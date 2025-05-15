@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geração de Referência</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="container mt-5">
+    <h1 class="text-center mb-4">Geração de Referência de Pagamento</h1>
+    <div id="service-reference" class="text-center"></div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", async function () {
+            function getQueryParam(param) {
+                const urlParams = new URLSearchParams(window.location.search);
+                return urlParams.get(param);
+            }
+
+            const transactionID = getQueryParam("id");
+            if (!transactionID) {
+                document.getElementById("service-reference").innerHTML = 
+                    '<div class="alert alert-danger">ID da transação não encontrado.</div>';
+                return;
+            }
+            const apiUrl = `https://spg.qly.site1.sibs.pt/api/v2/payments/${transactionID}/status`;
+            const headers = {
+                "Authorization": "Bearer 0276b80f950fb446c6addaccd121abfbbb.eyJlIjoiMjA1ODA5Nzc5Nzc3MyIsInJvbGVzIjoiTUFOQUdFUiIsInRva2VuQXBwRGF0YSI6IntcIm1jXCI6XCIzNjkwMDZcIixcInRjXCI6XCI4MDc2MFwifSIsImkiOiIxNzQyNTY0OTk3NzczIiwiaXMiOiJodHRwczovL3FseS5zaXRlMS5zc28uc3lzLnNpYnMucHQvYXV0aC9yZWFsbXMvUUxZLk1FUkNILlBPUlQxIiwidHlwIjoiQmVhcmVyIiwiaWQiOiJGRXZCOTh6WHMyMzU4NzE5MDFjYzkxNDRkMTgzZTc2MDQ1NWUzMmYzYmMifQ==.a58e334057e8e792127de95c6c12d41ba7fcd42361d7ef2ea87749a276192ead72ccfda4a98091f192bd7b3576e27d39b27c1e972d1b34a761540400535ea193",
+                "X-IBM-Client-Id": "9bbac851-6948-4c4e-9145-b45ef913f8d3",
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            };
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: "GET",
+                    headers: headers
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Erro na requisição: ${response.status}`);
+                }
+
+                const data = await response.json();
+
+                console.log(data);
+                
+                document.getElementById("service-reference").innerHTML = `
+                    <div class="card shadow-sm p-3 mb-4 bg-light">
+                        <h4 class="text-primary">Detalhes do Pagamento</h4>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item"><strong>Entidade:</strong> ${data.paymentReference.paymentEntity}</li>
+                            <li class="list-group-item"><strong>Referência:</strong> ${data.paymentReference.reference}</li>
+                            <li class="list-group-item"><strong>Montante:</strong> ${data.amount.value} €</li>
+                            <li class="list-group-item"><strong>Data de expiração:</strong> ${new Date(data.paymentReference.expireDate).toLocaleDateString()}</li>
+                        </ul>
+                    </div>
+                `;
+
+            } catch (error) {
+                console.error("Erro ao gerar referência de pagamento:", error);
+                document.getElementById("service-reference").innerHTML = 
+                    '<div class="alert alert-danger">Erro ao gerar referência de pagamento.</div>';
+            }
+        });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

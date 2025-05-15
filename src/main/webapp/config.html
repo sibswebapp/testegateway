@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Configuração do Terminal</title>
+
+  <!-- MDB Styles -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.1/mdb.min.css"/>
+
+  <!-- Font Awesome e Roboto (opcional) -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet"/>
+
+  <style>
+    html, body {
+      background: #f0f0f0;
+      color: #333;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    }
+
+    .navbar {
+      background-color: #ffffff !important;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .navbar .navbar-brand img {
+      max-height: 30px;
+      width: auto;
+    }
+
+    footer {
+      background-color: #fff;
+      color: #333;
+      padding: 20px 0;
+      font-size: 0.9rem;
+      text-align: center;
+      margin-top: 40px;
+      box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.05);
+    }
+
+    footer a {
+      color: #4c1d95;
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    h2 {
+      font-family: "Montserrat", sans-serif;
+      font-weight: bold;
+    }
+
+    .form-text {
+      margin-top: 0.5rem;
+      font-size: 0.875rem;
+    }
+
+    .d-none {
+      display: none;
+    }
+
+    .mb-5 {
+      margin-bottom: 2rem;
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar navbar-expand-lg navbar-light">
+    <div class="container">
+      <a class="navbar-brand d-flex align-items-center" href="#">
+        <img src="https://www.sibs.com/wp-content/themes/sitesibs/assets/images/logo.png" alt="Logo SIBS">
+      </a>
+    </div>
+  </nav>
+
+  <div class="container mt-4">
+    <div class="card">
+      <div class="card-header text-center" style="background-color: #cae3ff;">
+        <h2 style="color: #454545;"><b>Gateway SIBS - Configuração</b></h2>
+      </div>
+      <div class="card-body">
+        <div class="mb-4">
+          <label for="terminalId" class="form-label">Terminal ID:</label>
+          <input required type="text" id="terminalId" class="form-control" oninput="onlyNumbers(this)" placeholder="Apenas números">
+        </div>
+
+        <div class="mb-4">
+          <label for="clientId" class="form-label">Client ID:</label>
+          <input required type="text" id="clientId" class="form-control" placeholder="Insira o Client ID">
+        </div>
+
+        <div class="mb-4">
+          <label for="bearerToken" class="form-label">Bearer Token:</label>
+          <textarea required id="bearerToken" class="form-control" rows="4" placeholder="Insira o Bearer Token"></textarea>
+        </div>
+
+        <div class="mb-4">
+          <label for="paymentMethods" class="form-label">Métodos de Pagamento:</label>
+          <select required id="paymentMethods" data-mdb-select-init multiple class="form-select">
+            <option value="1">One</option>
+            <option value="2">Two</option>
+            <option value="3">Three</option>
+            <option value="4">Four</option>
+          </select>
+          <div class="form-text">Use Ctrl (Windows) ou Cmd (Mac) para selecionar múltiplos.</div>
+        </div>
+
+        <button class="btn btn-primary w-100" onclick="saveConfig()">Guardar Configuração</button>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="container">
+      <p class="mb-1">© 2025 Pagamentos SIBS. Todos os direitos reservados.</p>
+      <a href="https://www.docs.pay.sibs.com/portugal/sibs-gateway/integrations/api/integration-guide/"
+        class="btn btn-secondary btn-rounded" data-mdb-ripple-init>
+        Visite a documentação da Gateway
+      </a>
+    </div>
+  </footer>
+
+  <script>
+    function onlyNumbers(input) {
+      input.value = input.value.replace(/\D/g, '');
+    }
+
+    function saveConfig(){
+        const terminalId = document.getElementById('terminalId').value;
+        const clientId = document.getElementById('clientId').value;
+        const bearerToken = document.getElementById('bearerToken').value;
+        const methodsSelect = document.getElementById('paymentMethods');
+        const selectedMethods = Array.from(methodsSelect.selectedOptions).map(opt => opt.value);
+
+        if (!terminalId || !clientId || !bearerToken || selectedMethods.length === 0) {
+            alert("Por favor, preencha todos os campos e selecione ao menos um método de pagamento.");
+            return;
+        }
+
+        localStorage.setItem('terminalId', terminalId);
+        localStorage.setItem('clientId', clientId);
+        localStorage.setItem('bearerToken', bearerToken);
+        localStorage.setItem('paymentMethods', JSON.stringify(selectedMethods));
+
+        const newUrl = window.location.href.split('?')[0] + '?' + new URLSearchParams({
+            terminalId: terminalId,
+            clientId: clientId,
+            bearerToken: bearerToken,
+            paymentMethods: selectedMethods.join(',')
+        }).toString();
+
+        window.history.pushState({}, '', newUrl);
+
+        console.log("Configuração guardada:", {
+            terminalId,
+            clientId,
+            bearerToken,
+            paymentMethods: selectedMethods
+        });
+
+        alert("Configuração guardada com sucesso!");
+    
+
+    // Carregar valores salvos ao carregar a página
+    window.onload = function() {
+        if (localStorage.getItem('terminalId')) {
+            document.getElementById('terminalId').value = localStorage.getItem('terminalId');
+        }
+        if (localStorage.getItem('clientId')) {
+            document.getElementById('clientId').value = localStorage.getItem('clientId');
+        }
+        if (localStorage.getItem('bearerToken')) {
+            document.getElementById('bearerToken').value = localStorage.getItem('bearerToken');
+        }
+        if (localStorage.getItem('paymentMethods')) {
+            const savedMethods = JSON.parse(localStorage.getItem('paymentMethods'));
+            const methodsSelect = document.getElementById('paymentMethods');
+            Array.from(methodsSelect.options).forEach(option => {
+                if (savedMethods.includes(option.value)) {
+                    option.selected = true;
+                }
+            });
+        }
+    };
+  </script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.1/mdb.min.js"></script>
+</body>
+</html>

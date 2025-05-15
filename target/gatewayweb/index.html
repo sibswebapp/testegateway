@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pagamento SIBS</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="container mt-5">
+    <h1 class="text-center mb-4">Pagamento SIBS</h1>
+    
+    <div class="mb-3">
+        <label class="form-label">Valor (€):</label>
+        <input type="number" id="amount" class="form-control" value="1" min="1" step="0.01" onchange="makePayment()">
+    </div>
+    
+    <div class="mb-3">
+        <label for="payment-method" class="form-label">Método de Pagamento:</label>
+        <select id="payment-method" class="form-select" onchange="makePayment()">
+            <option value="CARD">Cartão</option>
+            <option value="MBWAY">MB WAY</option>
+            <option value="REFERENCE">Referência</option>
+        </select>
+    </div>
+    
+    <button class="btn btn-primary w-100" onclick="makePayment()">Iniciar Pagamento</button>
+    <div id="payment-form" class="mt-4"></div>
+
+
+
+        <script>
+
+            async function makePayment() {
+                const apiUrl ="https://spg.qly.site1.sibs.pt/api/v2/payments";
+                const token = "0276b80f950fb446c6addaccd121abfbbb.eyJlIjoiMjA1ODA5Nzc5Nzc3MyIsInJvbGVzIjoiTUFOQUdFUiIsInRva2VuQXBwRGF0YSI6IntcIm1jXCI6XCIzNjkwMDZcIixcInRjXCI6XCI4MDc2MFwifSIsImkiOiIxNzQyNTY0OTk3NzczIiwiaXMiOiJodHRwczovL3FseS5zaXRlMS5zc28uc3lzLnNpYnMucHQvYXV0aC9yZWFsbXMvUUxZLk1FUkNILlBPUlQxIiwidHlwIjoiQmVhcmVyIiwiaWQiOiJGRXZCOTh6WHMyMzU4NzE5MDFjYzkxNDRkMTgzZTc2MDQ1NWUzMmYzYmMifQ==.a58e334057e8e792127de95c6c12d41ba7fcd42361d7ef2ea87749a276192ead72ccfda4a98091f192bd7b3576e27d39b27c1e972d1b34a761540400535ea193";
+                const clientId = "9bbac851-6948-4c4e-9145-b45ef913f8d3";
+                const amountValue = parseFloat(document.getElementById("amount").value);
+            const selectedMethod = document.getElementById("payment-method").value;
+
+            if (!selectedMethod) {
+                alert("Selecione um método de pagamento.");
+                return;
+            }
+
+            const requestData = {
+                merchant: {
+                    terminalId: 80760,
+                    channel: "web",
+                    merchantTransactionId: "OrderID_00000"
+                },
+                transaction: {
+                    transactionTimestamp: new Date().toISOString(),
+                    description: "Transaction short description",
+                    moto: false,
+                    paymentType: "PURS",
+                    amount: {
+                        value: amountValue,
+                        currency: "EUR"
+                    },
+                    paymentMethod: [selectedMethod]
+                }
+            };
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: "POST",
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "X-IBM-Client-Id": clientId,
+                        "Content-Type": "application/json",
+                        "Accept": "application/json"
+                    },
+                    body: JSON.stringify(requestData)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Erro na requisição: ${response.status}`);
+                }
+
+                const data = await response.json();
+                if (data.transactionID && data.formContext) {
+                    generatePaymentForm(data.transactionID, data.formContext);
+                } else {
+                    throw new Error("Resposta da API incompleta.");
+                }
+            } catch (error) {
+                console.error("Erro ao processar pagamento:", error);
+                alert("Erro ao processar pagamento. Verifique o console para mais detalhes.");
+            }
+        }
+
+        function generatePaymentForm(transactionID, formContext) {
+            const script = document.createElement("script");
+            script.src = `https://spg.qly.site1.sibs.pt/assets/js/widget.js?id=${transactionID}`;
+            document.body.appendChild(script);
+
+            const formContainer = document.getElementById("payment-form");
+            formContainer.innerHTML = "";
+            
+            const form = document.createElement("form");
+            form.className = "paymentSPG mt-3";
+            form.setAttribute("spg-context", formContext);
+            form.setAttribute("spg-config", JSON.stringify({
+                paymentMethodList: [],
+                amount: { value: parseFloat(document.getElementById("amount").value), currency: "EUR" },
+                language: "pt",
+                redirectUrl: "http://localhost:8080/webapp/return.html"
+            }));
+            formContainer.appendChild(form);
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

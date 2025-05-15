@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Status do Pagamento</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const timerElement = document.getElementById("timer");
+      const messageElement = document.getElementById("message");
+      const buttonElement = document.getElementById("backButton");
+
+      const totalTime = 4 * 60;
+      const delayAfterExpiration = 60 * 1000; 
+      let timerInterval;
+
+      let startTime = localStorage.getItem("startTime");
+      if (!startTime) {
+        startTime = Date.now();
+        localStorage.setItem("startTime", startTime);
+      } else {
+        startTime = parseInt(startTime);
+      }
+
+      function showMessage(text, type) {
+        messageElement.textContent = text;
+        messageElement.classList.remove("d-none", "alert-danger", "alert-success", "alert-warning");
+        messageElement.classList.add("alert-" + type);
+        buttonElement.classList.remove("d-none");
+      }
+
+      async function checkFinalPaymentStatus() {
+        try {
+          const res = await fetch("/status-pagamento");
+          const data = await res.json();
+          if (data.status === "concluido") {
+            showMessage("Pagamento foi efetuado, mas fora do tempo limite!", "warning");
+            timerElement.textContent = "Pagamento concluído (fora do tempo)";
+          } else if (data.status === "falhado") {
+            showMessage("O pagamento falhou.", "danger");
+            timerElement.textContent = "Pagamento falhou.";
+          } else {
+            console.log("Pagamento continua pendente após o tempo limite.");
+          }
+        } catch (e) {
+          console.error("Erro ao consultar status após o timeout:", e);
+        }
+      }
+
+      async function checkImmediateStatus() {
+        try {
+          const res = await fetch("/status-pagamento");
+          const data = await res.json();
+          if (data.status === "concluido") {
+            clearInterval(timerInterval);
+            showMessage("Pagamento efetuado com sucesso!", "success");
+            timerElement.textContent = "Pagamento concluído!";
+            localStorage.removeItem("startTime");
+          }
+        } catch (e) {
+          console.error("Erro ao verificar status inicial:", e);
+        }
+      }
+
+      function updateTimer() {
+        const elapsedTime = Math.floor((Date.now() - startTime) / 1000);
+        const timeLeft = totalTime - elapsedTime;
+
+        if (timeLeft <= 0) {
+          timerElement.textContent = "0:00";
+          clearInterval(timerInterval);
+          showMessage("O pagamento no MB Way expirou.", "danger");
+          localStorage.removeItem("startTime");
+
+          setTimeout(checkFinalPaymentStatus, delayAfterExpiration);
+        } else {
+          const minutes = Math.floor(timeLeft / 60);
+          const seconds = timeLeft % 60;
+          timerElement.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+        }
+      }
+
+      timerInterval = setInterval(updateTimer, 1000);
+      updateTimer();
+      checkImmediateStatus();
+
+      /////////codigo teste/////////
+      async function decryptWebhook({ keyBase64, ivBase64, authTagBase64, bodyBase64 }) {
+      try {
+        const key = await crypto.subtle.importKey(
+          "raw",
+          Uint8Array.from(atob(keyBase64), c => c.charCodeAt(0)),
+          { name: "AES-GCM" },
+          false,
+          ["decrypt"]
+        );
+
+        const iv = Uint8Array.from(atob(ivBase64), c => c.charCodeAt(0));
+        const authTag = Uint8Array.from(atob(authTagBase64), c => c.charCodeAt(0));
+        const ciphertext = Uint8Array.from(atob(bodyBase64), c => c.charCodeAt(0));
+
+        const encrypted = new Uint8Array(ciphertext.length + authTag.length);
+        encrypted.set(ciphertext);
+        encrypted.set(authTag, ciphertext.length);
+
+        const decrypted = await crypto.subtle.decrypt(
+          { name: "AES-GCM", iv },
+          key,
+          encrypted
+        );
+
+        return new TextDecoder().decode(decrypted);
+      } catch (err) {
+        console.error("Erro ao descriptografar:", err);
+        return null;
+      }
+    }
+
+    async function handleWebhook() {
+      const exemplo = {
+        keyBase64: "Kza7LQ6t5RO4ROhw4qwhoAc8crdmqc8xJ3MY7LvGLgk=",
+        ivBase64: btoa("21jW/pi7C+zZvV2y"),
+        authTagBase64: "6/rb3PLU1m3LYVKkF95o9w==",
+        bodyBase64: "nnNe4OB66I1cbFSc0XAbjsqhsqJ5TRd6B/rXirxL0wY1s6IMshT0SX0qENYr6UqFvwqqy4+FLletPfwPs7/y8Z8kHYLQ8w9vG/lhVHNm9OAilRW9xglc+XcxhkTfCgG8yU2VWDDarGwHzRHm7SpXpfoJu6ypewK/NdRND+Enc09LkA3Mk1EAHEAH0WRfxDazxwLXbwdRDXLYT6QkNvQw+sExwAq/0awMPjFRx7z5wsbrZoxafofxaqnV7if3KtzdqMhSLl7gGkJ4WqgxJ+aFQ32Jlpbl3GkoOQlhLJwBSCyKT5eKzOeyauGq1X7XpQ2Rkqjqvwk712a/TqNdN8bydn7eXLaD8wn1dDkNk3tdozD3knfh9qi+ulZ673DyudPg6Rzz73tCpVMsZC/faKfix/sZWi/ilZ1sQLLHuOqsbx1cbHXGh63lQhKVNUkpDzj6l1t4mjvF+e49L8oIQ2pzkAWX0DzycIs/stMxWlF4aHg83JyDqbDpxSr/pbQF9tF/5YX6HKPem26baon64rMTeEYkLwgCMcohKRLTu21wgRqThCy76drhwOY97MsRf/yQXTROrgLsFpuyRmrkS9poJ1UMYw0JfIB3Q1OX6RvysuyRL6HFeKjCtbRQ66vhlc3FcbwyRf1ly87Y"
+      };
+
+      const decrypted = await decryptWebhook(exemplo);
+      console.log("Descriptografado:", decrypted);
+
+      if (decrypted) {
+        try {
+          const json = JSON.parse(decrypted);
+          const currentTransaction = json.transactionID;
+
+          const storedTransaction = localStorage.getItem("transactionID");
+
+          if (storedTransaction && storedTransaction !== currentTransaction) {
+            console.warn("Transaction ID mudou! Resetando a página...");
+            localStorage.removeItem("transactionID");
+            localStorage.removeItem("startTime");
+            location.reload();
+          } else {
+            localStorage.setItem("transactionID", currentTransaction);
+            console.log("Transação OK:", currentTransaction);
+          }
+        } catch (e) {
+          console.error("Erro ao interpretar JSON:", e);
+        }
+      }
+    }
+
+    handleWebhook();
+      /////////codigo teste fim/////////
+    });
+
+  </script>
+</head>
+<body class="container mt-5 text-center">
+  <h1 class="mb-4">Status do Pagamento</h1>
+  <p>Tempo restante para pagamento: <strong id="timer">4:00</strong></p>
+
+  <div id="message" class="alert d-none mt-4" role="alert"></div>
+
+  <a id="backButton" href="index.html" class="btn btn-primary d-none mt-3">Voltar para o checkout</a>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
