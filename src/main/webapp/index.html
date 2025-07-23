@@ -89,7 +89,7 @@
   <nav class="navbar navbar-expand-lg navbar-light">
     <div class="container-fluid d-flex justify-content-between align-items-center px-4" style="height: 69px;">
       <a class="navbar-brand d-flex align-items-center">
-        <img src="https://www.sibs.com/wp-content/themes/sitesibs/assets/images/logo.png" alt="Logo SIBS" style="max-height: 30px;">
+        <img src="https://www.pay.sibs.com/wp-content/uploads/2022/02/logo.png" alt="Logo SIBS" style="max-height: 30px;">
       </a>
       <div>
         <a href="http://localhost:8080/webapp/Stargate.html" style="background-color: #ff9800; color:#f2f2f2;"  class="btn btn-rounded" data-mdb-ripple-init>
@@ -116,18 +116,93 @@
         </div>
 
         <div class="card-body">
+
           <div class="mb-3">
             <label class="form-label">Montante (Valor máximo 200€):</label>
-            <input type="number" id="amount" class="form-control" value="1" min="1" max="200" step="0.01" onchange="makePayment()" oninput="if(this.value > 200) this.value = 200;">
+            <input type="number" id="amount" class="form-control" value="1" min="1" max="200" step="0.01"
+              onchange="makePayment()" oninput="if(this.value > 200) this.value = 200;">
           </div>
 
           <div class="mb-3">
             <label for="payment-method" class="form-label">Método de Pagamento:</label>
-            <select id="payment-method" class="form-select" onchange="makePayment()">
-            </select>
+            <select id="payment-method" class="form-select" onchange="makePayment()"></select>
           </div>
+          
+          <div id="dummyCustomerFields" class="mt-4" style="display: none;">
 
-          <button class="btn btn-primary w-100" onclick="makePayment()">Iniciar Pagamento</button>
+            <br>
+            <hr>
+            <h5 class="mb-3">Informações do Cliente</h5>
+
+            <div class="mb-3">
+              <label class="form-label">Nome:</label>
+              <input type="text" id="customerName" class="form-control" value="Diogo">
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Email:</label>
+              <input type="email" id="customerEmail" class="form-control" value="Onboarding@teste.com">
+            </div>
+
+            <h6 class="mt-4">Morada de Envio</h6>
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label>Rua 1:</label>
+                <input type="text" id="shippingStreet1" class="form-control" value="Rua 123">
+              </div>
+              <div class="col-md-6 mb-3">
+                <label>Rua 2:</label>
+                <input type="text" id="shippingStreet2" class="form-control" value="Porta 456">
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-4 mb-3">
+                <label>Cidade:</label>
+                <input type="text" id="shippingCity" class="form-control" value="Lisboa">
+              </div>
+              <div class="col-md-4 mb-3">
+                <label>Código Postal:</label>
+                <input type="text" id="shippingPostcode" class="form-control" value="1200-999">
+              </div>
+              <div class="col-md-4 mb-3">
+                <label>País:</label>
+                <select id="shippingCountry" class="form-select">
+                  <option value="PT" selected>Portugal</option>
+                </select>
+              </div>
+            </div>
+
+            <h6 class="mt-4">Morada de Faturação</h6>
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label>Rua 1:</label>
+                <input type="text" id="billingStreet1" class="form-control" value="First street">
+              </div>
+              <div class="col-md-6 mb-3">
+                <label>Rua 2:</label>
+                <input type="text" id="billingStreet2" class="form-control" value="Menef Square">
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-4 mb-3">
+                <label>Cidade:</label>
+                <input type="text" id="billingCity" class="form-control" value="Lisbon">
+              </div>
+              <div class="col-md-4 mb-3">
+                <label>Código Postal:</label>
+                <input type="text" id="billingPostcode" class="form-control" value="1700-123">
+              </div>
+              <div class="col-md-4 mb-3">
+                <label>País:</label>
+                <select id="billingCountry" class="form-select">
+                  <option value="PT" selected>Portugal</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          
+          <button class="btn btn-primary w-100 mt-3" onclick="makePayment()">Iniciar Pagamento</button>
+        
         </div>
       </div>
 
@@ -223,6 +298,16 @@
       const urlParams = new URLSearchParams(window.location.search);
       return urlParams.get(name);
     }
+
+    function showDummyFieldsIfNeeded() {
+      const params = new URLSearchParams(window.location.search);
+      const isDummyCustomer = params.get("isDummyCustomer");
+      if (isDummyCustomer === "1") {
+        document.getElementById("dummyCustomerFields").style.display = "block";
+      }
+    }
+
+    window.addEventListener("DOMContentLoaded", showDummyFieldsIfNeeded);
 
 
     async function makePayment() {
@@ -420,6 +505,25 @@
         //makePayment();
       //}
     //});
+
+
+    async function loadCountries() {
+    const response = await fetch("https://restcountries.com/v3.1/all");
+    const countries = await response.json();
+    const sorted = countries.sort((a, b) => a.name.common.localeCompare(b.name.common));
+
+    const countrySelects = [document.getElementById("shippingCountry"), document.getElementById("billingCountry")];
+
+    sorted.forEach(country => {
+      const option = document.createElement("option");
+      option.value = country.cca2;
+      option.text = country.name.common;
+      countrySelects.forEach(select => select.appendChild(option.cloneNode(true)));
+    });
+  }
+
+  window.addEventListener("DOMContentLoaded", loadCountries);
+
   </script>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
