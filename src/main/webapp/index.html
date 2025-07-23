@@ -258,6 +258,7 @@
     const defaultTerminalId = 80760;
     const defaultentity = "53246";
 
+
     document.addEventListener("DOMContentLoaded", function () {
       const urlParams = new URLSearchParams(window.location.search);
       const paymentMethodsParam = urlParams.get("paymentMethods");
@@ -300,14 +301,40 @@
     }
 
     function showDummyFieldsIfNeeded() {
-      const params = new URLSearchParams(window.location.search);
-      const isDummyCustomer = params.get("isDummyCustomer");
-      if (isDummyCustomer === "1") {
+      const urlParams = new URLSearchParams(window.location.search);
+      const isDummyCustomer = urlParams.get("isDummyCustomer");
+      const paymentMethodsParam = urlParams.get("paymentMethods");
+
+      if (isDummyCustomer === "1" && paymentMethodsParam && paymentMethodsParam.includes("3")) {
         document.getElementById("dummyCustomerFields").style.display = "block";
+      } else {
+        document.getElementById("dummyCustomerFields").style.display = "none";
       }
     }
 
     window.addEventListener("DOMContentLoaded", showDummyFieldsIfNeeded);
+
+    function validateDummyCustomerFields() {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get("isDummyCustomer") !== "1") {
+        return true;
+      }
+
+      const container = document.getElementById("dummyCustomerFields");
+      if (!container) return true; 
+
+      const inputs = container.querySelectorAll("input, select");
+
+      for (const input of inputs) {
+        if (!input.value || input.value.trim() === "") {
+          alert("Por favor, preencha todos os campos obrigatórios do cliente.");
+          input.focus();
+          return false;
+        }
+      }
+
+      return true;
+    }
 
 
     async function makePayment() {
@@ -325,6 +352,10 @@
       if (!selectedMethod) {
         alert("Selecione um método de pagamento.");
         return;
+      }
+
+       if (!validateDummyCustomerFields()) {
+        return; 
       }
       const initialDatetime = new Date();
       const finalDatetime = new Date(initialDatetime);
@@ -358,6 +389,30 @@
           }
         }
       };
+
+      const params = new URLSearchParams(window.location.search);
+      if (params.get("isDummyCustomer") === "1") {
+        requestData.customer = {
+          customerInfo: {
+            customerName: document.getElementById("customerName").value,
+            customerEmail: document.getElementById("customerEmail").value,
+            shippingAddress: {
+              street1: document.getElementById("shippingStreet1").value,
+              street2: document.getElementById("shippingStreet2").value,
+              city: document.getElementById("shippingCity").value,
+              postcode: document.getElementById("shippingPostcode").value,
+              country: document.getElementById("shippingCountry").value
+            },
+            billingAddress: {
+              street1: document.getElementById("billingStreet1").value,
+              street2: document.getElementById("billingStreet2").value,
+              city: document.getElementById("billingCity").value,
+              postcode: document.getElementById("billingPostcode").value,
+              country: document.getElementById("billingCountry").value
+            }
+          }
+        };
+      }
 
       try {
         const response = await fetch(apiUrl, {
