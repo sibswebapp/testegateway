@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gateway SIBS Testes</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.1/mdb.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
+
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      background: #f0f0f0;
+      color: #333;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    * {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    }
+
+    .navbar {
+      background-color: #fff !important;
+      padding-top: 0.2rem;
+      padding-bottom: 0.2rem;
+      min-height: 55px;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    }
+
+    .navbar .navbar-brand img {
+      max-height: 30px;
+      width: auto;
+    }
+
+    footer {
+      background-color: #fff;
+      color: #333;
+      padding: 20px 0;
+      font-size: 0.9rem;
+      text-align: center;
+    }
+
+    footer a.btn {
+      font-size: 0.85rem;
+      padding: 6px 14px;
+    }
+
+    footer a {
+      color: #4c1d95;
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    main {
+      flex: 1;
+    }
+
+    h2 {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: bold;
+    }
+
+    .method-badge {
+      display: inline-block;
+      background-color: #eaf5ff;
+      color: #0366d6;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: monospace;
+      font-weight: bold;
+    }
+
+    .fixed-payment-form {
+      width: 100%;          
+      height: 1050px;       
+      overflow: hidden;    
+    }
+  </style>
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg navbar-light">
+    <div class="container-fluid d-flex justify-content-between align-items-center px-4" style="height: 69px;">
+      <a class="navbar-brand d-flex align-items-center">
+        <img src="https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.netmentora.org%2Flisboa%2Fsomos-apoiados-por%2Fsibs-1%2F&psig=AOvVaw29PD9k-9d2RaJzZh4Szzbt&ust=1753355296135000&source=images&cd=vfe&opi=89978449&ved=0CBUQjRxqGAoTCPiPo9Dr0o4DFQAAAAAdAAAAABCdAQ" alt="Logo SIBS" style="max-height: 30px;">
+      </a>
+      <div>
+        <a href="http://localhost:8080/webapp/index.html" class="btn btn-secondary btn-rounded" data-mdb-ripple-init>
+          <i class="fa fa-list"></i> SPG
+        </a>
+        <a href="http://localhost:8080/webapp/config_stargate.html" style="background-color: #ff9800; color:#f2f2f2;"  class="btn btn-rounded" data-mdb-ripple-init>
+          <i class="fa fa-gears"></i> Configurações
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <div class="container mt-4">
+      <br>
+      <h1 class="text-center mb-4"></h1>
+
+      <div class="card">
+        <div class="card-header text-center d-flex justify-content-between align-items-center" style="background-color: #e65100;">
+          <h2 style="color: #f2f2f2; margin: 0 auto;"><b>Stargate SIBS Testes</b></h2>
+        </div>
+
+      <div class="card-body">
+
+      <div class="mb-3">
+        <label class="form-label">País:</label><br>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="country" id="spain" value="Spain" onchange="updatePaymentMethods()" onclick="makePayment()" checked>
+          <label class="form-check-label" for="spain">Spain (BIZM)</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="country" id="poland" value="Poland" onchange="updatePaymentMethods(); makePayment()" >
+          <label class="form-check-label" for="poland">Poland (BLIK)</label>
+        </div>
+      </div>
+
+
+        <div class="mb-3">
+          <label class="form-label">Montante (Valor máximo 200€):</label>
+          <input type="number" id="amount" class="form-control" value="1" min="1" max="200" step="0.01" 
+            onchange="makePayment()" 
+            oninput="if(this.value > 200) this.value = 200;">
+        </div>
+
+        <div class="mb-3">
+          <label for="payment-method" class="form-label">Método de Pagamento:</label>
+          <select id="payment-method" class="form-select" onchange="makePayment()">
+          </select>
+        </div>
+
+        <button class="btn w-100" style="background-color: #ff9800; color: #f2f2f2;" onclick="makePayment()">Iniciar Pagamento</button>
+      </div>
+    </div>
+
+    <div id="payment-form" style="width:100%; overflow:hidden;"></div>
+
+    <div id="debug-container"></div>
+
+    
+    <br>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p class="mb-1">© 2025 Pagamentos SIBS. Todos os direitos reservados.</p>
+    </div>
+  </footer>
+
+  <script>
+
+  
+    document.addEventListener("DOMContentLoaded", function () {
+      const urlParams = new URLSearchParams(window.location.search);
+    });
+
+    function getURLParameter(name) {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get(name);
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const paymentForm = document.getElementById("payment-form");
+      const debugContainer = document.getElementById("debug-container");
+
+      if (paymentForm) {
+        paymentForm.style.height = "";
+      }
+
+      const checkAndApplyHeight = () => {
+        if (
+          debugContainer &&
+          debugContainer.offsetHeight > 0 &&
+          window.getComputedStyle(debugContainer).display !== "none"
+        ) {
+          paymentForm.style.height = "771px";
+          observer.disconnect();
+        }
+      };
+
+      const observer = new MutationObserver(checkAndApplyHeight);
+
+      if (debugContainer) {
+        observer.observe(debugContainer, {
+          attributes: true,
+          childList: true,
+          subtree: true,
+        });
+      }
+
+      checkAndApplyHeight();
+    });
+
+    function updatePaymentMethods() {
+      const selectedCountry = document.querySelector('input[name="country"]:checked')?.value;
+      const select = document.getElementById("payment-method");
+      select.innerHTML = "";
+
+      const methodMap = {
+        Spain: [{ label: "Bizum", value: "BIZM" }],
+        Poland: [{ label: "BLIK", value: "BLIK" }]
+      };
+
+      const methods = methodMap[selectedCountry] || [];
+
+      methods.forEach(({ label, value }) => {
+        const opt = document.createElement("option");
+        opt.value = value;
+        opt.textContent = label;
+        select.appendChild(opt);
+      });
+      
+    }
+
+    updatePaymentMethods();
+
+    function updatePaymentMethods() {
+      const selectedCountry = document.querySelector('input[name="country"]:checked')?.value;
+      const select = document.getElementById("payment-method");
+      select.innerHTML = "";
+
+      const methodMap = {
+        Spain: [{ label: "Bizum", value: "BIZM" }, {label: "Cartão", value: "CARD"}],
+        Poland: [{ label: "BLIK", value: "BLIK" }, {label: "Cartão", value: "CARD"}]
+      };
+
+      const methods = methodMap[selectedCountry] || [];
+
+      methods.forEach(({ label, value }) => {
+        const opt = document.createElement("option");
+        opt.value = value;
+        opt.textContent = label;
+        select.appendChild(opt);
+      });
+
+    }
+
+    
+    async function makePayment() {
+
+      const apiUrl = "https://stargate.qly.site2.sibs.pt/api/v1/payments";
+
+      const selectedMethod = document.getElementById("payment-method").value;
+      const selectedCountry = document.querySelector('input[name="country"]:checked')?.value;
+
+      let defaultToken = "";
+      let defaultClientId = "";
+      let defaultTerminalId = "";
+      let currency_country = "";
+
+
+      if(selectedCountry == "Poland"){
+      
+        defaultToken = "02090d1ccf9a8e42a5b859c5b84dc4c5a8.eyJlIjoiMjA2NzY3MzI2NDY1MSIsInJvbGVzIjoiTUFOQUdFUiIsInRva2VuQXBwRGF0YSI6IntcIm1jXCI6XCIxODFcIixcInRjXCI6XCIzMDFcIn0iLCJpIjoiMTc1MjE0MDQ2NDY1MSIsImlzIjoiaHR0cHM6Ly9xbHkuc2l0ZTEuc3NvLnN5cy5zaWJzLnB0L2F1dGgvcmVhbG1zL1FMWS5TQk8tSU5ULlBPUlQxIiwidHlwIjoiQmVhcmVyIiwiaWQiOiJyaFNOVVl4RFNIMjE2NDU1NmU5NDYxNGU0YWEzOGU4NDYzMTBhMzRlMjUifQ==.f486111bd4c61bb025c46fb6478233f23a18edfebd42e66712d6b3547ed452d8217d85d2fc6f0682f2b572fb787e082e9f3609b3343c27f851659b5f71bacf30";
+        defaultClientId = "a1f729f7-ee7c-46b3-b30a-9b20d7fff09a";
+        defaultTerminalId = 301;
+        currency_country = "PLN";
+
+      } else {
+          defaultToken = "02090d1ccf9a8e42a5b859c5b84dc4c5a8.eyJlIjoiMjA2NzY3MzI2NDY1MSIsInJvbGVzIjoiTUFOQUdFUiIsInRva2VuQXBwRGF0YSI6IntcIm1jXCI6XCIxODFcIixcInRjXCI6XCIzMDFcIn0iLCJpIjoiMTc1MjE0MDQ2NDY1MSIsImlzIjoiaHR0cHM6Ly9xbHkuc2l0ZTEuc3NvLnN5cy5zaWJzLnB0L2F1dGgvcmVhbG1zL1FMWS5TQk8tSU5ULlBPUlQxIiwidHlwIjoiQmVhcmVyIiwiaWQiOiJyaFNOVVl4RFNIMjE2NDU1NmU5NDYxNGU0YWEzOGU4NDYzMTBhMzRlMjUifQ==.f486111bd4c61bb025c46fb6478233f23a18edfebd42e66712d6b3547ed452d8217d85d2fc6f0682f2b572fb787e082e9f3609b3343c27f851659b5f71bacf30";
+          defaultClientId = "a1f729f7-ee7c-46b3-b30a-9b20d7fff09a";
+          defaultTerminalId = 301;
+          currency_country = "EUR";
+      }
+        
+  
+
+      const token = getURLParameter("bearerToken") || defaultToken;
+      const clientId = getURLParameter("clientId") || defaultClientId;
+      const terminalId = parseInt(getURLParameter("terminalId")) || defaultTerminalId;
+      const amountValue = parseFloat(document.getElementById("amount").value);
+      
+
+      if (!selectedMethod) {
+        alert("Selecione um método de pagamento.");
+        return;
+      }
+      const initialDatetime = new Date();
+      const finalDatetime = new Date(initialDatetime);
+      finalDatetime.setMonth(finalDatetime.getMonth() + 2);
+
+      const initialDatetimeStr = initialDatetime.toISOString();
+      const finalDatetimeStr = finalDatetime.toISOString();
+      
+
+      const requestData = {
+        merchant: {
+          terminalId: terminalId,
+          channel: "web",
+          merchantTransactionId: "3a6e92ac6d3a4c9db517bba4337f5013"
+        },
+        transaction: {
+          transactionTimestamp: new Date().toISOString(),
+          description: "Transaction short description",
+          moto: false,
+          paymentType: "PURS",
+          amount: {
+            value: amountValue,
+            currency: currency_country
+          },
+          paymentMethod:[selectedMethod]
+        }
+      };
+      
+
+      try {
+        const response = await fetch(apiUrl, {
+          method: "POST",
+          headers: {
+            "Authorization": `Bearer ${token}`,
+            "X-IBM-Client-Id": clientId,
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+          },
+          body: JSON.stringify(requestData)
+        });
+
+        if (!response.ok) {
+          throw new Error(`Erro na requisição: ${response.status}`);
+        }
+
+        const data = await response.json();
+        if (data.transactionID && data.formContext) {
+          generatePaymentForm(data.transactionID, data.formContext, selectedMethod);
+        } else {
+          throw new Error("Resposta da API incompleta.");
+        }
+      } catch (error) {
+        console.error("Erro ao processar pagamento:", error);
+        alert("Erro ao processar pagamento. Verifique o console para mais detalhes.");
+      }
+    }
+
+    function generatePaymentForm(transactionID, formContext, selectedMethod) {
+      const formContainer = document.getElementById("payment-form");
+      
+      const defaultToken_payment = "02090d1ccf9a8e42a5b859c5b84dc4c5a8.eyJlIjoiMjA2NzY3MzI2NDY1MSIsInJvbGVzIjoiTUFOQUdFUiIsInRva2VuQXBwRGF0YSI6IntcIm1jXCI6XCIxODFcIixcInRjXCI6XCIzMDFcIn0iLCJpIjoiMTc1MjE0MDQ2NDY1MSIsImlzIjoiaHR0cHM6Ly9xbHkuc2l0ZTEuc3NvLnN5cy5zaWJzLnB0L2F1dGgvcmVhbG1zL1FMWS5TQk8tSU5ULlBPUlQxIiwidHlwIjoiQmVhcmVyIiwiaWQiOiJyaFNOVVl4RFNIMjE2NDU1NmU5NDYxNGU0YWEzOGU4NDYzMTBhMzRlMjUifQ==.f486111bd4c61bb025c46fb6478233f23a18edfebd42e66712d6b3547ed452d8217d85d2fc6f0682f2b572fb787e082e9f3609b3343c27f851659b5f71bacf30";
+      const defaultClientId_payment = "a1f729f7-ee7c-46b3-b30a-9b20d7fff09a";
+      const defaultTerminalId_payment = 301;
+
+      formContainer.innerHTML = ""; 
+
+      const token_payment = getURLParameter("bearerToken") || defaultToken_payment;
+      const clientId_payment = getURLParameter("clientId") || defaultClientId_payment;
+      const terminalId_payment = parseInt(getURLParameter("terminalId")) || defaultTerminalId_payment;
+
+
+      let redirectUrl = `http://localhost:8080/webapp/card_stargate_return.html?token=${token_payment}&clientId=${clientId_payment}&terminalId=${terminalId_payment}`;
+      if (selectedMethod === "BLIK") redirectUrl = `http://localhost:8080/webapp/BLIK_stargate_return.html?token=${token_payment}&clientId=${clientId_payment}&terminalId=${terminalId_payment}`;
+
+      const amount = parseFloat(document.getElementById("amount").value);
+
+      let defaultToken = "";
+      let defaultClientId = "";
+      let defaultTerminalId = "";
+      let currency_country = "";
+
+      if (selectedMethod === "BLIK") {
+        defaultToken = "02090d1ccf9a8e42a5b859c5b84dc4c5a8.eyJlIjoiMjA2NzY3MzI2NDY1MSIsInJvbGVzIjoiTUFOQUdFUiIsInRva2VuQXBwRGF0YSI6IntcIm1jXCI6XCIxODFcIixcInRjXCI6XCIzMDFcIn0iLCJpIjoiMTc1MjE0MDQ2NDY1MSIsImlzIjoiaHR0cHM6Ly9xbHkuc2l0ZTEuc3NvLnN5cy5zaWJzLnB0L2F1dGgvcmVhbG1zL1FMWS5TQk8tSU5ULlBPUlQxIiwidHlwIjoiQmVhcmVyIiwiaWQiOiJyaFNOVVl4RFNIMjE2NDU1NmU5NDYxNGU0YWEzOGU4NDYzMTBhMzRlMjUifQ==.f486111bd4c61bb025c46fb6478233f23a18edfebd42e66712d6b3547ed452d8217d85d2fc6f0682f2b572fb787e082e9f3609b3343c27f851659b5f71bacf30"; 
+        defaultClientId = "a1f729f7-ee7c-46b3-b30a-9b20d7fff09a";
+        defaultTerminalId = 301;
+        currency_country = "PLN";
+      } else {
+        defaultToken = "02090d1ccf9a8e42a5b859c5b84dc4c5a8.eyJlIjoiMjA2NzY3MzI2NDY1MSIsInJvbGVzIjoiTUFOQUdFUiIsInRva2VuQXBwRGF0YSI6IntcIm1jXCI6XCIxODFcIixcInRjXCI6XCIzMDFcIn0iLCJpIjoiMTc1MjE0MDQ2NDY1MSIsImlzIjoiaHR0cHM6Ly9xbHkuc2l0ZTEuc3NvLnN5cy5zaWJzLnB0L2F1dGgvcmVhbG1zL1FMWS5TQk8tSU5ULlBPUlQxIiwidHlwIjoiQmVhcmVyIiwiaWQiOiJyaFNOVVl4RFNIMjE2NDU1NmU5NDYxNGU0YWEzOGU4NDYzMTBhMzRlMjUifQ==.f486111bd4c61bb025c46fb6478233f23a18edfebd42e66712d6b3547ed452d8217d85d2fc6f0682f2b572fb787e082e9f3609b3343c27f851659b5f71bacf30"; // Outro token
+        defaultClientId = "a1f729f7-ee7c-46b3-b30a-9b20d7fff09a";
+        defaultTerminalId = 301;
+        currency_country = "EUR";
+      }
+
+      const form = document.createElement("form");
+      form.className = "paymentSPG";
+      form.setAttribute("spg-context", formContext);
+      form.setAttribute("spg-config", JSON.stringify({
+        paymentMethodList: [],
+        amount: { value: amount, currency: currency_country },
+        language: "pt",
+        redirectUrl: redirectUrl
+      }));
+
+      formContainer.appendChild(form);
+
+      const script = document.createElement("script");
+      script.src = `https://stargate.qly.site2.sibs.pt/assets/js/widget.js?id=${transactionID}`;
+      document.body.appendChild(script);
+
+      const token = getURLParameter("bearerToken") || defaultToken;
+      const clientId = getURLParameter("clientId") || defaultClientId;
+      const terminalId = parseInt(getURLParameter("terminalId")) || defaultTerminalId;
+
+      const debugBody = {
+        merchant: {
+          terminalId: terminalId,
+          channel: "web",
+          merchantTransactionId: "OrderID_00000"
+        },
+        transaction: {
+          transactionTimestamp: new Date().toISOString(),
+          description: "Transaction short description",
+          moto: false,
+          paymentType: "PURS",
+          amount: {
+            value: amount,
+            currency: currency_country
+          },
+          paymentMethod: [selectedMethod]
+        }
+      };
+
+      const debugHeaders = {
+        "Authorization": `Bearer ${token}`,
+        "X-IBM-Client-Id": clientId,
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+      };
+
+      const debugContainer = document.createElement("div");
+      debugContainer.className = "card mt-4";
+
+      const debugHeader = document.createElement("div");
+      debugHeader.className = "card-header text-white fw-bold";
+      debugHeader.style.backgroundColor = "#e65100";
+      debugHeader.textContent = "Debug da Requisição";
+      debugContainer.appendChild(debugHeader);
+
+      const debugContent = document.createElement("div");
+      debugContent.className = "card-body";
+
+      const headersTitle = document.createElement("h6");
+      headersTitle.className = "fw-bold";
+      headersTitle.textContent = "Headers da Requisição:";
+      const headersPre = document.createElement("pre");
+      headersPre.className = "bg-light p-3 rounded";
+      headersPre.style.maxHeight = "150px";
+      headersPre.style.overflowY = "auto";
+      headersPre.style.fontSize = "0.8rem";
+      headersPre.textContent = JSON.stringify(debugHeaders, null, 2);
+
+      const bodyTitle = document.createElement("h6");
+      bodyTitle.className = "fw-bold mt-3";
+      bodyTitle.textContent = "Corpo da Requisição:";
+      const bodyPre = document.createElement("pre");
+      bodyPre.className = "bg-light p-3 rounded";
+      bodyPre.style.maxHeight = "300px";
+      bodyPre.style.overflowY = "auto";
+      bodyPre.style.fontSize = "0.8rem";
+      bodyPre.textContent = JSON.stringify(debugBody, null, 2);
+
+      debugContent.appendChild(headersTitle);
+      debugContent.appendChild(headersPre);
+      debugContent.appendChild(bodyTitle);
+      debugContent.appendChild(bodyPre);
+
+      debugContainer.appendChild(debugContent);
+
+      const debugWrapper = document.getElementById("debug-container");
+      debugWrapper.innerHTML = "";
+      debugWrapper.appendChild(debugContainer);
+    }
+
+
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.1/mdb.min.js"></script>
+</body>
+</html>

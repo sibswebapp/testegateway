@@ -1,14 +1,160 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Geração de Referência</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.1/mdb.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet" />
+
+    <style>
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            background: #f0f0f0;
+            color: #333;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        }
+
+        * {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        }
+
+        .navbar {
+            background-color: #fff !important;
+            padding-top: 0.2rem;
+            padding-bottom: 0.2rem;
+            min-height: 55px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+
+        .navbar .navbar-brand img {
+            max-height: 30px;
+            width: auto;
+        }
+
+        footer {
+            background-color: #fff;
+            color: #333;
+            padding: 20px 0;
+            font-size: 0.9rem;
+            text-align: center;
+            margin-top: auto;
+        }
+
+        footer a.btn {
+            font-size: 0.85rem;
+            padding: 6px 14px;
+        }
+
+        footer a {
+            color: #4c1d95;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        main {
+            flex: 1;
+        }
+
+        h2 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: bold;
+        }
+
+       #debug-section {
+        background-color: #fff;
+        border: 1px solid #ddd;
+        margin: 20px auto;
+        padding: 15px;
+        max-width: 900px;
+        font-family: monospace;
+        font-size: 0.85rem;
+        color: #333;
+        box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+        }
+        #debug-section h3 {
+            margin-top: 0;
+            font-weight: 700;
+            font-family: 'Montserrat', sans-serif;
+            color: #4c1d95;
+        }
+        #debug-headers,
+        #debug-body {
+            white-space: pre-wrap;
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px;
+            max-height: 300px;
+            overflow: auto;
+            margin-bottom: 15px;
+        }
+
+    </style>
 </head>
-<body class="container mt-5">
-    <h1 class="text-center mb-4">Geração de Referência de Pagamento</h1>
-    <div id="service-reference" class="text-center"></div>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container-fluid d-flex justify-content-between align-items-center px-4" style="height: 69px;">
+            <a class="navbar-brand d-flex align-items-center" href="http://localhost:8080/webapp/index.html">
+                <img src="https://www.sibs.com/wp-content/themes/sitesibs/assets/images/logo.png" alt="Logo SIBS" style="max-height:30px;" />
+            </a>
+            <div>
+                <a class="btn btn-secondary btn-rounded" href="http://localhost:8080/webapp/index.html">
+                    <i class="fa fa-reply"></i> Voltar atrás
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <div class="container mt-4">
+            <div class="card">
+                <div class="card-header text-center d-flex justify-content-between align-items-center" style="background-color: #cae3ff;">
+                    <h2 style="color: #454545; margin: 0 auto;"><b>Geração de Referência de Pagamento</b></h2>
+                    <button type="button" class="btn btn-light btn-sm ms-2" data-bs-toggle="modal" data-bs-target="#infoModal" title="Informações">
+                        <i class="fa fa-question-circle"></i>
+                    </button>
+                </div>
+
+                <div class="card-body">
+                    <div id="service-reference" class="text-center"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div class="container my-4">
+    <div class="card shadow-sm border-0">
+        <div class="card-header fw-bold text-white" style="background-color: #0d6efd;">
+        Debug da Requisição
+        </div>
+        <div class="card-body bg-white">
+        <h5 class="mb-2">Headers da Requisição:</h5>
+        <div class="bg-light rounded p-2 mb-3" style="max-height: 200px; overflow: auto;">
+            <pre id="debug-headers" class="m-0" style="white-space: pre; overflow-x: auto;">A carregar...</pre>
+        </div>
+
+        <h5 class="mb-2">Corpo da Resposta:</h5>
+        <div class="bg-light rounded p-2" style="max-height: 300px; overflow: auto;">
+            <pre id="debug-body" class="m-0" style="white-space: pre; overflow-x: auto;">A carregar...</pre>
+        </div>
+        </div>
+    </div>
+    </div>
+
 
     <script>
         document.addEventListener("DOMContentLoaded", async function () {
@@ -17,25 +163,42 @@
                 return urlParams.get(param);
             }
 
+            const token_payment =  getQueryParam("token") || "Bearer 0276b80f950fb446c6addaccd121abfbbb.eyJlIjoiMjA1ODA5Nzc5Nzc3MyIsInJvbGVzIjoiTUFOQUdFUiIsInRva2VuQXBwRGF0YSI6IntcIm1jXCI6XCIzNjkwMDZcIixcInRjXCI6XCI4MDc2MFwifSIsImkiOiIxNzQyNTY0OTk3NzczIiwiaXMiOiJodHRwczovL3FseS5zaXRlMS5zc28uc3lzLnNpYnMucHQvYXV0aC9yZWFsbXMvUUxZLk1FUkNILlBPUlQxIiwidHlwIjoiQmVhcmVyIiwiaWQiOiJGRXZCOTh6WHMyMzU4NzE5MDFjYzkxNDRkMTgzZTc2MDQ1NWUzMmYzYmMifQ==.a58e334057e8e792127de95c6c12d41ba7fcd42361d7ef2ea87749a276192ead72ccfda4a98091f192bd7b3576e27d39b27c1e972d1b34a761540400535ea193";
+            const clientId_payment = getQueryParam("clientId") || "b041f6cb-c4d5-4d5d-b172-a4c18dc1060f";
+
             const transactionID = getQueryParam("id");
+            const referenceDiv = document.getElementById("service-reference");
+            const debugHeaders = document.getElementById("debug-headers");
+            const debugBody = document.getElementById("debug-body");
+
             if (!transactionID) {
-                document.getElementById("service-reference").innerHTML = 
-                    '<div class="alert alert-danger">ID da transação não encontrado.</div>';
+                referenceDiv.innerHTML = '<div class="alert alert-danger">ID da transação não encontrado.</div>';
+                debugHeaders.textContent = "";
+                debugBody.textContent = "";
                 return;
             }
+
             const apiUrl = `https://spg.qly.site1.sibs.pt/api/v2/payments/${transactionID}/status`;
             const headers = {
-                "Authorization": "Bearer 0276b80f950fb446c6addaccd121abfbbb.eyJlIjoiMjA1ODA5Nzc5Nzc3MyIsInJvbGVzIjoiTUFOQUdFUiIsInRva2VuQXBwRGF0YSI6IntcIm1jXCI6XCIzNjkwMDZcIixcInRjXCI6XCI4MDc2MFwifSIsImkiOiIxNzQyNTY0OTk3NzczIiwiaXMiOiJodHRwczovL3FseS5zaXRlMS5zc28uc3lzLnNpYnMucHQvYXV0aC9yZWFsbXMvUUxZLk1FUkNILlBPUlQxIiwidHlwIjoiQmVhcmVyIiwiaWQiOiJGRXZCOTh6WHMyMzU4NzE5MDFjYzkxNDRkMTgzZTc2MDQ1NWUzMmYzYmMifQ==.a58e334057e8e792127de95c6c12d41ba7fcd42361d7ef2ea87749a276192ead72ccfda4a98091f192bd7b3576e27d39b27c1e972d1b34a761540400535ea193",
-                "X-IBM-Client-Id": "9bbac851-6948-4c4e-9145-b45ef913f8d3",
+                Authorization: `Bearer ${token_payment}`,
+                "X-IBM-Client-Id": clientId_payment,
                 "Content-Type": "application/json",
-                "Accept": "application/json"
+                Accept: "application/json",
             };
+
 
             try {
                 const response = await fetch(apiUrl, {
                     method: "GET",
-                    headers: headers
+                    headers: headers,
                 });
+
+                // Extrai e mostra headers no debug
+                let headerObj = {};
+                for (let pair of response.headers.entries()) {
+                    headerObj[pair[0]] = pair[1];
+                }
+                debugHeaders.textContent = JSON.stringify(headerObj, null, 2);
 
                 if (!response.ok) {
                     throw new Error(`Erro na requisição: ${response.status}`);
@@ -43,28 +206,77 @@
 
                 const data = await response.json();
 
-                console.log(data);
-                
-                document.getElementById("service-reference").innerHTML = `
-                    <div class="card shadow-sm p-3 mb-4 bg-light">
-                        <h4 class="text-primary">Detalhes do Pagamento</h4>
-                        <ul class="list-group list-group-flush">
+                // Mostra corpo no debug
+                debugBody.textContent = JSON.stringify(data, null, 2);
+
+                referenceDiv.innerHTML = `
+                    <div class="card shadow-sm p-3 mt-3 bg-light">
+                        <ul class="list-group list-group-flush text-start text-center">
                             <li class="list-group-item"><strong>Entidade:</strong> ${data.paymentReference.paymentEntity}</li>
                             <li class="list-group-item"><strong>Referência:</strong> ${data.paymentReference.reference}</li>
                             <li class="list-group-item"><strong>Montante:</strong> ${data.amount.value} €</li>
-                            <li class="list-group-item"><strong>Data de expiração:</strong> ${new Date(data.paymentReference.expireDate).toLocaleDateString()}</li>
+                            <li class="list-group-item"><strong>Data de Validade:</strong> ${new Date(data.paymentReference.expireDate).toLocaleDateString()}</li>
+                            ${(() => {
+                                if (data.paymentStatus === "Pending") {
+                                    return `<li class="list-group-item text-warning"><strong>Estado do Pagamento:</strong> Pendente</li>`;
+                                } else if (data.paymentStatus === "Declined") {
+                                    return `<li class="list-group-item text-danger"><strong>Estado do Pagamento:</strong> Sem sucesso</li>`;
+                                } else if (data.paymentStatus === "Success") {
+                                    return `<li class="list-group-item text-success"><strong>Estado do Pagamento:</strong> Sucesso</li>`;
+                                } else {
+                                    return `<li class="list-group-item"><strong>Estado do Pagamento:</strong> ${data.paymentStatus}</li>`;
+                                }
+                            })()}
                         </ul>
                     </div>
                 `;
-
             } catch (error) {
                 console.error("Erro ao gerar referência de pagamento:", error);
-                document.getElementById("service-reference").innerHTML = 
-                    '<div class="alert alert-danger">Erro ao gerar referência de pagamento.</div>';
+                referenceDiv.innerHTML = '<div class="alert alert-danger">Erro ao gerar referência de pagamento.</div>';
+                debugHeaders.textContent = "";
+                debugBody.textContent = "";
             }
         });
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Modal -->
+    <div class="modal fade" id="infoModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content shadow">
+                <div class="modal-header bg-light">
+                    <h5 class="modal-title"><i class="fa fa-info-circle text-primary me-2"></i> Processo de Integração Gateway</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p>
+                        Nesta página pode visualizar os detalhes da referência bancária, como a <b>entidade</b>, <b>referência</b>, <b>montante</b> e
+                        <b>data de expiração</b>.
+                    </p>
+                    <p>Para obter estes dados necessita de fazer uma chamada API com o método: </p>
+                    <p style="white-space: nowrap;">
+                        <span class="badge bg-success align-middle">GET</span>
+                        <code class="align-middle" style="font-size: 0.70rem;">https://spg.qly.site1.sibs.pt/api/v2/payments/{transactionID}/status</code>
+                    </p>
+                    <br />
+                    <p>Mas depois necessita de utilizar um webhook para saber o estado real desta transação <b>(o webhook é de caráter obrigatório)</b></p>
+                    <p>Para visualização de toda a documentação, visite:</p>
+                    <a href="https://www.docs.pay.sibs.com/portugal/sibs-gateway/integrations/api/integration-guide/" class="btn btn-outline-primary btn-sm" target="_blank">
+                        <i class="fa fa-external-link me-1"></i> Documentação SIBS Gateway
+                    </a>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Fechar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p class="mb-1">© 2025 Pagamentos SIBS. Todos os direitos reservados.</p>
+        </div>
+    </footer>
 </body>
 </html>

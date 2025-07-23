@@ -84,7 +84,7 @@
           <img src="https://www.sibs.com/wp-content/themes/sitesibs/assets/images/logo.png" alt="Logo SIBS" style="max-height:30px;">
         </a>
         <div>
-          <a class="btn btn-secondary btn-rounded" data-back-button>
+          <a class="btn btn-rounded" data-back-button style="background-color: #ff9800; color:#f2f2f2;">
             <i class="fa fa-reply"></i> Voltar atrás
           </a>
         </div>
@@ -96,11 +96,8 @@
     <br>
       <br>
     <div class="card">
-      <div class="card-header text-center d-flex justify-content-between align-items-center" style="background-color: #cae3ff;">
-        <h2 style="color: #454545; margin: 0 auto;"><b>Gateway SIBS - Configuração</b></h2>
-        <button type="button" class="btn btn-light btn-sm" data-bs-toggle="modal" data-bs-target="#infoModal">
-          <i class="fa fa-question-circle"></i>
-        </button>
+      <div class="card-header text-center d-flex justify-content-between align-items-center" style="background-color: #e65100;">
+        <h2 style="color: #f2f2f2; margin: 0 auto;"><b>Gateway SIBS - Configuração</b></h2>
       </div>
       <div class="card-body">
         <div class="form-check form-switch mb-4">
@@ -123,88 +120,48 @@
           <textarea id="bearerToken" class="form-control" rows="4" placeholder="Insira o Bearer Token"></textarea>
         </div>
 
-        <div class="mb-4">
-          <label for="paymentMethods" class="form-label">Métodos de Pagamento:</label>
-          <select id="paymentMethods" multiple class="form-select" onchange="toggleEntityField()">
-            <option value="1">MB WAY</option>
-            <option value="2">Multibanco</option>
-            <option value="3">Cartões</option>
-          </select>
-          <div class="form-text">Use Ctrl (Windows) ou Cmd (Mac) para selecionar múltiplos.</div>
-        </div>
+      
 
-        <div class="mb-4 d-none" id="inputEntity">
-          <label for="entity" class="form-label">Entidade (Multibanco):</label>
-          <input type="text" id="entity" class="form-control" placeholder="Insira a entidade de pagamento">
-        </div>
-
-        <button class="btn btn-primary w-100" onclick="saveConfig()">Guardar Configuração</button>
+        <button class="btn w-100" onclick="saveConfig()" style="background-color: rgb(255, 152, 0); color: rgb(242, 242, 242);">Guardar Configuração</button>
       </div>
     </div>
   </div>
   <br>
-   <footer>
-        <div class="container">
-            <p class="mb-1">© 2025 Pagamentos SIBS. Todos os direitos reservados.</p>
-        </div>
-    </footer>
 
-
-  <!-- Modal -->
-  <div class="modal fade" id="infoModal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content shadow">
-        <div class="modal-header bg-light">
-          <h5 class="modal-title"><i class="fa fa-info-circle text-primary me-2"></i> Processo de Integração Gateway</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-        </div>
-        <div class="modal-body">
-          <p>Poderá utilizar este formulário em modo "Default", com credenciais de teste já previamente definidas, ou, poderá preencher os campos com as credenciais disponibilizadas pela equipa de Onboarding.</p>
-          <p>Utilize este formulário com credenciais default ou insira as credenciais da equipa de Onboarding.</p>
-          <br>
-          <p>Para visualização de toda a documentação, visite:</p>
-          <a href="https://www.docs.pay.sibs.com/portugal/sibs-gateway/integrations/api/integration-guide/" class="btn btn-outline-primary btn-sm" target="_blank">
-            <i class="fa fa-external-link me-1"></i> Documentação SIBS Gateway
-          </a>
-        </div>
-        <div class="modal-footer">
-          <button class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Fechar</button>
-        </div>
-      </div>
+  <footer>
+    <div class="container">
+      <p class="mb-1">© 2025 Pagamentos SIBS. Todos os direitos reservados.</p>
     </div>
-  </div>
+  </footer>
+
 
   <script>
     function toggleDefaults(checkbox) {
       const terminal = document.getElementById('terminalId');
       const client = document.getElementById('clientId');
       const token = document.getElementById('bearerToken');
-      const entitypag = document.getElementById('entity');
 
-      const inputs = ['inputTerminalId', 'inputClientId', 'inputBearerToken', 'inputEntity'];
+      const inputs = ['inputTerminalId', 'inputClientId', 'inputBearerToken'];
 
-      if (checkbox.checked) {
+      if(checkbox.checked) {
 
-      
-        terminal.value = '80760';
-        client.value = '9bbac851-6948-4c4e-9145-b45ef913f8d3';
-        token.value = '0276b80f950fb446c6addaccd121abfbbb.eyJlIjoiMjA1ODA5Nzc5Nzc3MyIsInJvbGVzIjoiTUFOQUdFUiIsInRva2VuQXBwRGF0YSI6IntcIm1jXCI6XCIzNjkwMDZcIixcInRjXCI6XCI4MDc2MFwifSIsImkiOiIxNzQyNTY0OTk3NzczIiwiaXMiOiJodHRwczovL3FseS5zaXRlMS5zc28uc3lzLnNpYnMucHQvYXV0aC9yZWFsbXMvUUxZLk1FUkNILlBPUlQxIiwidHlwIjoiQmVhcmVyIiwiaWQiOiJGRXZCOTh6WHMyMzU4NzE5MDFjYzkxNDRkMTgzZTc2MDQ1NWUzMmYzYmMifQ==.a58e334057e8e792127de95c6c12d41ba7fcd42361d7ef2ea87749a276192ead72ccfda4a98091f192bd7b3576e27d39b27c1e972d1b34a761540400535ea193';
-        entitypag.value = '53246';
+        
+        token.value = "02090d1ccf9a8e42a5b859c5b84dc4c5a8.eyJlIjoiMjA2NzY3MzI2NDY1MSIsInJvbGVzIjoiTUFOQUdFUiIsInRva2VuQXBwRGF0YSI6IntcIm1jXCI6XCIxODFcIixcInRjXCI6XCIzMDFcIn0iLCJpIjoiMTc1MjE0MDQ2NDY1MSIsImlzIjoiaHR0cHM6Ly9xbHkuc2l0ZTEuc3NvLnN5cy5zaWJzLnB0L2F1dGgvcmVhbG1zL1FMWS5TQk8tSU5ULlBPUlQxIiwidHlwIjoiQmVhcmVyIiwiaWQiOiJyaFNOVVl4RFNIMjE2NDU1NmU5NDYxNGU0YWEzOGU4NDYzMTBhMzRlMjUifQ==.f486111bd4c61bb025c46fb6478233f23a18edfebd42e66712d6b3547ed452d8217d85d2fc6f0682f2b572fb787e082e9f3609b3343c27f851659b5f71bacf30";
+        client.value = "a1f729f7-ee7c-46b3-b30a-9b20d7fff09a";
+        terminal.value = 301;
+
         
         inputs.forEach(id => document.getElementById(id).classList.add('d-none'));
-      } else {
+      }else{
         terminal.value = '';
         client.value = '';
         token.value = '';
-        entitypag.value = '';
 
         inputs.forEach(id => document.getElementById(id).classList.remove('d-none'));
       }
     }
 
     function toggleEntityField() {
-      const select = document.getElementById('paymentMethods');
-      const entityInput = document.getElementById('inputEntity');
       const useDefault = document.getElementById('defaultToggle').checked;
 
       const selectedValues = Array.from(select.selectedOptions).map(opt => opt.value);
@@ -218,15 +175,13 @@
       const terminal = document.getElementById('terminalId').value;
       const client = document.getElementById('clientId').value;
       const token = document.getElementById('bearerToken').value;
-      const methods = Array.from(document.getElementById('paymentMethods').selectedOptions).map(opt => opt.value);
-      const entity = document.getElementById('entity').value;
 
       if (!useDefault && (!terminal || !client || !token || methods.length === 0)) {
         alert("Preencha todos os campos obrigatórios.");
         return;
       }
 
-      if (!useDefault && methods.includes('2') && !entity) {
+      if (!useDefault && methods.includes('2')) {
         alert("Preencha a Entidade para Multibanco.");
         return;
       }
@@ -235,10 +190,8 @@
         localStorage.setItem('terminalId', terminal);
         localStorage.setItem('clientId', client);
         localStorage.setItem('bearerToken', token);
-        localStorage.setItem('entity', entity);
       }
 
-      localStorage.setItem('paymentMethods', JSON.stringify(methods));
       localStorage.setItem('useDefaultConfig', useDefault.toString());
 
       alert("Configuração guardada com sucesso!");
@@ -253,12 +206,9 @@
       if (!useDefault) {
         document.getElementById('terminalId').value = localStorage.getItem('terminalId') || '';
         document.getElementById('clientId').value = localStorage.getItem('clientId') || '';
-        document.getElementById('bearerToken').value = localStorage.getItem('bearerToken') || '';
-        document.getElementById('entity').value = localStorage.getItem('entity') || '';
+        document.getElementById('bearerToken').value = localStorage.getItem('bearerToken') || ''
       }
 
-      const savedMethods = JSON.parse(localStorage.getItem('paymentMethods') || '[]');
-      const select = document.getElementById('paymentMethods');
       Array.from(select.options).forEach(opt => {
         opt.selected = savedMethods.includes(opt.value);
       });
@@ -270,13 +220,11 @@
       btn.addEventListener('click', (e) => {
         e.preventDefault();
         const useDefault = localStorage.getItem('useDefaultConfig') === 'true';
-        const terminalId = useDefault ? '80760' : localStorage.getItem('terminalId');
-        const entity = useDefault ? '53246' : localStorage.getItem('entity');
-        const clientId = useDefault ? '9bbac851-6948-4c4e-9145-b45ef913f8d3' : localStorage.getItem('clientId');
-        const bearerToken = useDefault ? '0276b80f950fb446c6addaccd121abfbbb.eyJlIjoiMjA1ODA5Nzc5Nzc3MyIsInJvbGVzIjoiTUFOQUdFUiIsInRva2VuQXBwRGF0YSI6IntcIm1jXCI6XCIzNjkwMDZcIixcInRjXCI6XCI4MDc2MFwifSIsImkiOiIxNzQyNTY0OTk3NzczIiwiaXMiOiJodHRwczovL3FseS5zaXRlMS5zc28uc3lzLnNpYnMucHQvYXV0aC9yZWFsbXMvUUxZLk1FUkNILlBPUlQxIiwidHlwIjoiQmVhcmVyIiwiaWQiOiJGRXZCOTh6WHMyMzU4NzE5MDFjYzkxNDRkMTgzZTc2MDQ1NWUzMmYzYmMifQ==.a58e334057e8e792127de95c6c12d41ba7fcd42361d7ef2ea87749a276192ead72ccfda4a98091f192bd7b3576e27d39b27c1e972d1b34a761540400535ea193' : localStorage.getItem('bearerToken');
-        const paymentMethods = JSON.parse(localStorage.getItem('paymentMethods') || '[]');
+        const terminalId = useDefault ? '301' : localStorage.getItem('terminalId');
+        const clientId = useDefault ? 'a1f729f7-ee7c-46b3-b30a-9b20d7fff09a' : localStorage.getItem('clientId');
+        const bearerToken = useDefault ? '02090d1ccf9a8e42a5b859c5b84dc4c5a8.eyJlIjoiMjA2NzY3MzI2NDY1MSIsInJvbGVzIjoiTUFOQUdFUiIsInRva2VuQXBwRGF0YSI6IntcIm1jXCI6XCIxODFcIixcInRjXCI6XCIzMDFcIn0iLCJpIjoiMTc1MjE0MDQ2NDY1MSIsImlzIjoiaHR0cHM6Ly9xbHkuc2l0ZTEuc3NvLnN5cy5zaWJzLnB0L2F1dGgvcmVhbG1zL1FMWS5TQk8tSU5ULlBPUlQxIiwidHlwIjoiQmVhcmVyIiwiaWQiOiJyaFNOVVl4RFNIMjE2NDU1NmU5NDYxNGU0YWEzOGU4NDYzMTBhMzRlMjUifQ==.f486111bd4c61bb025c46fb6478233f23a18edfebd42e66712d6b3547ed452d8217d85d2fc6f0682f2b572fb787e082e9f3609b3343c27f851659b5f71bacf30' : localStorage.getItem('bearerToken');
 
-        if (!terminalId || !entity || !clientId || !bearerToken || paymentMethods.length === 0) {
+        if (!terminalId || !clientId || !bearerToken) {
           alert("As configurações não estão completas. Guarde primeiro.");
           return;
         }
@@ -284,12 +232,10 @@
       const params = new URLSearchParams({
         terminalId,
         clientId,
-        bearerToken,         
-        entity,
-        paymentMethods: paymentMethods.join(',')
+        bearerToken
       });
 
-      window.location.href = `http://localhost:8080/webapp/index.html?${params}`;
+      window.location.href = `http://localhost:8080/webapp/Stargate.html?${params}`;
 
       });
     });

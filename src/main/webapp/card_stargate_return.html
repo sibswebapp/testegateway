@@ -132,11 +132,11 @@
 <body>
   <nav class="navbar navbar-expand-lg navbar-light">
     <div class="container-fluid d-flex justify-content-between align-items-center px-4" style="height: 69px;">
-      <a class="navbar-brand d-flex align-items-center" href="http://localhost:8080/webapp/index.html">
+      <a class="navbar-brand d-flex align-items-center" href="http://localhost:8080/webapp/Stargate.html">
         <img src="https://www.sibs.com/wp-content/themes/sitesibs/assets/images/logo.png" alt="Logo SIBS" style="max-height:30px;" />
       </a>
       <div>
-        <a class="btn btn-secondary btn-rounded" href="http://localhost:8080/webapp/index.html">
+        <a href="http://localhost:8080/webapp/Stargate.html" style="background-color: #ff9800; color:#f2f2f2;"  class="btn btn-rounded" data-mdb-ripple-init>
           <i class="fa fa-reply"></i> Voltar atrás
         </a>
       </div>
@@ -146,24 +146,22 @@
   <main>
     <div class="container mt-4">
       <div class="card">
-        <div class="card-header text-center d-flex justify-content-between align-items-center" style="background-color: #cae3ff;">
-          <h2 style="color: #454545; margin: 0 auto;"><b>Status do Pagamento</b></h2>
-          <button type="button" class="btn btn-light btn-sm ms-2" data-bs-toggle="modal" data-bs-target="#infoModal" title="Informações">
-            <i class="fa fa-question-circle"></i>
-          </button>
+        <div class="card-header text-center d-flex justify-content-between align-items-center" style="background-color: #e65100;">
+          <h2 style="color: #f2f2f2; margin: 0 auto;"><b>Status do Pagamento</b></h2>
+        
         </div>
 
         <div class="card-body">
-          <h4 class="text-primary text-center"><b>Detalhes do Pagamento</b></h4>
+          <h4 class="text-primary text-center"><b style="color: #ff9800;">Detalhes do Pagamento</b></h4>
           <div id="payment-status" class="text-center"></div>
         </div>
       </div>
     </div>
   </main>
 
-  <div class="container my-4">
+    <div class="container my-4">
     <div class="card shadow-sm border-0">
-        <div class="card-header fw-bold text-white" style="background-color: #0d6efd;">
+        <div class="card-header fw-bold text-white" style="background-color: #e65100;">
         Debug da Requisição
         </div>
         <div class="card-body bg-white">
@@ -178,7 +176,7 @@
         </div>
         </div>
     </div>
-  </div>
+    </div>
 
 
   <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
@@ -206,10 +204,10 @@
         return;
       }
 
-      const apiUrl = `https://spg.qly.site1.sibs.pt/api/v2/payments/${paymentId}/status`;
-      
-      const token_payment =  getQueryParam("token") || "Bearer 0276b80f950fb446c6addaccd121abfbbb.eyJlIjoiMjA1ODA5Nzc5Nzc3MyIsInJvbGVzIjoiTUFOQUdFUiIsInRva2VuQXBwRGF0YSI6IntcIm1jXCI6XCIzNjkwMDZcIixcInRjXCI6XCI4MDc2MFwifSIsImkiOiIxNzQyNTY0OTk3NzczIiwiaXMiOiJodHRwczovL3FseS5zaXRlMS5zc28uc3lzLnNpYnMucHQvYXV0aC9yZWFsbXMvUUxZLk1FUkNILlBPUlQxIiwidHlwIjoiQmVhcmVyIiwiaWQiOiJGRXZCOTh6WHMyMzU4NzE5MDFjYzkxNDRkMTgzZTc2MDQ1NWUzMmYzYmMifQ==.a58e334057e8e792127de95c6c12d41ba7fcd42361d7ef2ea87749a276192ead72ccfda4a98091f192bd7b3576e27d39b27c1e972d1b34a761540400535ea193";
-      const clientId_payment = getQueryParam("clientId") || "b041f6cb-c4d5-4d5d-b172-a4c18dc1060f";
+      const apiUrl = `https://stargate.qly.site2.sibs.pt/api/v1/payments/${paymentId}/status`;
+
+      const token_payment =  getQueryParam("token") || "Bearer 02090d1ccf9a8e42a5b859c5b84dc4c5a8.eyJlIjoiMjA2NzY3MzI2NDY1MSIsInJvbGVzIjoiTUFOQUdFUiIsInRva2VuQXBwRGF0YSI6IntcIm1jXCI6XCIxODFcIixcInRjXCI6XCIzMDFcIn0iLCJpIjoiMTc1MjE0MDQ2NDY1MSIsImlzIjoiaHR0cHM6Ly9xbHkuc2l0ZTEuc3NvLnN5cy5zaWJzLnB0L2F1dGgvcmVhbG1zL1FMWS5TQk8tSU5ULlBPUlQxIiwidHlwIjoiQmVhcmVyIiwiaWQiOiJyaFNOVVl4RFNIMjE2NDU1NmU5NDYxNGU0YWEzOGU4NDYzMTBhMzRlMjUifQ==.f486111bd4c61bb025c46fb6478233f23a18edfebd42e66712d6b3547ed452d8217d85d2fc6f0682f2b572fb787e082e9f3609b3343c27f851659b5f71bacf30";
+      const clientId_payment = getQueryParam("clientId") || "a1f729f7-ee7c-46b3-b30a-9b20d7fff09a";
 
       const headers = {
         Authorization: `Bearer ${token_payment}`,
@@ -272,38 +270,6 @@
   </script>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-  <!-- Modal -->
-  <div class="modal fade" id="infoModal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content shadow">
-        <div class="modal-header bg-light">
-          <h5 class="modal-title">
-            <i class="fa fa-info-circle text-primary me-2"></i> Processo de Integração Gateway
-          </h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-        </div>
-        <div class="modal-body">
-          <p>
-            Nesta página pode verificar qual o status do pagamento, se foi <b>recusado</b> ou <b>aceite</b>. Para isso, utilize o método:
-          </p>
-          <p style="white-space: nowrap;">
-            <span class="badge bg-success align-middle">GET</span>
-            <code class="align-middle" style="font-size: 0.70rem;">https://spg.qly.site1.sibs.pt/api/v2/payments/{transactionID}/status</code>
-          </p>
-
-          <br />
-          <p>Para visualização de toda a documentação, visite:</p>
-          <a href="https://www.docs.pay.sibs.com/portugal/sibs-gateway/integrations/api/integration-guide/" class="btn btn-outline-primary btn-sm" target="_blank">
-            <i class="fa fa-external-link me-1"></i> Documentação SIBS Gateway
-          </a>
-        </div>
-        <div class="modal-footer">
-          <button class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Fechar</button>
-        </div>
-      </div>
-    </div>
-  </div>
 
   <footer>
     <div class="container">

@@ -1,252 +1,428 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gateway SIBS Testes</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gateway SIBS Testes</title>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"></linkhref>
-    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.1/mdb.min.css" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.1/mdb.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
 
-  
-    <style>
-        html, body {
-            height: 100%;
-            margin: 0;
-            padding: 0;
-            background: #f0f0f0;
-            color: #333;
-            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      background: #f0f0f0;
+      color: #333;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
 
-        * {
-            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-        }
+    * {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    }
 
-        .navbar {
-            background-color: #fff !important;
-            padding-top: 0.3rem;
-            padding-bottom: 0.3rem;
-            min-height: 85px;
-        }
-        .navbar .navbar-brand img {
-            max-height: 65px;
-            width: auto;
-        }
+    .navbar {
+      background-color: #fff !important;
+      padding-top: 0.2rem;
+      padding-bottom: 0.2rem;
+      min-height: 55px;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    }
 
-        .navbar .navbar-brand,
-      
+    .navbar .navbar-brand img {
+      max-height: 30px;
+      width: auto;
+    }
 
-        footer {
-            background-color: #fff;
-            color: #333;
-            padding: 20px 0;
-            font-size: 0.9rem;
-            text-align: center;
-        }
+    footer {
+      background-color: #fff;
+      color: #333;
+      padding: 20px 0;
+      font-size: 0.9rem;
+      text-align: center;
+    }
 
-        footer a.btn {
-            font-size: 0.85rem;
-            padding: 6px 14px;
-        }
+    footer a.btn {
+      font-size: 0.85rem;
+      padding: 6px 14px;
+    }
 
-        footer a {
-            color: #4c1d95;
-            text-decoration: none;
-        }
+    footer a {
+      color: #4c1d95;
+      text-decoration: none;
+    }
 
-        footer a:hover {
-            text-decoration: underline;
-        }
+    footer a:hover {
+      text-decoration: underline;
+    }
 
-        main {
-            flex: 1;
-        }
+    main {
+      flex: 1;
+    }
 
-        h2{
-            font-family: "Montserrat";
-            font-weight: bold;
-        }
-    </style>
+    h2 {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: bold;
+    }
+
+    .method-badge {
+      display: inline-block;
+      background-color: #eaf5ff;
+      color: #0366d6;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: monospace;
+      font-weight: bold;
+    }
+  </style>
 </head>
+
 <body>
+  <nav class="navbar navbar-expand-lg navbar-light">
+    <div class="container-fluid d-flex justify-content-between align-items-center px-4" style="height: 69px;">
+      <a class="navbar-brand d-flex align-items-center">
+        <img src="https://www.sibs.com/wp-content/themes/sitesibs/assets/images/logo.png" alt="Logo SIBS" style="max-height: 30px;">
+      </a>
+      <div>
+        <a href="http://localhost:8080/webapp/Stargate.html" style="background-color: #ff9800; color:#f2f2f2;"  class="btn btn-rounded" data-mdb-ripple-init>
+          <i class="fa fa-list"></i> Stargate
+        </a>
+        <a href="http://localhost:8080/webapp/config.html" class="btn btn-secondary btn-rounded" data-mdb-ripple-init>
+          <i class="fa fa-gears"></i> Configurações
+        </a>
+      </div>
+    </div>
+  </nav>
 
-    <nav class="navbar navbar-expand-lg navbar-dark shadow-sm">
-        <div class="container-fluid">
-            <a class="navbar-brand d-flex align-items-center" href="#">
-                <img src="https://www.sibs.com/wp-content/themes/sitesibs/assets/images/logo.png" alt="Logo SIBS" style="width: 140px;">
-                <span class="text-white"></span>
-            </a>
-            
-            <div class="ms-auto">
-                <a href="http://localhost:8080/webapp/config.html" class="btn btn-secondary btn-rounded" data-mdb-ripple-init><i class="fa fa-gears"></i> Config</a>
-            </div>
+  <main>
+    <div class="container mt-4">
+      <br>
+      <h1 class="text-center mb-4"></h1>
+
+      <div class="card">
+        <div class="card-header text-center d-flex justify-content-between align-items-center" style="background-color: #cae3ff;">
+          <h2 style="color: #454545; margin: 0 auto;"><b>Gateway SIBS Testes</b></h2>
+          <button type="button" class="btn btn-light btn-sm ms-2" data-bs-toggle="modal" data-bs-target="#infoModal" title="Informações">
+            <i class="fa fa-question-circle"></i>
+          </button>
         </div>
-    </nav>
 
-    <main>
-        <div class="container mt-4">
-            <br>
-            <h1 class="text-center mb-4"></h1>
+        <div class="card-body">
+          <div class="mb-3">
+            <label class="form-label">Montante (Valor máximo 200€):</label>
+            <input type="number" id="amount" class="form-control" value="1" min="1" max="200" step="0.01" onchange="makePayment()" oninput="if(this.value > 200) this.value = 200;">
+          </div>
 
-            <div class="card">
-                <div class="card-header text-center" style="background-color: #cae3ff;">
-                    <br>
-                    <h2 style="color: #454545;"><b>Gateway SIBS Testes</b></h2>                
-                </div>
-                <div class="card-body">
-                    <div class="mb-3">
-                        <label class="form-label">Valor (€):</label>
-                        <input type="number" id="amount" class="form-control" value="1" min="1" step="0.01" onchange="makePayment()">
-                    </div>
+          <div class="mb-3">
+            <label for="payment-method" class="form-label">Método de Pagamento:</label>
+            <select id="payment-method" class="form-select" onchange="makePayment()">
+            </select>
+          </div>
 
-                    <div class="mb-3">
-                        <label for="payment-method" class="form-label">Método de Pagamento:</label>
-                        <select id="payment-method" class="form-select" onchange="makePayment()">
-                            <option value="CARD">Cartão</option>
-                            <option value="MBWAY">MB WAY</option>
-                            <option value="REFERENCE">Referência</option>
-                        </select>
-                    </div>
-
-                    <button class="btn btn-primary w-100" onclick="makePayment()">Iniciar Pagamento</button>
-                </div>
-            </div>
-
-            <div id="payment-form" class="mt-4"></div>
+          <button class="btn btn-primary w-100" onclick="makePayment()">Iniciar Pagamento</button>
         </div>
-        <br>
-    </main>
+      </div>
 
-    <footer>
-        <div class="container">
-            <p class="mb-1">© 2025 Pagamentos SIBS. Todos os direitos reservados.</p>
-            <a href="https://www.docs.pay.sibs.com/portugal/sibs-gateway/integrations/api/integration-guide/" 
-               class="btn btn-secondary btn-rounded" data-mdb-ripple-init style="color: #333 !important;">
-               Visite aqui a documentação da Gateway
-            </a>
+      <div id="payment-form" class="mt-4"></div>
+    </div>
+    <br>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p class="mb-1">© 2025 Pagamentos SIBS. Todos os direitos reservados.</p>
+    </div>
+  </footer>
+
+  <!-- Modal de Informação -->
+  <div class="modal fade" id="infoModal" tabindex="-1" aria-labelledby="infoModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content shadow">
+        <div class="modal-header bg-light">
+          <h5 class="modal-title" id="infoModalLabel">
+            <i class="fa fa-info-circle me-2 text-primary"></i> Processo de Integração Gateway
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
         </div>
-    </footer>
+        <div class="modal-body">
+          <p>
+            Esta plataforma permite testar os métodos de pagamento da SIBS: <strong>Cartão</strong>, <strong>MB WAY</strong> e <strong>Referência Multibanco</strong>.
+            Selecione o valor e o método desejado para iniciar um pagamento.Para chamar o método basta fazer a seguinte chamada a API:
+          </p>
+          <p style="white-space: nowrap;">
+            <span class="badge bg-primary align-middle">POST</span> 
+            <code class="align-middle" style="font-size: 0.70rem;">https://spg.qly.site1.sibs.pt/api/v2/payments</code>
+          </p>
+          <br>
+          <p>Para visualização de toda a documentação, visite:</p>
+          <a href="https://www.docs.pay.sibs.com/portugal/sibs-gateway/integrations/api/integration-guide/" target="_blank" class="btn btn-outline-primary btn-sm">
+            <i class="fa fa-external-link me-1"></i> Documentação SIBS Gateway
+          </a>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">
+            <i class="fa fa-times me-1"></i> Fechar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 
-    <script>
-        async function makePayment() {
-            const apiUrl = "https://spg.qly.site1.sibs.pt/api/v2/payments";
-            const token = "0276b80f950fb446c6addaccd121abfbbb.eyJlIjoiMjA1ODA5Nzc5Nzc3MyIsInJvbGVzIjoiTUFOQUdFUiIsInRva2VuQXBwRGF0YSI6IntcIm1jXCI6XCIzNjkwMDZcIixcInRjXCI6XCI4MDc2MFwifSIsImkiOiIxNzQyNTY0OTk3NzczIiwiaXMiOiJodHRwczovL3FseS5zaXRlMS5zc28uc3lzLnNpYnMucHQvYXV0aC9yZWFsbXMvUUxZLk1FUkNILlBPUlQxIiwidHlwIjoiQmVhcmVyIiwiaWQiOiJGRXZCOTh6WHMyMzU4NzE5MDFjYzkxNDRkMTgzZTc2MDQ1NWUzMmYzYmMifQ==.a58e334057e8e792127de95c6c12d41ba7fcd42361d7ef2ea87749a276192ead72ccfda4a98091f192bd7b3576e27d39b27c1e972d1b34a761540400535ea193";
-            const clientId = "9bbac851-6948-4c4e-9145-b45ef913f8d3";
-            const amountValue = parseFloat(document.getElementById("amount").value);
-            const selectedMethod = document.getElementById("payment-method").value;
+  <script>
 
-            if (!selectedMethod) {
-                alert("Selecione um método de pagamento.");
-                return;
-            }
+    const defaultToken = "0276b80f950fb446c6addaccd121abfbbb.eyJlIjoiMjA2NTcwMDUxNzM1MyIsInJvbGVzIjoiTUFOQUdFUiIsInRva2VuQXBwRGF0YSI6IntcIm1jXCI6XCIzNjkwMDZcIixcInRjXCI6XCI4MDc2MFwifSIsImkiOiIxNzUwMTY3NzE3MzUzIiwiaXMiOiJodHRwczovL3FseS5zaXRlMS5zc28uc3lzLnNpYnMucHQvYXV0aC9yZWFsbXMvUUxZLk1FUkNILlBPUlQxIiwidHlwIjoiQmVhcmVyIiwiaWQiOiJpY2JRNTVzOW0xZTMzOWM5YzMxOGNmNGY0ZDljOWM2MDM1ZDNmYTc2ZTAifQ==.60a18e56a2428049dee1f1e4c9aea4070bfc55d273b6d8f47b3227b7363fa66cfe45ee3a49e5f25ef57bfe5c02ac6813f2a29c09d382bd5eeb5f5f32b7ef6926";
+    const defaultClientId = "b041f6cb-c4d5-4d5d-b172-a4c18dc1060f";
+    const defaultTerminalId = 80760;
+    const defaultentity = "53246";
 
-            const requestData = {
-                merchant: {
-                    terminalId: 80760,
-                    channel: "web",
-                    merchantTransactionId: "OrderID_00000"
-                },
-                transaction: {
-                    transactionTimestamp: new Date().toISOString(),
-                    description: "Transaction short description",
-                    moto: false,
-                    paymentType: "PURS",
-                    amount: {
-                        value: amountValue,
-                        currency: "EUR"
-                    },
-                    paymentMethod: [selectedMethod],
-                    paymentReference: { 
-                        initialDatetime: new Date().toISOString(),
-                        finalDatetime: "2025-06-30T23:59:59.000Z",
-                        maxAmount: {
-                            value: amountValue,
-                            currency: "EUR"
-                        },
-                        minAmount: {
-                            value:amountValue,
-                            currency: "EUR"
-                        },
-                        entity: "53246"
-                    },
-                }
-            };
+    document.addEventListener("DOMContentLoaded", function () {
+      const urlParams = new URLSearchParams(window.location.search);
+      const paymentMethodsParam = urlParams.get("paymentMethods");
 
-            try {
-                const response = await fetch(apiUrl, {
-                    method: "POST",
-                    headers: {
-                        "Authorization": `Bearer ${token}`,
-                        "X-IBM-Client-Id": clientId,
-                        "Content-Type": "application/json",
-                        "Accept": "application/json"
-                    },
-                    body: JSON.stringify(requestData)
-                });
+      const methodMap = {
+        "1": { label: "MB WAY", value: "MBWAY" },
+        "2": { label: "Multibanco", value: "REFERENCE" },
+        "3": { label: "Cartão", value: "CARD" }
+      };
 
-                if (!response.ok) {
-                    throw new Error(`Erro na requisição: ${response.status}`);
-                }
-
-                const data = await response.json();
-                if (data.transactionID && data.formContext) {
-                    generatePaymentForm(data.transactionID, data.formContext, selectedMethod);
-                } else {
-                    throw new Error("Resposta da API incompleta.");
-                }
-            } catch (error) {
-                console.error("Erro ao processar pagamento:", error);
-                alert("Erro ao processar pagamento. Verifique o console para mais detalhes.");
-            }
-        }
-
-        function generatePaymentForm(transactionID, formContext, selectedMethod) {
-            const script = document.createElement("script");
-            script.src = `https://spg.qly.site1.sibs.pt/assets/js/widget.js?id=${transactionID}`;
-            document.body.appendChild(script);
-
-            const formContainer = document.getElementById("payment-form");
-            formContainer.innerHTML = "";
-            
-            let redirectUrl = "http://localhost:8080/webapp/REFERENCE_return.html";
-
-            if (selectedMethod === "MBWAY") {
-                redirectUrl = "http://localhost:8080/webapp/MBWAY_return.html";
-            }
-
-            if (selectedMethod === "CARD") {
-                redirectUrl = "http://localhost:8080/webapp/card_return.html";
-            }
-
-            const form = document.createElement("form");
-            form.className = "paymentSPG";
-            form.setAttribute("spg-context", formContext);
-            form.setAttribute("spg-config", JSON.stringify({
-                paymentMethodList: [],
-                amount: { value: parseFloat(document.getElementById("amount").value), currency: "EUR" },
-                language: "pt",
-                redirectUrl: redirectUrl
-            }));
-            formContainer.appendChild(form);
-        }
-
-        console.log("Configuração guardada:", {
-            terminalId,
-            clientId,
-            bearerToken,
-            paymentMethods: selectedMethods
+      const select = document.getElementById("payment-method");
+      select.innerHTML = ""; 
+      
+      if (paymentMethodsParam) {
+        const codes = paymentMethodsParam.split(",");
+        codes.forEach(code => {
+          const trimmed = code.trim();
+          if (methodMap[trimmed]) {
+            const opt = document.createElement("option");
+            opt.value = methodMap[trimmed].value;
+            opt.textContent = methodMap[trimmed].label;
+            select.appendChild(opt);
+          }
         });
-    </script>
+      }
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.1/mdb.min.js"></script>
+      if (select.options.length === 0) {
+        Object.values(methodMap).forEach(({ label, value }) => {
+          const opt = document.createElement("option");
+          opt.value = value;
+          opt.textContent = label;
+          select.appendChild(opt);
+        });
+      }
+    });
 
+    function getURLParameter(name) {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get(name);
+    }
+
+
+    async function makePayment() {
+
+      const apiUrl = "https://spg.qly.site1.sibs.pt/api/v2/payments";
+
+      const token = getURLParameter("bearerToken") || defaultToken;
+      const clientId = getURLParameter("clientId") || defaultClientId;
+      const terminalId = parseInt(getURLParameter("terminalId")) || defaultTerminalId;
+      const entity = String(getURLParameter("entity") || "53246");
+
+      const amountValue = parseFloat(document.getElementById("amount").value);
+      const selectedMethod = document.getElementById("payment-method").value;
+
+      if (!selectedMethod) {
+        alert("Selecione um método de pagamento.");
+        return;
+      }
+      const initialDatetime = new Date();
+      const finalDatetime = new Date(initialDatetime);
+      finalDatetime.setMonth(finalDatetime.getMonth() + 2);
+
+      const initialDatetimeStr = initialDatetime.toISOString();
+      const finalDatetimeStr = finalDatetime.toISOString();
+      
+      const requestData = {
+        merchant: {
+          terminalId: terminalId,
+          channel: "web",
+          merchantTransactionId: "OrderID_00000"
+        },
+        transaction: {
+          transactionTimestamp: new Date().toISOString(),
+          description: "Transaction short description",
+          moto: false,
+          paymentType: "PURS",
+          amount: {
+            value: amountValue,
+            currency: "EUR"
+          },
+          paymentMethod: [selectedMethod],
+          paymentReference: {
+            initialDatetime: initialDatetimeStr,
+            finalDatetime: finalDatetimeStr,
+            maxAmount: { value: amountValue, currency: "EUR" },
+            minAmount: { value: amountValue, currency: "EUR" },
+            entity: entity
+          }
+        }
+      };
+
+      try {
+        const response = await fetch(apiUrl, {
+          method: "POST",
+          headers: {
+            "Authorization": `Bearer ${token}`,
+            "X-IBM-Client-Id": clientId,
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+          },
+          body: JSON.stringify(requestData)
+        });
+
+        if (!response.ok) {
+          throw new Error(`Erro na requisição: ${response.status}`);
+        }
+
+        const data = await response.json();
+        if (data.transactionID && data.formContext) {
+          generatePaymentForm(data.transactionID, data.formContext, selectedMethod);
+        } else {
+          throw new Error("Resposta da API incompleta.");
+        }
+      } catch (error) {
+        console.error("Erro ao processar pagamento:", error);
+        alert("Erro ao processar pagamento. Verifique o console para mais detalhes.");
+      }
+    }
+
+    function generatePaymentForm(transactionID, formContext, selectedMethod) {
+      const script = document.createElement("script");
+      script.src = `https://spg.qly.site1.sibs.pt/assets/js/widget.js?id=${transactionID}`;
+      document.body.appendChild(script);
+
+      const formContainer = document.getElementById("payment-form");
+      formContainer.innerHTML = "";
+
+      const token_payment = getURLParameter("bearerToken") || defaultToken;
+      const clientId_payment = getURLParameter("clientId") || defaultClientId;
+      const terminalId_payment = parseInt(getURLParameter("terminalId")) || defaultTerminalId;
+      const entity_payment = String(getURLParameter("entity") || "53246");
+
+      let redirectUrl = `http://localhost:8080/webapp/REFERENCE_return.html?token=${token_payment}&clientId=${clientId_payment}&terminalId=${terminalId_payment}&entity=${entity_payment}`;
+      if (selectedMethod === "MBWAY") redirectUrl = `http://localhost:8080/webapp/MBWAY_return.html?token=${token_payment}&clientId=${clientId_payment}&terminalId=${terminalId_payment}&entity=${entity_payment}`;
+      if (selectedMethod === "CARD") redirectUrl = `http://localhost:8080/webapp/card_return.html?token=${token_payment}&clientId=${clientId_payment}&terminalId=${terminalId_payment}&entity=${entity_payment}`;
+
+      const amount = parseFloat(document.getElementById("amount").value);
+
+      const form = document.createElement("form");
+      form.className = "paymentSPG";
+      form.setAttribute("spg-context", formContext);
+      form.setAttribute("spg-config", JSON.stringify({
+        paymentMethodList: [],
+        amount: { value: amount, currency: "EUR" },
+        language: "pt",
+        redirectUrl: redirectUrl
+      }));
+
+      formContainer.appendChild(form);
+
+      const token = getURLParameter("bearerToken") || defaultToken;
+      const clientId = getURLParameter("clientId") || defaultClientId;
+      const terminalId = parseInt(getURLParameter("terminalId")) || defaultTerminalId;
+      const entity = String(getURLParameter("entity") || defaultentity);
+
+      const initialDatetime = new Date().toISOString();
+      const finalDatetime = new Date();
+      finalDatetime.setMonth(finalDatetime.getMonth() + 2);
+
+      const debugBody = {
+        merchant: {
+          terminalId: terminalId,
+          channel: "web",
+          merchantTransactionId: "OrderID_00000"
+        },
+        transaction: {
+          transactionTimestamp: new Date().toISOString(),
+          description: "Transaction short description",
+          moto: false,
+          paymentType: "PURS",
+          amount: {
+            value: amount,
+            currency: "EUR"
+          },
+          paymentMethod: [selectedMethod],
+          paymentReference: {
+            initialDatetime: initialDatetime,
+            finalDatetime: finalDatetime.toISOString(),
+            maxAmount: { value: amount, currency: "EUR" },
+            minAmount: { value: amount, currency: "EUR" },
+            entity: entity
+          }
+        }
+      };
+
+      const debugHeaders = {
+        "Authorization": `Bearer ${token}`,
+        "X-IBM-Client-Id": clientId,
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+      };
+
+    const debugContainer = document.createElement("div");
+    debugContainer.className = "card mt-4";
+    
+    const debugHeader = document.createElement("div");
+    debugHeader.className = "card-header bg-primary text-white fw-bold";
+    debugHeader.textContent = "Debug da Requisição";
+    debugContainer.appendChild(debugHeader);
+
+    const debugContent = document.createElement("div");
+    debugContent.className = "card-body";
+
+    const headersTitle = document.createElement("h6");
+    headersTitle.className = "fw-bold";
+    headersTitle.textContent = "Headers da Requisição:";
+    const headersPre = document.createElement("pre");
+    headersPre.className = "bg-light p-3 rounded";
+    headersPre.style.maxHeight = "150px";
+    headersPre.style.overflowY = "auto";
+    headersPre.style.fontSize = "0.8rem";
+    headersPre.textContent = JSON.stringify(debugHeaders, null, 2);
+
+    const bodyTitle = document.createElement("h6");
+    bodyTitle.className = "fw-bold mt-3";
+    bodyTitle.textContent = "Corpo da Requisição:";
+    const bodyPre = document.createElement("pre");
+    bodyPre.className = "bg-light p-3 rounded";
+    bodyPre.style.maxHeight = "300px";
+    bodyPre.style.overflowY = "auto";
+    bodyPre.style.fontSize = "0.8rem";
+    bodyPre.textContent = JSON.stringify(debugBody, null, 2);
+
+    debugContent.appendChild(headersTitle);
+    debugContent.appendChild(headersPre);
+    debugContent.appendChild(bodyTitle);
+    debugContent.appendChild(bodyPre);
+
+    debugContainer.appendChild(debugContent);
+    formContainer.appendChild(debugContainer);
+  }
+
+    //window.addEventListener("pageshow", (event) => {
+      //if (event.persisted || performance.getEntriesByType("navigation")[0].type === "back_forward") {
+        //makePayment();
+      //}
+    //});
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.1/mdb.min.js"></script>
 </body>
 </html>
