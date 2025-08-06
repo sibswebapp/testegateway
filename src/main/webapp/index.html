@@ -125,7 +125,7 @@
 
           <div class="mb-3">
             <label for="payment-method" class="form-label">Método de Pagamento:</label>
-            <select id="payment-method" class="form-select" onchange="makePayment()"></select>
+            <select id="payment-method" class="form-select" onchange="makePayment(); showDummyFieldsIfNeeded();"></select>
           </div>
           
           <div id="dummyCustomerFields" class="mt-4" style="display: none;">
@@ -136,7 +136,7 @@
 
             <div class="mb-3">
               <label class="form-label">Nome:</label>
-              <input type="text" id="customerName" class="form-control" value="Diogo">
+              <input type="text" id="customerName" class="form-control" value="Diego">
             </div>
 
             <div class="mb-3">
@@ -176,17 +176,17 @@
             <div class="row">
               <div class="col-md-6 mb-3">
                 <label>Rua 1:</label>
-                <input type="text" id="billingStreet1" class="form-control" value="First street">
+                <input type="text" id="billingStreet1" class="form-control" value="Rua teste 1">
               </div>
               <div class="col-md-6 mb-3">
                 <label>Rua 2:</label>
-                <input type="text" id="billingStreet2" class="form-control" value="Menef Square">
+                <input type="text" id="billingStreet2" class="form-control" value="Rua teste 2">
               </div>
             </div>
             <div class="row">
               <div class="col-md-4 mb-3">
                 <label>Cidade:</label>
-                <input type="text" id="billingCity" class="form-control" value="Lisbon">
+                <input type="text" id="billingCity" class="form-control" value="Lisboa">
               </div>
               <div class="col-md-4 mb-3">
                 <label>Código Postal:</label>
@@ -202,11 +202,12 @@
           </div>
           
           <button class="btn btn-primary w-100 mt-3" onclick="makePayment()">Iniciar Pagamento</button>
-        
+
         </div>
       </div>
 
       <div id="payment-form" class="mt-4"></div>
+
     </div>
     <br>
   </main>
@@ -257,21 +258,22 @@
     const defaultClientId = "b041f6cb-c4d5-4d5d-b172-a4c18dc1060f";
     const defaultTerminalId = 80760;
     const defaultentity = "53246";
-
+  
+    showDummyFieldsIfNeeded();
 
     document.addEventListener("DOMContentLoaded", function () {
       const urlParams = new URLSearchParams(window.location.search);
-      const paymentMethodsParam = urlParams.get("paymentMethods");
-
-      const methodMap = {
-        "1": { label: "MB WAY", value: "MBWAY" },
-        "2": { label: "Multibanco", value: "REFERENCE" },
-        "3": { label: "Cartão", value: "CARD" }
-      };
+      const paymentMethodsParam = urlParams.get("paymentMethods");    
 
       const select = document.getElementById("payment-method");
       select.innerHTML = ""; 
-      
+
+      const methodMap = {
+          "1": { label: "MB WAY", value: "MBWAY" },
+          "2": { label: "Multibanco", value: "REFERENCE" },
+          "3": { label: "Cartão", value: "CARD" }
+      };
+
       if (paymentMethodsParam) {
         const codes = paymentMethodsParam.split(",");
         codes.forEach(code => {
@@ -303,9 +305,9 @@
     function showDummyFieldsIfNeeded() {
       const urlParams = new URLSearchParams(window.location.search);
       const isDummyCustomer = urlParams.get("isDummyCustomer");
-      const paymentMethodsParam = urlParams.get("paymentMethods");
+      const selectedMethod = document.getElementById("payment-method").value;
 
-      if (isDummyCustomer === "1" && paymentMethodsParam && paymentMethodsParam.includes("3")) {
+      if (isDummyCustomer === "1" && selectedMethod == "CARD") {
         document.getElementById("dummyCustomerFields").style.display = "block";
       } else {
         document.getElementById("dummyCustomerFields").style.display = "none";
@@ -354,7 +356,7 @@
         return;
       }
 
-       if (!validateDummyCustomerFields()) {
+      if (!validateDummyCustomerFields()) {
         return; 
       }
       const initialDatetime = new Date();
@@ -391,7 +393,7 @@
       };
 
       const params = new URLSearchParams(window.location.search);
-      if (params.get("isDummyCustomer") === "1") {
+      if (params.get("isDummyCustomer") === "1" && selectedMethod == "CARD") {
         requestData.customer = {
           customerInfo: {
             customerName: document.getElementById("customerName").value,
@@ -432,7 +434,7 @@
 
         const data = await response.json();
         if (data.transactionID && data.formContext) {
-          generatePaymentForm(data.transactionID, data.formContext, selectedMethod);
+          generatePaymentForm(data.transactionID, data.formContext, selectedMethod, data.transactionSignature);
         } else {
           throw new Error("Resposta da API incompleta.");
         }
@@ -442,24 +444,32 @@
       }
     }
 
-    function generatePaymentForm(transactionID, formContext, selectedMethod) {
+  function generatePaymentForm(transactionID, formContext, selectedMethod, transactionSignature) {
+    const formContainer = document.getElementById("payment-form");
+    formContainer.innerHTML = "";
+
+    const token_payment = getURLParameter("bearerToken") || defaultToken;
+    const clientId_payment = getURLParameter("clientId") || defaultClientId;
+    const terminalId_payment = parseInt(getURLParameter("terminalId")) || defaultTerminalId;
+    const entity_payment = String(getURLParameter("entity") || "53246");
+    const isDummyCustomer = getURLParameter("isDummyCustomer") || "0";
+
+
+    const paymentMethods = getURLParameter("paymentMethods") || "0";
+    const isServerToServer = getURLParameter("ServerToServer") === "1";
+
+    let redirectUrl = `http://localhost:8080/webapp/REFERENCE_return.html?token=${token_payment}&clientId=${clientId_payment}&terminalId=${terminalId_payment}&entity=${entity_payment}&ServerToServer=${isServerToServer}&paymentMethods=${paymentMethods}&isDummyCustomer=${isDummyCustomer}`;
+    
+    if (selectedMethod === "MBWAY") redirectUrl = `http://localhost:8080/webapp/MBWAY_return.html?token=${token_payment}&clientId=${clientId_payment}&terminalId=${terminalId_payment}&entity=${entity_payment}&paymentMethods=${paymentMethods}&isDummyCustomer=${isDummyCustomer}`;
+
+    if (selectedMethod === "CARD") redirectUrl = `http://localhost:8080/webapp/card_return.html?token=${token_payment}&clientId=${clientId_payment}&terminalId=${terminalId_payment}&entity=${entity_payment}&paymentMethods=${paymentMethods}&isDummyCustomer=${isDummyCustomer}`;
+
+    const amount = parseFloat(document.getElementById("amount").value);
+
+    if (!isServerToServer) {
       const script = document.createElement("script");
       script.src = `https://spg.qly.site1.sibs.pt/assets/js/widget.js?id=${transactionID}`;
       document.body.appendChild(script);
-
-      const formContainer = document.getElementById("payment-form");
-      formContainer.innerHTML = "";
-
-      const token_payment = getURLParameter("bearerToken") || defaultToken;
-      const clientId_payment = getURLParameter("clientId") || defaultClientId;
-      const terminalId_payment = parseInt(getURLParameter("terminalId")) || defaultTerminalId;
-      const entity_payment = String(getURLParameter("entity") || "53246");
-
-      let redirectUrl = `http://localhost:8080/webapp/REFERENCE_return.html?token=${token_payment}&clientId=${clientId_payment}&terminalId=${terminalId_payment}&entity=${entity_payment}`;
-      if (selectedMethod === "MBWAY") redirectUrl = `http://localhost:8080/webapp/MBWAY_return.html?token=${token_payment}&clientId=${clientId_payment}&terminalId=${terminalId_payment}&entity=${entity_payment}`;
-      if (selectedMethod === "CARD") redirectUrl = `http://localhost:8080/webapp/card_return.html?token=${token_payment}&clientId=${clientId_payment}&terminalId=${terminalId_payment}&entity=${entity_payment}`;
-
-      const amount = parseFloat(document.getElementById("amount").value);
 
       const form = document.createElement("form");
       form.className = "paymentSPG";
@@ -472,52 +482,225 @@
       }));
 
       formContainer.appendChild(form);
+    } else {
 
-      const token = getURLParameter("bearerToken") || defaultToken;
-      const clientId = getURLParameter("clientId") || defaultClientId;
-      const terminalId = parseInt(getURLParameter("terminalId")) || defaultTerminalId;
-      const entity = String(getURLParameter("entity") || defaultentity);
+      const wrapper = document.createElement("div");
+      wrapper.className = "d-flex flex-column align-items-center justify-content-center p-4 border rounded bg-light";
 
-      const initialDatetime = new Date().toISOString();
-      const finalDatetime = new Date();
-      finalDatetime.setMonth(finalDatetime.getMonth() + 2);
+      if (selectedMethod === "MBWAY") {
+        const phoneGroup = document.createElement("div");
+        phoneGroup.className = "mb-3 text-center";
 
-      const debugBody = {
-        merchant: {
-          terminalId: terminalId,
-          channel: "web",
-          merchantTransactionId: "OrderID_00000"
+        const phoneLabel = document.createElement("label");
+        phoneLabel.setAttribute("for", "mbwayPhone");
+        phoneLabel.className = "form-label fw-bold";
+        phoneLabel.textContent = "Número de Telemóvel MBWAY:";
+
+        const phoneInput = document.createElement("input");
+        phoneInput.id = "mbwayPhone";
+        phoneInput.type = "tel";
+        phoneInput.className = "form-control text-center";
+        phoneInput.placeholder = "Formato 351#915500462";
+        phoneInput.style.maxWidth = "300px";
+
+        phoneInput.addEventListener("input", function () {
+          this.value = this.value.replace(/[^\d#]/g, "");
+        });
+
+        const messageDiv = document.createElement("div");
+        messageDiv.id = "message";
+        messageDiv.setAttribute("role", "alert");
+        messageDiv.style.marginTop = "0.25rem";
+        messageDiv.style.textAlign = "center";
+        messageDiv.style.maxWidth = "300px";
+        messageDiv.style.margin = "0.25rem auto 0";
+        messageDiv.style.padding = "0.375rem 0.75rem";
+        messageDiv.style.borderRadius = "0.25rem";
+
+        phoneGroup.appendChild(phoneLabel);
+        phoneGroup.appendChild(phoneInput);
+        phoneGroup.appendChild(messageDiv);
+
+        const payButton = document.createElement("button");
+        payButton.className = "btn btn-success mt-2";
+        payButton.textContent = "Pagar MBWAY";
+        payButton.onclick = async () => {
+          const mbwayPhone = document.getElementById("mbwayPhone").value.trim();
+          const messageElement = document.getElementById("message");
+
+          if (!mbwayPhone) {
+            messageElement.textContent = "Por favor, preencha o campo de telefone MB WAY.";
+            messageElement.classList.add("alert", "alert-danger");
+            return;
+          }
+
+          messageElement.textContent = "Telefone OK!"; 
+          messageElement.classList.remove("alert", "alert-danger");
+
+          const apiUrl = `https://spg.qly.site1.sibs.pt/api/v2/payments/${transactionID}/mbway-id/purchase`;
+
+          const headers = {
+            Authorization: `Digest ${transactionSignature}`,
+            "X-IBM-Client-Id": clientId_payment,
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+          };
+
+          const body = {
+            customerPhone: mbwayPhone
+          };
+
+          try {
+            const response = await fetch(apiUrl, {
+              method: "POST",
+              headers,
+              body: JSON.stringify(body)
+            });
+
+            if (!response.ok) {
+              throw new Error(`Erro ao gerar referência ServerToServer: ${response.status}`);
+            }
+
+            const data = await response.json();
+
+          } catch (error) {
+            console.error("Erro ServerToServer:", error);
+            if (messageElement) {
+              messageElement.textContent = "Erro, número de telefone incorreto";
+              messageElement.classList.add("alert", "alert-danger");
+            }
+            return;
+          }
+
+          const redirectWithPhone = `http://localhost:8080/webapp/MBWAY_return.html?id=${transactionID}&token=${token_payment}&clientId=${clientId_payment}&terminalId=${terminalId_payment}&entity=${entity_payment}&ServerToServer=${isServerToServer}&mbwayPhone=${encodeURIComponent(mbwayPhone)}&paymentMethods=${paymentMethods}&isDummyCustomer=${isDummyCustomer}`;
+
+          window.location.href = redirectWithPhone;
+        };
+
+      wrapper.appendChild(phoneGroup);
+      wrapper.appendChild(payButton);
+
+      } 
+      else if (selectedMethod === "REFERENCE") {
+          const referenceText = document.createElement("p");
+          referenceText.className = "fw-semibold text-center mb-3";
+          referenceText.textContent = "Clique no botão abaixo para gerar uma referência de pagamento:";
+
+          const referenceButton = document.createElement("button");
+          referenceButton.className = "btn btn-primary";
+          referenceButton.textContent = "Gerar Referência de Pagamento";
+          referenceButton.onclick = () => {
+
+            referenceButton.onclick = () => {
+            const redirect_reference_serverToserver = `http://localhost:8080/webapp/REFERENCE_return.html?id=${transactionID}&token=${token_payment}&clientId=${clientId_payment}&terminalId=${terminalId_payment}&entity=${entity_payment}&ServerToServer=${isServerToServer}&paymentMethods=${paymentMethods}&isDummyCustomer=${isDummyCustomer}`;
+
+            const headers = {
+              "Authorization": `Digest ${transactionSignature}`,
+              "X-IBM-Client-Id": clientId_payment,
+              "Content-Type": "application/json",
+              "Accept": "application/json"
+            };
+
+            const apiUrl = `https://spg.qly.site1.sibs.pt/api/v2/payments/${transactionID}/service-reference/generate`;
+
+            fetch(apiUrl, {
+              method: 'POST',  
+              headers: headers
+            })
+            .then(response => {
+              if (response.ok) {
+                window.location.href = redirect_reference_serverToserver;
+              } else {
+                console.error('Erro ao gerar referência:', response.status);
+              }
+            })
+            .catch(error => {
+              console.error('Erro na requisição:', error);
+            });
+          };
+
+        };
+
+        wrapper.appendChild(referenceText);
+        wrapper.appendChild(referenceButton);
+      }
+
+      formContainer.appendChild(wrapper);
+
+    }
+
+    const token = getURLParameter("bearerToken") || defaultToken;
+    const clientId = getURLParameter("clientId") || defaultClientId;
+    const terminalId = parseInt(getURLParameter("terminalId")) || defaultTerminalId;
+    const entity = String(getURLParameter("entity") || defaultentity);
+
+    const initialDatetime = new Date().toISOString();
+    const finalDatetime = new Date();
+    finalDatetime.setMonth(finalDatetime.getMonth() + 2);
+
+    const debugBody = {
+      merchant: {
+        terminalId: terminalId,
+        channel: "web",
+        merchantTransactionId: "OrderID_00000"
+      },
+      transaction: {
+        transactionTimestamp: new Date().toISOString(),
+        description: "Transaction short description",
+        moto: false,
+        paymentType: "PURS",
+        amount: {
+          value: amount,
+          currency: "EUR"
         },
-        transaction: {
-          transactionTimestamp: new Date().toISOString(),
-          description: "Transaction short description",
-          moto: false,
-          paymentType: "PURS",
-          amount: {
-            value: amount,
-            currency: "EUR"
+        paymentMethod: [selectedMethod]
+      }
+    };
+
+    if (selectedMethod === "REFERENCE") {
+      debugBody.transaction.paymentReference = {
+        initialDatetime: initialDatetime,
+        finalDatetime: finalDatetime.toISOString(),
+        maxAmount: { value: amount, currency: "EUR" },
+        minAmount: { value: amount, currency: "EUR" },
+        entity: entity
+      };
+    }
+
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("isDummyCustomer") === "1" && selectedMethod === "CARD") {
+      debugBody.customer = {
+        customerInfo: {
+          customerName: document.getElementById("customerName").value,
+          customerEmail: document.getElementById("customerEmail").value,
+          shippingAddress: {
+            street1: document.getElementById("shippingStreet1").value,
+            street2: document.getElementById("shippingStreet2").value,
+            city: document.getElementById("shippingCity").value,
+            postcode: document.getElementById("shippingPostcode").value,
+            country: document.getElementById("shippingCountry").value
           },
-          paymentMethod: [selectedMethod],
-          paymentReference: {
-            initialDatetime: initialDatetime,
-            finalDatetime: finalDatetime.toISOString(),
-            maxAmount: { value: amount, currency: "EUR" },
-            minAmount: { value: amount, currency: "EUR" },
-            entity: entity
+          billingAddress: {
+            street1: document.getElementById("billingStreet1").value,
+            street2: document.getElementById("billingStreet2").value,
+            city: document.getElementById("billingCity").value,
+            postcode: document.getElementById("billingPostcode").value,
+            country: document.getElementById("billingCountry").value
           }
         }
       };
+    }
 
-      const debugHeaders = {
-        "Authorization": `Bearer ${token}`,
-        "X-IBM-Client-Id": clientId,
-        "Content-Type": "application/json",
-        "Accept": "application/json"
-      };
+    const debugHeaders = {
+      "Authorization": `Bearer ${token}`,
+      "X-IBM-Client-Id": clientId,
+      "Content-Type": "application/json",
+      "Accept": "application/json"
+    };
 
     const debugContainer = document.createElement("div");
     debugContainer.className = "card mt-4";
-    
+
     const debugHeader = document.createElement("div");
     debugHeader.className = "card-header bg-primary text-white fw-bold";
     debugHeader.textContent = "Debug da Requisição";
@@ -554,30 +737,6 @@
     debugContainer.appendChild(debugContent);
     formContainer.appendChild(debugContainer);
   }
-
-    //window.addEventListener("pageshow", (event) => {
-      //if (event.persisted || performance.getEntriesByType("navigation")[0].type === "back_forward") {
-        //makePayment();
-      //}
-    //});
-
-
-    async function loadCountries() {
-    const response = await fetch("https://restcountries.com/v3.1/all");
-    const countries = await response.json();
-    const sorted = countries.sort((a, b) => a.name.common.localeCompare(b.name.common));
-
-    const countrySelects = [document.getElementById("shippingCountry"), document.getElementById("billingCountry")];
-
-    sorted.forEach(country => {
-      const option = document.createElement("option");
-      option.value = country.cca2;
-      option.text = country.name.common;
-      countrySelects.forEach(select => select.appendChild(option.cloneNode(true)));
-    });
-  }
-
-  window.addEventListener("DOMContentLoaded", loadCountries);
 
   </script>
 

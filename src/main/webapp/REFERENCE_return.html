@@ -112,7 +112,7 @@
                 <img src="https://www.pay.sibs.com/wp-content/uploads/2022/02/logo.png" alt="Logo SIBS" style="max-height:30px;" />
             </a>
             <div>
-                <a class="btn btn-secondary btn-rounded" href="http://localhost:8080/webapp/index.html">
+                <a id="btnComParametros" href="#" class="btn btn-primary">
                     <i class="fa fa-reply"></i> Voltar atrás
                 </a>
             </div>
@@ -158,9 +158,35 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", async function () {
+
             function getQueryParam(param) {
                 const urlParams = new URLSearchParams(window.location.search);
                 return urlParams.get(param);
+            }
+            const token = getQueryParam("token");
+            const clientId = getQueryParam("clientId");
+            const terminalId = getQueryParam("terminalId");
+            const entity = getQueryParam("entity");
+
+            const isDummyCustomer = getQueryParam("isDummyCustomer") || "0";
+            const ServerToServer = getQueryParam("ServerToServer") || "0";
+            const paymentMethods= getQueryParam("paymentMethods")
+
+            let novaURL = "";
+            
+            if(ServerToServer){
+                const isServerToServer = getQueryParam("ServerToServer") === "true" ? 1 : 0;
+
+                const novaURL = `?token=${encodeURIComponent(token)}&clientId=${encodeURIComponent(clientId)}&terminalId=${encodeURIComponent(terminalId)}&entity=${encodeURIComponent(entity)}&isDummyCustomer=${encodeURIComponent(isDummyCustomer)}&ServerToServer=${encodeURIComponent(isServerToServer)}&paymentMethods=${paymentMethods}`;
+                const btn = document.getElementById("btnComParametros");
+                btn.href = `index.html${novaURL}`; 
+
+            }else if (token && clientId && terminalId && entity) {
+                const novaURL = `?token=${encodeURIComponent(token)}&clientId=${encodeURIComponent(clientId)}&terminalId=${encodeURIComponent(terminalId)}&entity=${encodeURIComponent(entity)}&paymentMethods=${paymentMethods}}&isDummyCustomer=${encodeURIComponent(isDummyCustomer)}&paymentMethods=${paymentMethods}`;
+                const btn = document.getElementById("btnComParametros");
+                btn.href = `index.html${novaURL}`; 
+            } else {
+                console.warn("Parâmetros obrigatórios ausentes na URL.");
             }
 
             const token_payment =  getQueryParam("token") || "Bearer 0276b80f950fb446c6addaccd121abfbbb.eyJlIjoiMjA1ODA5Nzc5Nzc3MyIsInJvbGVzIjoiTUFOQUdFUiIsInRva2VuQXBwRGF0YSI6IntcIm1jXCI6XCIzNjkwMDZcIixcInRjXCI6XCI4MDc2MFwifSIsImkiOiIxNzQyNTY0OTk3NzczIiwiaXMiOiJodHRwczovL3FseS5zaXRlMS5zc28uc3lzLnNpYnMucHQvYXV0aC9yZWFsbXMvUUxZLk1FUkNILlBPUlQxIiwidHlwIjoiQmVhcmVyIiwiaWQiOiJGRXZCOTh6WHMyMzU4NzE5MDFjYzkxNDRkMTgzZTc2MDQ1NWUzMmYzYmMifQ==.a58e334057e8e792127de95c6c12d41ba7fcd42361d7ef2ea87749a276192ead72ccfda4a98091f192bd7b3576e27d39b27c1e972d1b34a761540400535ea193";

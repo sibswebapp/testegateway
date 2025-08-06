@@ -136,7 +136,7 @@
         <img src="https://www.pay.sibs.com/wp-content/uploads/2022/02/logo.png" alt="Logo SIBS" style="max-height:30px;" />
       </a>
       <div>
-        <a class="btn btn-secondary btn-rounded" href="http://localhost:8080/webapp/index.html">
+        <a id="btnComParametros" href="#" class="btn btn-primary">
           <i class="fa fa-reply"></i> Voltar atrás
         </a>
       </div>
@@ -197,6 +197,30 @@
       function getQueryParam(param) {
         const urlParams = new URLSearchParams(window.location.search);
         return urlParams.get(param);
+      }
+
+      const token = getQueryParam("token");
+      const clientId = getQueryParam("clientId");
+      const terminalId = getQueryParam("terminalId");
+      const entity = getQueryParam("entity");
+
+      const isDummyCustomer = getQueryParam("isDummyCustomer") || "0";
+      const ServerToServer = getQueryParam("ServerToServer") || "0";
+      const paymentMethods= getQueryParam("paymentMethods")
+
+      if(ServerToServer){
+        const isServerToServer = getQueryParam("ServerToServer") === "true" ? 1 : 0;
+
+        const novaURL = `?token=${encodeURIComponent(token)}&clientId=${encodeURIComponent(clientId)}&terminalId=${encodeURIComponent(terminalId)}&entity=${encodeURIComponent(entity)}&isDummyCustomer=${encodeURIComponent(isDummyCustomer)}&ServerToServer=${encodeURIComponent(isServerToServer)}&paymentMethods=${paymentMethods}`;
+        const btn = document.getElementById("btnComParametros");
+        btn.href = `index.html${novaURL}`; 
+
+      }else if (token && clientId && terminalId && entity) {
+        const novaURL = `?token=${encodeURIComponent(token)}&clientId=${encodeURIComponent(clientId)}&terminalId=${encodeURIComponent(terminalId)}&entity=${encodeURIComponent(entity)}&isDummyCustomer=${encodeURIComponent(isDummyCustomer)}&paymentMethods=${paymentMethods}`;
+        const btn = document.getElementById("btnComParametros");
+        btn.href = `index.html${novaURL}`; 
+      } else {
+        console.warn("Parâmetros obrigatórios ausentes na URL.");
       }
 
       const paymentId = getQueryParam("id");

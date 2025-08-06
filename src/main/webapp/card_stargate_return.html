@@ -136,7 +136,7 @@
         <img src="https://www.pay.sibs.com/wp-content/uploads/2022/02/logo.png" alt="Logo SIBS" style="max-height:30px;" />
       </a>
       <div>
-        <a href="http://localhost:8080/webapp/Stargate.html" style="background-color: #ff9800; color:#f2f2f2;"  class="btn btn-rounded" data-mdb-ripple-init>
+        <a id="btnComParametros" href="#" style="background-color: #ff9800; color:#f2f2f2;" class="btn btn-rounded" data-mdb-ripple-init>
           <i class="fa fa-reply"></i> Voltar atrás
         </a>
       </div>
@@ -195,6 +195,18 @@
       function getQueryParam(param) {
         const urlParams = new URLSearchParams(window.location.search);
         return urlParams.get(param);
+      }
+
+      const token = getQueryParam("token");
+      const clientId = getQueryParam("clientId");
+      const terminalId = getQueryParam("terminalId");
+
+      if (token && clientId && terminalId) {
+        const novaURL = `?token=${encodeURIComponent(token)}&clientId=${encodeURIComponent(clientId)}&terminalId=${encodeURIComponent(terminalId)}`;
+        const btn = document.getElementById("btnComParametros");
+        btn.href = `Stargate.html${novaURL}`; 
+      } else {
+        console.warn("Parâmetros obrigatórios ausentes na URL.");
       }
 
       const paymentId = getQueryParam("id");

@@ -109,9 +109,15 @@
             <label class="form-check-label" for="defaultToggle">Usar Terminal default</label>
           </div>
 
-          <div class="form-check form-switch ms-4">
+          <div class="form-check form-switch ms-4" id="dummyCustomerToggleContainer" style="display: none;">
             <input class="form-check-input" type="checkbox" id="dummyCustomerToggle" onchange="toggleDummyCustomer(this);">
             <label class="form-check-label" for="dummyCustomerToggle">Customer Info Personalizado</label>
+          </div>
+
+          
+          <div class="form-check form-switch ms-4" id="ServerToServerContainer" >
+            <input class="form-check-input" type="checkbox" id="ServerToServerCheckbox" onchange="toggleServerToServer(this);">
+            <label class="form-check-label" for="ServerToServerCheckbox">Integração Server to Server (Apenas MBWAY e Multibanco)</label>
           </div>
         </div>
 
@@ -133,7 +139,7 @@
 
         <div class="mb-4">
           <label for="paymentMethods" class="form-label">Métodos de Pagamento:</label>
-          <select id="paymentMethods" multiple class="form-select" onchange="toggleEntityField()">
+          <select id="paymentMethods" multiple class="form-select" onchange="handlePaymentMethodChange()">
             <option value="1">MB WAY</option>
             <option value="2">Multibanco</option>
             <option value="3">Cartões</option>
@@ -141,7 +147,7 @@
           <div class="form-text">Use Ctrl (Windows) ou Cmd (Mac) para selecionar múltiplos.</div>
         </div>
 
-        <div class="mb-4 d-none" id="inputEntity">
+        <div class="mb-4" id="inputEntity">
           <label for="entity" class="form-label">Entidade (Multibanco):</label>
           <input type="text" id="entity" class="form-control" placeholder="Insira a entidade de pagamento">
         </div>
@@ -185,6 +191,54 @@
   <script>
 
     let isDummyCustomer = 0;
+    let ServerToServer = 0;
+
+    function handlePaymentMethodChange() {
+      const selectedOptions = Array.from(document.getElementById("paymentMethods").selectedOptions);
+      const hasCardSelected = selectedOptions.some(option => option.value === "3");
+      const hasMultibancoSelected = selectedOptions.some(option => option.value === "2");
+      const terminalDefault = document.getElementById('defaultToggle').checked;
+
+      const toggleContainer = document.getElementById("dummyCustomerToggleContainer");
+      const inputEntity = document.getElementById("inputEntity");
+
+      toggleContainer.style.display = hasCardSelected ? "block" : "none";
+
+      if(hasMultibancoSelected && !terminalDefault){
+        inputEntity.classList.remove("d-none"); 
+      }else{
+        inputEntity.classList.add("d-none"); 
+      }
+
+      if (hasCardSelected) {
+        localStorage.setItem('isDummyCustomer', '1');
+      } else {
+        localStorage.setItem('isDummyCustomer', '0');
+      }
+    }
+
+
+    function toggleServerToServer(element) {
+      const ServerToServer = element.checked ? 1 : 0;
+      localStorage.setItem('ServerToServer', ServerToServer.toString());
+
+      const paymentMethodsSelect = document.getElementById("paymentMethods");
+      const options = paymentMethodsSelect.options;
+
+      for (let i = 0; i < options.length; i++) {
+        const option = options[i];
+
+        if (option.value === "3") {
+          option.style.display = ServerToServer === 1 ? "none" : "block";
+
+          if (ServerToServer === 1 && option.selected) {
+            option.selected = false;
+          }
+        }
+      }
+
+      handlePaymentMethodChange();
+    }
 
     function toggleDummyCustomer(element) {
       isDummyCustomer = element.checked ? 1 : 0;
@@ -197,6 +251,14 @@
         isDummyCustomer = parseInt(storedDummy);
         const checkbox = document.getElementById('dummyCustomerToggle');
         if (checkbox) checkbox.checked = isDummyCustomer === 1;
+      }
+
+
+      const storedServerToServer = localStorage.getItem('ServerToServer');
+      if (storedServerToServer !== null) {
+        ServerToServer = parseInt(storedServerToServer);
+        const checkbox = document.getElementById('ServerToServerCheckbox');
+        if (checkbox) checkbox.checked = ServerToServer === 1;
       }
     });
 
@@ -212,7 +274,7 @@
 
         terminal.value = '80760';
         client.value = 'b041f6cb-c4d5-4d5d-b172-a4c18dc1060f';
-        token.value = '0276b80f950fb446c6addaccd121abfbbb.eyJlIjoiMjA1ODA5Nzc5Nzc3MyIsInJvbGVzIjoiTUFOQUdFUiIsInRva2VuQXBwRGF0YSI6IntcIm1jXCI6XCIzNjkwMDZcIixcInRjXCI6XCI4MDc2MFwifSIsImkiOiIxNzQyNTY0OTk3NzczIiwiaXMiOiJodHRwczovL3FseS5zaXRlMS5zc28uc3lzLnNpYnMucHQvYXV0aC9yZWFsbXMvUUxZLk1FUkNILlBPUlQxIiwidHlwIjoiQmVhcmVyIiwiaWQiOiJGRXZCOTh6WHMyMzU4NzE5MDFjYzkxNDRkMTgzZTc2MDQ1NWUzMmYzYmMifQ==.a58e334057e8e792127de95c6c12d41ba7fcd42361d7ef2ea87749a276192ead72ccfda4a98091f192bd7b3576e27d39b27c1e972d1b34a761540400535ea193';
+        token.value = '0276b80f950fb446c6addaccd121abfbbb.eyJlIjoiMjA2NTcwMDUxNzM1MyIsInJvbGVzIjoiTUFOQUdFUiIsInRva2VuQXBwRGF0YSI6IntcIm1jXCI6XCIzNjkwMDZcIixcInRjXCI6XCI4MDc2MFwifSIsImkiOiIxNzUwMTY3NzE3MzUzIiwiaXMiOiJodHRwczovL3FseS5zaXRlMS5zc28uc3lzLnNpYnMucHQvYXV0aC9yZWFsbXMvUUxZLk1FUkNILlBPUlQxIiwidHlwIjoiQmVhcmVyIiwiaWQiOiJpY2JRNTVzOW0xZTMzOWM5YzMxOGNmNGY0ZDljOWM2MDM1ZDNmYTc2ZTAifQ==.60a18e56a2428049dee1f1e4c9aea4070bfc55d273b6d8f47b3227b7363fa66cfe45ee3a49e5f25ef57bfe5c02ac6813f2a29c09d382bd5eeb5f5f32b7ef6926';
         entitypag.value = '53246';
         
         inputs.forEach(id => document.getElementById(id).classList.add('d-none'));
@@ -249,6 +311,7 @@
       const methods = Array.from(document.getElementById('paymentMethods').selectedOptions).map(opt => opt.value);
       const entity = document.getElementById('entity').value;
       const isDummyCustomer = parseInt(localStorage.getItem('isDummyCustomer') || '0');
+      const ServerToServer = parseInt(localStorage.getItem('ServerToServer') || '0');
 
 
       if (!useDefault && (!terminal || !client || !token || methods.length === 0)) {
@@ -271,6 +334,7 @@
       localStorage.setItem('paymentMethods', JSON.stringify(methods));
       localStorage.setItem('useDefaultConfig', useDefault.toString());
       localStorage.setItem('isDummyCustomer', isDummyCustomer.toString());
+      localStorage.setItem('ServerToServer', ServerToServer.toString());
 
       alert("Configuração guardada com sucesso!");
     }
@@ -295,6 +359,8 @@
       });
 
       toggleEntityField();
+      handlePaymentMethodChange();
+
     }
 
     document.querySelectorAll('[data-back-button]').forEach(btn => {
@@ -307,6 +373,7 @@
         const bearerToken = useDefault ? '0276b80f950fb446c6addaccd121abfbbb.eyJlIjoiMjA1ODA5Nzc5Nzc3MyIsInJvbGVzIjoiTUFOQUdFUiIsInRva2VuQXBwRGF0YSI6IntcIm1jXCI6XCIzNjkwMDZcIixcInRjXCI6XCI4MDc2MFwifSIsImkiOiIxNzQyNTY0OTk3NzczIiwiaXMiOiJodHRwczovL3FseS5zaXRlMS5zc28uc3lzLnNpYnMucHQvYXV0aC9yZWFsbXMvUUxZLk1FUkNILlBPUlQxIiwidHlwIjoiQmVhcmVyIiwiaWQiOiJGRXZCOTh6WHMyMzU4NzE5MDFjYzkxNDRkMTgzZTc2MDQ1NWUzMmYzYmMifQ==.a58e334057e8e792127de95c6c12d41ba7fcd42361d7ef2ea87749a276192ead72ccfda4a98091f192bd7b3576e27d39b27c1e972d1b34a761540400535ea193' : localStorage.getItem('bearerToken');
         const paymentMethods = JSON.parse(localStorage.getItem('paymentMethods') || '[]');
         const isDummyCustomer = parseInt(localStorage.getItem('isDummyCustomer') || '0');
+        const ServerToServer = parseInt(localStorage.getItem('ServerToServer') || '0');
 
         if (!terminalId || !entity || !clientId || !bearerToken || paymentMethods.length === 0) {
           alert("As configurações não estão completas. Guarde primeiro.");
@@ -319,7 +386,8 @@
         bearerToken,
         entity,
         paymentMethods: paymentMethods.join(','),
-        isDummyCustomer
+        isDummyCustomer,
+        ServerToServer
       });
 
 
@@ -327,6 +395,17 @@
 
       });
     });
+
+   window.addEventListener("DOMContentLoaded", () => {
+    const storedServerToServer = localStorage.getItem('ServerToServer');
+    const checkbox = document.getElementById("ServerToServerCheckbox");
+
+    if (storedServerToServer === "1") {
+      checkbox.checked = true;
+      toggleServerToServer(checkbox); 
+    }
+  });
+
 
     window.addEventListener('DOMContentLoaded', restoreFromLocalStorage);
   </script>
