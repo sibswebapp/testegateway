@@ -179,7 +179,7 @@
         const data = await response.json();
         updateDebug(responseHeadersObj, data);
 
-        if (data.paymentStatus === "Declined") {
+        if (data.paymentStatus === "Declined" && data.transactionStatusCode == "E0506") {
           const timerParagraph = document.querySelector('p');
           if (timerParagraph) timerParagraph.style.display = "none";
           messageElement.textContent = 'O número colocado não está registado no MB WAY.';

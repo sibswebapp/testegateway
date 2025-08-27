@@ -105,19 +105,19 @@
           <label class="form-check-label" for="defaultToggle">Usar Terminal default</label>
         </div>
 
-        <div class="mb-4" id="inputTerminalId">
-          <label for="terminalId" class="form-label">Terminal ID:</label>
-          <input type="number" id="terminalId" class="form-control" placeholder="Insira o terminalID fornecido pela SIBS">
+        <div class="mb-4" id="inputTerminalId_stargate">
+          <label for="terminalId_stargate" class="form-label">Terminal ID:</label>
+          <input type="number" id="terminalId_stargate" class="form-control" placeholder="Insira o terminalID fornecido pela SIBS">
         </div>
 
-        <div class="mb-4" id="inputClientId">
-          <label for="clientId" class="form-label">Client ID:</label>
-          <input type="text" id="clientId" class="form-control" placeholder="Insira o ClientID fornecido pela SIBS">
+        <div class="mb-4" id="inputClientId_stargate">
+          <label for="clientId_stargate" class="form-label">Client ID:</label>
+          <input type="text" id="clientId_stargate" class="form-control" placeholder="Insira o ClientID fornecido pela SIBS">
         </div>
 
-        <div class="mb-4" id="inputBearerToken">
-          <label for="bearerToken" class="form-label">Bearer Token:</label>
-          <textarea id="bearerToken" class="form-control" rows="4" placeholder="Insira o Bearer Token"></textarea>
+        <div class="mb-4" id="inputBearerToken_stargate">
+          <label for="bearerToken_stargate" class="form-label">Bearer Token:</label>
+          <textarea id="bearerToken_stargate" class="form-control" rows="4" placeholder="Insira o Bearer Token"></textarea>
         </div>
 
       
@@ -137,11 +137,11 @@
 
   <script>
     function toggleDefaults(checkbox) {
-      const terminal = document.getElementById('terminalId');
-      const client = document.getElementById('clientId');
-      const token = document.getElementById('bearerToken');
+      const terminal = document.getElementById('terminalId_stargate');
+      const client = document.getElementById('clientId_stargate');
+      const token = document.getElementById('bearerToken_stargate');
 
-      const inputs = ['inputTerminalId', 'inputClientId', 'inputBearerToken'];
+      const inputs = ['inputTerminalId_stargate', 'inputClientId_stargate', 'inputBearerToken_stargate'];
 
       if(checkbox.checked) {
 
@@ -172,24 +172,21 @@
 
     function saveConfig() {
       const useDefault = document.getElementById('defaultToggle').checked;
-      const terminal = document.getElementById('terminalId').value;
-      const client = document.getElementById('clientId').value;
-      const token = document.getElementById('bearerToken').value;
+      const terminal = document.getElementById('terminalId_stargate').value;
+      const client = document.getElementById('clientId_stargate').value;
+      const token = document.getElementById('bearerToken_stargate').value;
 
-      if (!useDefault && (!terminal || !client || !token || methods.length === 0)) {
+
+
+      if (!useDefault && (!terminal || !client || !token)) {
         alert("Preencha todos os campos obrigatórios.");
         return;
       }
 
-      if (!useDefault && methods.includes('2')) {
-        alert("Preencha a Entidade para Multibanco.");
-        return;
-      }
-
       if (!useDefault) {
-        localStorage.setItem('terminalId', terminal);
-        localStorage.setItem('clientId', client);
-        localStorage.setItem('bearerToken', token);
+        localStorage.setItem('terminalId_stargate', terminal);
+        localStorage.setItem('clientId_stargate', client);
+        localStorage.setItem('bearerToken_stargate', token);
       }
 
       localStorage.setItem('useDefaultConfig', useDefault.toString());
@@ -204,14 +201,10 @@
       toggleDefaults(checkbox);
 
       if (!useDefault) {
-        document.getElementById('terminalId').value = localStorage.getItem('terminalId') || '';
-        document.getElementById('clientId').value = localStorage.getItem('clientId') || '';
-        document.getElementById('bearerToken').value = localStorage.getItem('bearerToken') || ''
+        document.getElementById('terminalId_stargate').value = localStorage.getItem('terminalId_stargate') || '';
+        document.getElementById('clientId_stargate').value = localStorage.getItem('clientId_stargate') || '';
+        document.getElementById('bearerToken_stargate').value = localStorage.getItem('bearerToken_stargate') || ''
       }
-
-      Array.from(select.options).forEach(opt => {
-        opt.selected = savedMethods.includes(opt.value);
-      });
 
       toggleEntityField();
     }
@@ -220,9 +213,9 @@
       btn.addEventListener('click', (e) => {
         e.preventDefault();
         const useDefault = localStorage.getItem('useDefaultConfig') === 'true';
-        const terminalId = useDefault ? '301' : localStorage.getItem('terminalId');
-        const clientId = useDefault ? 'a1f729f7-ee7c-46b3-b30a-9b20d7fff09a' : localStorage.getItem('clientId');
-        const bearerToken = useDefault ? '02090d1ccf9a8e42a5b859c5b84dc4c5a8.eyJlIjoiMjA2NzY3MzI2NDY1MSIsInJvbGVzIjoiTUFOQUdFUiIsInRva2VuQXBwRGF0YSI6IntcIm1jXCI6XCIxODFcIixcInRjXCI6XCIzMDFcIn0iLCJpIjoiMTc1MjE0MDQ2NDY1MSIsImlzIjoiaHR0cHM6Ly9xbHkuc2l0ZTEuc3NvLnN5cy5zaWJzLnB0L2F1dGgvcmVhbG1zL1FMWS5TQk8tSU5ULlBPUlQxIiwidHlwIjoiQmVhcmVyIiwiaWQiOiJyaFNOVVl4RFNIMjE2NDU1NmU5NDYxNGU0YWEzOGU4NDYzMTBhMzRlMjUifQ==.f486111bd4c61bb025c46fb6478233f23a18edfebd42e66712d6b3547ed452d8217d85d2fc6f0682f2b572fb787e082e9f3609b3343c27f851659b5f71bacf30' : localStorage.getItem('bearerToken');
+        const terminalId = useDefault ? '301' : localStorage.getItem('terminalId_stargate');
+        const clientId = useDefault ? 'a1f729f7-ee7c-46b3-b30a-9b20d7fff09a' : localStorage.getItem('clientId_stargate');
+        const bearerToken = useDefault ? '02090d1ccf9a8e42a5b859c5b84dc4c5a8.eyJlIjoiMjA2NzY3MzI2NDY1MSIsInJvbGVzIjoiTUFOQUdFUiIsInRva2VuQXBwRGF0YSI6IntcIm1jXCI6XCIxODFcIixcInRjXCI6XCIzMDFcIn0iLCJpIjoiMTc1MjE0MDQ2NDY1MSIsImlzIjoiaHR0cHM6Ly9xbHkuc2l0ZTEuc3NvLnN5cy5zaWJzLnB0L2F1dGgvcmVhbG1zL1FMWS5TQk8tSU5ULlBPUlQxIiwidHlwIjoiQmVhcmVyIiwiaWQiOiJyaFNOVVl4RFNIMjE2NDU1NmU5NDYxNGU0YWEzOGU4NDYzMTBhMzRlMjUifQ==.f486111bd4c61bb025c46fb6478233f23a18edfebd42e66712d6b3547ed452d8217d85d2fc6f0682f2b572fb787e082e9f3609b3343c27f851659b5f71bacf30' : localStorage.getItem('bearerToken_stargate');
 
         if (!terminalId || !clientId || !bearerToken) {
           alert("As configurações não estão completas. Guarde primeiro.");
