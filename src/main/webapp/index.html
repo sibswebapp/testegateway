@@ -262,6 +262,7 @@
     showDummyFieldsIfNeeded();
 
     document.addEventListener("DOMContentLoaded", function () {
+
       const urlParams = new URLSearchParams(window.location.search);
       const paymentMethodsParam = urlParams.get("paymentMethods");    
 
@@ -737,11 +738,7 @@
     debugContainer.appendChild(debugContent);
     formContainer.appendChild(debugContainer);
 
-    window.addEventListener("popstate", function (event) {
-      window.location.href = "http://localhost:8080/webapp/index.html";
-    });
 
-    history.replaceState({ page: "payment" }, document.title, window.location.href);
   }
 
   </script>
