@@ -120,18 +120,19 @@
     const isDummyCustomer = getURLParameter("isDummyCustomer") || "0";
     const ServerToServer = getURLParameter("ServerToServer") || "0";
     const paymentMethods= getURLParameter("paymentMethods")
+    const encodedPaymentMethods = encodeURIComponent(paymentMethods);
 
     let novaURL = "";
 
     if(ServerToServer){
       const isServerToServer = getURLParameter("ServerToServer") === "true" ? 1 : 0;
 
-      const novaURL = `?token=${encodeURIComponent(token)}&clientId=${encodeURIComponent(clientId)}&terminalId=${encodeURIComponent(terminalId)}&entity=${encodeURIComponent(entity)}&isDummyCustomer=${encodeURIComponent(isDummyCustomer)}&ServerToServer=${encodeURIComponent(isServerToServer)}&paymentMethods=${paymentMethods}`;
+      const novaURL = `?token=${encodeURIComponent(token)}&clientId=${encodeURIComponent(clientId)}&terminalId=${encodeURIComponent(terminalId)}&entity=${encodeURIComponent(entity)}&isDummyCustomer=${encodeURIComponent(isDummyCustomer)}&ServerToServer=${encodeURIComponent(isServerToServer)}&paymentMethods=${encodedPaymentMethods}`;
       const btn = document.getElementById("btnComParametros");
       btn.href = `index.html${novaURL}`; 
 
     }else if (token && clientId && terminalId && entity) {
-      const novaURL = `?token=${encodeURIComponent(token)}&clientId=${encodeURIComponent(clientId)}&terminalId=${encodeURIComponent(terminalId)}&entity=${encodeURIComponent(entity)}&isDummyCustomer=${encodeURIComponent(isDummyCustomer)}&paymentMethods=${paymentMethods}`;
+      const novaURL = `?token=${encodeURIComponent(token)}&clientId=${encodeURIComponent(clientId)}&terminalId=${encodeURIComponent(terminalId)}&entity=${encodeURIComponent(entity)}&isDummyCustomer=${encodeURIComponent(isDummyCustomer)}&paymentMethods=${encodedPaymentMethods}`;
       const btn = document.getElementById("btnComParametros");
       btn.href = `index.html${novaURL}`; 
 
