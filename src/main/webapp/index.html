@@ -254,10 +254,10 @@
 
   <script>
 
-    const defaultToken = "0276b80f950fb446c6addaccd121abfbbb.eyJlIjoiMjA2NTcwMDUxNzM1MyIsInJvbGVzIjoiTUFOQUdFUiIsInRva2VuQXBwRGF0YSI6IntcIm1jXCI6XCIzNjkwMDZcIixcInRjXCI6XCI4MDc2MFwifSIsImkiOiIxNzUwMTY3NzE3MzUzIiwiaXMiOiJodHRwczovL3FseS5zaXRlMS5zc28uc3lzLnNpYnMucHQvYXV0aC9yZWFsbXMvUUxZLk1FUkNILlBPUlQxIiwidHlwIjoiQmVhcmVyIiwiaWQiOiJpY2JRNTVzOW0xZTMzOWM5YzMxOGNmNGY0ZDljOWM2MDM1ZDNmYTc2ZTAifQ==.60a18e56a2428049dee1f1e4c9aea4070bfc55d273b6d8f47b3227b7363fa66cfe45ee3a49e5f25ef57bfe5c02ac6813f2a29c09d382bd5eeb5f5f32b7ef6926";
-    const defaultClientId = "b041f6cb-c4d5-4d5d-b172-a4c18dc1060f";
-    const defaultTerminalId = 80760;
-    const defaultentity = "53246";
+    const defaultToken = "0267adfae94c224be1b374be2ce7b298f0.eyJlIjoiMjA3MDcwMDU2ODEyNSIsInJvbGVzIjoiTUFOQUdFUiIsInRva2VuQXBwRGF0YSI6IntcIm1jXCI6XCI1MDY5MzFcIixcInRjXCI6XCI5NjE2N1wifSIsImkiOiIxNzU1MTY3NzY4MTI1IiwiaXMiOiJodHRwczovL3FseS5zaXRlMS5zc28uc3lzLnNpYnMucHQvYXV0aC9yZWFsbXMvREVWLlNCTy1JTlQuUE9SVDEiLCJ0eXAiOiJCZWFyZXIiLCJpZCI6ImhtVmRVQ1lhU1NmOGIzMWRmY2JlMWQ0MDFlODc5OTdhZGY0ZTE1ZmM1MSJ9.71920d8b517e515a61b32b813872e5b967a06471fa63428ff66d32f83f4ce25e32548a4a8e9cf6545e2f5c6e47979b408a4f3bb2367329d71fafdec4d49af223";
+    const defaultClientId = "dd4348ea-e240-4356-bf06-6a4f294c1077";
+    const defaultTerminalId = 96167;
+    const defaultentity = "53882";
   
     showDummyFieldsIfNeeded();
 
@@ -458,11 +458,11 @@
     const paymentMethods = getURLParameter("paymentMethods") || "0";
     const isServerToServer = getURLParameter("ServerToServer") === "1";
 
-    let redirectUrl = `http://localhost:8080/webapp/REFERENCE_return.html?token=${token_payment}&clientId=${clientId_payment}&terminalId=${terminalId_payment}&entity=${entity_payment}&ServerToServer=${isServerToServer}&paymentMethods=${paymentMethods}&isDummyCustomer=${isDummyCustomer}`;
+    let redirectUrl = `http://localhost:8080/webapp/REFERENCE_return.html?bearerToken=${token_payment}&clientId=${clientId_payment}&terminalId=${terminalId_payment}&entity=${entity_payment}&ServerToServer=${isServerToServer}&paymentMethods=${paymentMethods}&isDummyCustomer=${isDummyCustomer}`;
     
-    if (selectedMethod === "MBWAY") redirectUrl = `http://localhost:8080/webapp/MBWAY_return.html?token=${token_payment}&clientId=${clientId_payment}&terminalId=${terminalId_payment}&entity=${entity_payment}&paymentMethods=${paymentMethods}&isDummyCustomer=${isDummyCustomer}`;
+    if (selectedMethod === "MBWAY") redirectUrl = `http://localhost:8080/webapp/MBWAY_return.html?bearerToken=${token_payment}&clientId=${clientId_payment}&terminalId=${terminalId_payment}&entity=${entity_payment}&paymentMethods=${paymentMethods}&isDummyCustomer=${isDummyCustomer}`;
 
-    if (selectedMethod === "CARD") redirectUrl = `http://localhost:8080/webapp/card_return.html?token=${token_payment}&clientId=${clientId_payment}&terminalId=${terminalId_payment}&entity=${entity_payment}&paymentMethods=${paymentMethods}&isDummyCustomer=${isDummyCustomer}`;
+    if (selectedMethod === "CARD") redirectUrl = `http://localhost:8080/webapp/card_return.html?bearerToken=${token_payment}&clientId=${clientId_payment}&terminalId=${terminalId_payment}&entity=${entity_payment}&paymentMethods=${paymentMethods}&isDummyCustomer=${isDummyCustomer}`;
 
     const amount = parseFloat(document.getElementById("amount").value);
 
@@ -572,7 +572,7 @@
             return;
           }
 
-          const redirectWithPhone = `http://localhost:8080/webapp/MBWAY_return.html?id=${transactionID}&token=${token_payment}&clientId=${clientId_payment}&terminalId=${terminalId_payment}&entity=${entity_payment}&ServerToServer=${isServerToServer}&mbwayPhone=${encodeURIComponent(mbwayPhone)}&paymentMethods=${paymentMethods}&isDummyCustomer=${isDummyCustomer}`;
+          const redirectWithPhone = `http://localhost:8080/webapp/MBWAY_return.html?id=${transactionID}&bearerToken=${token_payment}&clientId=${clientId_payment}&terminalId=${terminalId_payment}&entity=${entity_payment}&ServerToServer=${isServerToServer}&mbwayPhone=${encodeURIComponent(mbwayPhone)}&paymentMethods=${paymentMethods}&isDummyCustomer=${isDummyCustomer}`;
 
           window.location.href = redirectWithPhone;
         };
@@ -592,7 +592,7 @@
           referenceButton.onclick = () => {
 
             referenceButton.onclick = () => {
-            const redirect_reference_serverToserver = `http://localhost:8080/webapp/REFERENCE_return.html?id=${transactionID}&token=${token_payment}&clientId=${clientId_payment}&terminalId=${terminalId_payment}&entity=${entity_payment}&ServerToServer=${isServerToServer}&paymentMethods=${paymentMethods}&isDummyCustomer=${isDummyCustomer}`;
+            const redirect_reference_serverToserver = `http://localhost:8080/webapp/REFERENCE_return.html?id=${transactionID}&bearerToken=${token_payment}&clientId=${clientId_payment}&terminalId=${terminalId_payment}&entity=${entity_payment}&ServerToServer=${isServerToServer}&paymentMethods=${paymentMethods}&isDummyCustomer=${isDummyCustomer}`;
 
             const headers = {
               "Authorization": `Digest ${transactionSignature}`,
@@ -736,6 +736,12 @@
 
     debugContainer.appendChild(debugContent);
     formContainer.appendChild(debugContainer);
+
+    window.addEventListener("popstate", function (event) {
+      window.location.href = "http://localhost:8080/webapp/index.html";
+    });
+
+    history.replaceState({ page: "payment" }, document.title, window.location.href);
   }
 
   </script>

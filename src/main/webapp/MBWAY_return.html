@@ -112,7 +112,7 @@
     const currentTransactionID = urlParams.get("id");
     const TransactionID_ServerToServer = urlParams.get("TransactionID");
 
-    const token = getURLParameter("token");
+    const token = getURLParameter("bearerToken");
     const clientId = getURLParameter("clientId");
     const terminalId = getURLParameter("terminalId");
     const entity = getURLParameter("entity");
@@ -158,8 +158,8 @@
     async function checkRemotePaymentStatus() {
       const apiUrl = `https://spg.qly.site1.sibs.pt/api/v2/payments/${currentTransactionID}/status`;
 
-      const token_payment = getURLParameter("token") || "0276b80f950fb446c6addaccd121abfbbb.eyJlIjoiMjA2NTcwMDUxNzM1MyIsInJvbGVzIjoiTUFOQUdFUiIsInRva2VuQXBwRGF0YSI6IntcIm1jXCI6XCIzNjkwMDZcIixcInRjXCI6XCI4MDc2MFwifSIsImkiOiIxNzUwMTY3NzE3MzUzIiwiaXMiOiJodHRwczovL3FseS5zaXRlMS5zc28uc3lzLnNpYnMucHQvYXV0aC9yZWFsbXMvUUxZLk1FUkNILlBPUlQxIiwidHlwIjoiQmVhcmVyIiwiaWQiOiJpY2JRNTVzOW0xZTMzOWM5YzMxOGNmNGY0ZDljOWM2MDM1ZDNmYTc2ZTAifQ==.60a18e56a2428049dee1f1e4c9aea4070bfc55d273b6d8f47b3227b7363fa66cfe45ee3a49e5f25ef57bfe5c02ac6813f2a29c09d382bd5eeb5f5f32b7ef6926";
-      const clientId_payment = getURLParameter("clientId") || "b041f6cb-c4d5-4d5d-b172-a4c18dc1060f";
+      const token_payment =  getURLParameter("bearerToken") || "Bearer 0267adfae94c224be1b374be2ce7b298f0.eyJlIjoiMjA3MDcwMDU2ODEyNSIsInJvbGVzIjoiTUFOQUdFUiIsInRva2VuQXBwRGF0YSI6IntcIm1jXCI6XCI1MDY5MzFcIixcInRjXCI6XCI5NjE2N1wifSIsImkiOiIxNzU1MTY3NzY4MTI1IiwiaXMiOiJodHRwczovL3FseS5zaXRlMS5zc28uc3lzLnNpYnMucHQvYXV0aC9yZWFsbXMvREVWLlNCTy1JTlQuUE9SVDEiLCJ0eXAiOiJCZWFyZXIiLCJpZCI6ImhtVmRVQ1lhU1NmOGIzMWRmY2JlMWQ0MDFlODc5OTdhZGY0ZTE1ZmM1MSJ9.71920d8b517e515a61b32b813872e5b967a06471fa63428ff66d32f83f4ce25e32548a4a8e9cf6545e2f5c6e47979b408a4f3bb2367329d71fafdec4d49af223";
+      const clientId_payment = getURLParameter("clientId") || "dd4348ea-e240-4356-bf06-6a4f294c1077";
 
       const headers = {
         Authorization: `Bearer ${token_payment}`,
@@ -210,8 +210,9 @@
       try {
         const apiUrl = `https://spg.qly.site1.sibs.pt/api/v2/payments/${currentTransactionID}/status`;
 
-        const token_payment = getURLParameter("token") || "0276b80f950fb446c6addaccd121abfbbb.eyJlIjoiMjA2NTcwMDUxNzM1MyIsInJvbGVzIjoiTUFOQUdFUiIsInRva2VuQXBwRGF0YSI6IntcIm1jXCI6XCIzNjkwMDZcIixcInRjXCI6XCI4MDc2MFwifSIsImkiOiIxNzUwMTY3NzE3MzUzIiwiaXMiOiJodHRwczovL3FseS5zaXRlMS5zc28uc3lzLnNpYnMucHQvYXV0aC9yZWFsbXMvUUxZLk1FUkNILlBPUlQxIiwidHlwIjoiQmVhcmVyIiwiaWQiOiJpY2JRNTVzOW0xZTMzOWM5YzMxOGNmNGY0ZDljOWM2MDM1ZDNmYTc2ZTAifQ==.60a18e56a2428049dee1f1e4c9aea4070bfc55d273b6d8f47b3227b7363fa66cfe45ee3a49e5f25ef57bfe5c02ac6813f2a29c09d382bd5eeb5f5f32b7ef6926";
-        const clientId_payment = getURLParameter("clientId") || "b041f6cb-c4d5-4d5d-b172-a4c18dc1060f";
+        const token_payment = getURLParameter("bearerToken") || "Bearer 0267adfae94c224be1b374be2ce7b298f0.eyJlIjoiMjA3MDcwMDU2ODEyNSIsInJvbGVzIjoiTUFOQUdFUiIsInRva2VuQXBwRGF0YSI6IntcIm1jXCI6XCI1MDY5MzFcIixcInRjXCI6XCI5NjE2N1wifSIsImkiOiIxNzU1MTY3NzY4MTI1IiwiaXMiOiJodHRwczovL3FseS5zaXRlMS5zc28uc3lzLnNpYnMucHQvYXV0aC9yZWFsbXMvREVWLlNCTy1JTlQuUE9SVDEiLCJ0eXAiOiJCZWFyZXIiLCJpZCI6ImhtVmRVQ1lhU1NmOGIzMWRmY2JlMWQ0MDFlODc5OTdhZGY0ZTE1ZmM1MSJ9.71920d8b517e515a61b32b813872e5b967a06471fa63428ff66d32f83f4ce25e32548a4a8e9cf6545e2f5c6e47979b408a4f3bb2367329d71fafdec4d49af223";
+        const clientId_payment = getURLParameter("clientId") || "dd4348ea-e240-4356-bf06-6a4f294c1077";
+
 
         const headers = {
           Authorization: `Bearer ${token_payment}`,
