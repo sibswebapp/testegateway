@@ -210,20 +210,29 @@
       const encodedPaymentMethods = encodeURIComponent(paymentMethods);
 
       
-      if(ServerToServer){
+      let novaURL = "";
+            
+      if(ServerToServer == "1"){
         const isServerToServer = getQueryParam("ServerToServer") === "true" ? 1 : 0;
-
         const novaURL = `?bearerToken=${encodeURIComponent(token)}&clientId=${encodeURIComponent(clientId)}&terminalId=${encodeURIComponent(terminalId)}&entity=${encodeURIComponent(entity)}&isDummyCustomer=${encodeURIComponent(isDummyCustomer)}&ServerToServer=${encodeURIComponent(isServerToServer)}&paymentMethods=${encodedPaymentMethods}`;
         const btn = document.getElementById("btnComParametros");
         btn.href = `index.html${novaURL}`; 
 
       }else if (token && clientId && terminalId && entity) {
-        const novaURL = `?bearerToken=${encodeURIComponent(token)}&clientId=${encodeURIComponent(clientId)}&terminalId=${encodeURIComponent(terminalId)}&entity=${encodeURIComponent(entity)}&isDummyCustomer=${encodeURIComponent(isDummyCustomer)}&paymentMethods=${encodedPaymentMethods}`;
+        const novaURL = `?bearerToken=${encodeURIComponent(token)}&clientId=${encodeURIComponent(clientId)}&terminalId=${encodeURIComponent(terminalId)}&entity=${encodeURIComponent(entity)}&paymentMethods=${encodedPaymentMethods}&isDummyCustomer=${encodeURIComponent(isDummyCustomer)}`;
         const btn = document.getElementById("btnComParametros");
         btn.href = `index.html${novaURL}`; 
-      } else {
+
+      }else{
         console.warn("Parâmetros obrigatórios ausentes na URL.");
       }
+
+      window.addEventListener("popstate", function () {
+        window.location.href = "index.html" + novaURL;
+      });
+
+      document.getElementById("btnComParametros").href = "index.html" + novaURL;
+            
 
       const paymentId = getQueryParam("id");
       if (!paymentId) {
