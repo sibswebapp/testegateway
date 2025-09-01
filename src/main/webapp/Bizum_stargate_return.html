@@ -199,14 +199,22 @@
       const token = getQueryParam("bearerToken");
       const clientId = getQueryParam("clientId");
       const terminalId = getQueryParam("terminalId");
+      let novaURL = "";
+
 
       if (token && clientId && terminalId) {
-        const novaURL = `?bearerToken=${encodeURIComponent(token)}&clientId=${encodeURIComponent(clientId)}&terminalId=${encodeURIComponent(terminalId)}`;
+        novaURL = `?bearerToken=${encodeURIComponent(token)}&clientId=${encodeURIComponent(clientId)}&terminalId=${encodeURIComponent(terminalId)}`;
         const btn = document.getElementById("btnComParametros");
         btn.href = `Stargate.html${novaURL}`; 
       } else {
         console.warn("Parâmetros obrigatórios ausentes na URL.");
       }
+
+      window.addEventListener("popstate", function () {
+        window.location.href = "Stargate.html" + novaURL;
+      });
+
+      document.getElementById("btnComParametros").href = "Stargate.html" + novaURL;
 
       const paymentId = getQueryParam("id");
       if (!paymentId) {

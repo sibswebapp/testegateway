@@ -246,6 +246,46 @@
     }
 
     window.addEventListener('DOMContentLoaded', () => {
+
+
+      const useDefault = localStorage.getItem('defaultToggle') === "true"; 
+      const terminalId = localStorage.getItem('terminalId') || "";
+      const clientId = localStorage.getItem('clientId') || "";
+      const token = localStorage.getItem('bearerToken') || "";
+
+      let paymentMethods = [];
+      try {
+        paymentMethods = JSON.parse(localStorage.getItem('paymentMethods')) || [];
+      } catch (e) {
+        paymentMethods = [];
+      }
+      const encodedPaymentMethods = encodeURIComponent(paymentMethods.join(","));
+
+      const entity = localStorage.getItem('entity') || "";
+      const isDummyCustomer = parseInt(localStorage.getItem('isDummyCustomer') || "0", 10);
+      const ServerToServer = parseInt(localStorage.getItem('ServerToServer') || "0", 10);
+
+      let novaURL = "";
+
+      if(ServerToServer == "1"){
+        const isServerToServer = getURLParameter("ServerToServer") === "true" ? 1 : 0;
+
+        novaURL = `?bearerToken=${encodeURIComponent(token)}&clientId=${encodeURIComponent(clientId)}&terminalId=${encodeURIComponent(terminalId)}&entity=${encodeURIComponent(entity)}&isDummyCustomer=${encodeURIComponent(isDummyCustomer)}&ServerToServer=${encodeURIComponent(isServerToServer)}&paymentMethods=${encodedPaymentMethods}`;
+
+      }else if (token && clientId && terminalId && entity) {
+        novaURL = `?bearerToken=${encodeURIComponent(token)}&clientId=${encodeURIComponent(clientId)}&terminalId=${encodeURIComponent(terminalId)}&entity=${encodeURIComponent(entity)}&isDummyCustomer=${encodeURIComponent(isDummyCustomer)}&paymentMethods=${encodedPaymentMethods}`;
+
+      } else {
+        console.warn("Parâmetros obrigatórios ausentes na URL.");
+      }
+
+      history.pushState({ page: "custom" }, "", window.location.href);
+
+      window.addEventListener("popstate", function () {
+        window.location.href = "index.html" + novaURL;
+      });
+
+
       const storedDummy = localStorage.getItem('isDummyCustomer');
       if (storedDummy !== null) {
         isDummyCustomer = parseInt(storedDummy);
@@ -396,7 +436,7 @@
       });
     });
 
-   window.addEventListener("DOMContentLoaded", () => {
+  window.addEventListener("DOMContentLoaded", () => {
     const storedServerToServer = localStorage.getItem('ServerToServer');
     const checkbox = document.getElementById("ServerToServerCheckbox");
 
@@ -404,10 +444,12 @@
       checkbox.checked = true;
       toggleServerToServer(checkbox); 
     }
+
   });
 
 
-    window.addEventListener('DOMContentLoaded', restoreFromLocalStorage);
+      
+  window.addEventListener('DOMContentLoaded', restoreFromLocalStorage);
   </script>
 
 
