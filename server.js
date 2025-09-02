@@ -21,3 +21,8 @@ app.listen(PORT, HOST, () => {
     'testesgateway listening on http://' + HOST + ':' + PORT + ' serving ' + staticDir
   );
 });
+
+
+
+
+
