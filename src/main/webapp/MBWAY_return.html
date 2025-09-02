@@ -104,7 +104,7 @@
     const debugHeadersElement = document.getElementById("debugHeaders");
     const debugBodyElement = document.getElementById("debugBody");
 
-    const totalTime = 240;
+    const totalTime = 19 //240;
     const delayAfterExpiration = 60 * 1000;
     let timerInterval;
 
@@ -124,15 +124,15 @@
 
     let novaURL = "";
 
-    if(ServerToServer == "1"){
+    if(ServerToServer == "true"){
       const isServerToServer = getURLParameter("ServerToServer") === "true" ? 1 : 0;
 
-      const novaURL = `?bearerToken=${encodeURIComponent(token)}&clientId=${encodeURIComponent(clientId)}&terminalId=${encodeURIComponent(terminalId)}&entity=${encodeURIComponent(entity)}&isDummyCustomer=${encodeURIComponent(isDummyCustomer)}&ServerToServer=${encodeURIComponent(isServerToServer)}&paymentMethods=${encodedPaymentMethods}`;
+      novaURL = `?bearerToken=${encodeURIComponent(token)}&clientId=${encodeURIComponent(clientId)}&terminalId=${encodeURIComponent(terminalId)}&entity=${encodeURIComponent(entity)}&isDummyCustomer=${encodeURIComponent(isDummyCustomer)}&ServerToServer=${encodeURIComponent(isServerToServer)}&paymentMethods=${encodedPaymentMethods}`;
       const btn = document.getElementById("btnComParametros");
       btn.href = `index.html${novaURL}`; 
 
     }else if (token && clientId && terminalId && entity) {
-      const novaURL = `?bearerToken=${encodeURIComponent(token)}&clientId=${encodeURIComponent(clientId)}&terminalId=${encodeURIComponent(terminalId)}&entity=${encodeURIComponent(entity)}&isDummyCustomer=${encodeURIComponent(isDummyCustomer)}&paymentMethods=${encodedPaymentMethods}`;
+      novaURL = `?bearerToken=${encodeURIComponent(token)}&clientId=${encodeURIComponent(clientId)}&terminalId=${encodeURIComponent(terminalId)}&entity=${encodeURIComponent(entity)}&isDummyCustomer=${encodeURIComponent(isDummyCustomer)}&paymentMethods=${encodedPaymentMethods}`;
       const btn = document.getElementById("btnComParametros");
       btn.href = `index.html${novaURL}`; 
 
@@ -142,15 +142,15 @@
 
     let novaURL_button = "";
 
-    if(ServerToServer == "1"){
+    if(ServerToServer == "true"){
       const isServerToServer = getURLParameter("ServerToServer") === "true" ? 1 : 0;
 
-      const novaURL_button = `?bearerToken=${encodeURIComponent(token)}&clientId=${encodeURIComponent(clientId)}&terminalId=${encodeURIComponent(terminalId)}&entity=${encodeURIComponent(entity)}&isDummyCustomer=${encodeURIComponent(isDummyCustomer)}&ServerToServer=${encodeURIComponent(isServerToServer)}&paymentMethods=${encodedPaymentMethods}`;
+      novaURL_button = `?bearerToken=${encodeURIComponent(token)}&clientId=${encodeURIComponent(clientId)}&terminalId=${encodeURIComponent(terminalId)}&entity=${encodeURIComponent(entity)}&isDummyCustomer=${encodeURIComponent(isDummyCustomer)}&ServerToServer=${encodeURIComponent(isServerToServer)}&paymentMethods=${encodedPaymentMethods}`;
       const btnS = document.getElementById("btnComParametros_button");
       btnS.href = `index.html${novaURL_button}`; 
 
     }else if (token && clientId && terminalId && entity) {
-      const novaURL_button = `?bearerToken=${encodeURIComponent(token)}&clientId=${encodeURIComponent(clientId)}&terminalId=${encodeURIComponent(terminalId)}&entity=${encodeURIComponent(entity)}&isDummyCustomer=${encodeURIComponent(isDummyCustomer)}&paymentMethods=${encodedPaymentMethods}`;
+      novaURL_button = `?bearerToken=${encodeURIComponent(token)}&clientId=${encodeURIComponent(clientId)}&terminalId=${encodeURIComponent(terminalId)}&entity=${encodeURIComponent(entity)}&isDummyCustomer=${encodeURIComponent(isDummyCustomer)}&paymentMethods=${encodedPaymentMethods}`;
       const btnS = document.getElementById("btnComParametros_button");
       btnS.href = `index.html${novaURL_button}`; 
 
@@ -158,9 +158,10 @@
       console.warn("Parâmetros obrigatórios ausentes na URL.");
     }
 
+    let baseUrl = window.location.origin; 
 
     window.addEventListener("popstate", function () {
-      window.location.href = "index.html" + novaURL;
+      baseUrl = "index.html" + novaURL;
     });
 
     document.getElementById("btnComParametros").href = "index.html" + novaURL;
@@ -212,7 +213,7 @@
           messageElement.classList.remove("d-none");
           messageElement.classList.add("alert", "alert-danger");
           buttonElement.classList.add("d-none");
-          return false;
+          return { success: false, status: data.paymentStatus };
         }
 
         if (data.paymentStatus === "Success") {
@@ -222,6 +223,8 @@
           <div class="alert alert-success" role="alert">
             <strong>Estado do Pagamento:</strong> Sucesso
           </div>`;
+          return { success: true, status: data.paymentStatus };
+
         }
 
         
@@ -232,6 +235,8 @@
           <div class="alert alert-danger" role="alert">
             <strong>Estado do Pagamento:</strong> Recusado
           </div>`;
+          return { success: false, status: data.paymentStatus };
+
         }
 
         
@@ -242,9 +247,10 @@
           <div class="alert alert-danger" role="alert">
             <strong>Estado do Pagamento:</strong> Recusado (Cliente não efetou o pagamento na APP)
           </div>`;
+          return { success: false, status: data.paymentStatus };
         }
 
-        return true;
+        return { success: false, status: data.paymentStatus };
       } catch (error) {
         console.error("Erro ao buscar status remoto:", error);
         return true;
@@ -315,18 +321,22 @@
       }
     }
 
-    function updateTimer() {
+    async function updateTimer(canStartTimer) {
       const now = Date.now();
       const elapsed = Math.floor((now - startTime) / 1000);
       const timeLeft = totalTime - elapsed;
       const dataSafe = typeof data !== 'undefined' ? data : {};
 
-      if (timeLeft <= 0 && dataSafe.paymentStatus !== 'Success') {
+      if (timeLeft <= 0 ) {
         timerElement.textContent = "0:00";
         clearInterval(timerInterval);
-        showMessage("O pagamento no MB WAY expirou.", "warning");
-        localStorage.setItem("timerExpired", "true");
-        setTimeout(checkFinalPaymentStatus, delayAfterExpiration);
+        const canStartTimer = await checkRemotePaymentStatus();
+        if(canStartTimer.status == 'Pending'){
+          showMessage("O pagamento no MB WAY expirou.", "warning");
+          localStorage.setItem("timerExpired", "true");
+          setTimeout(checkFinalPaymentStatus, delayAfterExpiration);
+        }
+        
       } else {
         const minutes = Math.floor(timeLeft / 60);
         const seconds = timeLeft % 60;
@@ -355,20 +365,24 @@
 
     if (!canStartTimer) return;
 
-    if (isExpired && dataSafe.paymentStatus !== 'Success') {
+    if (isExpired) {
       timerElement.textContent = "0:00";
-      showMessage("O pagamento no MB WAY expirou.", "warning");
-      setTimeout(checkFinalPaymentStatus, delayAfterExpiration);
+      if(canStartTimer.status == 'Pending'){
+        showMessage("O pagamento no MB WAY expirou.", "warning");
+        setTimeout(checkFinalPaymentStatus, delayAfterExpiration);
+      }
     } else {
       const elapsed = Math.floor((Date.now() - startTime) / 1000);
-      if (elapsed >= totalTime && dataSafe.paymentStatus !== 'Success') {
+      if (elapsed >= totalTime) {
         timerElement.textContent = "0:00";
-        showMessage("O pagamento no MB WAY expirou.", "warning");
-        localStorage.setItem("timerExpired", "true");
-        setTimeout(checkFinalPaymentStatus, delayAfterExpiration);
+        if(canStartTimer.status == 'Pending'){
+          showMessage("O pagamento no MB WAY expirou.", "warning");
+          localStorage.setItem("timerExpired", "true");
+          setTimeout(checkFinalPaymentStatus, delayAfterExpiration);
+        }
       } else {
         timerInterval = setInterval(updateTimer, 1000);
-        updateTimer();
+        updateTimer(canStartTimer);
         checkImmediateStatus();
       }
     }
@@ -380,7 +394,7 @@
 <body>
   <nav class="navbar navbar-expand-lg navbar-light">
     <div class="container-fluid d-flex justify-content-between align-items-center px-4" style="height: 69px;">
-      <a class="navbar-brand" href="http://localhost:8080/webapp/index.html">
+      <a class="navbar-brand" id="btnComParametros_button" href="#">
         <img src="https://www.pay.sibs.com/wp-content/uploads/2022/02/logo.png" alt="Logo SIBS">
       </a>
       <a id="btnComParametros" href="#" class="btn btn-rounded btn-primary">
@@ -392,9 +406,13 @@
   <main>
     <div class="container mt-4">
       <div class="card">
-        <div class="card-header text-center" style="background-color: #cae3ff;">
-          <h2><b>Status do Pagamento</b></h2>
+        <div class="card-header text-center d-flex justify-content-between align-items-center" style="background-color: #cae3ff;">
+          <h2 style="color: #454545; margin: 0 auto;"><b>Status do Pagamento</b></h2>
+          <button type="button" class="btn btn-light btn-sm ms-2" data-bs-toggle="modal" data-bs-target="#infoModal" title="Informações">
+            <i class="fa fa-question-circle"></i>
+          </button>
         </div>
+      
         <div class="card-body text-center">
           <p>Tempo restante para pagamento: <strong id="timer"><!--4:00--></strong></p>
           <div id="message" class="alert d-none mt-4" role="alert"></div>
@@ -425,7 +443,38 @@
       </div>
     </div>
   </div>
-  
+
+  <!-- Modal -->
+  <div class="modal fade" id="infoModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content shadow">
+        <div class="modal-header bg-light">
+          <h5 class="modal-title"><i class="fa fa-info-circle text-primary me-2"></i> Processo de Integração Gateway</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <p>
+            Nesta página pode consultar os detalhes da sua transação MB WAY. É obrigatório indicar o prazo máximo de 4 minutos para a sua conclusão, podendo fazê-lo através de um <b>contador </b> ou, em alternativa, <b>através de uma mensagem informativa que comunique ao cliente este limite de tempo</b>.
+          </p>
+          <p>Para obter estes dados necessita de fazer uma chamada API com o método: </p>
+          <p style="white-space: nowrap;">
+            <span class="badge bg-success align-middle">GET</span>
+            <code class="align-middle" style="font-size: 0.70rem;">https://spg.qly.site1.sibs.pt/api/v2/payments/{transactionID}/status</code>
+          </p>
+          <br />
+          <p>Mas depois necessita de utilizar um webhook para saber o estado real desta transação <b>(o webhook é de caráter obrigatório)</b></p>
+          <p>Para visualização de toda a documentação, visite:</p>
+            <a href="https://www.docs.pay.sibs.com/portugal/sibs-gateway/integrations/api/integration-guide/" class="btn btn-outline-primary btn-sm" target="_blank">
+              <i class="fa fa-external-link me-1"></i> Documentação SIBS Gateway
+            </a>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Fechar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <footer>
     <div class="container">
       <p class="mb-1">© 2025 Pagamentos SIBS. Todos os direitos reservados.</p>

@@ -280,9 +280,10 @@
       }
 
       history.pushState({ page: "custom" }, "", window.location.href);
+      let baseUrl = window.location.origin; 
 
       window.addEventListener("popstate", function () {
-        window.location.href = "index.html" + novaURL;
+        baseUrl = "index.html" + novaURL;
       });
 
 
@@ -312,10 +313,10 @@
 
       if (checkbox.checked) {
 
-        terminal.value = '80760';
-        client.value = 'b041f6cb-c4d5-4d5d-b172-a4c18dc1060f';
-        token.value = '0276b80f950fb446c6addaccd121abfbbb.eyJlIjoiMjA2NTcwMDUxNzM1MyIsInJvbGVzIjoiTUFOQUdFUiIsInRva2VuQXBwRGF0YSI6IntcIm1jXCI6XCIzNjkwMDZcIixcInRjXCI6XCI4MDc2MFwifSIsImkiOiIxNzUwMTY3NzE3MzUzIiwiaXMiOiJodHRwczovL3FseS5zaXRlMS5zc28uc3lzLnNpYnMucHQvYXV0aC9yZWFsbXMvUUxZLk1FUkNILlBPUlQxIiwidHlwIjoiQmVhcmVyIiwiaWQiOiJpY2JRNTVzOW0xZTMzOWM5YzMxOGNmNGY0ZDljOWM2MDM1ZDNmYTc2ZTAifQ==.60a18e56a2428049dee1f1e4c9aea4070bfc55d273b6d8f47b3227b7363fa66cfe45ee3a49e5f25ef57bfe5c02ac6813f2a29c09d382bd5eeb5f5f32b7ef6926';
-        entitypag.value = '53246';
+        terminal.value = '96167';
+        client.value = 'dd4348ea-e240-4356-bf06-6a4f294c1077';
+        token.value = '0267adfae94c224be1b374be2ce7b298f0.eyJlIjoiMjA3MDcwMDU2ODEyNSIsInJvbGVzIjoiTUFOQUdFUiIsInRva2VuQXBwRGF0YSI6IntcIm1jXCI6XCI1MDY5MzFcIixcInRjXCI6XCI5NjE2N1wifSIsImkiOiIxNzU1MTY3NzY4MTI1IiwiaXMiOiJodHRwczovL3FseS5zaXRlMS5zc28uc3lzLnNpYnMucHQvYXV0aC9yZWFsbXMvREVWLlNCTy1JTlQuUE9SVDEiLCJ0eXAiOiJCZWFyZXIiLCJpZCI6ImhtVmRVQ1lhU1NmOGIzMWRmY2JlMWQ0MDFlODc5OTdhZGY0ZTE1ZmM1MSJ9.71920d8b517e515a61b32b813872e5b967a06471fa63428ff66d32f83f4ce25e32548a4a8e9cf6545e2f5c6e47979b408a4f3bb2367329d71fafdec4d49af223';
+        entitypag.value = '53882';
         
         inputs.forEach(id => document.getElementById(id).classList.add('d-none'));
       } else {
@@ -407,10 +408,10 @@
       btn.addEventListener('click', (e) => {
         e.preventDefault();
         const useDefault = localStorage.getItem('useDefaultConfig') === 'true';
-        const terminalId = useDefault ? '80760' : localStorage.getItem('terminalId');
-        const entity = useDefault ? '53246' : localStorage.getItem('entity');
-        const clientId = useDefault ? 'b041f6cb-c4d5-4d5d-b172-a4c18dc1060f' : localStorage.getItem('clientId');
-        const bearerToken = useDefault ? '0276b80f950fb446c6addaccd121abfbbb.eyJlIjoiMjA1ODA5Nzc5Nzc3MyIsInJvbGVzIjoiTUFOQUdFUiIsInRva2VuQXBwRGF0YSI6IntcIm1jXCI6XCIzNjkwMDZcIixcInRjXCI6XCI4MDc2MFwifSIsImkiOiIxNzQyNTY0OTk3NzczIiwiaXMiOiJodHRwczovL3FseS5zaXRlMS5zc28uc3lzLnNpYnMucHQvYXV0aC9yZWFsbXMvUUxZLk1FUkNILlBPUlQxIiwidHlwIjoiQmVhcmVyIiwiaWQiOiJGRXZCOTh6WHMyMzU4NzE5MDFjYzkxNDRkMTgzZTc2MDQ1NWUzMmYzYmMifQ==.a58e334057e8e792127de95c6c12d41ba7fcd42361d7ef2ea87749a276192ead72ccfda4a98091f192bd7b3576e27d39b27c1e972d1b34a761540400535ea193' : localStorage.getItem('bearerToken');
+        const terminalId = useDefault ? '96167' : localStorage.getItem('terminalId');
+        const entity = useDefault ? '53882' : localStorage.getItem('entity');
+        const clientId = useDefault ? 'dd4348ea-e240-4356-bf06-6a4f294c1077' : localStorage.getItem('clientId');
+        const bearerToken = useDefault ? '0267adfae94c224be1b374be2ce7b298f0.eyJlIjoiMjA3MDcwMDU2ODEyNSIsInJvbGVzIjoiTUFOQUdFUiIsInRva2VuQXBwRGF0YSI6IntcIm1jXCI6XCI1MDY5MzFcIixcInRjXCI6XCI5NjE2N1wifSIsImkiOiIxNzU1MTY3NzY4MTI1IiwiaXMiOiJodHRwczovL3FseS5zaXRlMS5zc28uc3lzLnNpYnMucHQvYXV0aC9yZWFsbXMvREVWLlNCTy1JTlQuUE9SVDEiLCJ0eXAiOiJCZWFyZXIiLCJpZCI6ImhtVmRVQ1lhU1NmOGIzMWRmY2JlMWQ0MDFlODc5OTdhZGY0ZTE1ZmM1MSJ9.71920d8b517e515a61b32b813872e5b967a06471fa63428ff66d32f83f4ce25e32548a4a8e9cf6545e2f5c6e47979b408a4f3bb2367329d71fafdec4d49af223' : localStorage.getItem('bearerToken');
         const paymentMethods = JSON.parse(localStorage.getItem('paymentMethods') || '[]');
         const isDummyCustomer = parseInt(localStorage.getItem('isDummyCustomer') || '0');
         const ServerToServer = parseInt(localStorage.getItem('ServerToServer') || '0');
@@ -430,8 +431,7 @@
         ServerToServer
       });
 
-
-      window.location.href = `http://localhost:8080/webapp/index.html?${params}`;
+      window.location.href = `${window.location.origin}/index.html?${params}`;
 
       });
     });

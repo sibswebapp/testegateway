@@ -84,9 +84,9 @@
     }
 
     .fixed-payment-form {
-      width: 100%;          
-      height: 1050px;       
-      overflow: hidden;    
+      width: 100%;
+      height: 1050px;
+      overflow: hidden;
     }
   </style>
 </head>
@@ -98,10 +98,10 @@
         <img src="https://www.pay.sibs.com/wp-content/uploads/2022/02/logo.png" alt="Logo SIBS" style="max-height:30px;" />
       </a>
       <div>
-        <a href="http://localhost:8080/webapp/index.html" class="btn btn-secondary btn-rounded" data-mdb-ripple-init>
+        <a href="index.html" class="btn btn-secondary btn-rounded" data-mdb-ripple-init>
           <i class="fa fa-list"></i> SPG
         </a>
-        <a href="http://localhost:8080/webapp/config_stargate.html" style="background-color: #ff9800; color:#f2f2f2;"  class="btn btn-rounded" data-mdb-ripple-init>
+        <a href="config_stargate.html" style="background-color: #ff9800; color:#f2f2f2;"  class="btn btn-rounded" data-mdb-ripple-init>
           <i class="fa fa-gears"></i> Configurações
         </a>
       </div>
@@ -354,16 +354,35 @@
       const defaultClientId_payment = "a1f729f7-ee7c-46b3-b30a-9b20d7fff09a";
       const defaultTerminalId_payment = 301;
 
-      formContainer.innerHTML = ""; 
+      formContainer.innerHTML = "";
 
       const token_payment = getURLParameter("bearerToken") || defaultToken_payment;
       const clientId_payment = getURLParameter("clientId") || defaultClientId_payment;
       const terminalId_payment = parseInt(getURLParameter("terminalId")) || defaultTerminalId_payment;
 
+      let baseUrl = window.location.origin;
+      let redirectUrl = "";
 
-      if (selectedMethod === "CARD") redirectUrl = `http://localhost:8080/webapp/card_stargate_return.html?bearerToken=${token_payment}&clientId=${clientId_payment}&terminalId=${terminalId_payment}`;
-      if (selectedMethod === "BLIK") redirectUrl = `http://localhost:8080/webapp/BLIK_stargate_return.html?bearerToken=${token_payment}&clientId=${clientId_payment}&terminalId=${terminalId_payment}`;
-      if (selectedMethod === "BIZM") redirectUrl = `http://localhost:8080/webapp/Bizum_stargate_return.html?bearerToken=${token_payment}&clientId=${clientId_payment}&terminalId=${terminalId_payment}`;
+      if (selectedMethod === "CARD") {
+        redirectUrl = `${baseUrl}/card_stargate_return.html` +
+          `?bearerToken=${token_payment}` +
+          `&clientId=${clientId_payment}` +
+          `&terminalId=${terminalId_payment}`;
+      }
+
+      if (selectedMethod === "BLIK") {
+        redirectUrl = `${baseUrl}/BLIK_stargate_return.html` +
+          `?bearerToken=${token_payment}` +
+          `&clientId=${clientId_payment}` +
+          `&terminalId=${terminalId_payment}`;
+      }
+
+      if (selectedMethod === "BIZM") {
+        redirectUrl = `${baseUrl}/Bizum_stargate_return.html` +
+          `?bearerToken=${token_payment}` +
+          `&clientId=${clientId_payment}` +
+          `&terminalId=${terminalId_payment}`;
+      }
 
       const amount = parseFloat(document.getElementById("amount").value);
 

@@ -92,10 +92,10 @@
         <img src="https://www.pay.sibs.com/wp-content/uploads/2022/02/logo.png" alt="Logo SIBS" style="max-height: 30px;">
       </a>
       <div>
-        <a href="http://localhost:8080/webapp/Stargate.html" style="background-color: #ff9800; color:#f2f2f2;"  class="btn btn-rounded" data-mdb-ripple-init>
+        <a href="Stargate.html" style="background-color: #ff9800; color:#f2f2f2;"  class="btn btn-rounded" data-mdb-ripple-init>
           <i class="fa fa-list"></i> Stargate
         </a>
-        <a href="http://localhost:8080/webapp/config.html" class="btn btn-secondary btn-rounded" data-mdb-ripple-init>
+        <a href="config.html" class="btn btn-secondary btn-rounded" data-mdb-ripple-init>
           <i class="fa fa-gears"></i> Configurações
         </a>
       </div>
@@ -357,7 +357,7 @@
       const token = getURLParameter("bearerToken") || defaultToken;
       const clientId = getURLParameter("clientId") || defaultClientId;
       const terminalId = parseInt(getURLParameter("terminalId")) || defaultTerminalId;
-      const entity = String(getURLParameter("entity") || "53246");
+      const entity = String(getURLParameter("entity") || "53882");
 
       const amountValue = parseFloat(document.getElementById("amount").value);
       const selectedMethod = document.getElementById("payment-method").value;
@@ -462,18 +462,44 @@
     const token_payment = getURLParameter("bearerToken") || defaultToken;
     const clientId_payment = getURLParameter("clientId") || defaultClientId;
     const terminalId_payment = parseInt(getURLParameter("terminalId")) || defaultTerminalId;
-    const entity_payment = String(getURLParameter("entity") || "53246");
+    const entity_payment = String(getURLParameter("entity") || "53882");
     const isDummyCustomer = getURLParameter("isDummyCustomer") || "0";
 
 
     const paymentMethods = getURLParameter("paymentMethods") || "0";
     const isServerToServer = getURLParameter("ServerToServer") === "1";
 
-    let redirectUrl = `http://localhost:8080/webapp/REFERENCE_return.html?bearerToken=${token_payment}&clientId=${clientId_payment}&terminalId=${terminalId_payment}&entity=${entity_payment}&ServerToServer=${isServerToServer}&paymentMethods=${paymentMethods}&isDummyCustomer=${isDummyCustomer}`;
-    
-    if (selectedMethod === "MBWAY") redirectUrl = `http://localhost:8080/webapp/MBWAY_return.html?bearerToken=${token_payment}&clientId=${clientId_payment}&terminalId=${terminalId_payment}&entity=${entity_payment}&paymentMethods=${paymentMethods}&isDummyCustomer=${isDummyCustomer}`;
+    let baseUrl = window.location.origin; 
 
-    if (selectedMethod === "CARD") redirectUrl = `http://localhost:8080/webapp/card_return.html?bearerToken=${token_payment}&clientId=${clientId_payment}&terminalId=${terminalId_payment}&entity=${entity_payment}&paymentMethods=${paymentMethods}&isDummyCustomer=${isDummyCustomer}`;
+    let redirectUrl = `${baseUrl}/REFERENCE_return.html` +
+      `?bearerToken=${token_payment}` +
+      `&clientId=${clientId_payment}` +
+      `&terminalId=${terminalId_payment}` +
+      `&entity=${entity_payment}` +
+      `&ServerToServer=${isServerToServer}` +
+      `&paymentMethods=${paymentMethods}` +
+      `&isDummyCustomer=${isDummyCustomer}`;
+
+    if (selectedMethod === "MBWAY") {
+      redirectUrl = `${baseUrl}/MBWAY_return.html` +
+        `?bearerToken=${token_payment}` +
+        `&clientId=${clientId_payment}` +
+        `&terminalId=${terminalId_payment}` +
+        `&entity=${entity_payment}` +
+        `&paymentMethods=${paymentMethods}` +
+        `&isDummyCustomer=${isDummyCustomer}`;
+    }
+
+    if (selectedMethod === "CARD") {
+      redirectUrl = `${baseUrl}/card_return.html` +
+        `?bearerToken=${token_payment}` +
+        `&clientId=${clientId_payment}` +
+        `&terminalId=${terminalId_payment}` +
+        `&entity=${entity_payment}` +
+        `&paymentMethods=${paymentMethods}` +
+        `&isDummyCustomer=${isDummyCustomer}`;
+    }
+
 
     const amount = parseFloat(document.getElementById("amount").value);
 
@@ -583,7 +609,8 @@
             return;
           }
 
-          const redirectWithPhone = `http://localhost:8080/webapp/MBWAY_return.html?id=${transactionID}&bearerToken=${token_payment}&clientId=${clientId_payment}&terminalId=${terminalId_payment}&entity=${entity_payment}&ServerToServer=${isServerToServer}&mbwayPhone=${encodeURIComponent(mbwayPhone)}&paymentMethods=${paymentMethods}&isDummyCustomer=${isDummyCustomer}`;
+          let baseUrl_MBWAY = window.location.origin; 
+          const redirectWithPhone = `${baseUrl_MBWAY}/MBWAY_return.html?id=${transactionID}&bearerToken=${token_payment}&clientId=${clientId_payment}&terminalId=${terminalId_payment}&entity=${entity_payment}&ServerToServer=${isServerToServer}&mbwayPhone=${encodeURIComponent(mbwayPhone)}&paymentMethods=${paymentMethods}&isDummyCustomer=${isDummyCustomer}`;
 
           window.location.href = redirectWithPhone;
         };
@@ -600,10 +627,12 @@
           const referenceButton = document.createElement("button");
           referenceButton.className = "btn btn-primary";
           referenceButton.textContent = "Gerar Referência de Pagamento";
+          let baseUrl = window.location.origin; 
+
           referenceButton.onclick = () => {
 
             referenceButton.onclick = () => {
-            const redirect_reference_serverToserver = `http://localhost:8080/webapp/REFERENCE_return.html?id=${transactionID}&bearerToken=${token_payment}&clientId=${clientId_payment}&terminalId=${terminalId_payment}&entity=${entity_payment}&ServerToServer=${isServerToServer}&paymentMethods=${paymentMethods}&isDummyCustomer=${isDummyCustomer}`;
+            const redirect_reference_serverToserver = `${baseUrl}/REFERENCE_return.html?id=${transactionID}&bearerToken=${token_payment}&clientId=${clientId_payment}&terminalId=${terminalId_payment}&entity=${entity_payment}&ServerToServer=${isServerToServer}&paymentMethods=${paymentMethods}&isDummyCustomer=${isDummyCustomer}`;
 
             const headers = {
               "Authorization": `Digest ${transactionSignature}`,

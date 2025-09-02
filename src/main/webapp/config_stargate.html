@@ -101,7 +101,7 @@
       </div>
       <div class="card-body">
         <div class="form-check form-switch mb-4">
-          <input class="form-check-input" type="checkbox" id="defaultToggle" onchange="toggleDefaults(this); toggleEntityField();">
+          <input class="form-check-input" type="checkbox" id="defaultToggle" onchange="toggleDefaults(this);">
           <label class="form-check-label" for="defaultToggle">Usar Terminal default</label>
         </div>
 
@@ -161,15 +161,6 @@
       }
     }
 
-    function toggleEntityField() {
-      const useDefault = document.getElementById('defaultToggle').checked;
-
-      const selectedValues = Array.from(select.selectedOptions).map(opt => opt.value);
-      const showEntity = selectedValues.includes('2') && !useDefault;
-
-      entityInput.classList.toggle('d-none', !showEntity);
-    }
-
     function saveConfig() {
       const useDefault = document.getElementById('defaultToggle').checked;
       const terminal = document.getElementById('terminalId_stargate').value;
@@ -205,8 +196,6 @@
         document.getElementById('clientId_stargate').value = localStorage.getItem('clientId_stargate') || '';
         document.getElementById('bearerToken_stargate').value = localStorage.getItem('bearerToken_stargate') || ''
       }
-
-      toggleEntityField();
     }
 
     document.querySelectorAll('[data-back-button]').forEach(btn => {
@@ -222,18 +211,29 @@
           return;
         }
 
-      const params = new URLSearchParams({
-        terminalId,
-        clientId,
-        bearerToken
-      });
+        const params = new URLSearchParams({
+          terminalId,
+          clientId,
+          bearerToken
+        });
 
-      window.location.href = `http://localhost:8080/webapp/Stargate.html?${params}`;
+        window.location.href = `${window.location.origin}/Stargate.html?${params}`;
 
       });
     });
 
     window.addEventListener('DOMContentLoaded', restoreFromLocalStorage);
+
+
+    document.addEventListener("DOMContentLoaded", async function () {
+
+      let baseUrl = window.location.origin; 
+
+      window.addEventListener("popstate", function () {
+        baseUrl = "Stargate.html" + novaURL;
+      });
+
+    });
   </script>
 
 
