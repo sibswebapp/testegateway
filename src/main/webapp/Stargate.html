@@ -361,7 +361,7 @@
       const clientId_payment = getURLParameter("clientId") || defaultClientId_payment;
       const terminalId_payment = parseInt(getURLParameter("terminalId")) || defaultTerminalId_payment;
 
-      let baseUrl = window.location.origin;
+      let baseUrl = window.location.origin + window.location.pathname.replace(/[^/]*$/, '');
       let redirectUrl = "";
 
       if (selectedMethod === "CARD") {

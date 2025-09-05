@@ -218,7 +218,7 @@
           bearerToken
         });
 
-        window.location.href = `${window.location.origin}/Stargate.html?${params}`;
+        window.location.href = window.location.pathname.replace(/[^/]*$/, '') + 'Stargate.html?' + params;
 
       });
     });
@@ -228,7 +228,7 @@
 
     document.addEventListener("DOMContentLoaded", async function () {
 
-      let baseUrl = window.location.origin; 
+      let baseUrl = window.location.origin + window.location.pathname.replace(/[^/]*$/, ''); 
 
       window.addEventListener("popstate", function () {
         baseUrl = "Stargate.html" + novaURL;

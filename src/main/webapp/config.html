@@ -281,7 +281,7 @@
       }
 
       history.pushState({ page: "custom" }, "", window.location.href);
-      let baseUrl = window.location.origin; 
+      let baseUrl = window.location.origin + window.location.pathname.replace(/[^/]*$/, ''); 
 
       window.addEventListener("popstate", function () {
         baseUrl = "index.html" + novaURL;
@@ -432,7 +432,7 @@
         ServerToServer
       });
 
-      window.location.href = `${window.location.origin}/index.html?${params}`;
+      window.location.href = window.location.pathname.replace(/[^/]*$/, '') + 'index.html?' + params;
 
       });
     });

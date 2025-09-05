@@ -610,7 +610,7 @@
             return;
           }
 
-          let baseUrl_MBWAY = window.location.origin; 
+          let baseUrl_MBWAY = window.location.origin + window.location.pathname.replace(/[^/]*$/, ''); 
           const redirectWithPhone = `${baseUrl_MBWAY}/MBWAY_return.html?id=${transactionID}&bearerToken=${token_payment}&clientId=${clientId_payment}&terminalId=${terminalId_payment}&entity=${entity_payment}&ServerToServer=${isServerToServer}&mbwayPhone=${encodeURIComponent(mbwayPhone)}&paymentMethods=${paymentMethods}&isDummyCustomer=${isDummyCustomer}`;
 
           window.location.href = redirectWithPhone;
@@ -628,7 +628,7 @@
           const referenceButton = document.createElement("button");
           referenceButton.className = "btn btn-primary";
           referenceButton.textContent = "Gerar Referência de Pagamento";
-          let baseUrl = window.location.origin; 
+          let baseUrl = window.location.origin + window.location.pathname.replace(/[^/]*$/, ''); 
 
           referenceButton.onclick = () => {
 

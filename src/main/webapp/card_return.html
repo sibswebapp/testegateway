@@ -228,7 +228,7 @@
         console.warn("Parâmetros obrigatórios ausentes na URL.");
       }
 
-      let baseUrl = window.location.origin; 
+      let baseUrl = window.location.origin + window.location.pathname.replace(/[^/]*$/, ''); 
 
       window.addEventListener("popstate", function () {
         baseUrl = "index.html" + novaURL;
