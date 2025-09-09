@@ -470,7 +470,7 @@
     const paymentMethods = getURLParameter("paymentMethods") || "0";
     const isServerToServer = getURLParameter("ServerToServer") === "1";
 
-    let baseUrl = window.location.origin; 
+    let baseUrl = window.location.origin + window.location.pathname.replace(/[^/]*$/, ''); 
 
     let redirectUrl = `${baseUrl}/REFERENCE_return.html` +
       `?bearerToken=${token_payment}` +
