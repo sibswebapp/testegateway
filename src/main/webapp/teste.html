@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <title>Simulador de Pagamento SIBS</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-4">
+  <h4 class="mb-3 text-primary fw-bold">Simulador de Pagamento SIBS (com Google Pay sandbox)</h4>
+
+  <div class="row mb-3">
+    <div class="col-md-4">
+      <label for="amount" class="form-label"><b>Montante (€)</b></label>
+      <input type="number" id="amount" class="form-control" value="1.00" step="0.01" min="0.01">
+    </div>
+    <div class="col-md-4">
+      <label for="payment-method" class="form-label"><b>Método de Pagamento</b></label>
+      <select id="payment-method" class="form-select">
+        <option value="">Selecione...</option>
+        <option value="CARD">Cartão</option>
+        <option value="MBWAY">MB WAY</option>
+        <option value="REFERENCE">Referência Multibanco</option>
+        <option value="XPAY">Google Pay</option>
+      </select>
+    </div>
+    <div class="col-md-4 d-flex align-items-end">
+      <button id="payButton" class="btn btn-success w-100 fw-bold">Iniciar Pagamento</button>
+    </div>
+  </div>
+
+  <div id="payment-frame-container" class="mt-4"></div>
+</div>
+
+<script>
+  window.makePayment = async function() {
+    const apiUrl = "https://spg.qly.site1.sibs.pt/api/v2/payments";
+    const token = "0276b80f950fb446c6addaccd121abfbbb.eyJlIjoiMjA3NTI5NTUzNTM2MSIsInJvbGVzIjoiTUFOQUdFUiIsInRva2VuQXBwRGF0YSI6IntcIm1jXCI6XCI1MDU2NjVcIixcInRjXCI6XCI3MjYwN1wifSIsImkiOiIxNzU5NzYyNzM1MzYxIiwiaXMiOiJodHRwczovL3FseS5zaXRlMS5zc28uc3lzLnNpYnMucHQvYXV0aC9yZWFsbXMvUUxZLk1FUkNILlBPUlQxIiwidHlwIjoiQmVhcmVyIiwiaWQiOiJVTTJRRnpaUUNHOTk1MGUxMDM5YzI3NGE2MTk0NzYzYTkwOGM5ODAxOTMifQ==.d4543ab9c27e4bf1c6e82a25b765600f2a67b5b07892e4cf9137a12acf862d864ad5a99f17c50e8603d68257b42be557edca21eb7b9d4f9a2dbfca5129d063b6";
+    const clientId = "f71ed912-fe5e-41b7-90db-36dd9752a1a9";
+
+    const amountValue = parseFloat(document.getElementById("amount").value) || 0;
+    const selectedMethod = document.getElementById("payment-method").value;
+
+    if (!selectedMethod) {
+      alert("Selecione um método de pagamento.");
+      return;
+    }
+
+    // JSON exato exigido pela API
+    const requestData = {
+      merchant: {
+        terminalId: 72607,
+        channel: "web",
+        merchantTransactionId: "OrderID " + Date.now()
+      },
+      transaction: {
+        transactionTimestamp: new Date().toISOString(),
+        description: "Pagamento de teste",
+        moto: false,
+        paymentType: "PURS",
+        amount: {
+          value: amountValue,
+          currency: "EUR"
+        },
+        paymentMethod: [selectedMethod]
+      }
+    };
+
+    try {
+      const response = await fetch(apiUrl, {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${token}`,
+          "X-IBM-Client-Id": clientId,
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        },
+        body: JSON.stringify(requestData)
+      });
+
+      if (!response.ok) throw new Error(`Erro na requisição: ${response.status}`);
+      const data = await response.json();
+
+      if (data.transactionID && data.formContext) {
+        loadPaymentIframe(data.transactionID, data.formContext, selectedMethod);
+      } else {
+        throw new Error("Resposta da API incompleta.");
+      }
+    } catch (error) {
+      console.error("Erro ao processar pagamento:", error);
+      alert("Erro ao processar pagamento. Verifique o console para mais detalhes.");
+    }
+  };
+
+  function loadPaymentIframe(transactionID, formContext, selectedMethod) {
+    const container = document.getElementById("payment-frame-container");
+    container.innerHTML = "";
+
+    const iframe = document.createElement("iframe");
+    iframe.width = "100%";
+    iframe.height = "600";
+    iframe.style.border = "none";
+    iframe.allow = "payment";
+    iframe.sandbox = "allow-scripts allow-popups allow-same-origin allow-forms";
+
+    let redirectUrl = "http://localhost:8080/webapp/REFERENCE_return.html";
+    if (selectedMethod === "MBWAY") redirectUrl = "http://localhost:8080/webapp/MBWAY_return.html";
+    if (selectedMethod === "CARD") redirectUrl = "http://localhost:8080/webapp/card_return.html";
+    if (selectedMethod === "XPAY") redirectUrl = "http://localhost:8080/webapp/googlepay_return.html";
+
+    const configObj = {
+      paymentMethodList: [selectedMethod],
+      amount: { value: parseFloat(document.getElementById("amount").value) || 0, currency: "EUR" },
+      language: "pt",
+      redirectUrl: redirectUrl
+    };
+
+    container.appendChild(iframe);
+    iframe.onload = () => {
+      const doc = iframe.contentWindow.document;
+
+      // HTML do iframe sem script
+      doc.open();
+      doc.write(`
+        <html>
+          <head>
+            <meta charset="UTF-8" />
+            <style>
+              body { font-family: Arial, sans-serif; margin: 0; padding: 20px; }
+            </style>
+          </head>
+          <body>
+            <form class="paymentSPG"
+                  spg-context="${formContext}"
+                  spg-config="${JSON.stringify(configObj).replace(/"/g, '&quot;')}">
+            </form>
+          </body>
+        </html>
+      `);
+      doc.close();
+
+      // Script do widget criado dinamicamente
+      const script = doc.createElement("script");
+      script.src = `https://spg.qly.site1.sibs.pt/assets/js/widget.js?id=${transactionID}`;
+      script.async = true;
+      doc.body.appendChild(script);
+    };
+    iframe.src = "about:blank";
+  }
+
+  document.getElementById("payButton").addEventListener("click", (e) => {
+    e.preventDefault();
+    makePayment();
+  });
+</script>
+</body>
+</html>

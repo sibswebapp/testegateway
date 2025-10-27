@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+  <script>(function(){var p=location.pathname;var b=p.indexOf("/TestAPIWEB2/")!==-1?"/TestAPIWEB2/":"/";var e=document.createElement("base");e.href=b;document.head.prepend(e);}());</script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Status do Pagamento</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.1/mdb.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet" />
+
+  <style>
+
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      background: #f0f0f0;
+      color: #333;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    }
+
+    * {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    }
+
+    /*navbar css*/
+    .navbar {
+      background-color: #fff !important;
+      padding-top: 0.2rem;
+      padding-bottom: 0.2rem;
+      min-height: 55px;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    }
+
+    .navbar .navbar-brand img {
+      max-height: 30px;
+      width: auto;
+    }
+
+    /*footer css*/
+    footer {
+      background-color: #fff;
+      color: #333;
+      padding: 20px 0;
+      font-size: 0.9rem;
+      text-align: center;
+      margin-top: auto;
+    }
+
+    footer a.btn {
+      font-size: 0.85rem;
+      padding: 6px 14px;
+    }
+
+    footer a {
+      color: #4c1d95;
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    main {
+      flex: 1;
+    }
+
+
+    /*letra css*/
+    h2 {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: bold;
+    }
+
+
+    /* POPUP - DESIGN (sucesso) */
+    /* Overlay escuro */
+    #successModal .overlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: rgba(0,0,0,0.6);
+          opacity: 0;
+          visibility: hidden;
+          transition: 0.3s ease-in-out;
+          z-index: 9998;
+        }
+
+        /* Caixa do modal */
+        #successModal .modal-box {
+          position: fixed;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%) scale(0.8);
+          background: #fff;
+          border-radius: 16px;
+          padding: 30px 25px;
+          width: 400px;
+          max-width: 90%;
+          text-align: center;
+          box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+          opacity: 0;
+          visibility: hidden;
+          transition: 0.3s ease-in-out;
+          z-index: 9999;
+        }
+
+        /* Ícone de sucesso */
+        #successModal .icon-success {
+          font-size: 60px;
+          color: #28a745;
+          margin-bottom: 15px;
+        }
+
+        /* Título */
+        #successModal h2 {
+          margin: 10px 0 5px;
+          font-size: 22px;
+          font-weight: bold;
+          color: #333;
+        }
+
+        /* Texto */
+        #successModal p {
+          font-size: 15px;
+          color: #666;
+          margin-bottom: 20px;
+        }
+
+        /* Botão */
+        #successModal .buttons .close-btn {
+          background: #28a745;
+          border: none;
+          color: #fff;
+          padding: 10px 18px;
+          border-radius: 8px;
+          cursor: pointer;
+          transition: background 0.2s;
+        }
+        #successModal .buttons .close-btn:hover {
+          background: #218838;
+        }
+
+        /* Estado ativo (mostra o modal) */
+        #successModal.active .overlay {
+          opacity: 1;
+          visibility: visible;
+        }
+        #successModal.active .modal-box {
+          opacity: 1;
+          visibility: visible;
+          transform: translate(-50%, -50%) scale(1);
+        }
+
+
+
+        /* POPUP - DESIGN (ERRO) */
+        /* Overlay do erro */
+        #errorModal .overlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: rgba(0,0,0,0.6);
+          opacity: 0;
+          visibility: hidden;
+          transition: 0.3s ease-in-out;
+          z-index: 9998;
+        }
+
+        /* Caixa do modal */
+        #errorModal .modal-box {
+          position: fixed;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%) scale(0.8);
+          background: #fff;
+          border-radius: 16px;
+          padding: 30px 25px;
+          width: 400px;
+          max-width: 90%;
+          text-align: center;
+          box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+          opacity: 0;
+          visibility: hidden;
+          transition: 0.3s ease-in-out;
+          z-index: 9999;
+        }
+
+        /* Ícone de erro */
+        #errorModal .icon-error {
+          font-size: 60px;
+          color: #dc3545; /* Vermelho Bootstrap */
+          margin-bottom: 15px;
+        }
+
+        /* Título */
+        #errorModal h2 {
+          margin: 10px 0 5px;
+          font-size: 22px;
+          font-weight: bold;
+          color: #333;
+        }
+
+        /* Texto */
+        #errorModal p {
+          font-size: 15px;
+          color: #666;
+          margin-bottom: 20px;
+        }
+
+        /* Botão */
+        #errorModal .buttons .close-btn {
+          background: #dc3545;
+          border: none;
+          color: #fff;
+          padding: 10px 18px;
+          border-radius: 8px;
+          cursor: pointer;
+          transition: background 0.2s;
+        }
+        #errorModal .buttons .close-btn:hover {
+          background: #c82333;
+        }
+
+        /* Estado ativo */
+        #errorModal.active .overlay {
+          opacity: 1;
+          visibility: visible;
+        }
+        #errorModal.active .modal-box {
+          opacity: 1;
+          visibility: visible;
+          transform: translate(-50%, -50%) scale(1);
+        }
+      
+  </style>
+</head>
+
+<body>
+  
+  <!--Nav bar-->
+  <nav class="navbar navbar-expand-lg navbar-light">
+    <div class="container-fluid d-flex justify-content-between align-items-center px-4">
+      <a class="navbar-brand d-flex align-items-center" href="index.html">
+        <img src="https://www.pay.sibs.com/wp-content/uploads/2022/02/logo.png" alt="Logo SIBS" style="max-height:30px;" />
+      </a>
+      <div>
+        <a href="index.html" class="btn btn-rounded btn-primary">
+          <i class="fa fa-reply"></i> Voltar atrás
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!--Main - Status do Pagamento com Tabs-->
+  <main>
+    <div class="container mt-4">
+      <div class="card shadow-lg border-0">
+        <div class="card-header d-flex justify-content-between align-items-center" style="background-color: #cae3ff;">
+          <h2 class="text-center flex-grow-1" style="color: #454545; margin: 0;"><b>Webhooks</b></h2>
+        </div>
+
+        <!-- Tabs -->
+        <ul class="nav nav-tabs justify-content-center border-0 mt-2" id="paymentTabs" role="tablist" style="background-color: #f8f9fa;">
+          <li class="nav-item mx-2" role="presentation">
+            <button class="nav-link active fw-bold px-6 py-2 shadow-sm" 
+                    id="tab-decrypt-tab" 
+                    data-bs-toggle="tab" 
+                    data-bs-target="#tab-decrypt" 
+                    type="button" 
+                    role="tab" 
+                    aria-controls="tab-decrypt" 
+                    aria-selected="true"
+                    style="border-radius: 50px;">
+              <i class="fa fa-lock-open me-2 text-primary"></i> Desencriptar Webhook
+            </button>
+          </li>
+          <li class="nav-item mx-2" role="presentation">
+            <button class="nav-link fw-bold px-6 py-2 shadow-sm" 
+                    id="tab-endpoint-tab" 
+                    data-bs-toggle="tab" 
+                    data-bs-target="#tab-endpoint" 
+                    type="button" 
+                    role="tab" 
+                    aria-controls="tab-endpoint" 
+                    aria-selected="false"
+                    style="border-radius: 50px;">
+              <i class="fa fa-network-wired me-2 text-success"></i> Endpoint Webhook
+            </button>
+          </li>
+        </ul>
+
+
+        <!-- Conteúdo das Tabs -->
+        <div class="tab-content p-4" id="paymentTabsContent">
+          <!-- Tab 1 - Desencriptar Webhook -->
+          <div class="tab-pane fade show active" id="tab-decrypt" role="tabpanel" aria-labelledby="tab-decrypt-tab">
+            <h4 class="text-primary text-center mb-4"><b>Desencriptar Webhook</b></h4>
+            <div class="text-center text-muted mb-3">
+              <small>Insira os dados recebidos do webhook para ver o conteúdo desencriptado.</small>
+            </div>
+
+            <p class="d-flex align-items-center">
+              <i class="fa fa-plug text-primary me-2"></i>
+              <label for="webhookSecret" class="form-label mb-0 me-2 fw-bold" style="white-space: nowrap;">
+                Webhook Secret:
+              </label>
+              <input
+                type="text"
+                class="form-control flex-grow-1"
+                id="webhookSecret"
+                placeholder="Ex: b64encodedSecret"
+              >
+            </p>
+
+            <br>
+
+            <div class="mb-3">
+              <label for="webhookBody" class="form-label"><b>HTTP Body:</b></label>
+              <textarea class="form-control" id="webhookBody" rows="4" placeholder='{"example":"data"}'></textarea>
+            </div>
+            
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label for="webhookAuthTagB64" class="form-label"><b>AuthTag 64:</b></label>
+                <input class="form-control" id="webhookAuthTagB64" rows="4" placeholder='Ex: L54FxAWEA415Zxfxn6rzyg== '></input>
+              </div>
+
+              <div class="col-md-6">
+                <label for="webhookIvB64" class="form-label"><b>IvB64:</b></label>
+                <input class="form-control" id="webhookIvB64" rows="4" placeholder='Ex: 1ILLz7q9joUTdyRL '></input>
+              </div>
+            </div>
+            
+            <br>
+            <br>
+            <div class="d-flex justify-content-center">
+                <button class="btn btn-primary btn-rounded mt-2" onclick="sodiumDecrypt()">
+                  <i class="fa fa-unlock-alt me-2"></i> Desencriptar
+                </button>
+            </div>
+
+            <div id="endpointResultDecrypt" class="mt-3 text-center"></div>
+          </div>
+
+          <!-- Tab 2 - Endpoint Webhook -->
+          <div class="tab-pane fade" id="tab-endpoint" role="tabpanel" aria-labelledby="tab-endpoint-tab">
+            <h4 class="text-success text-center mb-4"><b>Endpoint Webhook</b></h4>
+            <div class="text-center text-muted mb-3">
+              <small>Visualize ou teste o endpoint que recebe notificações de pagamento.</small>
+            </div>
+            <br>
+
+            <div id="endpointStatus" class="text-center">
+              <p class="d-flex align-items-center">
+                <i class="fa fa-plug text-success me-2"></i> 
+                <label for="EndpointWebhook_input" class="form-label mb-0 me-2 fw-bold">Endpoint:</label>
+                <input
+                  type="url"
+                  class="form-control"
+                  id="EndpointWebhook_input"
+                  placeholder="https://example.com/webhook/sibs "
+                  pattern="https://.*"
+                  required
+                  title="O endpoint deve começar com https://"
+                >
+              </p>
+
+              <br>
+
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label for="Vector" class="form-label text-start d-block"><b>Initialization Vector:</b></label>
+                  <input type="text" class="form-control" id="Vector" placeholder="Ex: G+mA/QcMXwqMkuxV">
+                </div>
+
+                <div class="col-md-6">
+                  <label for="Authentication_Tag" class="form-label text-start d-block"><b>Authentication Tag:</b></label>
+                  <input type="text" class="form-control" id="Authentication_Tag" placeholder="Ex: NEzdPhNyjvcCKqECEHoJcA==">
+                </div>
+              </div>
+
+              <div class="mt-3">
+                <label for="Body_endpoint" class="form-label text-start d-block"><b>Body webhook:</b></label>
+                <textarea class="form-control" id="Body_endpoint" rows="4" placeholder='{"example":"data"}'></textarea>
+              </div>
+
+              <br>
+              <br>
+              <button class="btn btn-outline-success btn-rounded mt-2" onclick="testEndpoint()"> 
+                <i class="fa fa-sync-alt me-2"></i> Testar Endpoint
+              </button>
+              
+              <div id="endpointResult" class="mt-3 text-center"></div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+
+  <!--PopUp sucesso-->
+    <section id="successModal">
+      <span class="overlay"></span>
+      <div class="modal-box">
+        <i class="fa-regular fa-circle-check icon-success"></i>
+        <h2>Configuração Guardada</h2>
+        <p>As suas definições foram gravadas com sucesso.</p>
+
+        <div class="buttons">
+          <button class="close-btn">Ok, Fechar</button>
+        </div>
+      </div>
+    </section>
+
+
+    <!--PopUp Erro-->
+    <section id="errorModal">
+      <span class="overlay"></span>
+      <div class="modal-box">
+        <i class="fa-regular fa-circle-xmark icon-error"></i>
+        <h2>Erro na Configuração</h2>
+        <p id="errorMessage">Ocorreu um problema ao gravar as definições.</p>
+
+        <div class="buttons">
+          <button class="close-btn">Ok, Fechar</button>
+        </div>
+      </div>
+    </section>
+
+  <script>
+
+    // PopUP de sucesso chamada
+    const successModal = document.getElementById("successModal"),
+          overlay = successModal.querySelector(".overlay"),
+          closeBtn = successModal.querySelector(".close-btn");
+
+    function showSuccessModal() {
+      successModal.classList.add("active");
+    }
+
+    overlay.addEventListener("click", () => successModal.classList.remove("active"));
+    closeBtn.addEventListener("click", () => successModal.classList.remove("active"));
+
+
+    // PopUP de erro chamada
+    const errorModal = document.getElementById("errorModal"),
+          errorOverlay = errorModal.querySelector(".overlay"),
+          errorCloseBtn = errorModal.querySelector(".close-btn");
+
+    function showErrorModal(message) {
+      errorMessage.textContent = message;
+      errorModal.classList.add("active");
+    }
+
+    errorOverlay.addEventListener("click", () => errorModal.classList.remove("active"));
+    errorCloseBtn.addEventListener("click", () => errorModal.classList.remove("active"));
+
+
+    //para ver se o endpoint do webhook esta correto
+    async function testEndpoint() {
+    
+      let Endpoint_URL = document.getElementById("EndpointWebhook_input").value.trim();
+      const x_initialization_vector = document.getElementById("Vector").value.trim();
+      const x_authentication_tag = document.getElementById("Authentication_Tag").value.trim();
+      const Body_endpoint = document.getElementById("Body_endpoint").value.trim();
+
+      const endpoint_obrigatorio = "https://cors-anywhere.herokuapp.com/"
+
+      Endpoint_URL_Completo = endpoint_obrigatorio + Endpoint_URL;
+
+      const resultContainer = document.getElementById("endpointResult"); 
+
+      resultContainer.innerHTML = "";
+
+      if (!Endpoint_URL && !x_initialization_vector && !x_authentication_tag && !Body_endpoint) {
+        showErrorModal("Preencha todos os campos obrigatórios.");
+        return;
+      }
+
+      if (!Endpoint_URL) {
+        showErrorModal("Preenchimento obrigatório do campo Endpoint");
+        return;
+      }
+
+      if (!x_initialization_vector) {
+        showErrorModal("Preenchimento obrigatório do campo Initialization Vector");
+        return;
+      }
+
+      if (!x_authentication_tag) {
+        showErrorModal("Preenchimento obrigatório do campo Authentication Tag");
+        return;
+      }
+
+      if (!Body_endpoint) {
+        showErrorModal("Preenchimento obrigatório do campo Body webhook");
+        return;
+      }
+
+      try {
+          const response = await fetch(Endpoint_URL_Completo, {
+              method: "POST",
+              headers: {
+                  "Content-Type": "text/plain",
+                  "X-AUTHENTICATION-TAG": x_authentication_tag,
+                  "X-INITIALIZATION-VECTOR": x_initialization_vector
+              },
+              body: Body_endpoint
+          });
+
+          if (!response.ok) {
+              const errorText = await response.text();
+              resultContainer.innerHTML = `
+                  <div class="alert alert-danger mt-3" role="alert">
+                      <br>
+                      <strong>Erro na chamada API:</strong><br>${errorText}
+                  </div>
+              `;
+              showErrorModal("Erro na chamada API");
+              return;
+          }
+
+          const resultText = await response.text();
+          resultContainer.innerHTML = `
+              <div class="alert alert-success mt-3" role="alert">
+                  <br>
+                  <strong>Resposta do endpoint:</strong><br>${resultText}
+              </div>
+          `;
+          showSuccessModal("Desencriptação do webhook feita com sucesso");
+
+      } catch (err) {
+          console.error(err);
+          resultContainer.innerHTML = `
+              <div class="alert alert-danger mt-3" role="alert">
+                  <strong>Erro ao chamar o endpoint:</strong><br>${err.message}
+              </div>
+          `;
+          showErrorModal("Erro ao chamar o endpoint");
+      }
+    }
+
+
+    //Para ver se ele faz a desencriptação como deve ser
+    async function sodiumDecrypt() {
+
+      const resultContainerDecrypt = document.getElementById("endpointResultDecrypt");
+      resultContainerDecrypt.innerHTML = "";
+
+      function base64ToBytes(base64) {
+        return Uint8Array.from(atob(base64), c => c.charCodeAt(0));
+      }
+
+      const webhookSecret = document.getElementById("webhookSecret").value.trim();
+      const iv_from_http_header = document.getElementById("webhookIvB64").value.trim();
+      const http_body = document.getElementById("webhookBody").value.trim();
+      const auth_tag_from_http_header = document.getElementById("webhookAuthTagB64").value.trim();
+
+      if (!webhookSecret && !iv_from_http_header && !http_body && !auth_tag_from_http_header) {
+          showErrorModal("Preencha todos os campos obrigatórios.");
+          return;
+      }
+
+      if (!webhookSecret) {
+          showErrorModal("Preenchimento obrigatório do campo Webhook Secret");
+          return;
+      }
+
+      if (!iv_from_http_header) {
+          showErrorModal("Preenchimento obrigatório do campo IvB64");
+          return;
+      }
+      
+      if (!http_body) {
+          showErrorModal("Preenchimento obrigatório do campo HTTP Body");
+          return;
+      }
+
+      if (!auth_tag_from_http_header) {
+          showErrorModal("Preenchimento obrigatório do campo AuthTag 64");
+          return;
+      }
+
+      const key = base64ToBytes(webhookSecret);
+      const iv = base64ToBytes(iv_from_http_header);
+      const ciphertext = base64ToBytes(http_body);
+      const authTag = base64ToBytes(auth_tag_from_http_header);
+
+      const combined = new Uint8Array(ciphertext.length + authTag.length);
+      combined.set(ciphertext);
+      combined.set(authTag, ciphertext.length);
+
+      const cryptoKey = await crypto.subtle.importKey(
+        "raw",
+        key,
+        { name: "AES-GCM", length: 256 },
+        false,
+        ["decrypt"]
+      );
+
+      try {
+        const decrypted = await crypto.subtle.decrypt(
+          { name: "AES-GCM", iv: iv },
+          cryptoKey,
+          combined
+        );
+
+        let decoder = new TextDecoder();
+
+        decoder.decode(decrypted);
+        const resultText = decoder.decode(decrypted);
+
+        resultContainerDecrypt.innerHTML = `
+              <div class="alert alert-success mt-3" role="alert">
+                <br>
+                <strong>Resposta da desencriptação do Webhook:</strong><br>${resultText}
+              </div>
+          `;
+
+        showSuccessModal("Desencriptação do webhook feita com sucesso");
+
+      } catch (err) {
+        console.error("Erro completo:", err);
+
+        resultContainerDecrypt.innerHTML = `
+          <div class="alert alert-danger mt-3" role="alert">
+            <strong>Erro ao desencriptar o webhook:</strong><br>
+            ${err.message || "Erro desconhecido"}<br><br>
+            <pre>${JSON.stringify(err, Object.getOwnPropertyNames(err), 2)}</pre>
+          </div>
+        `;
+
+        showErrorModal("Erro ao desencriptar o webhook");
+      }
+    }
+
+
+    //https://cors-anywhere.herokuapp.com/
+
+    
+  </script>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <br>
+  <br>
+  <!--footer-->
+  <footer>
+    <div class="container">
+      <p class="mb-1">© 2025 Pagamentos SIBS. Todos os direitos reservados.</p>
+    </div>
+  </footer>
+
+</body>
+
+</html>

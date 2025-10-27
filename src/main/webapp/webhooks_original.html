@@ -1,0 +1,58 @@
+
+<div class="card-body">
+    <div id="teste" class="text-center"></div>
+</div>
+
+
+
+<script>
+async function sodiumDecrypt(webhookSecret, iv_from_http_header, http_body, auth_tag_from_http_header) {
+  function base64ToBytes(base64) {
+    return Uint8Array.from(atob(base64), c => c.charCodeAt(0));
+  }
+
+  const key = base64ToBytes(webhookSecret);
+  const iv = base64ToBytes(iv_from_http_header);
+  const ciphertext = base64ToBytes(http_body);
+  const authTag = base64ToBytes(auth_tag_from_http_header);
+
+  const combined = new Uint8Array(ciphertext.length + authTag.length);
+  combined.set(ciphertext);
+  combined.set(authTag, ciphertext.length);
+
+  const cryptoKey = await crypto.subtle.importKey(
+    "raw",
+    key,
+    { name: "AES-GCM", length: 256 },
+    false,
+    ["decrypt"]
+  );
+
+  try {
+    const decrypted = await crypto.subtle.decrypt(
+      { name: "AES-GCM", iv: iv },
+      cryptoKey,
+      combined
+    );
+
+    const decoder = new TextDecoder();
+    return decoder.decode(decrypted);
+  } catch (err) {
+    console.error("Erro ao descriptografar:", err);
+    return null;
+  }
+}
+
+(async () => {
+  const resultDiv = document.getElementById("teste");
+
+  const webhookSecret = "JMRr03GXdt1AT0t67UBUJiVKbzCnydMxmX/mgSLzxt8=";
+  const iv_from_http_header = "1IkLz7q9joUTdyRL";
+  const auth_tag_from_http_header = "L57FxAWEA415Zxfxn6rzyg==";
+  const http_body =
+    "fmslNtJwI2IlCptO0vhpjSbjHG1xoUXH9z/DyAlzw8oZ/sa8XKqo0sHcDLbdYeKdh2ztqOmB3FSUvKbGY/q9Qq2E5nW0KpeZ9fP5ZtfUmN7EzV2wbeXayH8HNHWewCV4IbHTqVk+3r4OtFcm4ERLKLkbHOW84U3aUx6OS70wqL2chio7vpJvr0nSLoBaotCz4cmeG94mOyjwiHQ67jQqJ0c7IoQUr4R5uhJanDtxGlUkByN8uT/geF2emMsYfWMwhjBIQRTCEvg62cJKiBfKGupUGaoKp3S6IwiTs3Y8sMXR1zsDe6QVm+AK+QJS3HW4bn+bWZ70CdjSdSrI3yYQvEbrnBbMSPzzJz5AHZxCFiO2eJTNH9RxJaGgU0aQ4NZQ3/1pEinZfk6OVSFBVhnPmWMf3IEHKqK6YfVLaqGmIR03cvBxmC9NTS155kKYLXh7UshiBylinVLUvqR+UFOJWs+MUYvBt7FpW6mLMyh8VQx6WgVHwKezuZuOVySgmHfBfoPNYP3JCmng/mZ8sCgbz+L4EZREQK6Wxf0mBmJqaqiYc4Eg+33ad3dgcSBHPo7gjJ/rIvT43p6rVGu60yU21eNXMaeTRhmuBCy0x+uGjRf5zqDn4nCbVAkHp7nCkzrAIaBJm6dL4GgFK3pbjeYt7TpjOKm9heo3GGZa2CSDlR9/RLwa1DdWFvhqLsmZ5yH4336gU+8NjEWGpK6vx2T4T/GpDV19y/0fund6zxldcAVRQ6PE1arPKJs/WNjy3HWlBHs2HpIyYmUKXQVCC97ah0GkEw0nzWWPsIXS4hm79O2VXkKiJk/zjDW734sLLxFpTr9gQOWTYHKo/vWoJ/9lbXbRLkUz8lhthY17a8KI6unhzH9MZtyS5HWlgbkbttJX48k+xiNx";
+
+  const result = await sodiumDecrypt(webhookSecret, iv_from_http_header, http_body, auth_tag_from_http_header);
+  resultDiv.innerHTML = `<b>Resultado:</b> ${result}`;
+})();
+</script>
