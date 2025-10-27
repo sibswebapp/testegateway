@@ -14,6 +14,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
 
   <style>
+
     html, body {
       height: 100%;
       margin: 0;
@@ -30,6 +31,7 @@
       font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     }
 
+    /*navbar css*/
     .navbar {
       background-color: #fff !important;
       padding-top: 0.2rem;
@@ -43,6 +45,7 @@
       width: auto;
     }
 
+    /*footer css*/
     footer {
       background-color: #fff;
       color: #333;
@@ -69,6 +72,7 @@
       flex: 1;
     }
 
+    /*letra css*/
     h2 {
       font-family: 'Montserrat', sans-serif;
       font-weight: bold;
@@ -89,12 +93,178 @@
       height: 1050px;
       overflow: hidden;
     }
+
+    /* POPUP - DESIGN (sucesso) */
+    /* Overlay escuro */
+    #successModal .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.6);
+      opacity: 0;
+      visibility: hidden;
+      transition: 0.3s ease-in-out;
+      z-index: 9998;
+    }
+
+    /* Caixa do modal */
+    #successModal .modal-box {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.8);
+      background: #fff;
+      border-radius: 16px;
+      padding: 30px 25px;
+      width: 400px;
+      max-width: 90%;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      opacity: 0;
+      visibility: hidden;
+      transition: 0.3s ease-in-out;
+      z-index: 9999;
+    }
+
+    /* Ícone de sucesso */
+    #successModal .icon-success {
+      font-size: 60px;
+      color: #28a745;
+      margin-bottom: 15px;
+    }
+
+    /* Título */
+    #successModal h2 {
+      margin: 10px 0 5px;
+      font-size: 22px;
+      font-weight: bold;
+      color: #333;
+    }
+
+    /* Texto */
+    #successModal p {
+      font-size: 15px;
+      color: #666;
+      margin-bottom: 20px;
+    }
+
+    /* Botão */
+    #successModal .buttons .close-btn {
+      background: #28a745;
+      border: none;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    #successModal .buttons .close-btn:hover {
+      background: #218838;
+    }
+
+    /* Estado ativo (mostra o modal) */
+    #successModal.active .overlay {
+      opacity: 1;
+      visibility: visible;
+    }
+    #successModal.active .modal-box {
+      opacity: 1;
+      visibility: visible;
+      transform: translate(-50%, -50%) scale(1);
+    }
+
+
+    /* POPUP - DESIGN (ERRO) */
+    /* Overlay do erro */
+    #errorModal .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.6);
+      opacity: 0;
+      visibility: hidden;
+      transition: 0.3s ease-in-out;
+      z-index: 9998;
+    }
+
+    /* Caixa do modal */
+    #errorModal .modal-box {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.8);
+      background: #fff;
+      border-radius: 16px;
+      padding: 30px 25px;
+      width: 400px;
+      max-width: 90%;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      opacity: 0;
+      visibility: hidden;
+      transition: 0.3s ease-in-out;
+      z-index: 9999;
+    }
+
+    /* Ícone de erro */
+    #errorModal .icon-error {
+      font-size: 60px;
+      color: #dc3545; /* Vermelho Bootstrap */
+      margin-bottom: 15px;
+    }
+
+    /* Título */
+    #errorModal h2 {
+      margin: 10px 0 5px;
+      font-size: 22px;
+      font-weight: bold;
+      color: #333;
+    }
+
+    /* Texto */
+    #errorModal p {
+      font-size: 15px;
+      color: #666;
+      margin-bottom: 20px;
+    }
+
+    /* Botão */
+    #errorModal .buttons .close-btn {
+      background: #dc3545;
+      border: none;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    #errorModal .buttons .close-btn:hover {
+      background: #c82333;
+    }
+
+    /* Estado ativo */
+    #errorModal.active .overlay {
+      opacity: 1;
+      visibility: visible;
+    }
+    #errorModal.active .modal-box {
+      opacity: 1;
+      visibility: visible;
+      transform: translate(-50%, -50%) scale(1);
+    }
+
   </style>
 </head>
 
 <body>
+
+  <!--Nav bar-->
   <nav class="navbar navbar-expand-lg navbar-light">
-    <div class="container-fluid d-flex justify-content-between align-items-center px-4" style="height: 69px;">
+    <div class="container-fluid d-flex justify-content-between align-items-center px-4" >
       <a class="navbar-brand d-flex align-items-center">
         <img src="https://www.pay.sibs.com/wp-content/uploads/2022/02/logo.png" alt="Logo SIBS" style="max-height:30px;" />
       </a>
@@ -121,19 +291,20 @@
 
       <div class="card-body">
 
-      <div class="mb-3">
-        <label class="form-label">País:</label><br>
-        <div class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" name="country" id="spain" value="Spain" onchange="updatePaymentMethods(); makePayment()" checked>
-          <label class="form-check-label" for="spain">Spain (BIZM)</label>
+        <!--Opção para escolher os paises-->
+        <div class="mb-3">
+          <label class="form-label">País:</label><br>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="country" id="spain" value="Spain" onchange="updatePaymentMethods(); makePayment()" checked>
+            <label class="form-check-label" for="spain">Spain (BIZM)</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="country" id="poland" value="Poland" onchange="updatePaymentMethods(); makePayment()" >
+            <label class="form-check-label" for="poland">Poland (BLIK)</label>
+          </div>
         </div>
-        <div class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" name="country" id="poland" value="Poland" onchange="updatePaymentMethods(); makePayment()" >
-          <label class="form-check-label" for="poland">Poland (BLIK)</label>
-        </div>
-      </div>
 
-
+        <!--Inputs-->
         <div class="mb-3">
           <label class="form-label">Montante (Valor máximo 200€):</label>
           <input type="number" id="amount" class="form-control" value="1" min="1" max="200" step="0.01" 
@@ -141,7 +312,7 @@
             oninput="if(this.value > 200) this.value = 200;">
         </div>
 
-        <div class="mb-3">
+        <div class="mb-3" id="payment-method_Div">
           <label for="payment-method" class="form-label">Método de Pagamento:</label>
           <select id="payment-method" class="form-select" onchange="makePayment()">
           </select>
@@ -155,19 +326,94 @@
 
     <div id="debug-container"></div>
 
-    
     <br>
   </main>
-
+  
+  <!--footer-->
   <footer>
     <div class="container">
       <p class="mb-1">© 2025 Pagamentos SIBS. Todos os direitos reservados.</p>
     </div>
   </footer>
 
+  <!--PopUp sucesso-->
+  <section id="successModal">
+    <span class="overlay"></span>
+    <div class="modal-box">
+      <i class="fa-regular fa-circle-check icon-success"></i>
+      <h2>Configuração Guardada</h2>
+      <p>As suas definições foram gravadas com sucesso.</p>
+
+      <div class="buttons">
+        <button class="close-btn">Ok, Fechar</button>
+      </div>
+    </div>
+  </section>
+
+
+  <!--PopUp Erro-->
+  <section id="errorModal">
+    <span class="overlay"></span>
+    <div class="modal-box">
+      <i class="fa-regular fa-circle-xmark icon-error"></i>
+      <h2>Erro na Configuração</h2>
+      <p id="errorMessage">Ocorreu um problema ao gravar as definições.</p>
+
+      <div class="buttons">
+        <button class="close-btn">Ok, Fechar</button>
+      </div>
+    </div>
+  </section>
+
+
   <script>
 
+   //credenciais default
+    const credential_default_stargate = {
+      terminalId: "301",
+      clientId: "a1f729f7-ee7c-46b3-b30a-9b20d7fff09a",
+      bearerToken: "02090d1ccf9a8e42a5b859c5b84dc4c5a8.eyJlIjoiMjA2NzY3MzI2NDY1MSIsInJvbGVzIjoiTUFOQUdFUiIsInRva2VuQXBwRGF0YSI6IntcIm1jXCI6XCIxODFcIixcInRjXCI6XCIzMDFcIn0iLCJpIjoiMTc1MjE0MDQ2NDY1MSIsImlzIjoiaHR0cHM6Ly9xbHkuc2l0ZTEuc3NvLnN5cy5zaWJzLnB0L2F1dGgvcmVhbG1zL1FMWS5TQk8tSU5ULlBPUlQxIiwidHlwIjoiQmVhcmVyIiwiaWQiOiJyaFNOVVl4RFNIMjE2NDU1NmU5NDYxNGU0YWEzOGU4NDYzMTBhMzRlMjUifQ==.f486111bd4c61bb025c46fb6478233f23a18edfebd42e66712d6b3547ed452d8217d85d2fc6f0682f2b572fb787e082e9f3609b3343c27f851659b5f71bacf30",
+      AllMethodsPay: "0",
+      Country: "Poland"
+    };
+
+    const credential_default_stargate_SPAIN = {
+      terminalId: "345",
+      clientId:"46840c19-5ac0-40e4-8c88-b05ca0ad7efe",
+      bearerToken: "02090d1ccf9a8e42a5b859c5b84dc4c5a8.eyJlIjoiMjA3MDcwNDExMzgwNyIsInJvbGVzIjoiTUFOQUdFUiIsInRva2VuQXBwRGF0YSI6IntcIm1jXCI6XCIyMjFcIixcInRjXCI6XCIzNDVcIn0iLCJpIjoiMTc1NTE3MTMxMzgwNyIsImlzIjoiaHR0cHM6Ly9xbHkuc2l0ZTEuc3NvLnN5cy5zaWJzLnB0L2F1dGgvcmVhbG1zL1FMWS5TQk8tSU5ULlBPUlQxIiwidHlwIjoiQmVhcmVyIiwiaWQiOiJUdTRuZ1VodzExNWQ2MTQ2Yjk1MDIzNDA5YzkyODY2ODBhMjBhYjRhMjYifQ==.d4f8d7309bc4a158128ddb3e0b6072a47dfedb342c4c587c0f85829eb76dca21299327fa8d9ec9fa71391cd935ff7859dde9f68036dd1f4696c1b867baaddde3",
+      AllMethodsPay: "0",
+      Country: "EUR"
+    };
+
+    localStorage.setItem('credential_default_stargate_SPAIN', JSON.stringify(credential_default_stargate_SPAIN));
+    localStorage.setItem('credential_default_stargate', JSON.stringify(credential_default_stargate));
+    
+
+    //Buscar localStorage arrays
+    const credential_default_stargate_variable = JSON.parse(localStorage.getItem('credential_default_stargate'))
+    const credential_config_stargate_variable = JSON.parse(localStorage.getItem('credential_config_stargate'))
+    const credential_default_stargate_SPAIN_variable = JSON.parse(localStorage.getItem('credential_default_stargate_SPAIN'))
+    const default_stargate_Configs = JSON.parse(localStorage.getItem('default_stargate'))
+
   
+    //Se ele clicar voltar para tras isto da reset a tudo
+    window.addEventListener('pageshow', function(event) {
+      if (event.persisted || performance.getEntriesByType("navigation")[0].type === "back_forward") {
+        const dynamicForm = document.getElementById("dynamicForm");
+        if (dynamicForm) dynamicForm.remove();
+          const forms = document.querySelectorAll("form");
+          forms.forEach(form => form.reset());
+          window.location.reload();
+        }
+    });
+
+    //Função para mascarar string
+    function maskValue(value) {
+      if (!value) return "";
+      return value.substring(0, 4) + "****";
+    }
+
+
     document.addEventListener("DOMContentLoaded", function () {
       const urlParams = new URLSearchParams(window.location.search);
     });
@@ -178,6 +424,23 @@
     }
 
     document.addEventListener("DOMContentLoaded", () => {
+
+      if (!localStorage.getItem('default_stargate')) {
+        localStorage.setItem('default_stargate', '1');
+      }
+
+      if(default_stargate_Configs == "0"){
+        AllMethodsPay = credential_config_stargate_variable.AllMethodsPay
+      }else{
+        AllMethodsPay = credential_default_stargate.AllMethodsPay
+      }
+
+      if (AllMethodsPay == "1") {
+        document.getElementById("payment-method_Div").style.display = "none";
+      } else {
+        document.getElementById("payment-method_Div").style.display = "block";
+      }
+
       const paymentForm = document.getElementById("payment-form");
       const debugContainer = document.getElementById("debug-container");
 
@@ -253,157 +516,34 @@
 
     }
 
-    
-    async function makePayment() {
-
-      const apiUrl = "https://stargate.qly.site2.sibs.pt/api/v1/payments";
-
-      const selectedMethod = document.getElementById("payment-method").value;
-      const selectedCountry = document.querySelector('input[name="country"]:checked')?.value;
-
-      let defaultToken = "";
-      let defaultClientId = "";
-      let defaultTerminalId = "";
-      let currency_country = "";
-
-
-      if(selectedCountry == "Poland"){
-        defaultToken = "02090d1ccf9a8e42a5b859c5b84dc4c5a8.eyJlIjoiMjA2NzY3MzI2NDY1MSIsInJvbGVzIjoiTUFOQUdFUiIsInRva2VuQXBwRGF0YSI6IntcIm1jXCI6XCIxODFcIixcInRjXCI6XCIzMDFcIn0iLCJpIjoiMTc1MjE0MDQ2NDY1MSIsImlzIjoiaHR0cHM6Ly9xbHkuc2l0ZTEuc3NvLnN5cy5zaWJzLnB0L2F1dGgvcmVhbG1zL1FMWS5TQk8tSU5ULlBPUlQxIiwidHlwIjoiQmVhcmVyIiwiaWQiOiJyaFNOVVl4RFNIMjE2NDU1NmU5NDYxNGU0YWEzOGU4NDYzMTBhMzRlMjUifQ==.f486111bd4c61bb025c46fb6478233f23a18edfebd42e66712d6b3547ed452d8217d85d2fc6f0682f2b572fb787e082e9f3609b3343c27f851659b5f71bacf30";
-        defaultClientId = "a1f729f7-ee7c-46b3-b30a-9b20d7fff09a";
-        defaultTerminalId = 301;
-        currency_country = "PLN";
-
-      } else {
-        defaultToken = "02090d1ccf9a8e42a5b859c5b84dc4c5a8.eyJlIjoiMjA3MDcwNDExMzgwNyIsInJvbGVzIjoiTUFOQUdFUiIsInRva2VuQXBwRGF0YSI6IntcIm1jXCI6XCIyMjFcIixcInRjXCI6XCIzNDVcIn0iLCJpIjoiMTc1NTE3MTMxMzgwNyIsImlzIjoiaHR0cHM6Ly9xbHkuc2l0ZTEuc3NvLnN5cy5zaWJzLnB0L2F1dGgvcmVhbG1zL1FMWS5TQk8tSU5ULlBPUlQxIiwidHlwIjoiQmVhcmVyIiwiaWQiOiJUdTRuZ1VodzExNWQ2MTQ2Yjk1MDIzNDA5YzkyODY2ODBhMjBhYjRhMjYifQ==.d4f8d7309bc4a158128ddb3e0b6072a47dfedb342c4c587c0f85829eb76dca21299327fa8d9ec9fa71391cd935ff7859dde9f68036dd1f4696c1b867baaddde3"; // Outro token
-        defaultClientId = "46840c19-5ac0-40e4-8c88-b05ca0ad7efe";
-        defaultTerminalId = 345;
-        currency_country = "EUR";
-      }
-        
-  
-
-      const token = getURLParameter("bearerToken") || defaultToken;
-      const clientId = getURLParameter("clientId") || defaultClientId;
-      const terminalId = parseInt(getURLParameter("terminalId")) || defaultTerminalId;
-      const amountValue = parseFloat(document.getElementById("amount").value);
-      
-
-      if (!selectedMethod) {
-        alert("Selecione um método de pagamento.");
-        return;
-      }
-      const initialDatetime = new Date();
-      const finalDatetime = new Date(initialDatetime);
-      finalDatetime.setMonth(finalDatetime.getMonth() + 2);
-
-      const initialDatetimeStr = initialDatetime.toISOString();
-      const finalDatetimeStr = finalDatetime.toISOString();
-      
-
-      const requestData = {
-        merchant: {
-          terminalId: terminalId,
-          channel: "web",
-          merchantTransactionId: "OrderID_00000"
-        },
-        transaction: {
-          transactionTimestamp: new Date().toISOString(),
-          description: "Transaction short description",
-          moto: false,
-          paymentType: "PURS",
-          amount: {
-            value: amountValue,
-            currency: currency_country
-          },
-          paymentMethod:[selectedMethod]
-        }
-      };
-      
-
-      try {
-        const response = await fetch(apiUrl, {
-          method: "POST",
-          headers: {
-            "Authorization": `Bearer ${token}`,
-            "X-IBM-Client-Id": clientId,
-            "Content-Type": "application/json",
-            "Accept": "application/json"
-          },
-          body: JSON.stringify(requestData)
-        });
-
-        if (!response.ok) {
-          throw new Error(`Erro na requisição: ${response.status}`);
-        }
-
-        const data = await response.json();
-        if (data.transactionID && data.formContext) {
-          generatePaymentForm(data.transactionID, data.formContext, selectedMethod);
-        } else {
-          throw new Error("Resposta da API incompleta.");
-        }
-      } catch (error) {
-        console.error("Erro ao processar pagamento:", error);
-        alert("Erro ao processar pagamento. Verifique o console para mais detalhes.");
-      }
-    }
-
-    function generatePaymentForm(transactionID, formContext, selectedMethod) {
+    //Gerar o form depois do checkout
+    function generatePaymentForm(transactionID, formContext, token, clientId, terminalId, currency_country, paymentMethodArray, data) {
       const formContainer = document.getElementById("payment-form");
-      
-      const defaultToken_payment = "02090d1ccf9a8e42a5b859c5b84dc4c5a8.eyJlIjoiMjA2NzY3MzI2NDY1MSIsInJvbGVzIjoiTUFOQUdFUiIsInRva2VuQXBwRGF0YSI6IntcIm1jXCI6XCIxODFcIixcInRjXCI6XCIzMDFcIn0iLCJpIjoiMTc1MjE0MDQ2NDY1MSIsImlzIjoiaHR0cHM6Ly9xbHkuc2l0ZTEuc3NvLnN5cy5zaWJzLnB0L2F1dGgvcmVhbG1zL1FMWS5TQk8tSU5ULlBPUlQxIiwidHlwIjoiQmVhcmVyIiwiaWQiOiJyaFNOVVl4RFNIMjE2NDU1NmU5NDYxNGU0YWEzOGU4NDYzMTBhMzRlMjUifQ==.f486111bd4c61bb025c46fb6478233f23a18edfebd42e66712d6b3547ed452d8217d85d2fc6f0682f2b572fb787e082e9f3609b3343c27f851659b5f71bacf30";
-      const defaultClientId_payment = "a1f729f7-ee7c-46b3-b30a-9b20d7fff09a";
-      const defaultTerminalId_payment = 301;
-
       formContainer.innerHTML = "";
-
-      const token_payment = getURLParameter("bearerToken") || defaultToken_payment;
-      const clientId_payment = getURLParameter("clientId") || defaultClientId_payment;
-      const terminalId_payment = parseInt(getURLParameter("terminalId")) || defaultTerminalId_payment;
-
-      let baseUrl = window.location.origin + window.location.pathname.replace(/[^/]*$/, '');
+      
       let redirectUrl = "";
 
-      if (selectedMethod === "CARD") {
-        redirectUrl = `${baseUrl}/card_stargate_return.html` +
-          `?bearerToken=${token_payment}` +
-          `&clientId=${clientId_payment}` +
-          `&terminalId=${terminalId_payment}`;
+      let baseUrl = window.location.origin + window.location.pathname.replace(/[^/]*$/, '');
+
+      
+      if (paymentMethodArray.length === 0) {
+        redirectUrl = `${baseUrl}card_stargate_return.html`;
       }
 
-      if (selectedMethod === "BLIK") {
-        redirectUrl = `${baseUrl}/BLIK_stargate_return.html` +
-          `?bearerToken=${token_payment}` +
-          `&clientId=${clientId_payment}` +
-          `&terminalId=${terminalId_payment}`;
+      if (paymentMethodArray.length === 1 && paymentMethodArray[0] === "CARD") {
+        redirectUrl = `${baseUrl}card_stargate_return.html`;
       }
 
-      if (selectedMethod === "BIZM") {
-        redirectUrl = `${baseUrl}/Bizum_stargate_return.html` +
-          `?bearerToken=${token_payment}` +
-          `&clientId=${clientId_payment}` +
-          `&terminalId=${terminalId_payment}`;
+      if (paymentMethodArray.length === 1 && paymentMethodArray[0] === "BLIK") {
+        redirectUrl = `${baseUrl}BLIK_stargate_return.html`;
       }
+
+      if (paymentMethodArray.length === 1 && paymentMethodArray[0] === "BIZM") {
+        redirectUrl = `${baseUrl}Bizum_stargate_return.html`;
+      }
+
 
       const amount = parseFloat(document.getElementById("amount").value);
-
-      let defaultToken = "";
-      let defaultClientId = "";
-      let defaultTerminalId = "";
-      let currency_country = "";
-
-      if (selectedMethod === "BLIK") {
-        defaultToken = "02090d1ccf9a8e42a5b859c5b84dc4c5a8.eyJlIjoiMjA2NzY3MzI2NDY1MSIsInJvbGVzIjoiTUFOQUdFUiIsInRva2VuQXBwRGF0YSI6IntcIm1jXCI6XCIxODFcIixcInRjXCI6XCIzMDFcIn0iLCJpIjoiMTc1MjE0MDQ2NDY1MSIsImlzIjoiaHR0cHM6Ly9xbHkuc2l0ZTEuc3NvLnN5cy5zaWJzLnB0L2F1dGgvcmVhbG1zL1FMWS5TQk8tSU5ULlBPUlQxIiwidHlwIjoiQmVhcmVyIiwiaWQiOiJyaFNOVVl4RFNIMjE2NDU1NmU5NDYxNGU0YWEzOGU4NDYzMTBhMzRlMjUifQ==.f486111bd4c61bb025c46fb6478233f23a18edfebd42e66712d6b3547ed452d8217d85d2fc6f0682f2b572fb787e082e9f3609b3343c27f851659b5f71bacf30"; 
-        defaultClientId = "a1f729f7-ee7c-46b3-b30a-9b20d7fff09a";
-        defaultTerminalId = 301;
-        currency_country = "PLN";
-        
-      }else  if (selectedMethod === "BIZM") {
-        defaultToken = "02090d1ccf9a8e42a5b859c5b84dc4c5a8.eyJlIjoiMjA3MDcwNDExMzgwNyIsInJvbGVzIjoiTUFOQUdFUiIsInRva2VuQXBwRGF0YSI6IntcIm1jXCI6XCIyMjFcIixcInRjXCI6XCIzNDVcIn0iLCJpIjoiMTc1NTE3MTMxMzgwNyIsImlzIjoiaHR0cHM6Ly9xbHkuc2l0ZTEuc3NvLnN5cy5zaWJzLnB0L2F1dGgvcmVhbG1zL1FMWS5TQk8tSU5ULlBPUlQxIiwidHlwIjoiQmVhcmVyIiwiaWQiOiJUdTRuZ1VodzExNWQ2MTQ2Yjk1MDIzNDA5YzkyODY2ODBhMjBhYjRhMjYifQ==.d4f8d7309bc4a158128ddb3e0b6072a47dfedb342c4c587c0f85829eb76dca21299327fa8d9ec9fa71391cd935ff7859dde9f68036dd1f4696c1b867baaddde3"; // Outro token
-        defaultClientId = "46840c19-5ac0-40e4-8c88-b05ca0ad7efe";
-        defaultTerminalId = 345;
-        currency_country = "EUR";
-      }
 
       const form = document.createElement("form");
       form.className = "paymentSPG";
@@ -421,15 +561,11 @@
       script.src = `https://stargate.qly.site2.sibs.pt/assets/js/widget.js?id=${transactionID}`;
       document.body.appendChild(script);
 
-      const token = getURLParameter("bearerToken") || defaultToken;
-      const clientId = getURLParameter("clientId") || defaultClientId;
-      const terminalId = parseInt(getURLParameter("terminalId")) || defaultTerminalId;
-
       const debugBody = {
         merchant: {
           terminalId: terminalId,
           channel: "web",
-          merchantTransactionId: "OrderID_00000"
+          merchantTransactionId: "OrderID"
         },
         transaction: {
           transactionTimestamp: new Date().toISOString(),
@@ -440,32 +576,47 @@
             value: amount,
             currency: currency_country
           },
-          paymentMethod: [selectedMethod]
+          paymentMethod: paymentMethodArray
         }
       };
 
+      //para o corpo do debug (debug - body do checkout)
       const debugHeaders = {
-        "Authorization": `Bearer ${token}`,
-        "X-IBM-Client-Id": clientId,
+        "Authorization": `Bearer ${maskValue(token)}`,
+        "X-IBM-Client-Id": maskValue(clientId),
         "Content-Type": "application/json",
         "Accept": "application/json"
       };
 
+       // --- Debug Container ---
       const debugContainer = document.createElement("div");
       debugContainer.className = "card mt-4";
 
+      // Cabeçalho com título e botão
       const debugHeader = document.createElement("div");
-      debugHeader.className = "card-header text-white fw-bold";
-      debugHeader.style.backgroundColor = "#e65100";
-      debugHeader.textContent = "Debug da Requisição";
+      debugHeader.className = "card-header text-white fw-bold d-flex justify-content-between align-items-center";
+      debugHeader.style.backgroundColor = "rgb(255, 152, 0)";
+      debugHeader.style.color = "rgb(242, 242, 242)";
+      const debugTitle = document.createElement("span");
+      debugTitle.innerHTML = '<i class="fa fa-bug me-2"></i>Debug da Requisição';
+
+      const responseButton = document.createElement("button");
+      responseButton.className = "btn btn-light btn-sm fw-bold";
+      responseButton.textContent = "Resposta";
+
+      debugHeader.appendChild(debugTitle);
+      debugHeader.appendChild(responseButton);
       debugContainer.appendChild(debugHeader);
 
+      // Corpo inicial do debug (requisição)
       const debugContent = document.createElement("div");
       debugContent.className = "card-body";
 
+      // Elementos do debug original
       const headersTitle = document.createElement("h6");
       headersTitle.className = "fw-bold";
       headersTitle.textContent = "Headers da Requisição:";
+
       const headersPre = document.createElement("pre");
       headersPre.className = "bg-light p-3 rounded";
       headersPre.style.maxHeight = "150px";
@@ -476,6 +627,252 @@
       const bodyTitle = document.createElement("h6");
       bodyTitle.className = "fw-bold mt-3";
       bodyTitle.textContent = "Corpo da Requisição:";
+
+      const bodyPre = document.createElement("pre");
+      bodyPre.className = "bg-light p-3 rounded";
+      bodyPre.style.maxHeight = "300px";
+      bodyPre.style.overflowY = "auto";
+      bodyPre.style.fontSize = "0.8rem";
+      bodyPre.textContent = JSON.stringify(debugBody, null, 2);
+
+      // Montar conteúdo original
+      debugContent.appendChild(headersTitle);
+      debugContent.appendChild(headersPre);
+      debugContent.appendChild(bodyTitle);
+      debugContent.appendChild(bodyPre);
+      debugContainer.appendChild(debugContent);
+      formContainer.appendChild(debugContainer);
+
+      // --- Alternar entre Request e Response ---
+      let showingResponse = false;
+
+      responseButton.onclick = () => {
+        if (!showingResponse) {
+          // Mostrar a resposta recebida (vinda como parâmetro 'data')
+          debugContent.innerHTML = `
+            <h6 class="fw-bold">Status Code da Resposta:</h6>
+            <pre class="bg-light p-3 rounded">${data?.status || "200"}</pre>
+
+            <h6 class="fw-bold mt-3">Corpo da Resposta:</h6>
+            <pre class="bg-light p-3 rounded" style="max-height:400px;overflow-y:auto;font-size:0.8rem;">
+              ${JSON.stringify(data, null, 2)}
+            </pre>
+          `;
+
+          responseButton.textContent = "Requisição";
+          debugTitle.innerHTML = '<i class="fa fa-bug me-2"></i>Resposta da API';
+          showingResponse = true;
+        } else {
+        
+          // Voltar à visualização original
+          debugContent.innerHTML = "";
+          debugContent.appendChild(headersTitle);
+          debugContent.appendChild(headersPre);
+          debugContent.appendChild(bodyTitle);
+          debugContent.appendChild(bodyPre);
+
+          responseButton.textContent = "Resposta";
+          debugTitle.innerHTML = '<i class="fa fa-bug me-2"></i>Debug da Requisição';
+          showingResponse = false;
+        }
+      };
+
+      
+    }
+
+
+    //Fazer o checkout para depois gerar o form
+    async function makePayment() {
+
+      const apiUrl = "https://stargate.qly.site2.sibs.pt/api/v1/payments";
+
+      const selectedMethod = document.getElementById("payment-method").value;
+      const selectedCountry = document.querySelector('input[name="country"]:checked')?.value;
+
+      let defaultToken = "";
+      let defaultClientId = "";
+      let defaultTerminalId = "";
+      let currency_country = "";
+
+      let token;
+      let clientId;
+      let terminalId;
+      
+
+      if(selectedCountry == "Poland"){
+        defaultToken = credential_default_stargate_variable.bearerToken
+        defaultTerminalId =  credential_default_stargate_variable.terminalId;
+        defaultClientId = credential_default_stargate_variable.clientId
+        currency_country = "PLN";
+
+      } else {
+        defaultToken = credential_default_stargate_SPAIN_variable.bearerToken;
+        defaultTerminalId = credential_default_stargate_SPAIN_variable.terminalId;
+        defaultClientId = credential_default_stargate_SPAIN_variable.clientId
+        currency_country = "EUR";
+      }
+        
+      
+      if (default_stargate_Configs == "0" && credential_config_stargate_variable?.useDefaultConfig == "true") {
+        token = defaultToken;
+        clientId = defaultClientId;
+        terminalId = parseInt(defaultTerminalId);
+      } else {
+        token = credential_config_stargate_variable?.bearerToken || defaultToken;
+        clientId = credential_config_stargate_variable?.clientId || defaultClientId;
+        terminalId = parseInt(credential_config_stargate_variable?.terminalId || defaultTerminalId);
+      }
+
+      const amountValue = parseFloat(document.getElementById("amount").value);
+
+      //caso o AllMethodsPay tiver a 1 então o array do payment Method fica vazio
+      const paymentMethodArray = (AllMethodsPay == "1") ? [] : [selectedMethod];
+
+      if (!selectedMethod  && AllMethodsPay != "1") {
+        showErrorModal("Selecione um método de pagamento.");
+        return;
+      }
+      
+      const requestData = {
+        merchant: {
+          terminalId: terminalId,
+          channel: "web",
+          merchantTransactionId: "OrderID"
+        },
+        transaction: {
+          transactionTimestamp: new Date().toISOString(),
+          description: "Transaction short description",
+          moto: false,
+          paymentType: "PURS",
+          amount: {
+            value: amountValue,
+            currency: currency_country
+          },
+          paymentMethod:paymentMethodArray
+        }
+      };
+
+      let response;
+
+      try {
+        response = await fetch(apiUrl, {
+          method: "POST",
+          headers: {
+            "Authorization": `Bearer ${token}`,
+            "X-IBM-Client-Id": clientId,
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+          },
+          body: JSON.stringify(requestData)
+        });
+
+        if (!response.ok) {
+          throw new Error(`Erro na requisição: ${response.status}`);
+        }
+
+        const data = await response.json();
+        if (data.transactionID && data.formContext) {
+          generatePaymentForm(data.transactionID, data.formContext, token, clientId, terminalId, currency_country, paymentMethodArray, data);
+        } else {
+          throw new Error("Resposta da API incompleta.");
+        }
+      } catch (error) {
+        console.error("Erro ao processar pagamento:", error);
+        showErrorModal("Erro ao processar pagamento. Verifique o console para mais detalhes.");
+
+        if (response) {
+
+              const debugHeaders = {
+              "Authorization": `Bearer ${maskValue(token)}`,
+              "X-IBM-Client-Id": maskValue(clientId),
+              "Content-Type": "application/json",
+              "Accept": "application/json"
+            };
+
+
+            const debugBody = {
+              merchant: {
+                terminalId: terminalId,
+                channel: "web",
+                merchantTransactionId: "OrderID"
+              },
+              transaction: {
+                transactionTimestamp: new Date().toISOString(),
+                description: "Transaction short description",
+                moto: false,
+                paymentType: "PURS",
+                amount: {
+                  value: amount,
+                  currency: "EUR"
+                },
+                paymentMethod: paymentMethodArray
+              }
+            };
+
+
+          try {
+            const responseBody = await response.json().catch(() => null);
+            createDebugContainer(debugHeaders, debugBody, {
+              status: response.status,
+              body: responseBody
+            });
+          } catch {
+            createDebugContainer(debugHeaders, debugBody, {
+              status: "Erro ao ler resposta"
+            });
+          }
+        } else {
+          createDebugContainer(debugHeaders, debugBody, {
+            status: "Sem resposta do servidor"
+          });
+        }
+      }
+
+    }
+
+
+    //Caso der erro, irá fazer mesmo assimm o modo debug da resposta
+    function createDebugContainer(debugHeaders, debugBody, responseData) {
+      const formContainer = document.getElementById("payment-form");
+      formContainer.innerHTML = "";
+
+      const debugContainer = document.createElement("div");
+      debugContainer.className = "card mt-4";
+
+      // Cabeçalho
+      const debugHeader = document.createElement("div");
+      debugHeader.className = "card-header bg-danger text-white fw-bold d-flex justify-content-between align-items-center";
+
+      const debugTitle = document.createElement("span");
+      debugTitle.innerHTML = '<i class="fa fa-bug me-2"></i>Debug da Requisição - Erro';
+
+      const responseButton = document.createElement("button");
+      responseButton.className = "btn btn-light btn-sm fw-bold";
+      responseButton.textContent = "Resposta";
+
+      debugHeader.appendChild(debugTitle);
+      debugHeader.appendChild(responseButton);
+      debugContainer.appendChild(debugHeader);
+
+      // Corpo (request)
+      const debugContent = document.createElement("div");
+      debugContent.className = "card-body";
+
+      const headersTitle = document.createElement("h6");
+      headersTitle.className = "fw-bold";
+      headersTitle.textContent = "Headers da Requisição:";
+
+      const headersPre = document.createElement("pre");
+      headersPre.className = "bg-light p-3 rounded";
+      headersPre.style.maxHeight = "150px";
+      headersPre.style.overflowY = "auto";
+      headersPre.style.fontSize = "0.8rem";
+      headersPre.textContent = JSON.stringify(debugHeaders, null, 2);
+
+      const bodyTitle = document.createElement("h6");
+      bodyTitle.className = "fw-bold mt-3";
+      bodyTitle.textContent = "Corpo da Requisição:";
+
       const bodyPre = document.createElement("pre");
       bodyPre.className = "bg-light p-3 rounded";
       bodyPre.style.maxHeight = "300px";
@@ -487,13 +884,65 @@
       debugContent.appendChild(headersPre);
       debugContent.appendChild(bodyTitle);
       debugContent.appendChild(bodyPre);
-
       debugContainer.appendChild(debugContent);
+      formContainer.appendChild(debugContainer);
 
-      const debugWrapper = document.getElementById("debug-container");
-      debugWrapper.innerHTML = "";
-      debugWrapper.appendChild(debugContainer);
+      // Alternar request / response
+      let showingResponse = false;
+
+      responseButton.onclick = () => {
+        if (!showingResponse) {
+          debugContent.innerHTML = `
+            <h6 class="fw-bold">Status Code da Resposta:</h6>
+            <pre class="bg-light p-3 rounded">${responseData?.status || "200"}</pre>
+
+            <h6 class="fw-bold mt-3">Corpo da Resposta:</h6>
+            <pre class="bg-light p-3 rounded" style="max-height:400px;overflow-y:auto;font-size:0.8rem;">
+    ${JSON.stringify(responseData, null, 2)}
+            </pre>
+          `;
+          responseButton.textContent = "Requisição";
+          debugTitle.innerHTML = '<i class="fa fa-bug me-2"></i>Resposta da API - Erro';
+          showingResponse = true;
+        } else {
+          debugContent.innerHTML = "";
+          debugContent.appendChild(headersTitle);
+          debugContent.appendChild(headersPre);
+          debugContent.appendChild(bodyTitle);
+          debugContent.appendChild(bodyPre);
+          responseButton.textContent = "Resposta";
+          debugTitle.innerHTML = '<i class="fa fa-bug me-2"></i>Debug da Requisição - Erro';
+          showingResponse = false;
+        }
+      };
     }
+
+
+    // PopUP de sucesso chamada
+    const successModal = document.getElementById("successModal"),
+      overlay = successModal.querySelector(".overlay"),
+      closeBtn = successModal.querySelector(".close-btn");
+
+    function showSuccessModal() {
+      successModal.classList.add("active");
+    }
+
+    overlay.addEventListener("click", () => successModal.classList.remove("active"));
+    closeBtn.addEventListener("click", () => successModal.classList.remove("active"));
+
+
+    // PopUP de erro chamada
+    const errorModal = document.getElementById("errorModal"),
+      errorOverlay = errorModal.querySelector(".overlay"),
+      errorCloseBtn = errorModal.querySelector(".close-btn");
+
+    function showErrorModal(message) {
+      errorMessage.textContent = message;
+      errorModal.classList.add("active");
+    }
+
+    errorOverlay.addEventListener("click", () => errorModal.classList.remove("active"));
+    errorCloseBtn.addEventListener("click", () => errorModal.classList.remove("active"));
 
 
   </script>

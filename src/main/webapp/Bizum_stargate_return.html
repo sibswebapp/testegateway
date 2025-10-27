@@ -15,6 +15,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet" />
 
   <style>
+
     html,
     body {
       height: 100%;
@@ -31,6 +32,7 @@
       font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     }
 
+    /*navbar css*/
     .navbar {
       background-color: #fff !important;
       padding-top: 0.2rem;
@@ -44,6 +46,8 @@
       width: auto;
     }
 
+
+    /*footer css*/
     footer {
       background-color: #fff;
       color: #333;
@@ -71,6 +75,8 @@
       flex: 1;
     }
 
+
+    /*letra css*/
     h2 {
       font-family: 'Montserrat', sans-serif;
       font-weight: bold;
@@ -131,19 +137,23 @@
 </head>
 
 <body>
+
+  <!--Nav bar-->
   <nav class="navbar navbar-expand-lg navbar-light">
-    <div class="container-fluid d-flex justify-content-between align-items-center px-4" style="height: 69px;">
-      <a class="navbar-brand d-flex align-items-center" href="">
+    <div class="container-fluid d-flex justify-content-between align-items-center px-4" >
+      <a class="navbar-brand d-flex align-items-center" href="Stargate.html">
         <img src="https://www.pay.sibs.com/wp-content/uploads/2022/02/logo.png" alt="Logo SIBS" style="max-height:30px;" />
       </a>
       <div>
-        <a id="btnComParametros" href="#" style="background-color: #ff9800; color:#f2f2f2;" class="btn btn-rounded" data-mdb-ripple-init>
+        <a href="Stargate.html" style="background-color: #ff9800; color:#f2f2f2;" class="btn btn-rounded" data-mdb-ripple-init>
           <i class="fa fa-reply"></i> Voltar atrás
         </a>
       </div>
     </div>
   </nav>
 
+
+  <!--Main - Ter o status do pagamento-->
   <main>
     <div class="container mt-4">
       <div class="card">
@@ -159,26 +169,29 @@
     </div>
   </main>
 
-    <div class="container my-4">
+
+  <!--para o corpo do debug (debug - body do checkout)-->
+  <div class="container my-4">
     <div class="card shadow-sm border-0">
         <div class="card-header fw-bold text-white" style="background-color: #e65100;">
-        Debug da Requisição
+        <i class="fa fa-bug me-2"></i>Debug da Requisição
         </div>
         <div class="card-body bg-white">
-        <h5 class="mb-2">Headers da Requisição:</h5>
+        <h6 class="fw-bold">Headers da Requisição:</h6>
         <div class="bg-light rounded p-2 mb-3" style="max-height: 200px; overflow: auto;">
             <pre id="debug-headers" class="m-0" style="white-space: pre; overflow-x: auto;">Carregando...</pre>
         </div>
 
-        <h5 class="mb-2">Corpo da Resposta:</h5>
+        <h6 class="fw-bold">Corpo da Resposta:</h6>
         <div class="bg-light rounded p-2" style="max-height: 300px; overflow: auto;">
             <pre id="debug-body" class="m-0" style="white-space: pre; overflow-x: auto;">Carregando...</pre>
         </div>
         </div>
     </div>
-    </div>
+  </div>
 
 
+  <!--Icons para colocar no status-->
   <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
     <symbol id="check-circle-fill" fill="currentColor" viewBox="0 0 16 16">
       <path
@@ -191,34 +204,46 @@
   </svg>
 
   <script>
+
     document.addEventListener("DOMContentLoaded", async function () {
+
       function getQueryParam(param) {
         const urlParams = new URLSearchParams(window.location.search);
         return urlParams.get(param);
       }
 
-      const token = getQueryParam("bearerToken");
-      const clientId = getQueryParam("clientId");
-      const terminalId = getQueryParam("terminalId");
-      let novaURL = "";
+      // variavies globais
+      const useDefault_stargate = JSON.parse(localStorage.getItem("default_stargate"));
+      const credential_default_stargate_variable = JSON.parse(localStorage.getItem('credential_default_stargate'))
+      const credential_config_stargate_variable = JSON.parse(localStorage.getItem('credential_config_stargate'))
 
-      if (token && clientId && terminalId) {
-        novaURL = `?bearerToken=${encodeURIComponent(token)}&clientId=${encodeURIComponent(clientId)}&terminalId=${encodeURIComponent(terminalId)}`;
-        const btn = document.getElementById("btnComParametros");
-        btn.href = `Stargate.html${novaURL}`; 
-      } else {
-        console.warn("Parâmetros obrigatórios ausentes na URL.");
+      let token
+      let clientId
+      let terminalId
+      let paymentMethods
+      let encodedPaymentMethods
+  
+            
+      if(useDefault_stargate == "0"){
+        token = credential_config_stargate_variable.bearerToken;
+        clientId = credential_config_stargate_variable.clientId;
+        terminalId = credential_config_stargate_variable.terminalId;
+        paymentMethods = credential_config_stargate_variable.paymentMethods;
+      }else{
+        token = credential_default_stargate_variable.bearerToken;
+        clientId = credential_default_stargate_variable.clientId;
+        terminalId = credential_default_stargate_variable.terminalId;
+        paymentMethods = credential_default_stargate_variable.paymentMethods;
       }
-      
+
       let baseUrl = window.location.origin + window.location.pathname.replace(/[^/]*$/, ''); 
 
       window.addEventListener("popstate", function () {
-        baseUrl = "index.html" + novaURL;
+        baseUrl = "Stargate.html";
       });
 
-      document.getElementById("btnComParametros").href = "Stargate.html" + novaURL;
-
       const paymentId = getQueryParam("id");
+
       if (!paymentId) {
         document.getElementById("payment-status").innerHTML =
           '<div class="alert alert-danger">ID do pagamento não encontrado.</div>';
@@ -227,9 +252,18 @@
 
       const apiUrl = `https://stargate.qly.site2.sibs.pt/api/v1/payments/${paymentId}/status`;
       
-      
-      const token_payment =  getQueryParam("bearerToken") || "Bearer 02090d1ccf9a8e42a5b859c5b84dc4c5a8.eyJlIjoiMjA2NzY3MzI2NDY1MSIsInJvbGVzIjoiTUFOQUdFUiIsInRva2VuQXBwRGF0YSI6IntcIm1jXCI6XCIxODFcIixcInRjXCI6XCIzMDFcIn0iLCJpIjoiMTc1MjE0MDQ2NDY1MSIsImlzIjoiaHR0cHM6Ly9xbHkuc2l0ZTEuc3NvLnN5cy5zaWJzLnB0L2F1dGgvcmVhbG1zL1FMWS5TQk8tSU5ULlBPUlQxIiwidHlwIjoiQmVhcmVyIiwiaWQiOiJyaFNOVVl4RFNIMjE2NDU1NmU5NDYxNGU0YWEzOGU4NDYzMTBhMzRlMjUifQ==.f486111bd4c61bb025c46fb6478233f23a18edfebd42e66712d6b3547ed452d8217d85d2fc6f0682f2b572fb787e082e9f3609b3343c27f851659b5f71bacf30";
-      const clientId_payment = getQueryParam("clientId") || "a1f729f7-ee7c-46b3-b30a-9b20d7fff09a";
+      let token_payment
+      let clientId_payment
+
+      if(useDefault_stargate == "0"){
+        token_payment = credential_config_stargate_variable.bearerToken;
+        clientId_payment = credential_config_stargate_variable.clientId;
+
+      }else{
+        token_payment = credential_default_stargate_variable.bearerToken;
+        clientId_payment = credential_default_stargate_variable.clientId;
+      }
+
       
       const headers = {
         Authorization: `Bearer ${token_payment}`,
@@ -294,6 +328,8 @@
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
+
+  <!--footer-->
   <footer>
     <div class="container">
       <p class="mb-1">© 2025 Pagamentos SIBS. Todos os direitos reservados.</p>

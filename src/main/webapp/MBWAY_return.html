@@ -24,6 +24,8 @@
       flex-direction: column;
       min-height: 100vh;
     }
+
+    /*navbar css*/
     .navbar {
       background-color: #fff !important;
       padding-top: 0.2rem;
@@ -35,6 +37,9 @@
       max-height: 30px; 
       width: auto;
     }
+
+
+    /*footer css*/
     footer {
       background-color: #fff;
       color: #333;
@@ -57,10 +62,13 @@
     main {
       flex: 1 0 auto;
     }
+
+    /*letra css*/
     h2 {
       font-weight: bold;
     }
 
+    /* Estilo para a área de debug */
     #debug-section {
         background-color: #fff;
         border: 1px solid #ddd;
@@ -98,6 +106,8 @@
 
 
   document.addEventListener("DOMContentLoaded", async function () {
+
+    // variavies globais
     const timerElement = document.getElementById("timer");
     const messageElement = document.getElementById("message");
     const buttonElement = document.getElementById("btnComParametros_button");
@@ -111,64 +121,86 @@
 
     const urlParams = new URLSearchParams(window.location.search);
     const currentTransactionID = urlParams.get("id");
-    const TransactionID_ServerToServer = urlParams.get("TransactionID");
 
-    const token = getURLParameter("bearerToken");
-    const clientId = getURLParameter("clientId");
-    const terminalId = getURLParameter("terminalId");
-    const entity = getURLParameter("entity");
+    const useDefault = JSON.parse(localStorage.getItem("default"));
+    const credential_default_variable = JSON.parse(localStorage.getItem('credential_default'))
+    const credential_config_variable = JSON.parse(localStorage.getItem('credential_config'))
 
-    const isDummyCustomer = getURLParameter("isDummyCustomer") || "0";
-    const ServerToServer = getURLParameter("ServerToServer") || "0";
-    const paymentMethods= getURLParameter("paymentMethods")
-    const encodedPaymentMethods = encodeURIComponent(paymentMethods);
+    let token
+    let clientId
+    let terminalId
+    let entity
+    let isDummyCustomer
+    let ServerToServer
+    let paymentMethods
+    let encodedPaymentMethods
+    
+    if(useDefault == "0"){
+      token = credential_config_variable.bearerToken;
+      clientId = credential_config_variable.clientId;
+      terminalId = credential_config_variable.terminalId;
+      entity = credential_config_variable.entity;
+      isDummyCustomer = credential_config_variable.isDummyCustomer;
+      ServerToServer = credential_config_variable.ServerToServer;
+      paymentMethods= credential_config_variable.paymentMethods;
 
-    let novaURL = "";
+    }else{
 
-    if(ServerToServer == "true"){
-      const isServerToServer = getURLParameter("ServerToServer") === "true" ? 1 : 0;
+      token = credential_default_variable.bearerToken;
+      clientId = credential_default_variable.clientId;
+      terminalId = credential_default_variable.terminalId;
+      entity = credential_default_variable.entity;
+      isDummyCustomer = credential_default_variable.isDummyCustomer;
+      ServerToServer = credential_default_variable.ServerToServer;
+      paymentMethods= credential_default_variable.paymentMethods;
+    }
+  
+    encodedPaymentMethods = encodeURIComponent(paymentMethods);
 
-      novaURL = `?bearerToken=${encodeURIComponent(token)}&clientId=${encodeURIComponent(clientId)}&terminalId=${encodeURIComponent(terminalId)}&entity=${encodeURIComponent(entity)}&isDummyCustomer=${encodeURIComponent(isDummyCustomer)}&ServerToServer=${encodeURIComponent(isServerToServer)}&paymentMethods=${encodedPaymentMethods}`;
-      const btn = document.getElementById("btnComParametros");
-      btn.href = `index.html${novaURL}`; 
 
-    }else if (token && clientId && terminalId && entity) {
-      novaURL = `?bearerToken=${encodeURIComponent(token)}&clientId=${encodeURIComponent(clientId)}&terminalId=${encodeURIComponent(terminalId)}&entity=${encodeURIComponent(entity)}&isDummyCustomer=${encodeURIComponent(isDummyCustomer)}&paymentMethods=${encodedPaymentMethods}`;
-      const btn = document.getElementById("btnComParametros");
-      btn.href = `index.html${novaURL}`; 
+    const toggleButton = document.getElementById("toggleDebugView");
+    let originalDebugHTML = ""; // Guarda o conteúdo atual antes de trocar
 
-    } else {
-      console.warn("Parâmetros obrigatórios ausentes na URL.");
+    // Só mostra o botão se for ServerToServer = 1
+    if (toggleButton) {
+      if (ServerToServer !== "1") {
+        toggleButton.style.display = "none";
+      } else {
+        toggleButton.style.display = "inline-block";
+      }
+
+      toggleButton.addEventListener("click", function () {
+      const debugContent = document.getElementById("debugContent");
+
+        // Alterna estado
+        showingResponse = !showingResponse;
+
+        if (showingResponse) {
+
+          originalDebugHTML = debugContent.innerHTML;
+
+          debugContent.innerHTML = `
+            <h6 class="fw-bold">Status Code da Resposta:</h6>
+            <div class="bg-light rounded p-2 mb-3">
+              <pre class="m-0">${lastResponseStatus ?? "Sem status disponível"}</pre>
+            </div>
+
+            <h6 class="fw-bold">Corpo da Resposta:</h6>
+            <div class="bg-light rounded p-2" style="max-height: 300px; overflow: auto;">
+              <pre id="debugResponseBody" class="m-0" style="white-space: pre; overflow-x: auto;">${JSON.stringify(lastResponseBody, null, 2)}</pre>
+            </div>
+          `;
+
+          toggleButton.textContent = "Requisição";
+        } else {
+          // Restaurar conteúdo original
+          debugContent.innerHTML = originalDebugHTML;
+          toggleButton.textContent = "Resposta";
+        }
+      });
     }
 
-    let novaURL_button = "";
-
-    if(ServerToServer == "true"){
-      const isServerToServer = getURLParameter("ServerToServer") === "true" ? 1 : 0;
-
-      novaURL_button = `?bearerToken=${encodeURIComponent(token)}&clientId=${encodeURIComponent(clientId)}&terminalId=${encodeURIComponent(terminalId)}&entity=${encodeURIComponent(entity)}&isDummyCustomer=${encodeURIComponent(isDummyCustomer)}&ServerToServer=${encodeURIComponent(isServerToServer)}&paymentMethods=${encodedPaymentMethods}`;
-      const btnS = document.getElementById("btnComParametros_button");
-      btnS.href = `index.html${novaURL_button}`; 
-
-    }else if (token && clientId && terminalId && entity) {
-      novaURL_button = `?bearerToken=${encodeURIComponent(token)}&clientId=${encodeURIComponent(clientId)}&terminalId=${encodeURIComponent(terminalId)}&entity=${encodeURIComponent(entity)}&isDummyCustomer=${encodeURIComponent(isDummyCustomer)}&paymentMethods=${encodedPaymentMethods}`;
-      const btnS = document.getElementById("btnComParametros_button");
-      btnS.href = `index.html${novaURL_button}`; 
-
-    } else {
-      console.warn("Parâmetros obrigatórios ausentes na URL.");
-    }
-
-    let baseUrl = window.location.origin + window.location.pathname.replace(/[^/]*$/, ''); 
-
-    window.addEventListener("popstate", function () {
-      baseUrl = "index.html" + novaURL;
-    });
-
-    document.getElementById("btnComParametros").href = "index.html" + novaURL;
-
-    document.getElementById("btnComParametros_button").href = "index.html" + novaURL_button;
-
+    //função que serve para indexar os headers e o body para a parte do debug
     function updateDebug(headers, body) {
         debugHeadersElement.textContent = JSON.stringify(headers, null, 2);
         debugBodyElement.textContent = JSON.stringify(body, null, 2);
@@ -181,12 +213,25 @@
       buttonElement.classList.remove("d-none");
     }
 
-
+    //Função que irá fazer o getstatus da transação MB WAY e ver em qual estado esta o pagamento para colocar a mensagem certa na tela do utilizador
     async function checkRemotePaymentStatus() {
-      const apiUrl = `https://spg.qly.site1.sibs.pt/api/v2/payments/${currentTransactionID}/status`;
 
-      const token_payment =  getURLParameter("bearerToken") || "Bearer 0267adfae94c224be1b374be2ce7b298f0.eyJlIjoiMjA3MDcwMDU2ODEyNSIsInJvbGVzIjoiTUFOQUdFUiIsInRva2VuQXBwRGF0YSI6IntcIm1jXCI6XCI1MDY5MzFcIixcInRjXCI6XCI5NjE2N1wifSIsImkiOiIxNzU1MTY3NzY4MTI1IiwiaXMiOiJodHRwczovL3FseS5zaXRlMS5zc28uc3lzLnNpYnMucHQvYXV0aC9yZWFsbXMvREVWLlNCTy1JTlQuUE9SVDEiLCJ0eXAiOiJCZWFyZXIiLCJpZCI6ImhtVmRVQ1lhU1NmOGIzMWRmY2JlMWQ0MDFlODc5OTdhZGY0ZTE1ZmM1MSJ9.71920d8b517e515a61b32b813872e5b967a06471fa63428ff66d32f83f4ce25e32548a4a8e9cf6545e2f5c6e47979b408a4f3bb2367329d71fafdec4d49af223";
-      const clientId_payment = getURLParameter("clientId") || "dd4348ea-e240-4356-bf06-6a4f294c1077";
+      let token_payment
+      let clientId_payment
+      let gatewayVersion
+
+      if(useDefault == "0"){
+        token_payment = credential_config_variable.bearerToken;
+        clientId_payment = credential_config_variable.clientId;
+        gatewayVersion = credential_config_variable.gatewayVersion;
+      }else{
+        token_payment = credential_default_variable.bearerToken;
+        clientId_payment = credential_default_variable.clientId;
+        gatewayVersion = credential_default_variable.gatewayVersion;
+      }
+
+      const version = gatewayVersion === "1" ? "v1" : "v2";
+      const apiUrl = `https://spg.qly.site1.sibs.pt/api/${version}/payments/${currentTransactionID}/status`;
 
       const headers = {
         Authorization: `Bearer ${token_payment}`,
@@ -207,6 +252,10 @@
         const data = await response.json();
         updateDebug(responseHeadersObj, data);
 
+        if(data.transactionStatusCode == "000") data.transactionStatusCode = "200"
+        updateResponseDebug(data.transactionStatusCode, data);
+
+        
         if (data.paymentStatus === "Declined" && data.transactionStatusCode == "E0506") {
           const timerParagraph = document.querySelector('p');
           if (timerParagraph) timerParagraph.style.display = "none";
@@ -258,13 +307,28 @@
       }
     }
 
+    //Função que irá fazer novamente o get status por uma segunda vez apos os 4 minutos expirar
     async function checkFinalPaymentStatus() {
       try {
-        const apiUrl = `https://spg.qly.site1.sibs.pt/api/v2/payments/${currentTransactionID}/status`;
 
-        const token_payment = getURLParameter("bearerToken") || "Bearer 0267adfae94c224be1b374be2ce7b298f0.eyJlIjoiMjA3MDcwMDU2ODEyNSIsInJvbGVzIjoiTUFOQUdFUiIsInRva2VuQXBwRGF0YSI6IntcIm1jXCI6XCI1MDY5MzFcIixcInRjXCI6XCI5NjE2N1wifSIsImkiOiIxNzU1MTY3NzY4MTI1IiwiaXMiOiJodHRwczovL3FseS5zaXRlMS5zc28uc3lzLnNpYnMucHQvYXV0aC9yZWFsbXMvREVWLlNCTy1JTlQuUE9SVDEiLCJ0eXAiOiJCZWFyZXIiLCJpZCI6ImhtVmRVQ1lhU1NmOGIzMWRmY2JlMWQ0MDFlODc5OTdhZGY0ZTE1ZmM1MSJ9.71920d8b517e515a61b32b813872e5b967a06471fa63428ff66d32f83f4ce25e32548a4a8e9cf6545e2f5c6e47979b408a4f3bb2367329d71fafdec4d49af223";
-        const clientId_payment = getURLParameter("clientId") || "dd4348ea-e240-4356-bf06-6a4f294c1077";
+        let token_payment
+        let clientId_payment
+        let gatewayVersion
 
+        if(useDefault == "0"){
+          token_payment = credential_config_variable.bearerToken;
+          clientId_payment = credential_config_variable.clientId;
+          gatewayVersion = credential_config_variable.gatewayVersion;
+
+        }else{
+          token_payment = credential_default_variable.bearerToken;
+          clientId_payment = credential_default_variable.clientId;
+          gatewayVersion = credential_default_variable.gatewayVersion;
+
+        }
+
+        const version = gatewayVersion === "1" ? "v1" : "v2";
+        const apiUrl = `https://spg.qly.site1.sibs.pt/api/${version}/payments/${currentTransactionID}/status`;
 
         const headers = {
           Authorization: `Bearer ${token_payment}`,
@@ -283,6 +347,10 @@
         const data = await response.json();
 
         updateDebug(responseHeadersObj, data);
+        
+        if(data.transactionStatusCode == "000") data.transactionStatusCode = "200"
+        updateResponseDebug(data.transactionStatusCode, data);
+
         messageElement.classList.add("d-none");
 
         let statusHTML = '';
@@ -322,6 +390,7 @@
       }
     }
 
+    // É o que vai fazer o update ao timer quando tiver a zero e determinar o fluxo do MB WAY
     async function updateTimer(canStartTimer) {
       const now = Date.now();
       const elapsed = Math.floor((now - startTime) / 1000);
@@ -346,7 +415,6 @@
     }
 
     // --- FLUXO PRINCIPAL ---
-
     const storedTransactionID = localStorage.getItem("transactionID");
     if (!storedTransactionID || storedTransactionID !== currentTransactionID) {
       localStorage.setItem("transactionID", currentTransactionID);
@@ -389,21 +457,84 @@
     }
   });
 
+  // Armazena temporariamente os dados da última requisição e resposta
+let lastRequestHeaders = {};
+let lastRequestBody = {};
+let lastResponseStatus = null;
+let lastResponseBody = {};
+
+// Flag para saber o modo atual
+let showingResponse = false;
+
+// Função original que atualiza debug da requisição
+function updateDebug(headers, body) {
+  lastRequestHeaders = headers;
+  lastRequestBody = body;
+  if (!showingResponse) {
+    renderRequestDebug();
+  }
+}
+
+// Nova função para renderizar a secção de requisição
+function renderRequestDebug() {
+  const debugContent = document.getElementById("debugContent");
+  debugContent.innerHTML = `
+    <h6 class="fw-bold"><i class="fa fa-bug me-2"></i>Headers da Requisição:</h6>
+    <div class="bg-light rounded p-2 mb-3" style="max-height: 200px; overflow: auto;">
+      <pre id="debugHeaders" class="m-0" style="white-space: pre; overflow-x: auto;">${JSON.stringify(lastRequestHeaders, null, 2)}</pre>
+    </div>
+
+    <h6 class="fw-bold">Corpo da Requisição:</h6>
+    <div class="bg-light rounded p-2" style="max-height: 300px; overflow: auto;">
+      <pre id="debugBody" class="m-0" style="white-space: pre; overflow-x: auto;">${JSON.stringify(lastRequestBody, null, 2)}</pre>
+    </div>
+  `;
+}
+
+// Nova função para renderizar a secção de resposta
+function renderResponseDebug() {
+  const debugContent = document.getElementById("debugContent");
+  debugContent.innerHTML = `
+    <h6 class="fw-bold">Status Code da Resposta:</h6>
+    <div class="bg-light rounded p-2 mb-3">
+      <pre class="m-0">${lastResponseStatus ?? "Sem status disponível"}</pre>
+    </div>
+
+    <h6 class="fw-bold">Corpo da Resposta:</h5>
+    <div class="bg-light rounded p-2" style="max-height: 300px; overflow: auto;">
+      <pre id="debugResponseBody" class="m-0" style="white-space: pre; overflow-x: auto;">${JSON.stringify(lastResponseBody, null, 2)}</pre>
+    </div>
+  `;
+}
+
+// Função auxiliar para guardar dados da resposta
+function updateResponseDebug(statusCode, body) {
+  lastResponseStatus = statusCode;
+  lastResponseBody = body;
+  if (showingResponse) {
+    renderResponseDebug();
+  }
+}
+
   </script>
 </head>
 
 <body>
+
+  <!--Nav bar-->
   <nav class="navbar navbar-expand-lg navbar-light">
-    <div class="container-fluid d-flex justify-content-between align-items-center px-4" style="height: 69px;">
-      <a class="navbar-brand" id="btnComParametros_button" href="#">
+    <div class="container-fluid d-flex justify-content-between align-items-center px-4">
+      <a class="navbar-brand" href="index.html">
         <img src="https://www.pay.sibs.com/wp-content/uploads/2022/02/logo.png" alt="Logo SIBS">
       </a>
-      <a id="btnComParametros" href="#" class="btn btn-rounded btn-primary">
+      <a href="index.html" class="btn btn-rounded btn-primary">
         <i class="fa fa-reply"></i> Voltar atrás
       </a>
     </div>
   </nav>
 
+
+  <!--Main - É aonde esta o contador e os status do pagamento-->
   <main>
     <div class="container mt-4">
       <div class="card">
@@ -426,24 +557,29 @@
     </div>
   </main>
 
-  <div class="container my-4">
-    <div class="card shadow-sm border-0">
-      <div class="card-header fw-bold text-white" style="background-color: #0d6efd;">
-        Debug da Requisição
-      </div>
-      <div class="card-body bg-white">
-        <h5 class="mb-2">Headers da Requisição:</h5>
-        <div class="bg-light rounded p-2 mb-3" style="max-height: 200px; overflow: auto;">
-            <pre id="debugHeaders" class="m-0" style="white-space: pre; overflow-x: auto;">A carregar...</pre>
-        </div>
 
-        <h5 class="mb-2">Corpo da Resposta:</h5>
-        <div class="bg-light rounded p-2" style="max-height: 300px; overflow: auto;">
-            <pre id="debugBody" class="m-0" style="white-space: pre; overflow-x: auto;">A carregar...</pre>
-        </div>
+  <!--para o corpo do debug (debug - body do checkout)-->
+<div class="container my-4">
+  <div class="card shadow-sm border-0">
+    <div class="card-header d-flex align-items-center fw-bold text-white" style="background-color: #0d6efd;">
+      <i class="fa fa-bug me-2"></i>Debug da Requisição
+      <button id="toggleDebugView" class="btn btn-light btn-sm fw-bold ms-auto">Resposta</button>
+    </div>
+    <div class="card-body bg-white" id="debugContent">
+      <h6 class="fw-bold">Headers da Requisição:</h6>
+      <div class="bg-light rounded p-2 mb-3" style="max-height: 200px; overflow: auto;">
+        <pre id="debugHeaders" class="m-0" style="white-space: pre; overflow-x: auto;">A carregar...</pre>
+      </div>
+
+      <h6 class="fw-bold">Corpo da Requisição:</h6>
+      <div class="bg-light rounded p-2" style="max-height: 300px; overflow: auto;">
+        <pre id="debugBody" class="m-0" style="white-space: pre; overflow-x: auto;">A carregar...</pre>
       </div>
     </div>
   </div>
+</div>
+
+
 
   <!-- Modal -->
   <div class="modal fade" id="infoModal" tabindex="-1">
@@ -458,10 +594,14 @@
             Nesta página pode consultar os detalhes da sua transação MB WAY. É obrigatório indicar o prazo máximo de 4 minutos para a sua conclusão, podendo fazê-lo através de um <b>contador </b> ou, em alternativa, <b>através de uma mensagem informativa que comunique ao cliente este limite de tempo</b>.
           </p>
           <p>Para obter estes dados necessita de fazer uma chamada API com o método: </p>
-          <p style="white-space: nowrap;">
-            <span class="badge bg-success align-middle">GET</span>
-            <code class="align-middle" style="font-size: 0.70rem;">https://spg.qly.site1.sibs.pt/api/v2/payments/{transactionID}/status</code>
-          </p>
+          
+          <div class="text-nowrap overflow-auto" style="max-width: 100%;">
+            <p class="mb-0">
+              <span class="badge bg-success align-middle">GET</span>
+              <code class="align-middle" style="font-size: 0.70rem;">https://spg.qly.site1.sibs.pt/api/v2/payments/{transactionID}/status</code>
+            </p>
+          </div>
+
           <br />
           <p>Mas depois necessita de utilizar um webhook para saber o estado real desta transação <b>(o webhook é de caráter obrigatório)</b></p>
           <p>Para visualização de toda a documentação, visite:</p>
@@ -476,6 +616,8 @@
     </div>
   </div>
 
+
+  <!--footer-->
   <footer>
     <div class="container">
       <p class="mb-1">© 2025 Pagamentos SIBS. Todos os direitos reservados.</p>

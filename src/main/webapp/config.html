@@ -16,6 +16,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
 
   <style>
+
         html, body {
           height: 100%;
           margin: 0;
@@ -29,20 +30,22 @@
         }
 
 
+        /*navbar css*/
         .navbar {
             background-color: #fff !important;
             padding-top: 0.2rem;
             padding-bottom: 0.2rem;
-            min-height: 55px; 
+            min-height: 55px;
             box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05); 
         }
 
         .navbar .navbar-brand img {
-            max-height: 30px; 
+            max-height: 30px;
             width: auto;
         }
 
-        
+
+        /*footer css*/
         footer {
             background-color: #fff;
             color: #333;
@@ -66,98 +69,383 @@
             text-decoration: underline;
         }
 
+        
         main {
           flex: 1 0 auto;
         }
 
+
+        /*letra css*/
         h2 {
           font-weight: bold;
         }
 
+        /* POPUP - DESIGN (sucesso) */
+        /* Overlay escuro */
+        #successModal .overlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: rgba(0,0,0,0.6);
+          opacity: 0;
+          visibility: hidden;
+          transition: 0.3s ease-in-out;
+          z-index: 9998;
+        }
+
+        /* Caixa do modal */
+        #successModal .modal-box {
+          position: fixed;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%) scale(0.8);
+          background: #fff;
+          border-radius: 16px;
+          padding: 30px 25px;
+          width: 400px;
+          max-width: 90%;
+          text-align: center;
+          box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+          opacity: 0;
+          visibility: hidden;
+          transition: 0.3s ease-in-out;
+          z-index: 9999;
+        }
+
+        /* Ícone de sucesso */
+        #successModal .icon-success {
+          font-size: 60px;
+          color: #28a745;
+          margin-bottom: 15px;
+        }
+
+        /* Título */
+        #successModal h2 {
+          margin: 10px 0 5px;
+          font-size: 22px;
+          font-weight: bold;
+          color: #333;
+        }
+
+        /* Texto */
+        #successModal p {
+          font-size: 15px;
+          color: #666;
+          margin-bottom: 20px;
+        }
+
+        /* Botão */
+        #successModal .buttons .close-btn {
+          background: #28a745;
+          border: none;
+          color: #fff;
+          padding: 10px 18px;
+          border-radius: 8px;
+          cursor: pointer;
+          transition: background 0.2s;
+        }
+        #successModal .buttons .close-btn:hover {
+          background: #218838;
+        }
+
+        /* Estado ativo (mostra o modal) */
+        #successModal.active .overlay {
+          opacity: 1;
+          visibility: visible;
+        }
+        #successModal.active .modal-box {
+          opacity: 1;
+          visibility: visible;
+          transform: translate(-50%, -50%) scale(1);
+        }
+
+
+
+        /* POPUP - DESIGN (ERRO) */
+        /* Overlay do erro */
+        #errorModal .overlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: rgba(0,0,0,0.6);
+          opacity: 0;
+          visibility: hidden;
+          transition: 0.3s ease-in-out;
+          z-index: 9998;
+        }
+
+        /* Caixa do modal */
+        #errorModal .modal-box {
+          position: fixed;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%) scale(0.8);
+          background: #fff;
+          border-radius: 16px;
+          padding: 30px 25px;
+          width: 400px;
+          max-width: 90%;
+          text-align: center;
+          box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+          opacity: 0;
+          visibility: hidden;
+          transition: 0.3s ease-in-out;
+          z-index: 9999;
+        }
+
+        /* Ícone de erro */
+        #errorModal .icon-error {
+          font-size: 60px;
+          color: #dc3545; /* Vermelho Bootstrap */
+          margin-bottom: 15px;
+        }
+
+        /* Título */
+        #errorModal h2 {
+          margin: 10px 0 5px;
+          font-size: 22px;
+          font-weight: bold;
+          color: #333;
+        }
+
+        /* Texto */
+        #errorModal p {
+          font-size: 15px;
+          color: #666;
+          margin-bottom: 20px;
+        }
+
+        /* Botão */
+        #errorModal .buttons .close-btn {
+          background: #dc3545;
+          border: none;
+          color: #fff;
+          padding: 10px 18px;
+          border-radius: 8px;
+          cursor: pointer;
+          transition: background 0.2s;
+        }
+        #errorModal .buttons .close-btn:hover {
+          background: #c82333;
+        }
+
+        /* Estado ativo */
+        #errorModal.active .overlay {
+          opacity: 1;
+          visibility: visible;
+        }
+        #errorModal.active .modal-box {
+          opacity: 1;
+          visibility: visible;
+          transform: translate(-50%, -50%) scale(1);
+        }
+      
+        /* Garante que o input e o select têm o mesmo tamanho e alinhamento */
+        #referenceExpiry,
+        #referenceExpiryUnit {
+          height: 38px;
+        }
+
+        .gap-2 {
+          gap: 10px !important;
+        }
     </style>
 </head>
 
 <body>
 
-    <nav class="navbar navbar-expand-lg navbar-light">
-      <div class="container-fluid d-flex justify-content-between align-items-center px-4" style="height: 69px;">
-        <a class="navbar-brand d-flex align-items-center"  href="#" data-back-button>
-          <img src="https://www.pay.sibs.com/wp-content/uploads/2022/02/logo.png" alt="Logo SIBS" style="max-height:30px;">
+  <!--Nav bar-->
+  <nav class="navbar navbar-expand-lg navbar-light">
+    <div class="container-fluid d-flex justify-content-between align-items-center px-4" >
+      <a class="navbar-brand d-flex align-items-center"  href="#" data-back-button>
+        <img src="https://www.pay.sibs.com/wp-content/uploads/2022/02/logo.png" alt="Logo SIBS" style="max-height:30px;">
+      </a>
+      <div>
+        <a class="btn btn-secondary btn-rounded" data-back-button>
+          <i class="fa fa-reply"></i> Voltar atrás
         </a>
-        <div>
-          <a class="btn btn-secondary btn-rounded" data-back-button>
-            <i class="fa fa-reply"></i> Voltar atrás
-          </a>
-        </div>
-
       </div>
-    </nav>
+
+    </div>
+  </nav>
 
   <div class="container mt-4">
-    <br>
-      <br>
     <div class="card">
-      <div class="card-header text-center d-flex justify-content-between align-items-center" style="background-color: #cae3ff;">
+      <div class="card-header text-center d-flex justify-content-between align-items-center" style="background-color: #cae3ff;">   
         <h2 style="color: #454545; margin: 0 auto;"><b>Gateway SIBS - Configuração</b></h2>
+
+        <!--botao para ver informação-->
         <button type="button" class="btn btn-light btn-sm" data-bs-toggle="modal" data-bs-target="#infoModal">
           <i class="fa fa-question-circle"></i>
         </button>
       </div>
+
       <div class="card-body">
-        <div class="d-flex align-items-center mb-4">
-          <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" id="defaultToggle" onchange="toggleDefaults(this); toggleEntityField();">
-            <label class="form-check-label" for="defaultToggle">Usar Terminal default</label>
+
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs mb-4" id="configTabs" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="normal-tab" data-bs-toggle="tab" data-bs-target="#normal" type="button" role="tab">Configurações</button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="mits-tab" data-bs-toggle="tab" data-bs-target="#mits" type="button" role="tab">MITs</button>
+          </li>
+        </ul>
+
+        <!-- Tab panes -->
+        <div class="tab-content" id="configTabsContent">
+          <!-- Configurações Normais -->
+          <div class="tab-pane fade show active" id="normal" role="tabpanel" aria-labelledby="normal-tab">
+
+            <!--Aqui você coloca TODO o conteúdo que estava antes no card-body-->
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3 mb-4">
+
+              <div class="col">
+                <div class="form-check form-switch">
+                  <input class="form-check-input" type="checkbox" id="defaultToggle"
+                        onchange="toggleDefaults(this); toggleEntityField();">
+                  <label class="form-check-label" for="defaultToggle">Usar Terminal default</label>
+                </div>
+              </div>
+
+              <div class="col" id="dummyCustomerToggleContainer" style="display: none;">
+                <div class="form-check form-switch">
+                  <input class="form-check-input" type="checkbox" id="dummyCustomerToggle"
+                        onchange="toggleDummyCustomer(this);">
+                  <label class="form-check-label" for="dummyCustomerToggle">Customer Info Personalizado</label>
+                </div>
+              </div>
+
+              <div class="col">
+                <div class="form-check form-switch">
+                  <input class="form-check-input" type="checkbox" id="ServerToServerCheckbox"
+                        onchange="toggleServerToServer(this);">
+                  <label class="form-check-label" for="ServerToServerCheckbox">
+                    Integração Server to Server (Apenas MBWAY e Multibanco)
+                  </label>
+                </div>
+              </div>
+
+              <div class="col">
+                <div class="form-check form-switch">
+                  <input class="form-check-input" type="checkbox" id="AllMethodsPay"
+                        onchange="toggleAllMethodsPay(this)">
+                  <label class="form-check-label" for="AllMethodsPay">Usar todos os métodos de pagamento</label>
+                </div>
+              </div>
+
+            </div>
+
+
+            <!--Inputs restantes-->
+            <div class="mb-4" id="inputTerminalId">
+              <label for="terminalId" class="form-label">Terminal ID:</label>
+              <input type="number" id="terminalId" class="form-control" placeholder="Insira o terminal ID fornecido pela SIBS">
+            </div>
+
+            <div class="mb-4" id="inputClientId">
+              <label for="clientId" class="form-label">Client ID:</label>
+              <input type="text" id="clientId" class="form-control" placeholder="Insira o Client ID fornecido pela SIBS">
+            </div>
+
+            <div class="mb-4" id="inputBearerToken">
+              <label for="bearerToken" class="form-label">Bearer Token:</label>
+              <textarea id="bearerToken" class="form-control" rows="4" placeholder="Insira o Bearer Token via SIBS BackOffice"></textarea>
+            </div>
+
+            <div class="mb-4" id="paymentMethodsLabels">
+              <label class="form-label">Métodos de Pagamento:</label>
+              <div class="d-flex align-items-start gap-3 flex-wrap" id="paymentMethodsWrapper">
+                <div id="paymentMethodsContainer" style="flex: 1; min-width: 260px;">
+                  <select id="paymentMethods" multiple class="form-select" onchange="handlePaymentMethodChange()">
+                    <option value="1">MB WAY</option>
+                    <option value="2">Multibanco</option>
+                    <option value="3">Cartões</option>
+                  </select>
+                  <div id="paymentMethodsText" class="form-text">Use Ctrl (Windows) ou Cmd (Mac) para selecionar múltiplos.</div>
+                </div>
+
+                <div id="LayoutVersionContainer" style="width: 220px;">
+                  <label for="LayoutVersion" class="form-label">Versão do Layout:</label>
+                  <select id="LayoutVersion" class="form-select">
+                    <option value="1" selected>Default</option>
+                    <option value="2">spg_form_tabs</option>
+                    <option value="3">spg_form</option>
+                  </select>
+                </div>
+
+                <div id="gatewayVersionContainer" style="width: 220px;">
+                  <label for="gatewayVersion" class="form-label">Versão da Gateway:</label>
+                  <select id="gatewayVersion" class="form-select">
+                    <option value="1">v1</option>
+                    <option value="2" selected>v2</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div class="mb-4" id="inputReferenceExpiry">
+              <label for="referenceExpiry" class="form-label">Data de Expiração das Referências Bancárias:</label>
+              <div class="d-flex align-items-center gap-2">
+                <input type="number" id="referenceExpiry" class="form-control" placeholder="Ex: 24" style="flex: 1;" min="1" max="31" value="1" oninput="if(this.valueAsNumber > 31) this.value = 31; if(this.valueAsNumber < 1) this.value = 1;">
+                <select id="referenceExpiryUnit" class="form-select" style="width: 140px;">
+                  <option value="hours">Horas</option>
+                  <option value="days" selected>Dias</option>
+                  <option value="months">Meses</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="mb-4" id="inputEntity">
+              <label for="entity" class="form-label">Entidade (Multibanco):</label>
+              <input type="text" id="entity" class="form-control" placeholder="Insira a entidade de pagamento">
+            </div>
+
           </div>
 
-          <div class="form-check form-switch ms-4" id="dummyCustomerToggleContainer" style="display: none;">
-            <input class="form-check-input" type="checkbox" id="dummyCustomerToggle" onchange="toggleDummyCustomer(this);">
-            <label class="form-check-label" for="dummyCustomerToggle">Customer Info Personalizado</label>
-          </div>
+          <!-- MITs -->
+          <div class="tab-pane fade" id="mits" role="tabpanel" aria-labelledby="mits-tab">
 
+            <div class="row align-items-center mb-4">
+                
+              <div class="col-md-3 mb-3 mb-md-0">
+                <div class="form-check form-switch">
+                  <input class="form-check-input" type="checkbox" id="MITs" onchange="toggleMITS(this);">
+                  <label class="form-check-label" for="MITs">
+                    Ativar a opção das MITs
+                  </label>
+                </div>
+              </div>
+
+              <div class="col-md-4" id="LayoutVersionMITS">
+                <label for="VersionMITS" class="form-label fw-semibold">Tipo de MITs:</label>
+                <select id="VersionMITS" class="form-select">
+                  <option value="1" selected>One Click</option>
+                  <option value="2">Recorrentes</option>
+                  <option value="3">UCOF</option>
+                </select>
+              </div>
+            </div>
+        
+            <br>
+
+          </div>
           
-          <div class="form-check form-switch ms-4" id="ServerToServerContainer" >
-            <input class="form-check-input" type="checkbox" id="ServerToServerCheckbox" onchange="toggleServerToServer(this);">
-            <label class="form-check-label" for="ServerToServerCheckbox">Integração Server to Server (Apenas MBWAY e Multibanco)</label>
-          </div>
+          <!--Botão de salvar os dados-->
+          <button class="btn btn-primary w-100" onclick="saveConfig()">Guardar Configuração</button>
+
         </div>
-
-
-        <div class="mb-4" id="inputTerminalId">
-          <label for="terminalId" class="form-label">Terminal ID:</label>
-          <input type="number" id="terminalId" class="form-control" placeholder="Insira o terminalID fornecido pela SIBS">
-        </div>
-
-        <div class="mb-4" id="inputClientId">
-          <label for="clientId" class="form-label">Client ID:</label>
-          <input type="text" id="clientId" class="form-control" placeholder="Insira o ClientID fornecido pela SIBS">
-        </div>
-
-        <div class="mb-4" id="inputBearerToken">
-          <label for="bearerToken" class="form-label">Bearer Token:</label>
-          <textarea id="bearerToken" class="form-control" rows="4" placeholder="Insira o Bearer Token"></textarea>
-        </div>
-
-        <div class="mb-4">
-          <label for="paymentMethods" class="form-label">Métodos de Pagamento:</label>
-          <select id="paymentMethods" multiple class="form-select" onchange="handlePaymentMethodChange()">
-            <option value="1">MB WAY</option>
-            <option value="2">Multibanco</option>
-            <option value="3">Cartões</option>
-          </select>
-          <div class="form-text">Use Ctrl (Windows) ou Cmd (Mac) para selecionar múltiplos.</div>
-        </div>
-
-        <div class="mb-4" id="inputEntity">
-          <label for="entity" class="form-label">Entidade (Multibanco):</label>
-          <input type="text" id="entity" class="form-control" placeholder="Insira a entidade de pagamento">
-        </div>
-
-        <button class="btn btn-primary w-100" onclick="saveConfig()">Guardar Configuração</button>
       </div>
     </div>
   </div>
+
   <br>
+
+  <!--footer-->
   <footer>
     <div class="container">
       <p class="mb-1">© 2025 Pagamentos SIBS. Todos os direitos reservados.</p>
@@ -165,7 +453,7 @@
   </footer>
 
 
-  <!-- Modal -->
+  <!--Modal -->
   <div class="modal fade" id="infoModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content shadow">
@@ -189,39 +477,129 @@
     </div>
   </div>
 
+
+  <!--PopUp sucesso-->
+  <section id="successModal">
+    <span class="overlay"></span>
+    <div class="modal-box">
+      <i class="fa-regular fa-circle-check icon-success"></i>
+      <h2>Configuração Guardada</h2>
+      <p>As suas definições foram gravadas com sucesso.</p>
+
+      <div class="buttons">
+        <button class="close-btn">Ok, Fechar</button>
+      </div>
+    </div>
+  </section>
+
+
+  <!--PopUp Erro-->
+  <section id="errorModal">
+    <span class="overlay"></span>
+    <div class="modal-box">
+      <i class="fa-regular fa-circle-xmark icon-error"></i>
+      <h2>Erro na Configuração</h2>
+      <p id="errorMessage">Ocorreu um problema ao gravar as definições.</p>
+
+      <div class="buttons">
+        <button class="close-btn">Ok, Fechar</button>
+      </div>
+    </div>
+  </section>
+
+
   <script>
 
-    let isDummyCustomer = 0;
-    let ServerToServer = 0;
+    // PopUP de sucesso chamada
+    const successModal = document.getElementById("successModal"),
+          overlay = successModal.querySelector(".overlay"),
+          closeBtn = successModal.querySelector(".close-btn");
 
-    function handlePaymentMethodChange() {
-      const selectedOptions = Array.from(document.getElementById("paymentMethods").selectedOptions);
-      const hasCardSelected = selectedOptions.some(option => option.value === "3");
-      const hasMultibancoSelected = selectedOptions.some(option => option.value === "2");
-      const terminalDefault = document.getElementById('defaultToggle').checked;
+    function showSuccessModal() {
+      successModal.classList.add("active");
+    }
 
-      const toggleContainer = document.getElementById("dummyCustomerToggleContainer");
-      const inputEntity = document.getElementById("inputEntity");
+    overlay.addEventListener("click", () => successModal.classList.remove("active"));
+    closeBtn.addEventListener("click", () => successModal.classList.remove("active"));
 
-      toggleContainer.style.display = hasCardSelected ? "block" : "none";
 
-      if(hasMultibancoSelected && !terminalDefault){
-        inputEntity.classList.remove("d-none"); 
-      }else{
-        inputEntity.classList.add("d-none"); 
-      }
+    // PopUP de erro chamada
+    const errorModal = document.getElementById("errorModal"),
+          errorOverlay = errorModal.querySelector(".overlay"),
+          errorCloseBtn = errorModal.querySelector(".close-btn");
 
-      if (hasCardSelected) {
-        localStorage.setItem('isDummyCustomer', '1');
-      } else {
-        localStorage.setItem('isDummyCustomer', '0');
-      }
+    function showErrorModal(message) {
+      errorMessage.textContent = message;
+      errorModal.classList.add("active");
+    }
+
+    errorOverlay.addEventListener("click", () => errorModal.classList.remove("active"));
+    errorCloseBtn.addEventListener("click", () => errorModal.classList.remove("active"));
+
+
+    //Função para mascarar string
+    function maskValue(value) {
+      if (!value) return "";
+      value = String(value);
+      return value.substring(0, 4) + "****";
     }
 
 
+    //Buscar localStorage arrays
+    const credentialDefaultObj = JSON.parse(localStorage.getItem('credential_default'));
+    const credential_config_variable = JSON.parse(localStorage.getItem('credential_config'))
+    const default_Configs = JSON.parse(localStorage.getItem('default'))
+    
+
+    function getSelectedPaymentMethods() {
+      let selectedOptions = Array.from(document.getElementById("paymentMethods").selectedOptions)
+                                .map(opt => opt.value);
+
+      if (selectedOptions.length === 0) {
+        if (credential_config_variable && credential_config_variable.paymentMethods && credential_config_variable.paymentMethods.length > 0) {
+          try {
+            selectedOptions = JSON.parse(credential_config_variable.paymentMethods);
+          } catch (e) {
+            selectedOptions = credential_config_variable.paymentMethods;
+          }
+        } else {
+          selectedOptions = credential_default_variable.paymentMethods;
+        }
+      }
+
+      return selectedOptions;
+    }
+
+    // handler para os vários métodos de pagamento
+    function handlePaymentMethodChange() {
+      const selectedOptions = getSelectedPaymentMethods();
+
+      const hasCardSelected = selectedOptions.includes("3") || selectedOptions.includes("CARD");
+      const hasMultibancoSelected = selectedOptions.includes("2") || selectedOptions.includes("REFERENCE");
+      const terminalDefault = document.getElementById("defaultToggle").checked;
+
+      const toggleContainer = document.getElementById("dummyCustomerToggleContainer");
+      const inputEntity = document.getElementById("inputEntity");
+      const inputReferenceExpiry = document.getElementById("inputReferenceExpiry");
+
+      toggleContainer.style.display = hasCardSelected ? "block" : "none";
+
+      if (hasMultibancoSelected && !terminalDefault) {
+        inputEntity.classList.remove("d-none");
+      } else {
+        inputEntity.classList.add("d-none");
+      }
+
+      if (hasMultibancoSelected) {
+        inputReferenceExpiry.classList.remove("d-none");
+      } else {
+        inputReferenceExpiry.classList.add("d-none");
+      }
+    }
+
+    // Para selecionar a checkbox do server to server
     function toggleServerToServer(element) {
       const ServerToServer = element.checked ? 1 : 0;
-      localStorage.setItem('ServerToServer', ServerToServer.toString());
 
       const paymentMethodsSelect = document.getElementById("paymentMethods");
       const options = paymentMethodsSelect.options;
@@ -234,6 +612,7 @@
 
           if (ServerToServer === 1 && option.selected) {
             option.selected = false;
+            paymentMethodsSelect.selectedIndex = 0;
           }
         }
       }
@@ -241,6 +620,62 @@
       handlePaymentMethodChange();
     }
 
+    //Função caso ele selecione a opção de todos os metodos de pagamento
+    function toggleAllMethodsPay(element) {
+      const CheckAllMethodsPay = element.checked ? 1 : 0;
+      const paymentMethodsContainer = document.getElementById("paymentMethodsContainer");
+      const paymentMethodsLabels = document.getElementById("paymentMethodsLabels");
+      const paymentMethodsText = document.getElementById("paymentMethodsText");
+
+      if (CheckAllMethodsPay) {
+        paymentMethodsContainer.style.display = "none";
+        paymentMethodsLabels.style.display = "none";
+        paymentMethodsText.style.display = "none";
+
+        document.getElementById("dummyCustomerToggleContainer").style.display = "none";
+        document.getElementById("ServerToServerContainer").style.display = "none";
+        inputReferenceExpiry.classList.remove("d-none");
+
+      } else {
+        paymentMethodsContainer.style.display = "block";
+        paymentMethodsLabels.style.display = "block";
+        paymentMethodsText.style.display = "block";
+        paymentMethods.style.display = "block";
+
+        document.getElementById("dummyCustomerToggleContainer").style.display = "block";
+        document.getElementById("ServerToServerContainer").style.display = "block";
+        handlePaymentMethodChange();
+      }
+    }
+
+    function toggleAllMethodsPayRestored(AllMethodsPay) {
+      
+      const checkbox = document.getElementById("AllMethodsPay");
+      const paymentContainer = document.getElementById("paymentMethodsContainer");
+      const paymentMethodsLabels = document.getElementById("paymentMethodsLabels");
+      const paymentMethodsText = document.getElementById("paymentMethodsText");
+
+      if (AllMethodsPay == 1) {
+        checkbox.checked = true;
+        paymentContainer.style.display = "none";
+        paymentMethodsLabels.style.display = "none";
+        paymentMethodsText.style.display = "none";
+        document.getElementById("dummyCustomerToggleContainer").style.display = "none";
+        document.getElementById("ServerToServerContainer").style.display = "none";
+        inputReferenceExpiry.classList.remove("d-none");
+      } else {
+        checkbox.checked = false;
+        paymentContainer.style.display = "block";
+        paymentMethodsLabels.style.display = "block";
+        paymentMethodsText.style.display = "block";
+        document.getElementById("dummyCustomerToggleContainer").style.display = "block";
+        document.getElementById("ServerToServerContainer").style.display = "block";
+        handlePaymentMethodChange();
+      }
+    }
+
+
+    // Para selecionar a checkbox do Customer info personalizado
     function toggleDummyCustomer(element) {
       isDummyCustomer = element.checked ? 1 : 0;
       localStorage.setItem('isDummyCustomer', isDummyCustomer.toString());
@@ -248,53 +683,12 @@
 
     window.addEventListener('DOMContentLoaded', () => {
 
-
-      const useDefault = localStorage.getItem('defaultToggle') === "true"; 
-      const terminalId = localStorage.getItem('terminalId') || "";
-      const clientId = localStorage.getItem('clientId') || "";
-      const token = localStorage.getItem('bearerToken') || "";
-
-      let paymentMethods = [];
-      try {
-        paymentMethods = JSON.parse(localStorage.getItem('paymentMethods')) || [];
-      } catch (e) {
-        paymentMethods = [];
-      }
-      const encodedPaymentMethods = encodeURIComponent(paymentMethods.join(","));
-
-      const entity = localStorage.getItem('entity') || "";
-      const isDummyCustomer = parseInt(localStorage.getItem('isDummyCustomer') || "0", 10);
-      const ServerToServer = parseInt(localStorage.getItem('ServerToServer') || "0", 10);
-
-      let novaURL = "";
-
-      if(ServerToServer == "1"){
-        const isServerToServer = getURLParameter("ServerToServer") === "true" ? 1 : 0;
-
-        novaURL = `?bearerToken=${encodeURIComponent(token)}&clientId=${encodeURIComponent(clientId)}&terminalId=${encodeURIComponent(terminalId)}&entity=${encodeURIComponent(entity)}&isDummyCustomer=${encodeURIComponent(isDummyCustomer)}&ServerToServer=${encodeURIComponent(isServerToServer)}&paymentMethods=${encodedPaymentMethods}`;
-
-      }else if (token && clientId && terminalId && entity) {
-        novaURL = `?bearerToken=${encodeURIComponent(token)}&clientId=${encodeURIComponent(clientId)}&terminalId=${encodeURIComponent(terminalId)}&entity=${encodeURIComponent(entity)}&isDummyCustomer=${encodeURIComponent(isDummyCustomer)}&paymentMethods=${encodedPaymentMethods}`;
-
-      } else {
-        console.warn("Parâmetros obrigatórios ausentes na URL.");
-      }
-
-      history.pushState({ page: "custom" }, "", window.location.href);
-      let baseUrl = window.location.origin + window.location.pathname.replace(/[^/]*$/, ''); 
-
-      window.addEventListener("popstate", function () {
-        baseUrl = "index.html" + novaURL;
-      });
-
-
       const storedDummy = localStorage.getItem('isDummyCustomer');
       if (storedDummy !== null) {
         isDummyCustomer = parseInt(storedDummy);
         const checkbox = document.getElementById('dummyCustomerToggle');
         if (checkbox) checkbox.checked = isDummyCustomer === 1;
       }
-
 
       const storedServerToServer = localStorage.getItem('ServerToServer');
       if (storedServerToServer !== null) {
@@ -304,6 +698,7 @@
       }
     });
 
+    //Opções default
     function toggleDefaults(checkbox) {
       const terminal = document.getElementById('terminalId');
       const client = document.getElementById('clientId');
@@ -312,14 +707,15 @@
 
       const inputs = ['inputTerminalId', 'inputClientId', 'inputBearerToken', 'inputEntity'];
 
-      if (checkbox.checked) {
+      if(checkbox.checked) {
 
-        terminal.value = '96167';
-        client.value = 'dd4348ea-e240-4356-bf06-6a4f294c1077';
-        token.value = '0267adfae94c224be1b374be2ce7b298f0.eyJlIjoiMjA3MDcwMDU2ODEyNSIsInJvbGVzIjoiTUFOQUdFUiIsInRva2VuQXBwRGF0YSI6IntcIm1jXCI6XCI1MDY5MzFcIixcInRjXCI6XCI5NjE2N1wifSIsImkiOiIxNzU1MTY3NzY4MTI1IiwiaXMiOiJodHRwczovL3FseS5zaXRlMS5zc28uc3lzLnNpYnMucHQvYXV0aC9yZWFsbXMvREVWLlNCTy1JTlQuUE9SVDEiLCJ0eXAiOiJCZWFyZXIiLCJpZCI6ImhtVmRVQ1lhU1NmOGIzMWRmY2JlMWQ0MDFlODc5OTdhZGY0ZTE1ZmM1MSJ9.71920d8b517e515a61b32b813872e5b967a06471fa63428ff66d32f83f4ce25e32548a4a8e9cf6545e2f5c6e47979b408a4f3bb2367329d71fafdec4d49af223';
-        entitypag.value = '53882';
+        terminal.value = credentialDefaultObj.terminalId;
+        client.value = credentialDefaultObj.clientId;
+        token.value = credentialDefaultObj.bearerToken;
+        entitypag.value = credentialDefaultObj.entity;
         
         inputs.forEach(id => document.getElementById(id).classList.add('d-none'));
+        
       } else {
         terminal.value = '';
         client.value = '';
@@ -330,6 +726,7 @@
       }
     }
 
+    //Na mudança de estados do checkout
     function toggleEntityField() {
       const select = document.getElementById('paymentMethods');
       const entityInput = document.getElementById('inputEntity');
@@ -338,63 +735,165 @@
       const selectedValues = Array.from(select.selectedOptions).map(opt => opt.value);
       const showEntity = selectedValues.includes('2') && !useDefault;
 
-      isDummyCustomer = parseInt(localStorage.getItem('isDummyCustomer') || '0');
+      const isDummyCustomer = parseInt(credential_config_variable.isDummyCustomer || '0');
+      
       document.getElementById('dummyCustomerToggle').checked = isDummyCustomer === 1;
-
-
       entityInput.classList.toggle('d-none', !showEntity);
     }
 
+    //Salvar opções
     function saveConfig() {
       const useDefault = document.getElementById('defaultToggle').checked;
-      const terminal = document.getElementById('terminalId').value;
-      const client = document.getElementById('clientId').value;
-      const token = document.getElementById('bearerToken').value;
+      let terminal = document.getElementById('terminalId').value;
+      let client = document.getElementById('clientId').value;
+      let token = document.getElementById('bearerToken').value;
+      let entity = document.getElementById('entity').value;
+
+      let referenceExpiry = document.getElementById("referenceExpiry").value.trim();
+      let referenceExpiryUnit = document.getElementById("referenceExpiryUnit").value;
+      let isDummyCustomer = document.getElementById('dummyCustomerToggle').checked ? 1 : 0;
+      let ServerToServer = document.getElementById('ServerToServerCheckbox').checked ? 1 : 0;
+      let gatewayVersion = document.getElementById("gatewayVersion").value;
+      let LayoutVersion = document.getElementById("LayoutVersion").value;
+      let MITs = document.getElementById('MITs').checked ? 1 : 0;
+      let VersionMITS = document.getElementById('VersionMITS').value;
+
+
       const methods = Array.from(document.getElementById('paymentMethods').selectedOptions).map(opt => opt.value);
-      const entity = document.getElementById('entity').value;
-      const isDummyCustomer = parseInt(localStorage.getItem('isDummyCustomer') || '0');
-      const ServerToServer = parseInt(localStorage.getItem('ServerToServer') || '0');
+      const AllMethodsPay = document.getElementById('AllMethodsPay').checked ? 1 : 0;
 
-
+      if(useDefault){
+        terminal = credentialDefaultObj.terminalId;
+        client = credentialDefaultObj.clientId;
+        token = credentialDefaultObj.bearerToken;
+        entity = credentialDefaultObj.entity;
+      }
+      
       if (!useDefault && (!terminal || !client || !token || methods.length === 0)) {
-        alert("Preencha todos os campos obrigatórios.");
+        showErrorModal("Preencha todos os campos obrigatórios.")
         return;
       }
 
       if (!useDefault && methods.includes('2') && !entity) {
-        alert("Preencha a Entidade para Multibanco.");
+        showErrorModal("Preencha a Entidade de pagamento para o método de Multibanco.");
+        return;
+      }
+      
+      if ((methods.includes('2') || AllMethodsPay) && referenceExpiry === "") {
+        showErrorModal("Preencha a data de expiração para o método de Multibanco.");
         return;
       }
 
-      if (!useDefault) {
-        localStorage.setItem('terminalId', terminal);
-        localStorage.setItem('clientId', client);
-        localStorage.setItem('bearerToken', token);
-        localStorage.setItem('entity', entity);
+      if(AllMethodsPay){
+        isDummyCustomer = 0;
+        ServerToServer = 0;
       }
 
-      localStorage.setItem('paymentMethods', JSON.stringify(methods));
-      localStorage.setItem('useDefaultConfig', useDefault.toString());
-      localStorage.setItem('isDummyCustomer', isDummyCustomer.toString());
-      localStorage.setItem('ServerToServer', ServerToServer.toString());
+      if(!methods.includes('2') && !AllMethodsPay){
+        entity = "";
+        referenceExpiry = "";
+        referenceExpiryUnit = "days";
+      }
 
-      alert("Configuração guardada com sucesso!");
+      const credential_obj = {
+        terminalId: terminal,
+        entity: entity,
+        clientId: client,
+        bearerToken: token,
+        paymentMethods:JSON.stringify(methods),
+        referenceExpiry: referenceExpiry,
+        referenceExpiryUnit: referenceExpiryUnit,
+        useDefaultConfig: useDefault.toString(),
+        isDummyCustomer: isDummyCustomer.toString(),
+        ServerToServer: ServerToServer.toString(),
+        AllMethodsPay: AllMethodsPay,
+        gatewayVersion: gatewayVersion,
+        LayoutVersion: LayoutVersion,
+        MITs: MITs,
+        VersionMITS: VersionMITS
+      };
+
+      localStorage.setItem('credential_config', JSON.stringify(credential_obj));
+      localStorage.setItem('default', '0');
+
+      showSuccessModal();
+
     }
 
+    //Ao abrir a pagina ele vai buscar ao LocalStorage as opções certas
     function restoreFromLocalStorage() {
-      const useDefault = localStorage.getItem('useDefaultConfig') === 'true';
+      const useDefault = default_Configs;
       const checkbox = document.getElementById('defaultToggle');
-      checkbox.checked = useDefault;
+
+      let checkbox_option
+      let savedMethods
+      let AllMethodsPay
+      let referenceExpiry
+      let referenceExpiryUnit
+      let ServerToServer
+      let gatewayVersion
+      let LayoutVersion
+      let MITs
+      let VersionMITS
+    
+      if(useDefault == "1"){
+        checkbox_option = credentialDefaultObj.useDefaultConfig;
+        savedMethods = credentialDefaultObj.paymentMethods;
+        AllMethodsPay = credentialDefaultObj.AllMethodsPay;
+        referenceExpiry = credentialDefaultObj.referenceExpiry;
+        referenceExpiryUnit = credentialDefaultObj.referenceExpiryUnit;
+        ServerToServer = credentialDefaultObj.ServerToServer;
+        gatewayVersion = credentialDefaultObj.gatewayVersion;
+        LayoutVersion = credentialDefaultObj.LayoutVersion;
+        MITs = credentialDefaultObj.MITs;
+        VersionMITS = credentialDefaultObj.VersionMITS;
+
+      }else{
+        checkbox_option = credential_config_variable.useDefaultConfig;
+        savedMethods = credential_config_variable.paymentMethods;
+        AllMethodsPay = credential_config_variable.AllMethodsPay;
+        referenceExpiry = credential_config_variable.referenceExpiry;
+        referenceExpiryUnit = credential_config_variable.referenceExpiryUnit;
+        ServerToServer = credential_config_variable.ServerToServer;
+        gatewayVersion = credential_config_variable.gatewayVersion;
+        LayoutVersion = credential_config_variable.LayoutVersion;
+        MITs = credential_config_variable.MITs;
+        VersionMITS = credential_config_variable.VersionMITS;
+
+      }
+
+      checkbox.checked = checkbox_option === "true" || checkbox_option === true || checkbox_option === 1 || checkbox_option === "1" ;
+
       toggleDefaults(checkbox);
 
       if (!useDefault) {
-        document.getElementById('terminalId').value = localStorage.getItem('terminalId') || '';
-        document.getElementById('clientId').value = localStorage.getItem('clientId') || '';
-        document.getElementById('bearerToken').value = localStorage.getItem('bearerToken') || '';
-        document.getElementById('entity').value = localStorage.getItem('entity') || '';
+        document.getElementById('terminalId').value = credential_config_variable.terminalId || '';
+        document.getElementById('clientId').value = credential_config_variable.clientId || '';
+        document.getElementById('bearerToken').value = credential_config_variable.bearerToken || '';
+        document.getElementById('entity').value = credential_config_variable.entity || '';
+        document.getElementById('referenceExpiry').value = credential_config_variable.referenceExpiry;
+        document.getElementById('referenceExpiryUnit').value = credential_config_variable.referenceExpiryUnit;
+        document.getElementById('gatewayVersion').value = credential_config_variable.gatewayVersion;
+        document.getElementById('LayoutVersion').value = credential_config_variable.LayoutVersion;
+        document.getElementById('MITs').value = credential_config_variable.MITs;
+        document.getElementById('VersionMITS').value = credential_config_variable.VersionMITS;
+
       }
 
-      const savedMethods = JSON.parse(localStorage.getItem('paymentMethods') || '[]');
+      if(useDefault){
+        document.getElementById('referenceExpiry').value = credentialDefaultObj.referenceExpiry;
+        document.getElementById('referenceExpiryUnit').value = credentialDefaultObj.referenceExpiryUnit;
+      }
+
+      document.getElementById("LayoutVersionMITS").style.display = "block";
+
+      if (MITs == "1") {
+        document.getElementById('MITs').checked = true;
+      } else {
+        document.getElementById('MITs').checked = false;
+        document.getElementById("LayoutVersionMITS").style.display = "none";
+      }
+
       const select = document.getElementById('paymentMethods');
       Array.from(select.options).forEach(opt => {
         opt.selected = savedMethods.includes(opt.value);
@@ -402,55 +901,49 @@
 
       toggleEntityField();
       handlePaymentMethodChange();
-
+      toggleAllMethodsPayRestored(AllMethodsPay);
+      toggleMITS();
     }
 
+    // Caso clicar no botão de voltar para tras, ele valida alguns pontos
     document.querySelectorAll('[data-back-button]').forEach(btn => {
       btn.addEventListener('click', (e) => {
         e.preventDefault();
-        const useDefault = localStorage.getItem('useDefaultConfig') === 'true';
-        const terminalId = useDefault ? '96167' : localStorage.getItem('terminalId');
-        const entity = useDefault ? '53882' : localStorage.getItem('entity');
-        const clientId = useDefault ? 'dd4348ea-e240-4356-bf06-6a4f294c1077' : localStorage.getItem('clientId');
-        const bearerToken = useDefault ? '0267adfae94c224be1b374be2ce7b298f0.eyJlIjoiMjA3MDcwMDU2ODEyNSIsInJvbGVzIjoiTUFOQUdFUiIsInRva2VuQXBwRGF0YSI6IntcIm1jXCI6XCI1MDY5MzFcIixcInRjXCI6XCI5NjE2N1wifSIsImkiOiIxNzU1MTY3NzY4MTI1IiwiaXMiOiJodHRwczovL3FseS5zaXRlMS5zc28uc3lzLnNpYnMucHQvYXV0aC9yZWFsbXMvREVWLlNCTy1JTlQuUE9SVDEiLCJ0eXAiOiJCZWFyZXIiLCJpZCI6ImhtVmRVQ1lhU1NmOGIzMWRmY2JlMWQ0MDFlODc5OTdhZGY0ZTE1ZmM1MSJ9.71920d8b517e515a61b32b813872e5b967a06471fa63428ff66d32f83f4ce25e32548a4a8e9cf6545e2f5c6e47979b408a4f3bb2367329d71fafdec4d49af223' : localStorage.getItem('bearerToken');
-        const paymentMethods = JSON.parse(localStorage.getItem('paymentMethods') || '[]');
-        const isDummyCustomer = parseInt(localStorage.getItem('isDummyCustomer') || '0');
-        const ServerToServer = parseInt(localStorage.getItem('ServerToServer') || '0');
 
-        if (!terminalId || !entity || !clientId || !bearerToken || paymentMethods.length === 0) {
-          alert("As configurações não estão completas. Guarde primeiro.");
-          return;
-        }
+        const useDefault = document.getElementById('defaultToggle').checked;
+        const terminal = document.getElementById('terminalId').value;
+        const client = document.getElementById('clientId').value;
+        const token = document.getElementById('bearerToken').value;
+        const entity = document.getElementById('entity').value;
+        const methods = Array.from(document.getElementById('paymentMethods').selectedOptions).map(opt => opt.value);
+        const isDummyCustomer = parseInt(credential_config_variable.isDummyCustomer);
+        const ServerToServer = parseInt(credential_config_variable.ServerToServer);
 
-      const params = new URLSearchParams({
-        terminalId,
-        clientId,
-        bearerToken,
-        entity,
-        paymentMethods: paymentMethods.join(','),
-        isDummyCustomer,
-        ServerToServer
-      });
+        const baseUrl = window.location.origin + window.location.pathname.replace(/[^/]*$/, '');
+        window.location.href = baseUrl + 'index.html';
 
-      window.location.href = window.location.pathname.replace(/[^/]*$/, '') + 'index.html?' + params;
-      
       });
     });
 
-  window.addEventListener("DOMContentLoaded", () => {
-    const storedServerToServer = localStorage.getItem('ServerToServer');
-    const checkbox = document.getElementById("ServerToServerCheckbox");
+    window.addEventListener("DOMContentLoaded", () => {
+      const checkbox = document.getElementById("ServerToServerCheckbox");
+      if (!checkbox) return;
 
-    if (storedServerToServer === "1") {
-      checkbox.checked = true;
-      toggleServerToServer(checkbox); 
+      const storedServerToServer = parseInt(credential_config_variable.ServerToServer, 10) || 0;
+      checkbox.checked = storedServerToServer === 1;
+
+      toggleServerToServer(checkbox);
+    });
+
+    window.addEventListener('DOMContentLoaded', restoreFromLocalStorage);
+
+     //Função caso ele selecionar as MITs irá aparecer a checkbox
+    function toggleMITS(element) {
+      const paymentMethodsContainer = document.getElementById("LayoutVersionMITS");
+      paymentMethodsContainer.style.display = element.checked ? "block" : "none";
     }
 
-  });
-
-
-      
-  window.addEventListener('DOMContentLoaded', restoreFromLocalStorage);
+    
   </script>
 
 

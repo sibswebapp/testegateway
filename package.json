@@ -19,6 +19,8 @@
   },
   "homepage": "https://github.com/joaoleao123/testesgateway#readme",
   "dependencies": {
-    "express": "^5.1.0"
+    "crypto-js": "^4.2.0",
+    "express": "^5.1.0",
+    "node-fetch": "^3.3.2"
   }
 }

@@ -28,7 +28,7 @@
           min-height: 100vh;
         }
 
-
+        /*navbar css*/
         .navbar {
             background-color: #fff !important;
             padding-top: 0.2rem;
@@ -42,7 +42,7 @@
             width: auto;
         }
 
-        
+        /*footer css*/
         footer {
             background-color: #fff;
             color: #333;
@@ -70,8 +70,173 @@
           flex: 1 0 auto;
         }
 
+        /*letra css*/
         h2 {
           font-weight: bold;
+        }
+
+        /* POPUP - DESIGN (sucesso) */
+        /* Overlay escuro */
+        #successModal .overlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: rgba(0,0,0,0.6);
+          opacity: 0;
+          visibility: hidden;
+          transition: 0.3s ease-in-out;
+          z-index: 9998;
+        }
+
+        /* Caixa do modal */
+        #successModal .modal-box {
+          position: fixed;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%) scale(0.8);
+          background: #fff;
+          border-radius: 16px;
+          padding: 30px 25px;
+          width: 400px;
+          max-width: 90%;
+          text-align: center;
+          box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+          opacity: 0;
+          visibility: hidden;
+          transition: 0.3s ease-in-out;
+          z-index: 9999;
+        }
+
+        /* Ícone de sucesso */
+        #successModal .icon-success {
+          font-size: 60px;
+          color: #28a745;
+          margin-bottom: 15px;
+        }
+
+        /* Título */
+        #successModal h2 {
+          margin: 10px 0 5px;
+          font-size: 22px;
+          font-weight: bold;
+          color: #333;
+        }
+
+        /* Texto */
+        #successModal p {
+          font-size: 15px;
+          color: #666;
+          margin-bottom: 20px;
+        }
+
+        /* Botão */
+        #successModal .buttons .close-btn {
+          background: #28a745;
+          border: none;
+          color: #fff;
+          padding: 10px 18px;
+          border-radius: 8px;
+          cursor: pointer;
+          transition: background 0.2s;
+        }
+        #successModal .buttons .close-btn:hover {
+          background: #218838;
+        }
+
+        /* Estado ativo (mostra o modal) */
+        #successModal.active .overlay {
+          opacity: 1;
+          visibility: visible;
+        }
+        #successModal.active .modal-box {
+          opacity: 1;
+          visibility: visible;
+          transform: translate(-50%, -50%) scale(1);
+        }
+
+
+
+        /* POPUP - DESIGN (ERRO) */
+        /* Overlay do erro */
+        #errorModal .overlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: rgba(0,0,0,0.6);
+          opacity: 0;
+          visibility: hidden;
+          transition: 0.3s ease-in-out;
+          z-index: 9998;
+        }
+
+        /* Caixa do modal */
+        #errorModal .modal-box {
+          position: fixed;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%) scale(0.8);
+          background: #fff;
+          border-radius: 16px;
+          padding: 30px 25px;
+          width: 400px;
+          max-width: 90%;
+          text-align: center;
+          box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+          opacity: 0;
+          visibility: hidden;
+          transition: 0.3s ease-in-out;
+          z-index: 9999;
+        }
+
+        /* Ícone de erro */
+        #errorModal .icon-error {
+          font-size: 60px;
+          color: #dc3545; /* Vermelho Bootstrap */
+          margin-bottom: 15px;
+        }
+
+        /* Título */
+        #errorModal h2 {
+          margin: 10px 0 5px;
+          font-size: 22px;
+          font-weight: bold;
+          color: #333;
+        }
+
+        /* Texto */
+        #errorModal p {
+          font-size: 15px;
+          color: #666;
+          margin-bottom: 20px;
+        }
+
+        /* Botão */
+        #errorModal .buttons .close-btn {
+          background: #dc3545;
+          border: none;
+          color: #fff;
+          padding: 10px 18px;
+          border-radius: 8px;
+          cursor: pointer;
+          transition: background 0.2s;
+        }
+        #errorModal .buttons .close-btn:hover {
+          background: #c82333;
+        }
+
+        /* Estado ativo */
+        #errorModal.active .overlay {
+          opacity: 1;
+          visibility: visible;
+        }
+        #errorModal.active .modal-box {
+          opacity: 1;
+          visibility: visible;
+          transform: translate(-50%, -50%) scale(1);
         }
 
     </style>
@@ -79,19 +244,19 @@
 
 <body>
 
-    <nav class="navbar navbar-expand-lg navbar-light">
-      <div class="container-fluid d-flex justify-content-between align-items-center px-4" style="height: 69px;">
-        <a class="navbar-brand d-flex align-items-center"  href="#" data-back-button>
-          <img src="https://www.pay.sibs.com/wp-content/uploads/2022/02/logo.png" alt="Logo SIBS" style="max-height:30px;">
+  <!--Nav bar-->
+  <nav class="navbar navbar-expand-lg navbar-light">
+    <div class="container-fluid d-flex justify-content-between align-items-center px-4">
+      <a class="navbar-brand d-flex align-items-center"  href="#" data-back-button>
+        <img src="https://www.pay.sibs.com/wp-content/uploads/2022/02/logo.png" alt="Logo SIBS" style="max-height:30px;">
+      </a>
+      <div>
+        <a class="btn btn-rounded" data-back-button style="background-color: #ff9800; color:#f2f2f2;">
+          <i class="fa fa-reply"></i> Voltar atrás
         </a>
-        <div>
-          <a class="btn btn-rounded" data-back-button style="background-color: #ff9800; color:#f2f2f2;">
-            <i class="fa fa-reply"></i> Voltar atrás
-          </a>
-        </div>
-
       </div>
-    </nav>
+    </div>
+  </nav>
 
   <div class="container mt-4">
     <br>
@@ -101,11 +266,21 @@
         <h2 style="color: #f2f2f2; margin: 0 auto;"><b>Gateway SIBS - Configuração</b></h2>
       </div>
       <div class="card-body">
-        <div class="form-check form-switch mb-4">
-          <input class="form-check-input" type="checkbox" id="defaultToggle" onchange="toggleDefaults(this);">
-          <label class="form-check-label" for="defaultToggle">Usar Terminal default</label>
+
+        <!--Checkboxs-->
+        <div class="d-flex align-items-center mb-4">
+          <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" id="defaultToggle" onchange="toggleDefaults(this);">
+            <label class="form-check-label" for="defaultToggle">Usar Terminal default</label>
+          </div>
+          <div class="form-check form-switch ms-4">
+              <input class="form-check-input" type="checkbox" id="AllMethodsPay" onchange="toggleAllMethodsPay(this)">
+              <label class="form-check-label" for="AllMethodsPay">Usar todos os métodos de pagamento</label>
+          </div>
         </div>
 
+
+        <!--Inputs para preencher-->
         <div class="mb-4" id="inputTerminalId_stargate">
           <label for="terminalId_stargate" class="form-label">Terminal ID:</label>
           <input type="number" id="terminalId_stargate" class="form-control" placeholder="Insira o terminalID fornecido pela SIBS">
@@ -121,22 +296,90 @@
           <textarea id="bearerToken_stargate" class="form-control" rows="4" placeholder="Insira o Bearer Token"></textarea>
         </div>
 
-      
-
         <button class="btn w-100" onclick="saveConfig()" style="background-color: rgb(255, 152, 0); color: rgb(242, 242, 242);">Guardar Configuração</button>
       </div>
     </div>
   </div>
   <br>
 
+  <!--footer-->
   <footer>
     <div class="container">
       <p class="mb-1">© 2025 Pagamentos SIBS. Todos os direitos reservados.</p>
     </div>
   </footer>
 
+  <!--PopUp sucesso-->
+  <section id="successModal">
+    <span class="overlay"></span>
+    <div class="modal-box">
+      <i class="fa-regular fa-circle-check icon-success"></i>
+      <h2>Configuração Guardada</h2>
+      <p>As suas definições foram gravadas com sucesso.</p>
+
+      <div class="buttons">
+        <button class="close-btn">Ok, Fechar</button>
+      </div>
+    </div>
+  </section>
+
+
+  <!--PopUp Erro-->
+  <section id="errorModal">
+    <span class="overlay"></span>
+    <div class="modal-box">
+      <i class="fa-regular fa-circle-xmark icon-error"></i>
+      <h2>Erro na Configuração</h2>
+      <p id="errorMessage">Ocorreu um problema ao gravar as definições.</p>
+
+      <div class="buttons">
+        <button class="close-btn">Ok, Fechar</button>
+      </div>
+    </div>
+  </section>
 
   <script>
+
+    // PopUP de sucesso chamada
+    const successModal = document.getElementById("successModal"),
+          overlay = successModal.querySelector(".overlay"),
+          closeBtn = successModal.querySelector(".close-btn");
+
+    function showSuccessModal() {
+      successModal.classList.add("active");
+    }
+
+    overlay.addEventListener("click", () => successModal.classList.remove("active"));
+    closeBtn.addEventListener("click", () => successModal.classList.remove("active"));
+
+
+    // PopUP de erro chamada
+    const errorModal = document.getElementById("errorModal"),
+          errorOverlay = errorModal.querySelector(".overlay"),
+          errorCloseBtn = errorModal.querySelector(".close-btn");
+
+    function showErrorModal(message) {
+      errorMessage.textContent = message;
+      errorModal.classList.add("active");
+    }
+
+    errorOverlay.addEventListener("click", () => errorModal.classList.remove("active"));
+    errorCloseBtn.addEventListener("click", () => errorModal.classList.remove("active"));
+
+
+    //Função para mascarar string
+    function maskValue(value) {
+      if (!value) return "";
+      value = String(value);
+      return value.substring(0, 4) + "****";
+    }
+
+    //Buscar localStorage arrays
+    const credentialDefaultObj = JSON.parse(localStorage.getItem('credential_default_stargate'));
+    const credential_config_variable = JSON.parse(localStorage.getItem('credential_config_stargate'))
+    const default_Configs = JSON.parse(localStorage.getItem('default_stargate'))
+
+
     function toggleDefaults(checkbox) {
       const terminal = document.getElementById('terminalId_stargate');
       const client = document.getElementById('clientId_stargate');
@@ -146,79 +389,116 @@
 
       if(checkbox.checked) {
 
-        
-        token.value = "02090d1ccf9a8e42a5b859c5b84dc4c5a8.eyJlIjoiMjA2NzY3MzI2NDY1MSIsInJvbGVzIjoiTUFOQUdFUiIsInRva2VuQXBwRGF0YSI6IntcIm1jXCI6XCIxODFcIixcInRjXCI6XCIzMDFcIn0iLCJpIjoiMTc1MjE0MDQ2NDY1MSIsImlzIjoiaHR0cHM6Ly9xbHkuc2l0ZTEuc3NvLnN5cy5zaWJzLnB0L2F1dGgvcmVhbG1zL1FMWS5TQk8tSU5ULlBPUlQxIiwidHlwIjoiQmVhcmVyIiwiaWQiOiJyaFNOVVl4RFNIMjE2NDU1NmU5NDYxNGU0YWEzOGU4NDYzMTBhMzRlMjUifQ==.f486111bd4c61bb025c46fb6478233f23a18edfebd42e66712d6b3547ed452d8217d85d2fc6f0682f2b572fb787e082e9f3609b3343c27f851659b5f71bacf30";
-        client.value = "a1f729f7-ee7c-46b3-b30a-9b20d7fff09a";
-        terminal.value = 301;
-
+        terminal.value = credentialDefaultObj.terminalId;
+        client.value = credentialDefaultObj.clientId;
+        token.value = credentialDefaultObj.bearerToken;
         
         inputs.forEach(id => document.getElementById(id).classList.add('d-none'));
-      }else{
+        
+      } else {
         terminal.value = '';
         client.value = '';
         token.value = '';
 
         inputs.forEach(id => document.getElementById(id).classList.remove('d-none'));
       }
+
     }
 
     function saveConfig() {
       const useDefault = document.getElementById('defaultToggle').checked;
-      const terminal = document.getElementById('terminalId_stargate').value;
-      const client = document.getElementById('clientId_stargate').value;
-      const token = document.getElementById('bearerToken_stargate').value;
+      const AllMethodsPay = document.getElementById('AllMethodsPay').checked ? 1 : 0;
 
+      let terminal = document.getElementById('terminalId_stargate').value;
+      let client = document.getElementById('clientId_stargate').value;
+      let token = document.getElementById('bearerToken_stargate').value;
 
-
-      if (!useDefault && (!terminal || !client || !token)) {
-        alert("Preencha todos os campos obrigatórios.");
+      if (!terminal) {
+        showErrorModal("Preencha o campo do Terminal.");
         return;
       }
 
-      if (!useDefault) {
-        localStorage.setItem('terminalId_stargate', terminal);
-        localStorage.setItem('clientId_stargate', client);
-        localStorage.setItem('bearerToken_stargate', token);
+      if (!client) {
+        showErrorModal("Preencha o campo do Client ID.");
+        return;
       }
 
-      localStorage.setItem('useDefaultConfig', useDefault.toString());
+      if (!token) {
+        showErrorModal("Preencha o campo do Bearer Token.");
+        return;
+      }
+      
+      if (!useDefault && (!terminal || !client || !token)) {
+        showErrorModal("Preencha todos os campos obrigatórios.");
+        return;
+      }
 
-      alert("Configuração guardada com sucesso!");
+      if(useDefault){
+        terminal = credentialDefaultObj.terminalId;
+        client = credentialDefaultObj.clientId;
+        token = credentialDefaultObj.bearerToken;
+      }
+
+      const credential_obj = {
+        terminalId: terminal,
+        clientId: client,
+        bearerToken: token,
+        useDefaultConfig: useDefault.toString(),
+        AllMethodsPay: AllMethodsPay,
+      };
+
+      localStorage.setItem('credential_config_stargate', JSON.stringify(credential_obj));
+      localStorage.setItem('default_stargate', '0');
+
+      showSuccessModal();
     }
 
     function restoreFromLocalStorage() {
-      const useDefault = localStorage.getItem('useDefaultConfig') === 'true';
+      const useDefault = default_Configs;
       const checkbox = document.getElementById('defaultToggle');
-      checkbox.checked = useDefault;
+
+      let checkbox_option
+      let AllMethodsPay
+
+
+      if(useDefault == "1"){
+        checkbox_option = credentialDefaultObj.useDefaultConfig;
+        AllMethodsPay = credentialDefaultObj.AllMethodsPay;
+      }else{
+        checkbox_option = credential_config_variable.useDefaultConfig;
+        AllMethodsPay = credential_config_variable.AllMethodsPay;
+      }
+
+      checkbox.checked = checkbox_option === "true" || checkbox_option === true || checkbox_option === 1 || checkbox_option === "1" ;
+
       toggleDefaults(checkbox);
 
       if (!useDefault) {
-        document.getElementById('terminalId_stargate').value = localStorage.getItem('terminalId_stargate') || '';
-        document.getElementById('clientId_stargate').value = localStorage.getItem('clientId_stargate') || '';
-        document.getElementById('bearerToken_stargate').value = localStorage.getItem('bearerToken_stargate') || ''
+        document.getElementById('terminalId_stargate').value = credential_config_variable.terminalId || '';
+        document.getElementById('clientId_stargate').value = credential_config_variable.clientId || '';
+        document.getElementById('bearerToken_stargate').value = credential_config_variable.bearerToken || '';
       }
+
+      if (AllMethodsPay == 1) {
+        document.getElementById("AllMethodsPay").checked = true;
+      } else {
+        document.getElementById("AllMethodsPay").checked = false;
+      }
+
     }
 
     document.querySelectorAll('[data-back-button]').forEach(btn => {
       btn.addEventListener('click', (e) => {
         e.preventDefault();
-        const useDefault = localStorage.getItem('useDefaultConfig') === 'true';
-        const terminalId = useDefault ? '301' : localStorage.getItem('terminalId_stargate');
-        const clientId = useDefault ? 'a1f729f7-ee7c-46b3-b30a-9b20d7fff09a' : localStorage.getItem('clientId_stargate');
-        const bearerToken = useDefault ? '02090d1ccf9a8e42a5b859c5b84dc4c5a8.eyJlIjoiMjA2NzY3MzI2NDY1MSIsInJvbGVzIjoiTUFOQUdFUiIsInRva2VuQXBwRGF0YSI6IntcIm1jXCI6XCIxODFcIixcInRjXCI6XCIzMDFcIn0iLCJpIjoiMTc1MjE0MDQ2NDY1MSIsImlzIjoiaHR0cHM6Ly9xbHkuc2l0ZTEuc3NvLnN5cy5zaWJzLnB0L2F1dGgvcmVhbG1zL1FMWS5TQk8tSU5ULlBPUlQxIiwidHlwIjoiQmVhcmVyIiwiaWQiOiJyaFNOVVl4RFNIMjE2NDU1NmU5NDYxNGU0YWEzOGU4NDYzMTBhMzRlMjUifQ==.f486111bd4c61bb025c46fb6478233f23a18edfebd42e66712d6b3547ed452d8217d85d2fc6f0682f2b572fb787e082e9f3609b3343c27f851659b5f71bacf30' : localStorage.getItem('bearerToken_stargate');
 
-        if (!terminalId || !clientId || !bearerToken) {
-          alert("As configurações não estão completas. Guarde primeiro.");
-          return;
-        }
+        const useDefault = document.getElementById('defaultToggle').checked;
+        const terminal = document.getElementById('terminalId_stargate').value;
+        const client = document.getElementById('clientId_stargate').value;
+        const token = document.getElementById('bearerToken_stargate').value;
+      
+        const baseUrl = window.location.origin + window.location.pathname.replace(/[^/]*$/, '');
 
-        const params = new URLSearchParams({
-          terminalId,
-          clientId,
-          bearerToken
-        });
-
-        window.location.href = window.location.pathname.replace(/[^/]*$/, '') + 'Stargate.html?' + params;
+        window.location.href = window.location.pathname.replace(/[^/]*$/, '') + 'Stargate.html';
 
       });
     });
