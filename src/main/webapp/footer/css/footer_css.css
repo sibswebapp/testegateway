@@ -1,0 +1,22 @@
+/*footer css*/
+footer {
+    background-color: #fff;
+    color: #333;
+    padding: 20px 0;
+    font-size: 0.9rem;
+    text-align: center;
+}
+
+footer a.btn {
+    font-size: 0.85rem;
+    padding: 6px 14px;
+}
+
+footer a {
+    color: #4c1d95;
+    text-decoration: none;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}

@@ -1,0 +1,54 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
+  <div class="container-fluid d-flex justify-content-between align-items-center px-4">
+    
+    <!-- Logo SIBS -->
+    <a class="navbar-brand d-flex align-items-center" href="#">
+      <img src="https://www.pay.sibs.com/wp-content/uploads/2022/02/logo.png" alt="Logo SIBS" style="max-height: 30px;">
+    </a>
+
+    <!-- Botões à direita -->
+    <div class="d-flex align-items-center gap-2" style="display: flex !important;">
+
+      <!-- Botão Stargate -->
+      <a href="/stargate/Stargate.html" 
+        class="btn btn-rounded px-4" 
+        style="background-color: #ff9800; color:#f2f2f2;" 
+        data-mdb-ripple-init>
+        <i class="fa fa-list me-1"></i> Stargate
+      </a>
+
+      <!-- Dropdown Configurações -->
+      <div class="dropdown">
+        <button class="btn btn-secondary btn-rounded dropdown-toggle d-flex align-items-center px-4"
+                type="button" id="dropdownConfig" data-bs-toggle="dropdown" aria-expanded="false"
+                style="background-color: #6c757d; color: #f2f2f2; border: none; font-weight: 500;">
+          <i class="fa fa-gears me-2"></i> Configurações
+        </button>
+
+        <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="dropdownConfig"
+            style="border-radius: 12px; min-width: 180px;">
+          <li>
+            <a class="dropdown-item" href="/config_gateway/config.html">
+              <i class="fa fa-sliders me-2 text-secondary"></i> Geral
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item" href="webhooks/webhooks.html">
+              <i class="fa fa-cogs me-2 text-secondary"></i> Webhook
+            </a>
+          </li>
+          <!--
+          <li>
+            <a class="dropdown-item" href="/MITS.html">
+              <i class="fa fa-code me-2 text-secondary"></i> MITs
+            </a>
+          </li>
+          -->
+        </ul>
+        
+      </div>
+
+    </div>
+
+  </div>
+</nav>

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <script>(function(){var p=location.pathname;var b=p.indexOf("/TestAPIWEB2/")!==-1?"/TestAPIWEB2/":"/";var e=document.createElement("base");e.href=b;document.head.prepend(e);}());</script>
+  
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Status do Pagamento</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.1/mdb.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="/gateway/css/gateway_css.css">
+  <link rel="stylesheet" href="/navbar/css/navbar_css.css">
+  <link rel="stylesheet" href="/footer/css/footer_css.css">
+  <link rel="stylesheet" href="/AllmethodsPayment/css/AllmethodsPayment_css.css">
+
+</head>
+
+<body>
+  
+  <div id="navbar"></div>
+
+
+  <!--Main - Ter o status do pagamento-->
+  <main>
+    <div class="container mt-4">
+
+      <!--Cartão-->
+      <div class="card"  id="Div_Status_Card">
+        <div class="card-header text-center d-flex justify-content-between align-items-center" style="background-color: #cae3ff;">
+          <h2 style="color: #454545; margin: 0 auto;"><b>Status do Pagamento</b></h2>
+          <button type="button" class="btn btn-light btn-sm ms-2" data-bs-toggle="modal" data-bs-target="#infoModal" title="Informações">
+            <i class="fa fa-question-circle"></i>
+          </button>
+        </div>
+
+        <div class="card-body">
+          <h4 class="text-primary text-center"><b>Detalhes do Pagamento</b></h4>
+          <div id="payment-status" class="text-center"></div>
+        </div>
+      </div>
+
+      <!--MB WAY-->
+      <div class="card"  id="Div_Status_MBWAY">
+        <div class="card-header text-center d-flex justify-content-between align-items-center" style="background-color: #cae3ff;">
+          <h2 style="color: #454545; margin: 0 auto;"><b>Status do Pagamento</b></h2>
+          <button type="button" class="btn btn-light btn-sm ms-2" data-bs-toggle="modal" data-bs-target="#infoModal" title="Informações">
+            <i class="fa fa-question-circle"></i>
+          </button>
+        </div>
+
+        <div class="card-body">
+          <h4 class="text-primary text-center"><b>Detalhes do Pagamento (Possui 4 minutos para realizar o pagamento via MB WAY)</b></h4>
+          <div id="payment-status_MBWAY" class="text-center"></div>
+        </div>
+      </div>
+
+      <!--Referencias-->
+      <div class="card" id="Div_Status_reference">
+        <div class="card-header text-center d-flex justify-content-between align-items-center" style="background-color: #cae3ff;">
+          <h2 style="color: #454545; margin: 0 auto;"><b>Geração de Referência de Pagamento</b></h2>
+          <button type="button" class="btn btn-light btn-sm ms-2" data-bs-toggle="modal" data-bs-target="#infoModal" title="Informações">
+            <i class="fa fa-question-circle"></i>
+          </button>
+        </div>
+
+        <div class="card-body">
+          <div id="service-reference" class="text-center"></div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+
+  <!--para o corpo do debug (debug - body do checkout)-->
+  <div class="container my-4">
+    <div class="card shadow-sm border-0">
+        <div class="card-header fw-bold text-white" style="background-color: #0d6efd;">
+        <i class="fa fa-bug me-2"></i>Debug da Requisição
+        </div>
+        <div class="card-body bg-white">
+        <h6 class="fw-bold">Headers da Requisição:</h6>
+        <div class="bg-light rounded p-2 mb-3" style="max-height: 200px; overflow: auto;">
+            <pre id="debug-headers" class="m-0" style="white-space: pre; overflow-x: auto;">Carregando...</pre>
+        </div>
+
+        <h6 class="fw-bold">Corpo da Resposta:</h6>
+        <div class="bg-light rounded p-2" style="max-height: 300px; overflow: auto;">
+            <pre id="debug-body" class="m-0" style="white-space: pre; overflow-x: auto;">Carregando...</pre>
+        </div>
+        </div>
+    </div>
+  </div>
+
+
+  <!--Icons para colocar no status-->
+  <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+    <symbol id="check-circle-fill" fill="currentColor" viewBox="0 0 16 16">
+      <path
+        d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
+    </symbol>
+    <symbol id="exclamation-triangle-fill" fill="currentColor" viewBox="0 0 16 16">
+      <path
+        d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
+    </symbol>
+  </svg>
+
+
+  <!-- Modal -->
+  <div class="modal fade" id="infoModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content shadow">
+        <div class="modal-header bg-light">
+          <h5 class="modal-title">
+            <i class="fa fa-info-circle text-primary me-2"></i> Processo de Integração Gateway
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <p>
+            Nesta página pode verificar qual o status do pagamento, se foi <b>recusado</b> ou <b>aceite</b>. Para isso, utilize o método:
+          </p>
+          <p style="white-space: nowrap;">
+            <span class="badge bg-success align-middle">GET</span>
+            <code class="align-middle" style="font-size: 0.70rem;">https://spg.qly.site1.sibs.pt/api/v2/payments/{transactionID}/status</code>
+          </p>
+
+          <br/>
+          <p>Para visualização de toda a documentação, visite:</p>
+          <a href="https://www.docs.pay.sibs.com/portugal/sibs-gateway/integrations/api/integration-guide/" class="btn btn-outline-primary btn-sm" target="_blank">
+            <i class="fa fa-external-link me-1"></i> Documentação SIBS Gateway
+          </a>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Fechar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+<div id="footer"></div>
+
+<script>
+
+    // Carregar o ficheiro footer
+    fetch("/footer/footer_layout.html")
+    .then(res => res.text())
+    .then(html => {
+      document.getElementById("footer").innerHTML = html;
+    })
+    .catch(err => console.error("Erro ao carregar footer:", err));
+
+    // Carregar o ficheiro navbar
+    fetch("/navbar/navbar_gateway_pages.html")
+    .then(res => res.text())
+    .then(html => {
+      document.getElementById("navbar").innerHTML = html;
+    })
+    .catch(err => console.error("Erro ao carregar navbar:", err));
+
+  </script>
+
+  <!--Carregar o js-->
+  <script src="/AllmethodsPayment/js/AllmethodsPayment_js.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</html>

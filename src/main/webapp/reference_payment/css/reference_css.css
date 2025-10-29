@@ -1,0 +1,28 @@
+ /* Estilo para a área de debug */
+        #debug-section {
+        background-color: #fff;
+        border: 1px solid #ddd;
+        margin: 20px auto;
+        padding: 15px;
+        max-width: 900px;
+        font-family: monospace;
+        font-size: 0.85rem;
+        color: #333;
+        box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+        }
+        #debug-section h3 {
+            margin-top: 0;
+            font-weight: 700;
+            font-family: 'Montserrat', sans-serif;
+            color: #4c1d95;
+        }
+        #debug-headers,
+        #debug-body {
+            white-space: pre-wrap;
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px;
+            max-height: 300px;
+            overflow: auto;
+            margin-bottom: 15px;
+        }

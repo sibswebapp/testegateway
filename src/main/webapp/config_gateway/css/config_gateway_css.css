@@ -1,0 +1,43 @@
+html, body {
+          height: 100%;
+          margin: 0;
+          padding: 0;
+          background: #f0f0f0;
+          color: #333;
+          font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+          display: flex;
+          flex-direction: column;
+          min-height: 100vh;
+        }
+
+        main {
+          flex: 1 0 auto;
+        }
+
+
+        /*letra css*/
+        h2 {
+          font-weight: bold;
+        }
+
+        
+        /* Estado ativo */
+        #errorModal.active .overlay {
+          opacity: 1;
+          visibility: visible;
+        }
+        #errorModal.active .modal-box {
+          opacity: 1;
+          visibility: visible;
+          transform: translate(-50%, -50%) scale(1);
+        }
+      
+        /* Garante que o input e o select têm o mesmo tamanho e alinhamento */
+        #referenceExpiry,
+        #referenceExpiryUnit {
+          height: 38px;
+        }
+
+        .gap-2 {
+          gap: 10px !important;
+        }

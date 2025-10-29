@@ -1,0 +1,40 @@
+    /* Estilo para a área de debug */
+    #debug-container {
+      background: #fff;
+      border: 1px solid #ccc;
+      margin: 20px auto;
+      padding: 15px;
+      max-width: 900px;
+      font-family: monospace;
+      font-size: 0.85rem;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      color: #222;
+    }
+
+    #debug-container h5 {
+      margin-top: 0;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #444;
+    }
+
+    #debug-container {
+    background: #fff;
+    border: 1px solid #ccc;
+    margin: 20px auto;
+    padding: 15px;
+    max-width: 900px;
+    font-family: monospace;
+    font-size: 0.85rem;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    color: #222;
+    }
+
+    #debug-container h5 {
+    margin-top: 0;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #444;
+    }
