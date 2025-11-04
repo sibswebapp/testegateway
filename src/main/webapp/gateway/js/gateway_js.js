@@ -5,7 +5,7 @@
       entity: "53882",
       clientId: "dd4348ea-e240-4356-bf06-6a4f294c1077",
       bearerToken: "0267adfae94c224be1b374be2ce7b298f0.eyJlIjoiMjA3MDcwMDU2ODEyNSIsInJvbGVzIjoiTUFOQUdFUiIsInRva2VuQXBwRGF0YSI6IntcIm1jXCI6XCI1MDY5MzFcIixcInRjXCI6XCI5NjE2N1wifSIsImkiOiIxNzU1MTY3NzY4MTI1IiwiaXMiOiJodHRwczovL3FseS5zaXRlMS5zc28uc3lzLnNpYnMucHQvYXV0aC9yZWFsbXMvREVWLlNCTy1JTlQuUE9SVDEiLCJ0eXAiOiJCZWFyZXIiLCJpZCI6ImhtVmRVQ1lhU1NmOGIzMWRmY2JlMWQ0MDFlODc5OTdhZGY0ZTE1ZmM1MSJ9.71920d8b517e515a61b32b813872e5b967a06471fa63428ff66d32f83f4ce25e32548a4a8e9cf6545e2f5c6e47979b408a4f3bb2367329d71fafdec4d49af223",
-      paymentMethods: [1, 2, 3],
+      paymentMethods: ["1", "2", "3"],
       isDummyCustomer: "1",
       ServerToServer: "0",
       useDefaultConfig: "1",
@@ -19,8 +19,7 @@
     };
 
     localStorage.setItem('credential_default', JSON.stringify(credential_default));
-    
-    
+
     //Buscar localStorage arrays
     const credential_default_variable = JSON.parse(localStorage.getItem('credential_default'))
     const credential_config_variable = JSON.parse(localStorage.getItem('credential_config'))
@@ -47,7 +46,7 @@
 
     document.addEventListener("DOMContentLoaded", function () {
 
-      
+
       if (!localStorage.getItem('default')) {
         localStorage.setItem('default', '1');
       }
@@ -67,14 +66,14 @@
         LayoutVersion = credential_default_variable.LayoutVersion
 
       }
-      
+
       if (AllMethodsPay == "1") {
         document.getElementById("payment-method_Div").style.display = "none";
       } else {
         document.getElementById("payment-method_Div").style.display = "block";
       }
 
-      
+
       const select = document.getElementById("payment-method");
       select.innerHTML = "";
 
@@ -193,13 +192,14 @@
         terminalId = parseInt(credential_default_variable.terminalId);
         entity = String(credential_default_variable.entity);
       }else{
-        token = credential_config_variable.bearerToken ||  credential_default_variable.bearerToken;
-        clientId = credential_config_variable.clientId ||  credential_default_variable.clientId;
-        terminalId = parseInt(credential_config_variable.terminalId || credential_default_variable.terminalId);
-        entity = String(credential_config_variable.entity || credential_default_variable.entity);
+
+        token = credential_config_variable?.bearerToken ?? credential_default_variable?.bearerToken;
+        clientId = credential_config_variable?.clientId ?? credential_default_variable?.clientId;
+        terminalId =  parseInt(credential_config_variable?.terminalId ?? credential_default_variable?.terminalId);
+        entity =  String(credential_config_variable?.entity ?? credential_default_variable?.entity);
       }
 
-      if(credential_config_variable.useDefaultConfig == "true"){
+      if(credential_config_variable?.useDefaultConfig == "true"){
         referenceExpiry = credential_config_variable.referenceExpiry;
         referenceExpiryUnit = credential_config_variable.referenceExpiryUnit;
         gatewayVersion = credential_config_variable.gatewayVersion;
@@ -215,7 +215,7 @@
 
       const amountValue = parseFloat(document.getElementById("amount").value);
       const selectedMethod = document.getElementById("payment-method").value;
-    
+
 
      //caso o AllMethodsPay tiver a 1 então o array do payment Method fica vazio
       const paymentMethodArray = (AllMethodsPay == "1") ? [] : [selectedMethod];
@@ -232,7 +232,7 @@
       if (!validateDummyCustomerFields()) {
         return;
       }
-      
+
       const initialDatetime = new Date();
       const initialDatetimeStr = initialDatetime.toISOString();
 
@@ -479,18 +479,19 @@
         entity_payment = String(credential_default_variable.entity);
 
       }else{
-        token_payment = credential_config_variable.bearerToken || credential_default_variable.bearerToken;
-        clientId_payment = credential_config_variable.clientId || credential_default_variable.clientId;
-        terminalId_payment = parseInt(credential_config_variable.terminalId || credential_default_variable.terminalId);
-        entity_payment = String(credential_config_variable.entity || credential_default_variable.entity);
+
+        token_payment = credential_config_variable?.bearerToken ?? credential_default_variable?.bearerToken;
+        clientId_payment = credential_config_variable?.clientId ?? credential_default_variable?.clientId;
+        terminalId_payment = parseInt(credential_config_variable?.terminalId ?? credential_default_variable?.terminalId);
+        entity_payment = String(credential_config_variable?.entity ?? credential_default_variable?.entity);
       }
 
-      let LayoutVersion = credential_config_variable.LayoutVersion || credential_default_variable.LayoutVersion;
+      let LayoutVersion = credential_config_variable?.LayoutVersion ?? credential_default_variable?.LayoutVersion;
 
-      const isDummyCustomer = credential_config_variable.isDummyCustomer || credential_default_variable.isDummyCustomer;
-      const paymentMethods = credential_config_variable.paymentMethods || credential_default_variable.paymentMethods;
-      const isServerToServer = credential_config_variable.ServerToServer || credential_default_variable.ServerToServer;
-      const gatewayVersion = credential_config_variable.gatewayVersion || credential_default_variable.gatewayVersion;
+      const isDummyCustomer = credential_config_variable?.isDummyCustomer ?? credential_default_variable?.isDummyCustomer;
+      const paymentMethods = credential_config_variable?.paymentMethods ?? credential_default_variable?.paymentMethods;
+      const isServerToServer = credential_config_variable?.ServerToServer ?? credential_default_variable?.ServerToServer;
+      const gatewayVersion = credential_config_variable?.gatewayVersion ?? credential_default_variable?.gatewayVersion;
 
       let baseUrl = window.location.origin + '/';
 
@@ -723,10 +724,10 @@
         entity = String(credential_default_variable.entity);
 
       }else{
-        token = credential_config_variable.bearerToken || credential_default_variable.bearerToken;
-        clientId = credential_config_variable.clientId || credential_default_variable.clientId;
-        terminalId = parseInt(credential_config_variable.terminalId || credential_default_variable.terminalId);
-        entity = String(credential_config_variable.entity || credential_default_variable.entity);
+        token = credential_config_variable?.bearerToken ?? credential_default_variable?.bearerToken;
+        clientId = credential_config_variable?.clientId ?? credential_default_variable?.clientId;
+        terminalId = parseInt(credential_config_variable?.terminalId ?? credential_default_variable?.terminalId);
+        entity = String(credential_config_variable?.entity ?? credential_default_variable?.entity);
       }
 
       //para o corpo do debug (debug - body do checkout)
