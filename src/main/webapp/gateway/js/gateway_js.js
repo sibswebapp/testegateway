@@ -95,7 +95,9 @@
           }
         }
 
-        paymentMethodsParam.forEach(code => {
+        paymentMethodsParam
+        .filter(code => typeof code === "string")
+        .forEach(code => {
           const trimmed = code.trim();
           if (methodMap[trimmed]) {
             const opt = document.createElement("option");
@@ -193,8 +195,8 @@
         terminalId = parseInt(credential_default_variable.terminalId);
         entity = String(credential_default_variable.entity);
       }else{
-        token = credential_config_variable.bearerToken ||  credential_default_variable.bearerToken;
-        clientId = credential_config_variable.clientId ||  credential_default_variable.clientId;
+        token = credential_config_variable.bearerToken || credential_default_variable.bearerToken;
+        clientId = credential_config_variable.clientId || credential_default_variable.clientId;
         terminalId = parseInt(credential_config_variable.terminalId || credential_default_variable.terminalId);
         entity = String(credential_config_variable.entity || credential_default_variable.entity);
       }
