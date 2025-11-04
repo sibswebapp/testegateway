@@ -94,7 +94,9 @@
           }
         }
 
-        paymentMethodsParam.forEach(code => {
+        paymentMethodsParam
+        .filter(code => typeof code === "string")
+        .forEach(code => {
           const trimmed = code.trim();
           if (methodMap[trimmed]) {
             const opt = document.createElement("option");
