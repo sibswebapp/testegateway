@@ -546,14 +546,6 @@
             font: ""
           }));
         }
-        
-
-        //updates do form
-        form.setAttribute("PostMessageEvent", JSON.stringify({
-          source: "spg-form",
-          type: "onClickPay"
-        }));
-
 
         formContainer.appendChild(form);
 
@@ -981,4 +973,60 @@
       terminalToggle.checked = currentDefault === '1';
     }
 
-   
+
+
+  window.addEventListener("message", function (event) {
+    try {
+      // --- Validação de origem (ativa em produção) ---
+      // if (!event.origin.includes("sibs.pt")) return;
+
+      let msg = event.data;
+      if (typeof msg === "string") {
+        try {
+          msg = JSON.parse(msg);
+        } catch {
+          console.warn("Mensagem recebida não é JSON:", msg);
+          return;
+        }
+      }
+
+      // --- Filtrar apenas mensagens do SPG ---
+      if (msg.source === "spg-form") {
+        console.log("📩 Evento recebido do SPG:", msg.type, msg.data);
+
+        // --- Guardar no localStorage ---
+        // Cria um histórico de eventos SPG
+        let history = JSON.parse(localStorage.getItem("spgEvents") || "[]");
+
+        // Guarda o novo evento com timestamp
+        history.push({
+          type: msg.type,
+          data: msg.data,
+          timestamp: new Date().toISOString()
+        });
+
+        // Atualiza o localStorage
+        localStorage.setItem("spgEvents", JSON.stringify(history));
+
+        // Opcional: guardar o estado mais recente separadamente
+        localStorage.setItem("spgLastEvent", msg.type);
+        localStorage.setItem("spgLastData", JSON.stringify(msg.data));
+
+        // --- Lógica de reação ---
+        if (msg.type === "onClickPay") {
+          console.log("🟡 Clique no botão Pay:", msg.data);
+        }
+
+        if (msg.type === "onPaymentSuccess") {
+          console.log("🟢 Pagamento bem-sucedido:", msg.data);
+        }
+
+        if (msg.type === "onPaymentError") {
+          console.error("🔴 Erro no pagamento:", msg.data);
+        }
+      }
+
+    } catch (err) {
+      console.error("Erro ao processar mensagem SPG:", err);
+    }
+  }, false);

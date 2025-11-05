@@ -414,3 +414,13 @@ function updateResponseDebug(statusCode, body) {
     renderResponseDebug();
   }
 }
+
+
+const lastEvent = localStorage.getItem("spgLastEvent");
+const lastData = JSON.parse(localStorage.getItem("spgLastData") || "{}");
+
+console.log("Último evento SPG:", lastEvent, lastData);
+
+if (lastEvent === "onPaymentSuccess") {
+  document.getElementById("status").innerText = "✅ Pagamento confirmado!";
+}
