@@ -17,11 +17,10 @@ app.get('/', (req, res) => {
 // Health check
 app.get('/health', (req, res) => res.json({ status: 'ok' }));
 
+// Use a porta do Azure App Service
 const PORT = process.env.PORT || 8002;
-const HOST = process.env.HOST || '127.0.0.1';
 
-app.listen(PORT, HOST, () => {
-  console.log(
-    'testesgateway listening on http://' + HOST + ':' + PORT + ' serving ' + webappDir
-  );}
-);
+// Não defina HOST fixo, apenas use undefined para aceitar conexões externas
+app.listen(PORT, () => {
+  console.log(`testesgateway listening on port ${PORT} serving ${webappDir}`);
+});
