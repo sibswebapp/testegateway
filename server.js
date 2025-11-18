@@ -6,10 +6,10 @@ app.set('trust proxy', true);
 
 const webappDir = path.join(__dirname, 'src', 'main', 'webapp');
 
-// Serve toda a pasta webapp
+// Serve TODA a pasta webapp (todas as pastas, todos os JS)
 app.use(express.static(webappDir));
 
-// Redireciona a raiz "/" para o gateway.html
+// Abrir automaticamente o gateway.html
 app.get('/', (req, res) => {
   res.sendFile(path.join(webappDir, 'gateway', 'gateway.html'));
 });
@@ -17,10 +17,11 @@ app.get('/', (req, res) => {
 // Health check
 app.get('/health', (req, res) => res.json({ status: 'ok' }));
 
-// Use a porta do Azure App Service
 const PORT = process.env.PORT || 8002;
+const HOST = process.env.HOST || '127.0.0.1';
 
-// Não defina HOST fixo, apenas use undefined para aceitar conexões externas
-app.listen(PORT, () => {
-  console.log(`testesgateway listening on port ${PORT} serving ${webappDir}`);
+app.listen(PORT, HOST, () => {
+  console.log(
+    'testesgateway listening on http://' + HOST + ':' + PORT + ' serving ' + webappDir
+  );
 });
