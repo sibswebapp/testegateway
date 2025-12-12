@@ -95,12 +95,12 @@
             
             <div class="row g-3">
               <div class="col-md-6">
-                <label for="webhookAuthTagB64" class="form-label"><b>AuthTag 64:</b></label>
+                <label for="webhookAuthTagB64" class="form-label"><b>AuthTag:</b></label>
                 <input class="form-control" id="webhookAuthTagB64" rows="4" placeholder='Ex: L54FxAWEA415Zxfxn6rzyg== '></input>
               </div>
 
               <div class="col-md-6">
-                <label for="webhookIvB64" class="form-label"><b>IvB64:</b></label>
+                <label for="webhookIvB64" class="form-label"><b>Vector:</b></label>
                 <input class="form-control" id="webhookIvB64" rows="4" placeholder='Ex: 1ILLz7q9joUTdyRL '></input>
               </div>
             </div>
@@ -122,8 +122,8 @@
             <div class="text-center text-muted mb-3">
               <small>Visualize ou teste o endpoint que recebe notificações de pagamento.</small>
             </div>
-            <br>
-
+            
+            
             <div id="endpointStatus" class="text-center">
               <p class="d-flex align-items-center">
                 <i class="fa fa-plug text-success me-2"></i> 
@@ -139,9 +139,7 @@
                 >
               </p>
 
-              <br>
-
-              <div class="row g-3">
+              <div class="row g-3 mt-3">
                 <div class="col-md-6">
                   <label for="Vector" class="form-label text-start d-block"><b>Initialization Vector:</b></label>
                   <input type="text" class="form-control" id="Vector" placeholder="Ex: G+mA/QcMXwqMkuxV">
@@ -158,16 +156,24 @@
                 <textarea class="form-control" id="Body_endpoint" rows="4" placeholder='{"example":"data"}'></textarea>
               </div>
 
-              <br>
+              <div class="my-3 d-flex align-items-center gap-3">
+                <a href="https://cors-anywhere.herokuapp.com/" target="_blank" class="btn btn-success btn-rounded">
+                  <i class="fa fa-external-link-alt me-2"></i> Abrir CORS Anywhere
+                </a>
+                <p class="text-muted small mb-0">
+                  Nota: Este passo é necessário para testar endpoints que não permitem requisições cross-origin diretamente do navegador.
+                </p>
+              </div>
+
               <br>
               <button class="btn btn-outline-success btn-rounded mt-2" onclick="testEndpoint()"> 
                 <i class="fa fa-sync-alt me-2"></i> Testar Endpoint
               </button>
-              
-              <div id="endpointResult" class="mt-3 text-center"></div>
 
+              <div id="endpointResult" class="mt-3 text-center"></div>
             </div>
           </div>
+
         </div>
       </div>
     </div>
@@ -220,7 +226,7 @@
     .catch(err => console.error("Erro ao carregar footer:", err));
 
     // Carregar o ficheiro navbar
-    fetch("/navbar/navbar_gateway_pages.html")
+    fetch("/navbar/navbar_Onboarding_pages.html")
     .then(res => res.text())
     .then(html => {
       document.getElementById("navbar").innerHTML = html;
