@@ -126,14 +126,18 @@ document.getElementById("exportarResultadosBtn").addEventListener("click", funct
     XLSX.writeFile(wb, "Resultados_ClientID.xlsx");
 });
 
-// Download template
+// Exportar Template
 document.getElementById('downloadTemplateBtn').addEventListener('click', function () {
     const ws = XLSX.utils.aoa_to_sheet([
         ["Processo", "Terminal ID", "Client ID", "Bearer Token"]
     ]);
 
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "Template");
+    const csv = XLSX.utils.sheet_to_csv(ws, { FS: ";" });
 
-    XLSX.writeFile(wb, "Template_validador.csv");
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const link = document.createElement("a");
+
+    link.href = URL.createObjectURL(blob);
+    link.download = "Template_validador.csv";
+    link.click();
 });
