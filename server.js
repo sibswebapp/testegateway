@@ -51,7 +51,7 @@ app.get('/health', (req, res) => res.json({ status: 'ok' }));
 // --------------------------------------------------
 // PROXY SIBS – VALIDADOR CLIENTID
 // --------------------------------------------------
-app.post('/api/validar-clientid', basicAuth, async (req, res) => {
+app.post('/api/validar-clientid', async (req, res) => {
   try {
     const { nome, clientId, token, terminalID } = req.body;
 
