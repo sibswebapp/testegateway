@@ -41,7 +41,8 @@ app.use(express.json());
 
 // Página inicial
 app.get('/', (req, res) => {
-  res.sendFile(path.join(webappDir, 'gateway', 'gateway.html'));
+  res.sendFile(path.join(webappDir, 'gateway_menu', 'gateway_menu.html'));
+  //res.sendFile(path.join(webappDir, 'gateway', 'gateway.html'));
 });
 
 // Health check

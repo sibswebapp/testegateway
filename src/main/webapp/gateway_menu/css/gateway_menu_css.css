@@ -1,0 +1,63 @@
+html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      background: #f0f0f0;
+      color: #333;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      }
+
+    * {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    }
+
+    main {
+      flex: 1;
+    }
+
+    /*letra css*/
+    h2 {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: bold;
+    }
+
+    h2 {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      color: #343a40;
+    }
+
+    .card {
+      border-radius: 20px;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    .card i {
+      transition: transform 0.3s;
+    }
+
+    .card:hover i {
+      transform: scale(1.2);
+    }
+
+    .card h4 {
+      font-weight: 600;
+    }
+
+    .card p {
+      font-size: 0.9rem;
+      color: #6c757d;
+    }
+
+    main {
+      padding-top: 60px;
+      padding-bottom: 60px;
+    }

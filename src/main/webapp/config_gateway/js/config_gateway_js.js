@@ -243,8 +243,8 @@
       let ServerToServer = document.getElementById('ServerToServerCheckbox').checked ? 1 : 0;
       let gatewayVersion = document.getElementById("gatewayVersion").value;
       let LayoutVersion = document.getElementById("LayoutVersion").value;
-      let MITs = document.getElementById('MITs').checked ? 1 : 0;
-      let VersionMITS = document.getElementById('VersionMITS').value;
+      let MITs = "0"; //document.getElementById('MITs').checked ? 1 : 0;
+      let VersionMITS = "0"; //document.getElementById('VersionMITS').value;
 
 
       const methods = Array.from(document.getElementById('paymentMethods').selectedOptions).map(opt => opt.value);
@@ -321,8 +321,8 @@
       let ServerToServer
       let gatewayVersion
       let LayoutVersion
-      let MITs
-      let VersionMITS
+      //let MITs
+      //let VersionMITS
     
       if(useDefault == "1"){
         checkbox_option = credentialDefaultObj.useDefaultConfig;
@@ -333,8 +333,8 @@
         ServerToServer = credentialDefaultObj.ServerToServer;
         gatewayVersion = credentialDefaultObj.gatewayVersion;
         LayoutVersion = credentialDefaultObj.LayoutVersion;
-        MITs = credentialDefaultObj.MITs;
-        VersionMITS = credentialDefaultObj.VersionMITS;
+        //MITs = credentialDefaultObj.MITs;
+        //VersionMITS = credentialDefaultObj.VersionMITS;
 
       }else{
         checkbox_option = credential_config_variable.useDefaultConfig;
@@ -345,8 +345,8 @@
         ServerToServer = credential_config_variable.ServerToServer;
         gatewayVersion = credential_config_variable.gatewayVersion;
         LayoutVersion = credential_config_variable.LayoutVersion;
-        MITs = credential_config_variable.MITs;
-        VersionMITS = credential_config_variable.VersionMITS;
+        //MITs = credential_config_variable.MITs;
+        //VersionMITS = credential_config_variable.VersionMITS;
 
       }
 
@@ -363,8 +363,8 @@
         document.getElementById('referenceExpiryUnit').value = credential_config_variable.referenceExpiryUnit;
         document.getElementById('gatewayVersion').value = credential_config_variable.gatewayVersion;
         document.getElementById('LayoutVersion').value = credential_config_variable.LayoutVersion;
-        document.getElementById('MITs').value = credential_config_variable.MITs;
-        document.getElementById('VersionMITS').value = credential_config_variable.VersionMITS;
+        //document.getElementById('MITs').value = credential_config_variable.MITs;
+        //document.getElementById('VersionMITS').value = credential_config_variable.VersionMITS;
 
       }
 
@@ -373,14 +373,14 @@
         document.getElementById('referenceExpiryUnit').value = credentialDefaultObj.referenceExpiryUnit;
       }
 
-      document.getElementById("LayoutVersionMITS").style.display = "block";
+      //document.getElementById("LayoutVersionMITS").style.display = "block";
 
-      if (MITs == "1") {
+      /*if (MITs == "1") {
         document.getElementById('MITs').checked = true;
       } else {
         document.getElementById('MITs').checked = false;
         document.getElementById("LayoutVersionMITS").style.display = "none";
-      }
+      }*/
 
       const select = document.getElementById('paymentMethods');
       Array.from(select.options).forEach(opt => {
@@ -390,7 +390,7 @@
       toggleEntityField();
       handlePaymentMethodChange();
       toggleAllMethodsPayRestored(AllMethodsPay);
-      toggleMITS();
+      //toggleMITS();
     }
 
     // Caso clicar no botão de voltar para tras, ele valida alguns pontos
@@ -425,8 +425,8 @@
 
     window.addEventListener('DOMContentLoaded', restoreFromLocalStorage);
 
-     //Função caso ele selecionar as MITs irá aparecer a checkbox
-    function toggleMITS(element) {
+    //Função caso ele selecionar as MITs irá aparecer a checkbox
+    /*function toggleMITS(element) {
       const paymentMethodsContainer = document.getElementById("LayoutVersionMITS");
       paymentMethodsContainer.style.display = element.checked ? "block" : "none";
-    }
+    }*/

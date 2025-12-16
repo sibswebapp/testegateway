@@ -72,6 +72,7 @@ async function chamarAPI(nome, clientId, token, terminalID) {
             status?.statusCode === "T9999"
         ) {
             estado = "✔️ Sucesso";
+            erro = data.paymentMethodList;
         } else {
             estado = "❌ Erro";
             erro = status
@@ -106,7 +107,7 @@ function adicionarNaTabela(nome, estado, erro, terminalID) {
         Processo: nome,
         "Terminal ID": terminalID,
         Estado: estado,
-        Erro: erro
+        "Métodos pagamento/Erro": Array.isArray(erro) ? erro.join(" | ") : erro
     });
 
     document.getElementById("exportarResultadosBtn").classList.remove("d-none");
@@ -117,7 +118,7 @@ document.getElementById("exportarResultadosBtn").addEventListener("click", funct
     if (resultadosExportacao.length === 0) return;
 
     const ws = XLSX.utils.json_to_sheet(resultadosExportacao, {
-        header: ["Processo", "Terminal ID", "Estado", "Erro"]
+        header: ["Processo", "Terminal ID", "Estado", "Métodos pagamento/Erro"]
     });
 
     const wb = XLSX.utils.book_new();
