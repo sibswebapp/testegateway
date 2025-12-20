@@ -85,6 +85,17 @@
               </div>
             </div>
 
+             <!-- Card 4 - Validador Body API -->
+            <div class="col-md-4 mb-4">
+              <div class="card shadow text-center p-4" style="border-radius:20px; cursor:pointer;"
+                  onclick="window.location.href='validador_API/validador_API.html'">
+                <i class="fa-solid fa-code fa-3x mb-3" style="color:#ff0000;"></i>
+ 
+                <h4 class="mb-2">Validador do Body API (Checkout)</h4>
+                <p class="text-muted">Validar o Body API dos clientes ou nossos</p>
+              </div>
+            </div>
+
           </div>
 
         </div>
@@ -109,7 +120,7 @@
     .catch(err => console.error("Erro ao carregar footer:", err));
 
     // Carregar o ficheiro navbar
-    fetch("/navbar/navbar_gateway_pages.html")
+    fetch("/navbar/navbar_Onboarding_menu.html")
     .then(res => res.text())
     .then(html => {
       document.getElementById("navbar").innerHTML = html;

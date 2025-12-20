@@ -106,23 +106,97 @@ app.post('/api/validar-clientid', async (req, res) => {
   }
 });
 
+
+app.post('/api/validar-clientid_qly', async (req, res) => {
+  try {
+    const { nome, clientId, token, terminalID } = req.body;
+
+    if (!nome || !clientId || !token || !terminalID) {
+      return res.status(400).json({
+        error: "Parâmetros obrigatórios em falta"
+      });
+    }
+
+    const payload = {
+      merchant: {
+        terminalId: Number(terminalID),
+        channel: "web",
+        merchantTransactionId: `Order ID: ${nome}`
+      },
+      transaction: {
+        transactionTimestamp: new Date().toISOString(),
+        description: "Validação ClientID",
+        moto: false,
+        paymentType: "PURS",
+        amount: {
+          value: 1,
+          currency: "EUR"
+        },
+        paymentMethod: []
+      }
+    };
+
+    const sibsResponse = await fetch(
+      "https://spg.qly.site1.sibs.pt/api/v2/payments",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+          "X-IBM-Client-Id": clientId
+        },
+        body: JSON.stringify(payload)
+      }
+    );
+
+    const data = await sibsResponse.json();
+
+    res.status(sibsResponse.status).json(data);
+
+  } catch (err) {
+    console.error("Erro proxy SIBS:", err);
+    res.status(500).json({
+      error: "Erro ao comunicar com a SIBS",
+      details: err.message
+    });
+  }
+});
+
 // --------------------------------------------------
 // SERVIR CONTEÚDO ESTÁTICO
 // --------------------------------------------------
 
-// Protege páginas do Validador
+// Protege páginas do Onboarding
+app.use(
+  '/validador_API',
+  basicAuth,
+  express.static(path.join(webappDir, 'validador_API'))
+);
+
 app.use(
   '/validador',
   basicAuth,
   express.static(path.join(webappDir, 'validador'))
 );
 
-// Protege páginas do Onboarding
 app.use(
   '/Onboarding',
   basicAuth,
   express.static(path.join(webappDir, 'Onboarding_menu'))
 );
+
+app.use(
+  '/webhooks',
+  basicAuth,
+  express.static(path.join(webappDir, 'webhooks'))
+);
+
+app.use(
+  '/validador_form',
+  basicAuth,
+  express.static(path.join(webappDir, 'validador_form'))
+);
+
 
 // Resto da webapp (sem proteção)
 app.use(express.static(webappDir));
