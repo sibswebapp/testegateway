@@ -15,6 +15,8 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.1/mdb.min.css" />
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
   <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
 
 
   <link rel="stylesheet" href="/validador_form/css/validador_form_css.css">
@@ -27,51 +29,65 @@
 <body>
 
   <div id="navbar"></div>
-  
+
   <br>
   <br>
-          
-  <main>
-    <div class="container mt-4">
 
-      <br>
-      <h1 class="text-center mb-4"></h1>
+  <main class="main-wrapper">
 
-      <div class="card">
+    <section class="control-panel card">
 
-        <div class="card-header text-center d-flex justify-content-between align-items-center" style="background-color: #cae3ff;">
-          <h2 style="color: #454545; margin: 0 auto;"><b>Gateway SIBS - Carregar Form</b></h2>
-        </div>
+      <div class="panel-header" style="margin-bottom: 30px;">
+        <div class="panel-title" style="display: flex; align-items: center; gap: 12px; margin-bottom: 4px;">
+          <i class="bi bi-stars" style="color: #1a73e8; font-size: 26px;"></i>
 
-        <!--Inputs-->
-        <div class="card-body">
-          <div class="mb-3">
-            <label class="form-label">Transaction ID:</label>
-            <input type="text" id="transactionId" class="form-control"  placeholder="Introduza o transactionID" />
-          </div>
-
-          <div class="mb-3">
-            <label class="form-label">Form Context:</label>
-            <textarea type="" id="formContext" class="form-control" placeholder="Introduza o formContext" ></textarea>
-          </div>
-
-          <button class="btn btn-primary w-100 mt-3" id="carregarForm" >Carregar Form</button>
-            <div id="sibsFormContainer" class="mt-4"></div>
-
+          <span style="font-size: 22px; color: #202124; letter-spacing: -0.5px;">
+            <b style="font-weight: 400;">Gateway</b>
+            <b style="font-weight: 600;">SIBS</b>
+            <span style="color: #dadce0; margin: 0 8px; font-weight: 300;">|</span>
+            <span style="color: #5f6368; font-weight: 400;">Gerar Form</span>
+          </span>
         </div>
       </div>
 
-    </div>
+      <div class="inputs-row">
+        <div class="form-group">
+          <label class="form-label" for="transactionId">Transaction ID</label>
+          <input type="text" id="transactionId" class="form-control" placeholder="Ex: 8a829417...">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="formContext">Form Context (JSON)</label>
+          <input type="text" id="formContext" class="form-control" placeholder="Cole aqui o token de contexto da SIBS">
+        </div>
+
+        <button id="carregarForm">
+          Gerar Checkout <i class="bi bi-arrow-right-short ms-2"></i>
+        </button>
+      </div>
+    </section>
+
+    <section class="form-canvas">
+      <div class="canvas-label">Payment Gateway Preview</div>
+
+      <div id="sibsFormContainer">
+        <div class="placeholder-ui">
+          <i class="bi bi-shield-lock"></i>
+          <h3>Pronto para Carregar</h3>
+          <p>Introduza os dados acima para visualizar o formulário de pagamento oficial.</p>
+        </div>
+      </div>
+    </section>
   </main>
-  
+
   <br>
   <br>
-     
+
   <div id="footer"></div>
 
   <div id="js_index"></div>
 
-   <!--PopUp sucesso-->
+  <!--PopUp sucesso-->
   <section id="successModal">
     <span class="overlay"></span>
     <div class="modal-box">
@@ -99,7 +115,7 @@
       </div>
     </div>
   </section>
-  
+
   <script>
 
     // Carregar o ficheiro footer

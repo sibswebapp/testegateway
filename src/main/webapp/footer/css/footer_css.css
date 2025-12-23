@@ -1,22 +1,97 @@
-/*footer css*/
-footer {
-    background-color: #fff;
-    color: #333;
-    padding: 20px 0;
-    font-size: 0.9rem;
-    text-align: center;
+.footer-slim {
+    background-color: #ffffff;
+    border-top: 1px solid #f0f0f0;
+    padding: 20px 0; /* Espaçamento interno vertical */
+    font-family: 'Inter', sans-serif;
+    width: 100%;
+    margin-top: 60px; /* Margem para não ficar colado ao conteúdo acima */
 }
 
-footer a.btn {
-    font-size: 0.85rem;
-    padding: 6px 14px;
+.footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
-footer a {
-    color: #4c1d95;
+.footer-section {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+/* Tipografia Refinada */
+.brand-text {
+    font-size: 11px;
+    letter-spacing: 1.2px;
+    color: #1a1d23;
+    font-weight: 400;
+}
+
+.brand-text strong {
+    font-weight: 700;
+}
+
+.separator {
+    color: #e2e8f0;
+    font-size: 14px;
+    font-weight: 300;
+}
+
+/* Status Discreto */
+.status-indicator {
+    font-size: 10px;
+    font-weight: 600;
+    color: #94a3b8;
+    letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.dot {
+    width: 5px;
+    height: 5px;
+    background-color: #22c55e;
+    border-radius: 50%;
+    box-shadow: 0 0 5px rgba(34, 197, 94, 0.4);
+}
+
+/* Navegação Lateral */
+.footer-nav {
+    display: flex;
+    gap: 20px;
+}
+
+.footer-nav a {
     text-decoration: none;
+    color: #64748b;
+    font-size: 11px;
+    transition: color 0.2s ease;
 }
 
-footer a:hover {
-    text-decoration: underline;
+.footer-nav a:hover {
+    color: #1a73e8;
+}
+
+.copyright {
+    font-size: 11px;
+    color: #cbd5e1;
+    border-left: 1px solid #f0f0f0;
+    padding-left: 20px;
+}
+
+/* Mobile: Empilha os elementos suavemente */
+@media (max-width: 768px) {
+    .footer-container {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+    }
+    .copyright {
+        border-left: none;
+        padding-left: 0;
+    }
 }

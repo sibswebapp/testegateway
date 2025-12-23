@@ -1,16 +1,47 @@
- <!--Nav bar-->
-  <nav class="navbar navbar-expand-lg navbar-light">
-    <div class="container-fluid d-flex justify-content-between align-items-center px-4" >
-      <a class="navbar-brand d-flex align-items-center">
-        <img src="https://www.pay.sibs.com/wp-content/uploads/2022/02/logo.png" alt="Logo SIBS" style="max-height:30px;" />
+<!--Nav bar-->
+<nav class="navbar-gemini">
+  <div style="width:100%;
+    display:flex;
+    justify-content:space-between;
+    align-items: center;
+    padding:0 20px;
+    box-sizing:border-box;
+    max-width:100%;
+    margin:0 auto;">
+
+    <a class="nav-brand" href="#">
+      <img src="https://www.pay.sibs.com/wp-content/uploads/2022/02/logo.png" alt="Logo SIBS">
+    </a>
+
+    <div class="nav-actions">
+
+      <a href="/gateway/gateway.html" class="btn-gateway">
+        <i class="fa fa-list"></i>
+        <span>SPG</span>
       </a>
-      <div>
-        <a href="/gateway/gateway.html" class="btn btn-secondary btn-rounded" data-mdb-ripple-init>
-          <i class="fa fa-list"></i> SPG
-        </a>
-        <a href="config_stargate/config_stargate.html" style="background-color: #ff9800; color:#f2f2f2;"  class="btn btn-rounded" data-mdb-ripple-init>
-          <i class="fa fa-gears"></i> Configurações
-        </a>
+
+      <div class="dropdown">
+        <button class="btn-config dropdown-toggle" type="button" id="dropdownConfig" data-bs-toggle="dropdown" aria-expanded="false">
+          <div class="icon-circle-config">
+            <i class="fa fa-gears"></i>
+          </div>
+          <span>Configurações</span>
+        </button>
+
+        <ul class="dropdown-menu dropdown-menu-end nav-dropdown-modern" aria-labelledby="dropdownConfig">
+          <div class="nav-dropdown-arrow"></div>
+          <li class="nav-dropdown-title">Preferências</li>
+          <li>
+            <a class="dropdown-item nav-item-glass_stargate" href="/config_stargate/config_stargate.html">
+              <div class="nav-item-icon"><i class="fa fa-sliders"></i></div>
+              <div class="nav-item-text">
+                  <strong>Geral</strong>
+                  <small>Configurações do terminal Stargate</small>
+              </div>
+            </a>
+          </li>
+        </ul>
       </div>
     </div>
-  </nav>
+  </div>
+</nav>

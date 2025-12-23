@@ -1,6 +1,102 @@
+document.addEventListener("DOMContentLoaded", () => {
+
+  toggleCheckout();
+
+  const raw = localStorage.getItem("credenciaisForm");
+  if (!raw) return;
+
+  let arr;
+  try {
+    arr = JSON.parse(raw);
+  } catch {
+    console.warn("credenciaisForm inválido no localStorage");
+    return;
+  }
+
+  if (!Array.isArray(arr)) return;
+
+  arr.forEach(item => {
+    if (!item.id) return;
+
+    const input = document.getElementById(item.id);
+    if (input && typeof item.value === "string") {
+      input.value = item.value;
+    }
+  });
+});
+
+function limparCredenciais() {
+  ["terminalId", "clientId", "bearerToken"].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = "";
+  });
+}
+
+
+// PopUP de erro chamada
+const errorModal = document.getElementById("errorModal"),
+errorOverlay = errorModal.querySelector(".overlay"),
+errorCloseBtn = errorModal.querySelector(".close-btn");
+
+function showErrorModal(message) {
+  errorMessage.textContent = message;
+  errorModal.classList.add("active");
+}
+
+errorOverlay.addEventListener("click", () => errorModal.classList.remove("active"));
+errorCloseBtn.addEventListener("click", () => errorModal.classList.remove("active"));
+
+
+function abrirPopupBodyAutorizado() {
+  const modal = new bootstrap.Modal(
+    document.getElementById("popupBodyAutorizado")
+  );
+  modal.show();
+}
+
+function abrirPopupBodyMIT() {
+  const modal = new bootstrap.Modal(
+    document.getElementById("popupBodyMIT")
+  );
+  modal.show();
+}
+
+function abrirPopupBodygenerico() {
+  const modal = new bootstrap.Modal(
+    document.getElementById("popupBodygenerico")
+  );
+  modal.show();
+}
+
 /* ===================== HELPERS ===================== */
 const isoDateTimeRegex =
   /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/;
+
+// Seleciona os checkboxes
+const chkMIT = document.getElementById("chkMIT");
+const chkAuth = document.getElementById("chkAuth");
+
+// Função para atualizar visibilidade
+function atualizarOpcaoMutua() {
+  if (chkMIT.checked) {
+    // Se MIT estiver ativo, desativa/oculta Pagamentos Autorizados
+    chkAuth.parentElement.style.display = "none";
+  } else if (chkAuth.checked) {
+    // Se Autorizados estiver ativo, desativa/oculta MIT
+    chkMIT.parentElement.style.display = "none";
+  } else {
+    // Se nenhum estiver ativo, mostra ambos
+    chkMIT.parentElement.style.display = "inline-flex";
+    chkAuth.parentElement.style.display = "inline-flex";
+  }
+}
+
+// Adiciona eventos onchange
+chkMIT.addEventListener("change", atualizarOpcaoMutua);
+chkAuth.addEventListener("change", atualizarOpcaoMutua);
+
+// Inicializa visibilidade ao carregar a página
+atualizarOpcaoMutua();
 
 function get(obj, path) {
   return path.split('.').reduce((o, k) => o && o[k], obj);
@@ -10,15 +106,21 @@ function stringOk(v) {
   return typeof v === "string" && v.trim() !== "";
 }
 
+function limparJson() {
+  const textarea = document.getElementById("jsonInput");
+  textarea.value = "";
+  textarea.focus();
+}
+
 function toggleMIT() {
   const isChecked = document.getElementById("chkMIT").checked;
-  console.log("MIT:", isChecked);
 }
 
 function atualizarCamposVisiveis() {
   const chkCheckout = document.getElementById("chkGenerateCheckout").checked;
   const chkPaymentMethods = document.getElementById("chkPaymentMethods").checked;
   const div = document.getElementById("paymentMethodsInputs");
+  const btnLimpar = document.getElementById("btnLimparCredenciais");
 
   // Mostrar se qualquer um dos dois checkboxes estiver ativo
   if (chkCheckout || chkPaymentMethods) {
@@ -26,57 +128,323 @@ function atualizarCamposVisiveis() {
   } else {
     div.classList.add("hidden");
   }
+
+  if (btnLimpar) {
+    btnLimpar.style.display = (chkCheckout || chkPaymentMethods) ? "inline-block" : "none";
+  }
+
+  // Verificar se os dois checkboxes estão ativos
+  const credenciais = JSON.parse(localStorage.getItem("credenciaisForm") || "[]");
+  let btnSync = document.getElementById("btnSyncCredenciais");
+
+  if ((chkCheckout || chkPaymentMethods) && credenciais.length > 0) {
+    if (!btnSync) {
+      btnSync = document.createElement("button");
+      btnSync.id = "btnSyncCredenciais";
+      btnSync.className = "btn btn-primary";
+      btnSync.style.marginLeft = "8px";
+      btnSync.textContent = "Sincronizar dados";
+      btnSync.onclick = () => sincronizarCredenciais();
+      btnLimpar?.parentNode.insertBefore(btnSync, btnLimpar.nextSibling);
+    }
+    btnSync.style.display = "inline-block";
+  } else if (btnSync) {
+    btnSync.style.display = "none";
+  }
+}
+
+// Função para sincronizar os dados do localStorage para os inputs
+function sincronizarCredenciais() {
+  const credenciais = JSON.parse(localStorage.getItem("credenciaisForm") || "[]");
+
+  if (!credenciais.length) {
+    showErrorModal("Não tem dados para sincronizar!");
+    return;
+  }
+
+  credenciais.forEach(item => {
+    const input = document.getElementById(item.id);
+    if (input) input.value = item.value || "";
+  });
 }
 
 function toggleCheckout() {
   const isChecked = document.getElementById("chkGenerateCheckout").checked;
-  document.getElementById("checkoutResultCol").style.display = isChecked ? "block" : "none";
+
+  const colJson = document.getElementById("colJson");
+  const colResultado = document.getElementById("colResultado");
+  const colCheckout = document.getElementById("checkoutResultCol");
+
+  if (isChecked) {
+    // Mostrar checkout → 3 colunas iguais
+    colCheckout.style.display = "block";
+
+    colJson.className = "col-md-4";
+    colResultado.className = "col-md-4";
+    colCheckout.className = "col-md-4";
+  } else {
+    // Esconder checkout → 2 colunas largas
+    colCheckout.style.display = "none";
+
+    colJson.className = "col-md-6";
+    colResultado.className = "col-md-6";
+  }
+
   atualizarCamposVisiveis();
 }
+
 
 function togglePaymentMethods() {
   atualizarCamposVisiveis();
 }
 
 
+function validarAuthMandate(rows, body) {
 
-async function gerarCheckout(body) {
+  /* ===================== POSICIONAMENTO ===================== */
+
+  // customerInfo não pode estar dentro de outros nós
+  if (body.merchant?.customerInfo || body.merchant?.customer?.customerInfo) {
+    rows.push({
+      campo: "merchant.customerInfo",
+      valor: JSON.stringify(body.merchant.customerInfo ?? body.merchant.customer?.customerInfo),
+      status: "ERRO",
+      msg: "customerInfo não pode estar dentro do merchant"
+    });
+  }
+
+  if (body.transaction?.customerInfo || body.transaction?.customer?.customerInfo) {
+    rows.push({
+      campo: "transaction.customerInfo",
+      valor: JSON.stringify(body.transaction.customerInfo ?? body.transaction.customer?.customerInfo),
+      status: "ERRO",
+      msg: "customerInfo não pode estar dentro do transaction"
+    });
+  }
+
+  if (body.mandate?.customerInfo) {
+    rows.push({
+      campo: "mandate.customerInfo",
+      valor: JSON.stringify(body.mandate.customerInfo),
+      status: "ERRO",
+      msg: "customerInfo não pode estar dentro do mandate"
+    });
+  }
+
+  // mandate não pode estar dentro de outros nós
+  if (body.merchant?.mandate) {
+    rows.push({
+      campo: "merchant.mandate",
+      valor: JSON.stringify(body.merchant.mandate),
+      status: "ERRO",
+      msg: "mandate não pode estar dentro do merchant"
+    });
+  }
+
+  if (body.transaction?.mandate) {
+    rows.push({
+      campo: "transaction.mandate",
+      valor: JSON.stringify(body.transaction.mandate),
+      status: "ERRO",
+      msg: "mandate não pode estar dentro do transaction"
+    });
+  }
+
+  if (body.customer?.mandate) {
+    rows.push({
+      campo: "customer.mandate",
+      valor: JSON.stringify(body.customer.mandate),
+      status: "ERRO",
+      msg: "mandate não pode estar dentro do customer"
+    });
+  }
+
+  /* ===================== MERCHANT ===================== */
+
+  if (!body.merchant || typeof body.merchant !== "object") {
+    rows.push({
+      campo: "merchant",
+      valor: "-",
+      status: "ERRO",
+      msg: "merchant é obrigatório"
+    });
+    return;
+  }
+
+  /* ===================== CUSTOMER ===================== */
+
+  if (!body.customer || !body.customer.customerInfo) {
+    rows.push({
+      campo: "customer.customerInfo",
+      valor: "-",
+      status: "ERRO",
+      msg: "customerInfo é obrigatório e deve estar fora do merchant/transaction/mandate"
+    });
+  } else {
+    validarCampo(
+      rows,
+      "customer.customerInfo.customerName",
+      body.customer.customerInfo.customerName,
+      "string"
+    );
+  }
+
+  /* ===================== TRANSACTION ===================== */
+
+  if (!body.transaction || typeof body.transaction !== "object") {
+    rows.push({
+      campo: "transaction",
+      valor: "-",
+      status: "ERRO",
+      msg: "transaction é obrigatório"
+    });
+    return;
+  }
+
+  const t = body.transaction;
+
+  validarCampo(rows, "transaction.description", t.description, "string");
+
+  /* ===================== PAYMENT METHOD ===================== */
+
+  if (!Array.isArray(t.paymentMethod)) {
+    rows.push({
+      campo: "transaction.paymentMethod",
+      valor: JSON.stringify(t.paymentMethod),
+      status: "ERRO",
+      msg: "paymentMethod tem de ser um array"
+    });
+  } else {
+    const obrigatorios = ["MANDATE", "MBWAY"];
+    const falta = obrigatorios.filter(m => !t.paymentMethod.includes(m));
+
+    if (falta.length > 0) {
+      rows.push({
+        campo: "transaction.paymentMethod",
+        valor: JSON.stringify(t.paymentMethod),
+        status: "ERRO",
+        msg: "paymentMethod deve conter obrigatoriamente MANDATE e MBWAY"
+      });
+    } else {
+      rows.push({
+        campo: "transaction.paymentMethod",
+        valor: JSON.stringify(t.paymentMethod),
+        status: "OK",
+        msg: ""
+      });
+    }
+  }
+
+  /* ===================== MANDATE ===================== */
+
+  if (!body.mandate || typeof body.mandate !== "object") {
+    rows.push({
+      campo: "mandate",
+      valor: "-",
+      status: "ERRO",
+      msg: "mandate é obrigatório e deve estar fora do merchant/transaction/customer"
+    });
+  } else {
+    validarCampo(rows, "mandate.mandateId", body.mandate.mandateId, "string");
+  }
+}
+
+async function gerarCheckout() {
   const out = document.getElementById("checkoutResult");
+  const colCheckout = document.getElementById("checkoutResultCol");
   out.innerHTML = "<p>A gerar checkout...</p>";
 
   const terminalId = document.getElementById("terminalId").value.trim();
   const clientId = document.getElementById("clientId").value.trim();
   const token = document.getElementById("bearerToken").value.trim();
+  const jsonInput = document.getElementById("jsonInput").value.trim();
 
-  if (!terminalId || !clientId || !token) return;
+  if (!terminalId || !clientId || !token || !jsonInput) {
+    out.innerHTML = "<p class='erro'>Preenche todos os campos e o JSON</p>";
+    return;
+  }
 
-  const requestData = {
-    nome: "teste",
-    terminalID: terminalId,
-    clientId: clientId,
-    token: token
-  };
+  let body;
+  try {
+    body = JSON.parse(jsonInput); // transforma texto em objeto
+  } catch (err) {
+    out.innerHTML = `<p class='erro'>JSON inválido: ${err.message}</p>`;
+    return;
+  }
+
+  // Adicionar os IDs de terminal e merchantTransactionId se necessário
+  body.merchant = body.merchant || {};
+  body.merchant.terminalId = Number(terminalId);
+  body.merchant.merchantTransactionId = body.merchant.merchantTransactionId || "Order ID teste";
 
   try {
-    const response = await fetch("/api/validar-clientid_qly", { 
+    const response = await fetch("/api/validar-body_qly", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(requestData)
+      body: JSON.stringify({ body, clientId, token })
     });
 
     const data = await response.json();
 
+    // Guardar credenciais + dados do checkout
+    const credenciaisForm = [
+      { id: "terminalId", value: terminalId },
+      { id: "clientId", value: clientId },
+      { id: "bearerToken", value: token },
+      { id: "formContext", value: data.formContext },
+      { id: "transactionID", value: data.transactionID }
+    ];
+
+    sessionStorage.setItem("credenciaisForm", JSON.stringify(credenciaisForm));
+
     if (!response.ok) {
-      out.innerHTML = `<p class='erro'>Erro ao gerar checkout: ${response.status}</p>`;
+      out.innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
       return;
     }
 
-    // Mostrar resultado completo da API na coluna
+    // Mostrar resultado do checkout
     out.innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+
+    // Tornar visível a coluna do checkout
+    colCheckout.style.display = "block";
+
+    // Adicionar botão "Gerar form com estas credenciais" logo abaixo de checkoutResult
+    const card = colCheckout.querySelector(".card");
+    const chkAuthAtivo = document.getElementById("chkAuth")?.checked;
+    const btnExistente = document.getElementById("btnGerarForm");
+
+      if (!chkAuthAtivo) {
+        // Mostrar / criar botão
+        if (!btnExistente) {
+          const btnDiv = document.createElement("div");
+          btnDiv.id = "btnGerarForm";
+          btnDiv.classList.add("row", "mt-3");
+          btnDiv.innerHTML = `
+            <div>
+              <button class="btn btn-success w-100" onclick="gerarForm()">
+                Gerar form com estas credenciais
+              </button>
+            </div>
+          `;
+          const checkoutResultDiv = card.querySelector("#checkoutResult");
+          checkoutResultDiv.insertAdjacentElement("afterend", btnDiv);
+        } else {
+          // Já existe → garantir que está visível
+          btnExistente.style.display = "block";
+        }
+      } else {
+        // chkAuthAtivo = true → esconder botão se existir
+        if (btnExistente) {
+          btnExistente.style.display = "none";
+        }
+      }
+
+
   } catch (e) {
     out.innerHTML = `<p class='erro'>Falha ao gerar checkout: ${e.message}</p>`;
   }
 }
+
 
 /* ===================== VALIDAÇÃO MIT ===================== */
 function validarMIT(rows, body) {
@@ -437,12 +805,99 @@ function validarPaymentReference(rows, pr) {
 
 /* ===================== VALIDAÇÃO PRINCIPAL ===================== */
 async function validar() {
+
+  const PAYMENT_METHODS_VALIDOS = ["REFERENCE", "CARD", "MBWAY"];
+
+  const SCHEMA = {
+    merchant: {
+      terminalId: "number",
+      channel: "string",
+      merchantTransactionId: "string"
+    },
+    transaction: {
+      transactionTimestamp: "string",
+      description: "string",
+      moto: "boolean",
+      paymentType: "string",
+      amount: {
+        value: "number",
+        currency: "string"
+      },
+      paymentMethod: "array",
+      paymentReference: {
+        initialDatetime: "string",
+        finalDatetime: "string",
+        maxAmount: {
+          value: "number",
+          currency: "string"
+        },
+        minAmount: {
+          value: "number",
+          currency: "string"
+        },
+        entity: "string"
+      }
+    },
+    customer: {
+      customerInfo: {
+        customerName: "string",
+        customerEmail: "string",
+        shippingAddress: {
+          street1: "string",
+          street2: "string",
+          city: "string",
+          postcode: "string",
+          country: "string"
+        },
+        billingAddress: {
+          street1: "string",
+          street2: "string",
+          city: "string",
+          postcode: "string",
+          country: "string"
+        }
+      }
+    }
+  };
+
+  const chkAuthAtivo = document.getElementById("chkAuth")?.checked;
+  const chkMITAtivo = document.getElementById("chkMIT")?.checked;
+  const chkGenerateCheckout = document.getElementById("chkGenerateCheckout")?.checked;
+  const chkPaymentMethods = document.getElementById("chkPaymentMethods")?.checked;
+
   const out = document.getElementById("resultado");
   out.innerHTML = "";
+
+  const terminalId = document.getElementById("terminalId").value.trim();
+  const clientId = document.getElementById("clientId").value.trim();
+  const token = document.getElementById("bearerToken").value.trim();
+  const jsonInput = document.getElementById("jsonInput").value.trim();
+
+  // Guardar credenciais + dados do checkout
+  const credenciaisForm = [
+    { id: "terminalId", value: terminalId },
+    { id: "clientId", value: clientId },
+    { id: "bearerToken", value: token }
+  ];
+
+  localStorage.setItem("credenciaisForm", JSON.stringify(credenciaisForm));
+
+  // Validação dos inputs obrigatórios
+  if (!jsonInput) {
+    showErrorModal("Por favor preencher o input com o body a validar");
+    return;
+  }
+
+  if ((chkPaymentMethods || chkGenerateCheckout) && (!terminalId || !clientId || !token || !jsonInput)) {
+    showErrorModal("Por favor preencher os inputs Terminal ID, Client ID e Bearer Token");
+    return;
+  }
+
 
   let body;
   try {
     body = JSON.parse(document.getElementById("jsonInput").value);
+
   } catch {
     out.innerHTML = "<p class='erro'>❌ JSON inválido</p>";
     return;
@@ -497,7 +952,9 @@ if (!body.transaction || typeof body.transaction !== "object") {
     validarCampo(rows,"transaction.amount.value", t.amount?.value,"number");
     validarCampo(rows,"transaction.amount.currency", t.amount?.currency,"string",
       v => v !== "EUR" ? "Currency tem de ser EUR" : null);
-    validarCampo(rows,"transaction.paymentMethod", t.paymentMethod,"array");
+    if(!chkAuthAtivo){
+      validarCampo(rows,"transaction.paymentMethod", t.paymentMethod,"array");
+    }
     validarCampo(rows,"transaction.moto", t.moto,"boolean");
 
     // paymentType fixo "PURS"
@@ -589,13 +1046,7 @@ if (!body.transaction || typeof body.transaction !== "object") {
         status: "ERRO",
         msg: "customerInfo deve existir fora do transaction"
       });
-    } 
-    /*else {
-      validarCampo(rows,"customer.customerInfo.customerName",ci.customerName,"string");
-      validarCampo(rows,"customer.customerInfo.customerEmail",ci.customerEmail,"string");
-      validarEndereco(rows,"customer.customerInfo.billingAddress",ci.billingAddress,true);
-      validarEndereco(rows,"customer.customerInfo.shippingAddress",ci.shippingAddress,false);
-    } */
+    }
   }
 
   // Se checkbox métodos de pagamento ativo
@@ -614,35 +1065,207 @@ if (!body.transaction || typeof body.transaction !== "object") {
       msg: "merchantInitiatedTransaction só pode existir se MIT estiver ativo"
     });
   }
-  
+
+  if (!chkAuthAtivo) {
+    // Campos que só podem existir se pagamentos autorizados estiverem ativos
+    if (Array.isArray(body.transaction?.paymentMethod) && body.transaction.paymentMethod.includes("MANDATE")) {
+      rows.push({
+        campo: "transaction.paymentMethod",
+        valor: JSON.stringify(body.transaction.paymentMethod),
+        status: "ERRO",
+        msg: 'O método "MANDATE" é exclusivo para Pagamentos Autorizados'
+      });
+    }
+
+    if (body.mandate) {
+      rows.push({
+        campo: "mandate",
+        valor: JSON.stringify(body.mandate),
+        status: "ERRO",
+        msg: "Este campo é exclusivo para Pagamentos Autorizados"
+      });
+    }
+  }
+
   // Se o checkbox de gerar checkout estiver ativo
   const chkCheckout = document.getElementById("chkGenerateCheckout").checked;
   if (chkCheckout) {
     gerarCheckout(body);
   }
 
-  validarMIT(rows, body);
+  // ALERTA CAMPOS INAPROPRIADOS CONFORME CHECKBOX
+  if (!chkMITAtivo) {
+    // Campos que só podem existir se MIT estiver ativo
+    if (body.merchantInitiatedTransaction) {
+      rows.push({
+        campo: "merchantInitiatedTransaction",
+        valor: JSON.stringify(body.merchantInitiatedTransaction),
+        status: "ERRO",
+        msg: "Este campo é exclusivo para MITs (merchantInitiatedTransaction só pode existir se MIT estiver ativo)"
+      });
+    }
+  }else{
+    validarMIT(rows, body);
+  }
+
+  if (Array.isArray(body.transaction?.paymentMethod)) {
+    body.transaction.paymentMethod.forEach((pm, index) => {
+      if (!PAYMENT_METHODS_VALIDOS.includes(pm)) {
+        rows.push({
+          campo: `transaction.paymentMethod[${index}]`,
+          valor: JSON.stringify(pm),
+          status: "ERRO",
+          msg: `Método inválido. Permitidos: ${PAYMENT_METHODS_VALIDOS.join(", ")}`
+        });
+      }
+    });
+  } else if (body.transaction?.paymentMethod !== undefined) {
+    rows.push({
+      campo: "transaction.paymentMethod",
+      valor: JSON.stringify(body.transaction.paymentMethod),
+      status: "ERRO",
+      msg: "paymentMethod deve ser um array"
+    });
+  }
+
+  if (chkAuthAtivo) {
+    validarAuthMandate(rows, body);
+  }
+
+  validarCamposDesconhecidos(rows, body, SCHEMA);
 
   // Gerar tabela
   let html = `<table>
+    <thead>
       <tr>
         <th>Campo</th>
         <th>Valor</th>
         <th>Status</th>
         <th>Mensagem</th>
-      </tr>`;
+      </tr>
+    </thead>
+    <tbody>`;
+
   rows.forEach(r => {
     html += `<tr>
       <td>${r.campo}${r.regra ? "<span class='badge'>Regras</span>" : ""}</td>
       <td>${r.valor}</td>
-      <td class="${r.status === "OK" ? "ok" : "erro"}">${r.status}</td>
+      <td class="${r.status === "OK" ? "ok" : "erro"}">${r.status === "OK" ? "Correto" : "Incorreto"}</td>
       <td>${r.msg}</td>
     </tr>`;
   });
-  html += "</table>";
+
+  html += `</tbody></table>`;
+
+  if (chkAuthAtivo) {
+    html += `
+      <div class="row mt-3 g-2">
+        <div class="col-md-6">
+          <button class="btn btn-warning w-100" onclick="abrirPopupBodyAutorizado()">
+            Ver exemplo de body de pagamentos autorizados
+          </button>
+        </div>
+
+        <div class="col-md-6">
+          <button class="btn btn-secondary w-100" onclick="verMandatos()">
+            Ver listagem de mandatos
+          </button>
+        </div>
+      </div>
+    `;
+  }
+
+  if (chkMITAtivo) {
+    html += `
+      <div class="row mt-3">
+        <div>
+          <button class="btn btn-warning w-100" onclick="abrirPopupBodyMIT()">
+            Ver exemplo de body de CIT
+          </button>
+        </div>
+      </div>
+      `;
+    }
+
+    if (!chkMITAtivo && !chkAuthAtivo) {
+      html += `
+        <div class="row mt-3">
+          <div>
+            <button class="btn btn-warning w-100" onclick="abrirPopupBodygenerico()">
+              Ver exemplo de body
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
   out.innerHTML = html;
 }
 
+function gerarForm() {
+  // Redirecionar para a página do form
+  window.location.href = '/validador_form/validador_form.html?validador=1';
+}
+
+function preencherExemplo() {
+  // JSON de exemplo
+  const exemploJSON = {
+    "merchant": {
+      "terminalId": 96167,
+      "channel": "web",
+      "merchantTransactionId": "SYN2965-57629"
+    },
+    "transaction": {
+      "transactionTimestamp": "2026-12-23T15:03:56.971Z",
+      "description": "teste",
+      "moto": false,
+      "paymentType": "PURS",
+      "amount": {
+        "value": 1,
+        "currency": "EUR"
+      },
+      "paymentMethod": []
+    }
+  };
+
+  // Preenche o textarea do JSON
+  const jsonInput = document.getElementById("jsonInput");
+  jsonInput.value = JSON.stringify(exemploJSON, null, 2);
+
+  // Preenche os campos fixos de credenciais
+  document.getElementById("terminalId").value = "96167";
+  document.getElementById("clientId").value = "dd4348ea-e240-4356-bf06-6a4f294c1077";
+  document.getElementById("bearerToken").value = "0267adfae94c224be1b374be2ce7b298f0.eyJlIjoiMjA3MDcwMDU2ODEyNSIsInJvbGVzIjoiTUFOQUdFUiIsInRva2VuQXBwRGF0YSI6IntcIm1jXCI6XCI1MDY5MzFcIixcInRjXCI6XCI5NjE2N1wifSIsImkiOiIxNzU1MTY3NzY4MTI1IiwiaXMiOiJodHRwczovL3FseS5zaXRlMS5zc28uc3lzLnNpYnMucHQvYXV0aC9yZWFsbXMvREVWLlNCTy1JTlQuUE9SVDEiLCJ0eXAiOiJCZWFyZXIiLCJpZCI6ImhtVmRVQ1lhU1NmOGIzMWRmY2JlMWQ0MDFlODc5OTdhZGY0ZTE1ZmM1MSJ9.71920d8b517e515a61b32b813872e5b967a06471fa63428ff66d32f83f4ce25e32548a4a8e9cf6545e2f5c6e47979b408a4f3bb2367329d71fafdec4d49af223";
+}
+
+function validarCamposDesconhecidos(rows, objeto, schema, path = "") {
+  if (!objeto || typeof objeto !== "object") return;
+
+  Object.keys(objeto).forEach(key => {
+    const fullPath = path ? `${path}.${key}` : key;
+
+    if (!schema[key]) {
+      rows.push({
+        campo: fullPath,
+        valor: JSON.stringify(objeto[key]),
+        status: "ERRO",
+        msg: "Campo não reconhecido ou mal escrito"
+      });
+      return;
+    }
+
+    // Se for objeto aninhado, validar recursivamente
+    if (
+      typeof schema[key] === "object" &&
+      typeof objeto[key] === "object" &&
+      !Array.isArray(objeto[key])
+    ) {
+      validarCamposDesconhecidos(rows, objeto[key], schema[key], fullPath);
+    }
+  });
+}
 
 
-
+function verMandatos() {
+  alert("Abrir listagem de mandatos (aqui podes ligar à API ou nova página)");
+}

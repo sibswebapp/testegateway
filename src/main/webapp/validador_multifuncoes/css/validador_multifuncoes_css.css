@@ -1,0 +1,91 @@
+html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      background: #f9fafb;
+      color: #333333;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      }
+
+    * {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    }
+
+    main {
+      flex: 1;
+    }
+
+    /*letra css*/
+    h2 {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: bold;
+    }
+
+    .method-badge {
+      display: inline-block;
+      background-color: #eaf5ff;
+      color: #0366d6;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: monospace;
+      font-weight: bold;
+    }
+
+    .main-container { padding-top: 30px; padding-bottom: 50px; }
+
+    /* Estilo dos Cards */
+    .card {
+      border: none;
+      border-radius: var(--card-radius);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      margin-bottom: 1.5rem;
+      background: #fff;
+    }
+    .card-header {
+      background-color: #fff;
+      border-bottom: 1px solid #edf2f7;
+      font-weight: 600;
+      padding: 1rem 1.25rem;
+      border-radius: var(--card-radius) var(--card-radius) 0 0 !important;
+    }
+
+    /* Inputs e Botões */
+    .form-control, .form-select {
+      border-radius: 8px;
+      padding: 0.6rem 0.75rem;
+      border: 1px solid #dce0e4;
+    }
+
+    /*.btn { border-radius: 8px; text-transform: none; font-weight: 600; padding: 0.6rem 1.5rem; }*/
+
+    /* Visualizador de JSON */
+    pre {
+      background: #1e1e1e;
+      color: #d4d4d4;
+      padding: 15px;
+      border-radius: 10px;
+      font-size: 0.85rem;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+
+    /* Popups */
+    .modal-box { text-align: center; padding: 30px; }
+    .icon-success { color: #28a745; font-size: 4rem; margin-bottom: 15px; }
+    .icon-error { color: #dc3545; font-size: 4rem; margin-bottom: 15px; }
+
+
+
+    #paResultado {
+      min-height: 120px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      background: #f9fafb;
+      padding: 12px;
+      border-radius: 12px;
+      border: 1px solid #e5e7eb;
+      white-space: pre-wrap;
+    }

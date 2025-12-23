@@ -22,8 +22,8 @@ function showErrorModal(message) {
 }
 
 errorOverlay.addEventListener("click", () => errorModal.classList.remove("active"));
-errorCloseBtn.addEventListener("click", () => errorModal.classList.remove("active")); 
- 
+errorCloseBtn.addEventListener("click", () => errorModal.classList.remove("active"));
+
 
 document.getElementById("carregarForm").addEventListener("click", function() {
 
@@ -34,6 +34,14 @@ document.getElementById("carregarForm").addEventListener("click", function() {
       showErrorModal("Preencha ambos os campos!");
       return;
     }
+
+    // Verificar se vem do validador
+    const params = new URLSearchParams(window.location.search);
+    const isValidador = params.get("validador") === "1";
+
+    const redirectUrl = isValidador
+    ? window.location.origin + "/validador_multifuncoes/validador_multifuncoes.html"
+    : window.location.href;
 
     // Remove qualquer widget/form anterior
     document.getElementById("sibsFormContainer").innerHTML = "";
@@ -51,9 +59,50 @@ document.getElementById("carregarForm").addEventListener("click", function() {
       paymentMethodList: [],
       amount: { value: 0, currency: "EUR" },
       language: "pt",
-      redirectUrl: window.location.href
+      redirectUrl: redirectUrl
     };
     form.setAttribute("spg-config", JSON.stringify(formConfig));
 
+    const formstyle = {
+      layout: "spg_form_tabs",
+            theme: "default",
+            color: {
+                  "primary": "",
+                  "border": "",
+                  "surface": "",
+                  "body": {
+                      "text": "",
+                  }
+            },
+            font: ""
+    };
+    form.setAttribute("spg-style", JSON.stringify(formstyle));
+
     document.getElementById("sibsFormContainer").appendChild(form);
   });
+
+
+  //quando vem do validador_API preencher os campos automaticamente
+  window.addEventListener("DOMContentLoaded", () => {
+  const params = new URLSearchParams(window.location.search);
+
+  if (params.get("validador") !== "1") return;
+
+  const dados = JSON.parse(sessionStorage.getItem("credenciaisForm") || "[]");
+
+  if (!dados.length) return;
+
+  const transactionId = dados.find(d => d.id === "transactionID")?.value;
+  const formContext = dados.find(d => d.id === "formContext")?.value;
+
+  const transactionInput = document.getElementById("transactionId");
+  const formContextInput = document.getElementById("formContext");
+
+  if (transactionInput && transactionId) {
+    transactionInput.value = transactionId;
+  }
+
+  if (formContextInput && formContext) {
+    formContextInput.value = formContext;
+  }
+});

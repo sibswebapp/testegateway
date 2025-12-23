@@ -15,7 +15,8 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.1/mdb.min.css" />
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
   <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
-
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <link rel="stylesheet" href="/Onboarding/css/Onboarding_css.css">
   <link rel="stylesheet" href="/navbar/css/navbar_css.css">
@@ -25,86 +26,63 @@
 <body>
 
   <div id="navbar"></div>
-  
-  <br>
-          
-  <main>
-    <div class="py-4">
-      <div class="row justify-content-center">
-        <div class="col-lg-8 col-md-10">
 
-        <div class="col-lg-8 col-md-10 text-center w-100">
-              <h2 class="mb-5" style="
-                  font-family: 'Montserrat', sans-serif; 
-                  font-weight: 700; 
-                  color: #343a40; 
-                  display: inline-block;
-              ">
-                  Menu Onboarding
-                  <span style="
-                      display: block;
-                      margin: 0 auto;
-                      width: 50%;
-                      height: 4px;
-                      background: #2871a7;
-                      border-radius: 2px;
-                      margin-top: 8px;
-                  "></span>
-              </h2>
+
+  <main class="main-wrapper">
+      <div class="container">
+          <div class="menu-header">
+              <h2>Menu Onboarding</h2>
+              <div class="accent-line"></div>
+              <p class="text-muted">Selecione uma ferramenta para iniciar a validação</p>
           </div>
 
-          <div class="row justify-content-center">
+          <div class="menu-grid">
 
-            <!-- Card 1 - Validador ClientID -->
-            <div class="col-md-4 mb-4">
-              <div class="card shadow text-center p-4" style="border-radius:20px; cursor:pointer;"
-                  onclick="window.location.href='/validador/validador.html'">
-                <i class="fas fa-id-card fa-3x mb-3" style="color:#0077CC;"></i>
-                <h4 class="mb-2">Validador de ClientID</h4>
-                <p class="text-muted">Validar ficheiros de configuração do ClientID</p>
-              </div>
-            </div>
+              <a href="/validador/validador.html" class="menu-card">
+                  <div class="icon-wrapper bg-blue">
+                      <i class="fas fa-id-card fa-2x"></i>
+                  </div>
+                  <h4>Validador de ClientID</h4>
+                  <p>Verificação rápida de ficheiros de configuração do ClientID.</p>
+              </a>
 
-            <!-- Card 2 - Validador FORM -->
-            <div class="col-md-4 mb-4">
-              <div class="card shadow text-center p-4" style="border-radius:20px; cursor:pointer;"
-                  onclick="window.location.href='/validador_form/validador_form.html'">
-                <i class="fas fa-file-alt fa-3x mb-3" style="color:#28A745;"></i>
-                <h4 class="mb-2">Validador de FORM</h4>
-                <p class="text-muted">Validar dados do formulário Onboarding</p>
-              </div>
-            </div>
+              <a href="/validador_form/validador_form.html" class="menu-card">
+                  <div class="icon-wrapper bg-green">
+                      <i class="fas fa-file-alt fa-2x"></i>
+                  </div>
+                  <h4>Validador de FORM</h4>
+                  <p>Validação estrutural dos dados do formulário de Onboarding.</p>
+              </a>
 
-            <!-- Card 3 - Validador Webhooks -->
-            <div class="col-md-4 mb-4">
-              <div class="card shadow text-center p-4" style="border-radius:20px; cursor:pointer;"
-                  onclick="window.location.href='webhooks/webhooks.html'">
-                <i class="fas fa-lock-open fa-3x mb-3" style="color:#FF9900;"></i>
-                <h4 class="mb-2">Validador de Webhooks</h4>
-                <p class="text-muted">Validar os Webhooks dos clientes ou nossos</p>
-              </div>
-            </div>
+              <a href="webhooks/webhooks.html" class="menu-card">
+                  <div class="icon-wrapper bg-orange">
+                      <i class="fas fa-lock-open fa-2x"></i>
+                  </div>
+                  <h4>Validador de Webhooks</h4>
+                  <p>Teste a receção e integridade dos Webhooks externos e internos.</p>
+              </a>
 
-             <!-- Card 4 - Validador Body API -->
-            <div class="col-md-4 mb-4">
-              <div class="card shadow text-center p-4" style="border-radius:20px; cursor:pointer;"
-                  onclick="window.location.href='validador_API/validador_API.html'">
-                <i class="fa-solid fa-code fa-3x mb-3" style="color:#ff0000;"></i>
- 
-                <h4 class="mb-2">Validador do Body API (Checkout)</h4>
-                <p class="text-muted">Validar o Body API dos clientes ou nossos</p>
-              </div>
-            </div>
+              <a href="validador_API/validador_API.html" class="menu-card">
+                  <div class="icon-wrapper bg-red">
+                      <i class="fa-solid fa-code fa-2x"></i>
+                  </div>
+                  <h4>Body API (Checkout)</h4>
+                  <p>Valide payloads JSON de requisições à API de Checkout.</p>
+              </a>
+
+              <a href="validador_multifuncoes/validador_multifuncoes.html" class="menu-card">
+                  <div class="icon-wrapper bg-yellow">
+                      <i class="fa-solid fa-gears fa-2x"></i>
+                  </div>
+                  <h4>Multi-Funções</h4>
+                  <p>Painel avançado: GET Status, MIT e Pagamentos autorizados.</p>
+              </a>
 
           </div>
-
-        </div>
       </div>
-    </div>
   </main>
 
 
-  
   <div id="footer"></div>
 
   <div id="js_index"></div>

@@ -162,6 +162,53 @@ app.post('/api/validar-clientid_qly', async (req, res) => {
   }
 });
 
+app.post('/api/validar-body_qly', async (req, res) => {
+  try {
+    const { body, clientId, token } = req.body;
+
+    if (!body || !clientId || !token) {
+      return res.status(400).json({ error: "Parâmetros obrigatórios em falta" });
+    }
+
+    body.merchant = body.merchant || {};
+    body.merchant.terminalId = body.merchant.terminalId || 0;
+
+    const sibsResponse = await fetch(
+      "https://spg.qly.site1.sibs.pt/api/v2/payments",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+          "X-IBM-Client-Id": clientId
+        },
+        body: JSON.stringify(body)
+      }
+    );
+
+    const responseBody = await sibsResponse.text(); // lê como texto primeiro
+    let data;
+
+    try {
+      data = JSON.parse(responseBody); // tenta transformar em JSON
+    } catch {
+      data = { raw: responseBody }; // se não for JSON, retorna como raw
+    }
+
+    // Retorna exatamente o status que a SIBS enviou
+    res.status(sibsResponse.status).json(data);
+
+  } catch (err) {
+    console.error("Erro proxy SIBS:", err);
+    res.status(500).json({
+      error: "Erro ao comunicar com a SIBS",
+      details: err.message
+    });
+  }
+});
+
+
+
 // --------------------------------------------------
 // SERVIR CONTEÚDO ESTÁTICO
 // --------------------------------------------------
@@ -197,6 +244,11 @@ app.use(
   express.static(path.join(webappDir, 'validador_form'))
 );
 
+app.use(
+  '/validador_multifuncoes',
+  basicAuth,
+  express.static(path.join(webappDir, 'validador_multifuncoes'))
+);
 
 // Resto da webapp (sem proteção)
 app.use(express.static(webappDir));

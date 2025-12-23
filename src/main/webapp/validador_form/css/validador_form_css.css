@@ -2,7 +2,7 @@ html, body {
       height: 100%;
       margin: 0;
       padding: 0;
-      background: #f0f0f0;
+      background: #f9fafb;
       color: #333;
       font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
       display: flex;
@@ -34,5 +34,181 @@ html, body {
       font-weight: bold;
     }
 
+:root {
+    --gemini-blue: #1a73e8;
+    --gemini-bg: #fdfdfd;
+    --gemini-border: #e0e0e0;
+    --canvas-bg: #ffffff;
+  }
 
-  
+
+  /* Container Ultra Largo */
+  .main-wrapper {
+    width: 85%;
+    max-width: 1400px; /* Largura máxima profissional */
+    margin: 0 auto;
+  }
+
+  /* Painel de Controle Superior */
+  .control-panel {
+    background: #49b2ff12;
+    border: 1px solid var(--gemini-border);
+    border-radius: 28px;
+    padding: 40px;
+    margin-bottom: 24px;
+    box-shadow: 0 1px 2px 0 rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15);
+  }
+
+  .panel-title {
+    font-size: 22px;
+    font-weight: 500;
+    margin-bottom: 30px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  /* Layout dos Inputs em linha para poupar espaço vertical */
+  .inputs-row {
+    display: grid;
+    grid-template-columns: 1fr 2fr auto; /* ID, Contexto e Botão lado a lado */
+    gap: 20px;
+    align-items: end;
+  }
+
+  @media (max-width: 992px) {
+    .inputs-row { grid-template-columns: 1fr; }
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .form-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #202124;
+    margin-left: 4px;
+  }
+
+  .form-control {
+    border: 1px solid var(--gemini-border);
+    border-radius: 12px;
+    padding: 14px 18px;
+    font-size: 15px;
+    background-color: #f8f9fa;
+    transition: all 0.2s ease;
+  }
+
+  .form-control:focus {
+    outline: none;
+    border-color: var(--gemini-blue);
+    background-color: #fff;
+    box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.2);
+  }
+
+  /* Botão Gerar - Grande e Destacado */
+  #carregarForm {
+    background-color: var(--gemini-blue);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 14px 40px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    height: 52px;
+    transition: background 0.2s;
+    white-space: nowrap;
+  }
+
+  #carregarForm:hover {
+    background-color: #185abc;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  }
+
+  /* ÁREA DO FORMULÁRIO - O "CANVAS" */
+  .form-canvas {
+    background: var(--canvas-bg);
+    border: 1px solid var(--gemini-border);
+    border-radius: 28px;
+    min-height: 600px; /* Espaço generoso para o formulário SIBS */
+    padding: 60px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .canvas-label {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #bdc1c6;
+    font-weight: 700;
+  }
+
+  /* O container real onde a SIBS vai injectar o código */
+  #sibsFormContainer {
+    width: 100%;
+    max-width: 800px; /* Mantém o formulário de pagamento legível no centro do canvas */
+    margin: 0 auto;
+    transition: all 0.5s ease;
+  }
+
+  /* Mensagem de Espera */
+  .placeholder-ui {
+    text-align: center;
+    margin-top: 150px;
+    color: #dadce0;
+  }
+
+  .placeholder-ui i {
+    font-size: 80px;
+    margin-bottom: 20px;
+    display: block;
+  }
+
+  /* Pequeno ajuste no CSS para que o textarea alinhe bem com o botão */
+  .inputs-row {
+    display: grid;
+    grid-template-columns: 1fr 2fr auto;
+    gap: 20px;
+    align-items: flex-end; /* Garante alinhamento pela base */
+  }
+
+  /* Faz com que o textarea se comporte como os inputs no foco */
+  textarea.form-control {
+    line-height: 1.5;
+    padding-top: 10px;
+  }
+
+  .card {
+    border-radius: 20px;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+
+  .card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.15);
+  }
+
+  .card i {
+    transition: transform 0.3s;
+  }
+
+  .card:hover i {
+    transform: scale(1.2);
+  }
+
+  .card h4 {
+    font-weight: 600;
+  }
+
+  .card p {
+    font-size: 0.9rem;
+    color: #6c757d;
+  }
