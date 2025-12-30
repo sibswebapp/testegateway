@@ -95,14 +95,38 @@
         document.getElementById("debug-body").textContent = JSON.stringify(data, null, 2);
 
         if (data.paymentStatus === "Success") {
-          document.getElementById("payment-status").innerHTML = `<div class="alert alert-success d-flex flex-column align-items-center text-center" role="alert">
-                            <svg class="bi mb-2" width="50" height="50" role="img" aria-label="Success:">
-                                <use href="#check-circle-fill"/>
-                            </svg>
-                            <div>
-                                <strong>Status do pagamento:</strong> ${data.paymentStatus}
-                            </div>
-                        </div>`;
+           document.getElementById("payment-status").innerHTML = `
+            <div class="alert alert-success d-flex flex-column align-items-center text-center" role="alert">
+              <svg class="bi mb-2" width="50" height="50" role="img" aria-label="Success:">
+                  <use href="#check-circle-fill"/>
+              </svg>
+              <div>
+                  <strong>Status do pagamento:</strong> ${data.paymentStatus}
+              </div>
+              <div class="text-center mt-3">
+                <button type="button" id="refund-btn" class="btn btn-warning">
+                  Reembolso da Compra
+                </button>
+              </div>
+            </div>
+          `;
+
+          // Adicionar event listener ao botão de reembolso
+          document.getElementById("refund-btn").addEventListener("click", function() {
+
+            let refunds = JSON.parse(localStorage.getItem("refunds")) || [];
+
+            refunds.push({
+              paymentId: paymentId,
+              amount: data.amount.value,
+              redirect: 1
+            });
+
+            localStorage.setItem("refunds", JSON.stringify(refunds));
+
+            window.location.href = "Refund_gateway/Refund_gateway.html";
+          });
+
         } else {
           document.getElementById("payment-status").innerHTML = `<div class="alert alert-danger d-flex flex-column align-items-center text-center" role="alert">
                             <svg class="bi mb-2" width="50" height="50" role="img" aria-label="Erro:">

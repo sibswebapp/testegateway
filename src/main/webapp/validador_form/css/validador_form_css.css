@@ -115,18 +115,37 @@ html, body {
     color: white;
     border: none;
     border-radius: 12px;
-    padding: 14px 40px;
+    padding: 14px 24px;
     font-size: 16px;
     font-weight: 600;
     cursor: pointer;
-    height: 52px;
-    transition: background 0.2s;
-    white-space: nowrap;
+    
+    min-height: 52px; 
+    height: auto; 
+    display: inline-flex; 
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    
+    width: auto; 
+    max-width: 100%;
+    white-space: normal; 
+    word-wrap: break-word;
   }
 
+
+  @media (max-width: 576px) {
+    #carregarForm {
+      width: 100%; 
+      padding: 14px 15px;
+      font-size: 15px; 
+    }
+  }
+  
   #carregarForm:hover {
     background-color: #185abc;
     box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    filter: brightness(1.1);
   }
 
   /* ÁREA DO FORMULÁRIO - O "CANVAS" */

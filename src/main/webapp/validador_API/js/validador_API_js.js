@@ -25,6 +25,20 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
+const togglePassword = document.querySelector('#togglePassword');
+const passwordInput = document.querySelector('#bearerToken');
+const eyeIcon = document.querySelector('#eyeIcon');
+
+togglePassword.addEventListener('click', function () {
+  const type = passwordInput.type === 'password' ? 'text' : 'password';
+  passwordInput.type = type;
+        
+  // Alterna entre olho aberto e fechado
+  eyeIcon.classList.toggle('fa-eye');
+  eyeIcon.classList.toggle('fa-eye-slash');
+});
+
+
 function limparCredenciais() {
   ["terminalId", "clientId", "bearerToken"].forEach(id => {
     const el = document.getElementById(id);
@@ -371,11 +385,6 @@ async function gerarCheckout() {
     out.innerHTML = `<p class='erro'>JSON inválido: ${err.message}</p>`;
     return;
   }
-
-  // Adicionar os IDs de terminal e merchantTransactionId se necessário
-  body.merchant = body.merchant || {};
-  body.merchant.terminalId = Number(terminalId);
-  body.merchant.merchantTransactionId = body.merchant.merchantTransactionId || "Order ID teste";
 
   try {
     const response = await fetch("/api/validar-body_qly", {
@@ -898,10 +907,12 @@ async function validar() {
   try {
     body = JSON.parse(document.getElementById("jsonInput").value);
 
-  } catch {
-    out.innerHTML = "<p class='erro'>❌ JSON inválido</p>";
+  } catch (e) {
+    console.error(e);
+    out.innerHTML = "<p class='erro'>❌ JSON inválido: " + e.message + "</p>";
     return;
   }
+
 
   const rows = [];
 
@@ -1269,3 +1280,4 @@ function validarCamposDesconhecidos(rows, objeto, schema, path = "") {
 function verMandatos() {
   alert("Abrir listagem de mandatos (aqui podes ligar à API ou nova página)");
 }
+    

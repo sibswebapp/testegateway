@@ -94,8 +94,8 @@ document.addEventListener("DOMContentLoaded", async function () {
                 // Mostra corpo no debug
                 debugBody.textContent = JSON.stringify(data, null, 2);
 
-                referenceDiv.innerHTML = `
-                    <div class="card shadow-sm p-3 mt-3 bg-light">
+               referenceDiv.innerHTML = `
+                <div class="card shadow-sm p-3 mt-3 bg-light">
                         <ul class="list-group list-group-flush text-start text-center">
                             <li class="list-group-item"><strong>Entidade:</strong> ${data.paymentReference.paymentEntity}</li>
                             <li class="list-group-item"><strong>Referência:</strong> ${data.paymentReference.reference}</li>
@@ -113,8 +113,48 @@ document.addEventListener("DOMContentLoaded", async function () {
                                 }
                             })()}
                         </ul>
+
+                        <!-- Botões dinâmicos -->
+                        <div class="text-center mt-3">
+                            ${data.paymentStatus === "Success" ? `
+                            <button type="button" id="refund-btn" class="btn btn-warning">Reembolso da Compra</button>
+                            ` : ""}
+                            ${data.paymentStatus === "Pending" ? `
+                            <button type="button" id="cancel-ref-btn" class="btn btn-danger">Cancelar Referência</button>
+                            ` : ""}
+                        </div>
                     </div>
                 `;
+
+                // Adicionar event listener para o botão de reembolso
+                if (data.paymentStatus === "Success") {
+                document.getElementById("refund-btn").addEventListener("click", function() {
+                    let refunds = JSON.parse(localStorage.getItem("refunds")) || [];
+                    refunds.push({
+                    paymentId: paymentId,
+                    amount: data.amount.value,
+                    redirect: 1
+                    });
+                    localStorage.setItem("refunds", JSON.stringify(refunds));
+                    window.location.href = "Refund_gateway/Refund_gateway.html";
+                });
+                }
+
+                // Adicionar event listener para o botão de cancelar referência
+                if (data.paymentStatus === "Pending") {
+                document.getElementById("cancel-ref-btn").addEventListener("click", function() {
+                    // Guardar a referência a cancelar
+                    let cancels = JSON.parse(localStorage.getItem("cancels")) || [];
+                    cancels.push({
+                    paymentId: paymentId,
+                    amount: data.amount.value,
+                    redirect: 1
+                    });
+                    localStorage.setItem("cancels", JSON.stringify(cancels));
+                    window.location.href = "Cancellation_gateway/Cancellation_gateway.html"; 
+                });
+                }
+
             } catch (error) {
                 console.error("Erro ao gerar referência de pagamento:", error);
                 referenceDiv.innerHTML = '<div class="alert alert-danger">Erro ao gerar referência de pagamento.</div>';

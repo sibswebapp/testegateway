@@ -172,6 +172,32 @@
           <div class="alert alert-success" role="alert">
             <strong>Estado do Pagamento:</strong> Sucesso
           </div>`;
+          
+          statusList.innerHTML = `
+            <div class="alert alert-success" role="alert">
+              <strong>Estado do Pagamento:</strong> Sucesso
+            </div>
+            <!-- Botão de Reembolso -->
+            <div class="text-center mt-3">
+              <button type="button" id="refund-btn" class="btn btn-warning">
+                Reembolso da Compra
+              </button>
+            </div>
+          `;
+
+          document.getElementById("refund-btn").addEventListener("click", function() {
+            let refunds = JSON.parse(localStorage.getItem("refunds")) || [];
+
+            refunds.push({
+              paymentId: currentTransactionID,
+              amount: data.amount.value,
+              redirect: 1
+            });
+
+            localStorage.setItem("refunds", JSON.stringify(refunds));
+            window.location.href = "Refund_gateway/Refund_gateway.html";
+          });
+
           return { success: true, status: data.paymentStatus };
 
         }
