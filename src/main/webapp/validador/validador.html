@@ -15,7 +15,8 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.1/mdb.min.css" />
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
   <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
-
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
 
   <link rel="stylesheet" href="/validador/css/validador_css.css">
   <link rel="stylesheet" href="/navbar/css/navbar_css.css">
@@ -25,61 +26,89 @@
 <body>
 
   <div id="navbar"></div>
-  
+
   <br>
   <br>
   <br>
-          
+
   <main>
-    <div class=" py-4">
-      <div class="row justify-content-center">
-        <div class="col-lg-8 col-md-10">
-          <div class="card card-template shadow-sm">
+    <div class="container" style="max-width: 900px;">
 
-            <div class="card-body">
-              <h2 class="mb-4 text-primary text-center">📄 Validação ClientID</h2>
+      <div class="card border-0 shadow-sm" style="border-radius: 20px; background: #ffffff;">
+        <div class="card-body p-4 p-md-5">
 
-              <!-- Botão de download do template Excel -->
-              <div class="d-flex justify-content-center mb-4">
-                <button id="downloadTemplateBtn" class="btn btn-success btn-lg">
-                  <i class="fas fa-file-excel"></i> Download Template Excel
+          <div class="panel-header" style="margin-bottom: 30px;">
+            <div class="panel-title" style="display: flex; align-items: center; gap: 12px; margin-bottom: 4px;">
+              <i class="bi bi-filetype-xls" style="color: #1a73e8; font-size: 26px;"></i>
+
+              <span style="font-size: 22px; color: #202124; letter-spacing: -0.5px;">
+                <b style="font-weight: 400;">Validador</b>
+                <b style="font-weight: 600;">Excel</b>
+                <span style="color: #dadce0; margin: 0 8px; font-weight: 300;">|</span>
+                <span style="color: #5f6368; font-weight: 400;">ClientID</span>
+              </span>
+            </div>
+          </div>
+
+          <div class="row align-items-center g-4 mb-5">
+            <div class="col-md-6">
+              <div style="padding: 20px; border-radius: 14px; background: #f8fafc; border: 1px dashed #cbd5e1;">
+                <p class="small fw-bold text-muted mb-3 text-uppercase" style="letter-spacing: 1px;">Passo 1: Preparação</p>
+                <button id="downloadTemplateBtn" class="btn w-100 d-flex align-items-center justify-content-center gap-2"
+                  style="background: #ffffff; border: 1px solid #e2e8f0; color: #334155; padding: 12px; border-radius: 12px; font-weight: 600; transition: all 0.2s;">
+                  <i class="fas fa-file-excel text-success"></i>
+                  Obter Template Excel
                 </button>
               </div>
+            </div>
 
-              <div class="mb-4">
-                <label class="form-label fw-bold">Selecione o ficheiro Excel (.csv)</label>
-                <input type="file" class="form-control" id="fileInput" accept=".xlsx,.xls, .txt, .csv">
+            <div class="col-md-6">
+              <div style="padding: 20px; border-radius: 14px; background: #f8fafc; border: 1px dashed #cbd5e1;">
+                <p class="small fw-bold text-muted mb-3 text-uppercase" style="letter-spacing: 1px;">Passo 2: Importação</p>
+                <input type="file" id="fileInput" accept=".xlsx,.xls, .txt, .csv" hidden>
+                <label for="fileInput" class="btn btn-primary w-100 d-flex align-items-center justify-content-center gap-2"
+                  style="padding: 12px; border-radius: 12px; font-weight: 600; background: #4f46e5; border: none; box-shadow: 0 4px 10px rgba(79, 70, 229, 0.2);">
+                  <i class="fas fa-cloud-upload-alt"></i>
+                  Selecionar Ficheiro
+                </label>
               </div>
+            </div>
+          </div>
 
-              <div class="table-responsive">
-                <table class="table table-striped table-bordered table-hover mt-4 mb-0">
-                  <thead class="table-primary">
-                    <tr>
-                      <th>Processo</th>
-                      <th>Terminal ID</th>
-                      <th>Estado</th>
-                      <th>Métodos pagamento/Erro</th>
-                    </tr>
-                  </thead>
-                  <tbody id="resultadoTabela"></tbody>
-                </table>
-              </div>
-              
-              <!-- Exportar resultados -->
-              <div class="d-flex justify-content-center mt-4">
-              <button id="exportarResultadosBtn" class="btn btn-primary btn-lg d-none">
-                <i class="fas fa-file-export"></i> Exportar Resultados para Excel
-              </button>
-              </div>
-              
-            </div> 
-          </div> 
-        </div> 
-      </div> 
-    </div> 
+          <div class="table-responsive" style="border-radius: 16px; border: 1px solid #f1f5f9;">
+            <table class="table mb-0" style="vertical-align: middle;">
+              <thead style="background: #f8fafc;">
+                <tr>
+                  <th class="py-3 px-4" style="border: none; color: #64748b; font-weight: 600; font-size: 0.85rem; text-transform: uppercase;">Processo</th>
+                  <th class="py-3 px-4" style="border: none; color: #64748b; font-weight: 600; font-size: 0.85rem; text-transform: uppercase;">Terminal ID</th>
+                  <th class="py-3 px-4" style="border: none; color: #64748b; font-weight: 600; font-size: 0.85rem; text-transform: uppercase;">Estado</th>
+                  <th class="py-3 px-4" style="border: none; color: #64748b; font-weight: 600; font-size: 0.85rem; text-transform: uppercase;">Métodos / Erro</th>
+                </tr>
+              </thead>
+              <tbody id="resultadoTabela" style="font-size: 0.95rem; color: #334155;">
+                <tr>
+                  <td colspan="4" class="text-center py-5 text-muted">
+                    <i class="fas fa-folder-open d-block mb-2" style="font-size: 2rem; opacity: 0.3;"></i>
+                    Aguardando importação de dados...
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div id="exportWrapper" class="d-flex justify-content-end mt-4">
+            <button id="exportarResultadosBtn" class="btn btn-outline-primary d-none"
+              style="border-radius: 10px; padding: 10px 24px; font-weight: 600; border-width: 2px;">
+              <i class="fas fa-file-export me-2"></i> Exportar Resultados
+            </button>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
   </main>
 
-  
   <div id="footer"></div>
 
   <div id="js_index"></div>

@@ -35,26 +35,49 @@ html, body {
     }
 
 
-      .card-template {
-      background: #ffffff;
-      border-radius: 15px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-      padding: 30px;
-      transition: transform 0.3s;
+ /* Estilização das linhas da tabela injetadas por JS */
+    #resultadoTabela tr {
+      transition: background 0.2s;
+      border-bottom: 1px solid #f8fafc;
     }
-    .card-template:hover {
-      transform: translateY(-5px);
+    #resultadoTabela tr:hover {
+      background-color: #fcfdfe;
     }
-    #downloadTemplateBtn {
-      font-size: 1rem;
-      padding: 10px 20px;
+    #resultadoTabela td {
+      padding: 16px 24px;
     }
-    .table th, .table td {
-      vertical-align: middle;
-      text-align: center;
+
+    /* Classes de utilidade para o JS usar no Estado */
+    .status-badge {
+      padding: 4px 12px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
     }
-    .table thead {
-      background-color: #343a40;
-      color: #fff;
+    .status-success { background: #dcfce7; color: #15803d; }
+    .status-error { background: #fee2e2; color: #b91c1c; }
+
+    #downloadTemplateBtn:hover {
+      background: #f1f5f9 !important;
+      transform: translateY(-1px);
     }
- 
+
+
+    
+  .card {
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+
+  .card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.15);
+  }
+
+  .card i {
+    transition: transform 0.3s;
+  }
+
+  .card:hover i {
+    transform: scale(1.2);
+  }

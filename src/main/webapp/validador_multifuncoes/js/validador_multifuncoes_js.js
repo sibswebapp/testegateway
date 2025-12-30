@@ -91,7 +91,7 @@ errorCloseBtn.addEventListener("click", () => errorModal.classList.remove("activ
     }
 
     function consultarPagamentosAutorizados() {
-      document.getElementById("paResultado").innerText = 
+      document.getElementById("paResultado").innerText =
         "A chamar API...\nPhone: " + document.getElementById("paPhone").value;
     }
 

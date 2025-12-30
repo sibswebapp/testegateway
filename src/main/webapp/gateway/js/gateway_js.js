@@ -519,7 +519,7 @@
         form.className = "paymentSPG";
 
         form.setAttribute("spg-context", formContext);
-        
+
         form.setAttribute("spg-config", JSON.stringify({
           paymentMethodList: [],
           amount: { value: amount, currency: "EUR" },
@@ -527,10 +527,8 @@
           redirectUrl: redirectUrl
         }));
 
-        if(LayoutVersion != "1"){
-
-          if(LayoutVersion == "2") LayoutVersion = "spg_form_tabs"
-          if(LayoutVersion == "3") LayoutVersion = "spg_form"
+        if(LayoutVersion == "1") LayoutVersion = "spg_form_tabs"
+        if(LayoutVersion == "2") LayoutVersion = "spg_form"
 
           form.setAttribute("spg-style", JSON.stringify({
             layout: LayoutVersion,
@@ -545,7 +543,7 @@
             },
             font: ""
           }));
-        }
+
 
         formContainer.appendChild(form);
 

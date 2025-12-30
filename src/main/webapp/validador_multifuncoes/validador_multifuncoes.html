@@ -9,8 +9,10 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.1/mdb.min.css" rel="stylesheet" />
-
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
   <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+
   <link rel="stylesheet" href="/validador_multifuncoes/css/validador_multifuncoes_css.css">
   <link rel="stylesheet" href="/popups/css/popups_css.css">
   <link rel="stylesheet" href="/navbar/css/navbar_css.css">
@@ -22,231 +24,228 @@
 
   <div id="navbar"></div>
 
-  <main class="container main-container">
+  <main class="container py-5" style="font-family: 'Inter', system-ui, sans-serif; color: #334155;">
 
-    <div class="card p-4 mb-4 shadow-sm rounded-3">
-      <div class="row g-3">
-        <div class="col-md-4">
-          <label class="form-label fw-bold small text-muted">Terminal ID</label>
-          <input type="text" id="terminalId" class="form-control" placeholder="Introduza o Terminal ID">
+    <div class="card border-0 shadow-sm mb-4" style="border-radius: 20px; background: #ffffff;">
+      <div class="card-body p-4">
+
+        <div class="panel-header" style="margin-bottom: 30px;">
+          <div class="panel-title" style="display: flex; align-items: center; gap: 12px; margin-bottom: 4px;">
+            <i class="bi bi-diagram-3" style="color: #1a73e8; font-size: 26px;"></i>
+
+            <span style="font-size: 22px; color: #202124; letter-spacing: -0.5px;">
+              <b style="font-weight: 400;">Gateway</b>
+              <b style="font-weight: 600;">SIBS</b>
+              <span style="color: #dadce0; margin: 0 8px; font-weight: 300;">|</span>
+              <span style="color: #5f6368; font-weight: 400;">Vários métodos</span>
+            </span>
+          </div>
         </div>
-        <div class="col-md-4">
-          <label class="form-label fw-bold small text-muted">Client ID</label>
-          <input type="text" id="clientId" class="form-control" placeholder="Introduza o Client ID">
-        </div>
-        <div class="col-md-4">
-          <label class="form-label fw-bold small text-muted">Bearer Token</label>
-          <input type="password" id="bearerToken" class="form-control" placeholder="Introduza o Token">
+
+        <div class="row g-3">
+          <div class="col-md-4">
+            <label class="form-label small fw-bold text-muted text-uppercase">Terminal ID</label>
+            <input type="text" id="terminalId" class="form-control bg-light border-0" placeholder="ID do Terminal" style="border-radius: 10px; padding: 12px;">
+          </div>
+          <div class="col-md-4">
+            <label class="form-label small fw-bold text-muted text-uppercase">Client ID</label>
+            <input type="text" id="clientId" class="form-control bg-light border-0" placeholder="ID do Cliente" style="border-radius: 10px; padding: 12px;">
+          </div>
+          <div class="col-md-4">
+            <label class="form-label small fw-bold text-muted text-uppercase">Bearer Token</label>
+            <input type="password" id="bearerToken" class="form-control bg-light border-0" placeholder="Token de Acesso" style="border-radius: 10px; padding: 12px;">
+          </div>
         </div>
       </div>
     </div>
 
-    <ul class="nav nav-tabs" id="multiFunctionTabs" role="tablist">
-      <li class="nav-item">
-        <button class="nav-link active" id="status-tab" data-bs-toggle="tab" data-bs-target="#status" type="button" role="tab">
-          <i class="fas fa-search me-2"></i>GET Status
-        </button>
-      </li>
-      <li class="nav-item">
-        <button class="nav-link" id="mit-tab" data-bs-toggle="tab" data-bs-target="#mit" type="button" role="tab">
-          <i class="fas fa-credit-card me-2"></i>MIT / CIT
-        </button>
-      </li>
-      <li class="nav-item">
-        <button class="nav-link" id="pa-tab" data-bs-toggle="tab" data-bs-target="#pagamentos_auto" type="button" role="tab">
-          <i class="fas fa-handshake me-2"></i>Pagamentos Autorizados
-        </button>
-      </li>
-      <li class="nav-item">
-        <button class="nav-link" id="paga_refund-tab" data-bs-toggle="tab" data-bs-target="#pagamentos_refund" type="button" role="tab">
-          <i class="fas fa-undo me-2"></i>Refund
-        </button>
-      </li>
-      <li class="nav-item">
-        <button class="nav-link" id="paga_cancel-tab" data-bs-toggle="tab" data-bs-target="#pagamentos_cancel" type="button" role="tab">
-          <i class="fas fa-times-circle me-2"></i>Cancelamento
-        </button>
-      </li>
+    <ul class="nav nav-pills mb-4 gap-2 p-1 bg-white shadow-sm d-inline-flex" id="multiFunctionTabs" role="tablist" style="border-radius: 16px; border: 1px solid #f1f5f9;">
+        <li class="nav-item"><button class="nav-link active" id="status-tab" data-bs-toggle="tab" data-bs-target="#status" type="button" role="tab"><i class="fas fa-search me-2"></i>Status</button></li>
+        <li class="nav-item"><button class="nav-link" id="mit-tab" data-bs-toggle="tab" data-bs-target="#mit" type="button" role="tab"><i class="fas fa-credit-card me-2"></i>MIT / CIT</button></li>
+        <li class="nav-item"><button class="nav-link" id="pa-tab" data-bs-toggle="tab" data-bs-target="#pagamentos_auto" type="button" role="tab"><i class="fas fa-handshake me-2"></i>Auto Pay</button></li>
+        <li class="nav-item"><button class="nav-link" id="paga_refund-tab" data-bs-toggle="tab" data-bs-target="#pagamentos_refund" type="button" role="tab"><i class="fas fa-undo me-2"></i>Refund</button></li>
+        <li class="nav-item"><button class="nav-link" id="paga_cancel-tab" data-bs-toggle="tab" data-bs-target="#pagamentos_cancel" type="button" role="tab"><i class="fas fa-times-circle me-2"></i>Cancel</button></li>
     </ul>
 
     <div class="tab-content" id="multiFunctionTabsContent">
 
       <div class="tab-pane fade show active" id="status" role="tabpanel">
-        <div class="card p-4 rounded-3">
+        <div class="card border-0 shadow-sm p-4" style="border-radius: 24px;">
           <div class="row align-items-end g-3 mb-4">
-            <div class="col-md-6">
-              <label class="form-label fw-bold">Transaction ID</label>
-              <input type="text" id="statusTransactionId" class="form-control" placeholder="Ex: 123456...">
-            </div>
-            <div class="col-md-3">
-              <button class="btn btn-primary w-100" onclick="getStatusPagamento()">
-                Ver Status <i class="fas fa-arrow-right ms-2"></i>
-              </button>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col-md-4">
-              <div class="card bg-light border-0">
-                <div class="card-body">
-                  <h6 class="text-muted small text-uppercase fw-bold">Resumo</h6>
-                  <p class="mb-1">Status: <span id="statusPagamento" class="badge bg-info">-</span></p>
-                  <p class="mb-0">Code: <span id="statusCode" class="fw-bold">-</span></p>
-                </div>
-              </div>
-            </div>
             <div class="col-md-8">
-              <div class="card border-0">
-                <div class="card-header border-0 pb-0">Body Completo</div>
-                <div class="card-body">
-                  <pre id="bodyCompletoStatus">-</pre>
+              <label class="form-label fw-bold">Transaction ID</label>
+              <input type="text" id="statusTransactionId" class="form-control form-control-lg bg-light border-0" placeholder="Ex: 123456..." style="border-radius: 12px;">
+            </div>
+            <div class="col-md-4">
+              <button class="btn btn-primary btn-lg w-100 shadow-sm py-3" onclick="getStatusPagamento()" style="border-radius: 12px; font-weight: 700;">Ver Status</button>
+            </div>
+          </div>
+          <div class="row g-3">
+            <div class="col-md-4">
+              <div class="p-3 rounded-4 bg-light border border-dashed text-center">
+                <span class="text-muted small fw-bold">STATUS</span>
+                <div id="statusPagamento" class="h4 fw-bold text-primary mt-1">-</div>
+                  <span class="badge bg-dark" id="statusCode">CODE: -</span>
+                </div>
+              </div>
+              <div class="col-md-8">
+                <div class="rounded-4 overflow-hidden" style="background: #1e293b; border: 1px solid #334155;">
+                  <div class="px-3 py-2 border-bottom border-secondary d-flex justify-content-between align-items-center">
+                    <small class="text-secondary fw-bold">RESPONSE BODY</small>
+                  </div>
+                  <pre class="p-3 m-0" id="bodyCompletoStatus" style="color: #38bdf8; font-size: 0.8rem; height: 120px;">{}</pre>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <div class="tab-pane fade" id="mit" role="tabpanel">
-        <div class="card p-4 rounded-3 border-primary border-top border-4">
-          <h5 class="mb-3 text-primary fw-bold">MIT (Cobrança)</h5>
-          <div class="row g-3">
-            <div class="col-md-3">
-              <label class="form-label">Transaction ID</label>
-              <input type="text" id="mitTransactionId" class="form-control">
+        <div class="tab-pane fade" id="mit" role="tabpanel">
+            <div class="card border-0 shadow-sm p-4" style="border-radius: 24px;">
+                <ul class="nav nav-pills mb-4 bg-light p-1 d-inline-flex" style="border-radius: 12px;">
+                    <li class="nav-item"><button class="nav-link active btn-sm" data-bs-toggle="tab" data-bs-target="#sub-mit-cobrar">MIT (Cobrança)</button></li>
+                    <li class="nav-item"><button class="nav-link btn-sm" data-bs-toggle="tab" data-bs-target="#sub-mit-captura">CIT (Captura)</button></li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane fade show active" id="sub-mit-cobrar">
+                        <div class="row g-3">
+                            <div class="col-md-3"><label class="form-label small fw-bold">Transaction ID</label><input type="text" id="mitTransactionId" class="form-control bg-light border-0"></div>
+                            <div class="col-md-3"><label class="form-label small fw-bold">Valor</label><input type="number" id="mitValor" class="form-control bg-light border-0"></div>
+                            <div class="col-md-3">
+                                <label class="form-label small fw-bold">Tipo</label>
+                                <select id="mitType" class="form-select bg-light border-0"><option value="UCOF">UCOF</option><option value="RCSS">Recorrente</option></select>
+                            </div>
+                            <div class="col-md-3 d-flex gap-2 align-items-end">
+                                <button class="btn btn-success w-100" onclick="fazerMIT()">MIT</button>
+                                <button class="btn btn-warning w-100" onclick="fazerCIT()">CIT</button>
+                            </div>
+                        </div>
+                        <div class="row mt-4">
+                            <div class="col-md-6"><div class="p-3 bg-dark rounded-3"><pre id="bodyCompletoMIT" class="small m-0 text-info">{}</pre></div></div>
+                            <div class="col-md-6">
+                                <div class="p-3 bg-light rounded-3 h-100 border">
+                                    <p class="small mb-1 fw-bold">Status: <span id="mitStatus" class="text-primary">-</span></p>
+                                    <p class="small mb-0">Mensagem: <span id="mitMsg" class="text-muted">-</span></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="sub-mit-captura">
+                        <div class="row g-3">
+                            <div class="col-md-4"><label class="form-label small fw-bold">Transaction ID MIT</label><input type="text" id="captureTransactionId" class="form-control bg-light border-0"></div>
+                            <div class="col-md-4"><label class="form-label small fw-bold">Valor Captura</label><input type="number" id="captureValor" class="form-control bg-light border-0"></div>
+                            <div class="col-md-4 d-flex align-items-end"><button class="btn btn-dark w-100" onclick="fazerCIT()">Executar Captura</button></div>
+                        </div>
+                        <div class="row mt-4">
+                            <div class="col-md-6"><div class="p-3 bg-dark rounded-3"><pre id="bodyCompletoCIT" class="small m-0 text-info">{}</pre></div></div>
+                            <div class="col-md-6"><div class="p-3 bg-light rounded-3 h-100 border"><p class="small mb-1 fw-bold">Status: <span id="captureStatus" class="text-primary">-</span></p><p class="small mb-0">Mensagem: <span id="captureMsg" class="text-muted">-</span></p></div></div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="col-md-3">
-              <label class="form-label">Valor</label>
-              <input type="number" id="mitValor" class="form-control">
-            </div>
-            <div class="col-md-3">
-              <label class="form-label">Tipo</label>
-              <select id="mitType" class="form-select">
-                <option value="UCOF">UCOF</option>
-                <option value="RCSS">Recorrente</option>
-              </select>
-            </div>
-            <div class="col-md-3 d-flex gap-2 align-items-end">
-              <button class="btn btn-success flex-grow-1" onclick="fazerMIT()">MIT</button>
-              <button class="btn btn-warning flex-grow-1" onclick="fazerCIT()">CIT</button>
-            </div>
-          </div>
-          <div class="row mt-3">
-            <div class="col-md-6"><pre id="bodyCompletoMIT">-</pre></div>
-            <div class="col-md-6">
-              <div class="p-3 bg-light rounded">
-                <p class="small mb-1">Status: <span id="mitStatus" class="fw-bold">-</span></p>
-                <p class="small mb-0">Mensagem: <span id="mitMsg">-</span></p>
-              </div>
-            </div>
-          </div>
         </div>
 
-        <div class="card p-4 rounded-3 border-secondary border-top border-4 mt-4">
-          <h5 class="mb-3 text-secondary fw-bold">Captura / CIT</h5>
-          <div class="row g-3">
-            <div class="col-md-4">
-              <label class="form-label">Transaction ID MIT</label>
-              <input type="text" id="captureTransactionId" class="form-control" readonly>
+        <div class="tab-pane fade" id="pagamentos_auto" role="tabpanel">
+            <div class="card border-0 shadow-sm p-4" style="border-radius: 24px;">
+                <ul class="nav nav-pills mb-4 bg-light p-1 d-flex overflow-auto flex-nowrap shadow-none" role="tablist" style="border-radius: 12px; white-space: nowrap;">
+                    <li class="nav-item"><button class="nav-link active small py-2" data-bs-toggle="tab" data-bs-target="#pa-consulta">Criar Mandato</button></li>
+                    <li class="nav-item"><button class="nav-link small py-2" data-bs-toggle="tab" data-bs-target="#pa-checkout">Checkout</button></li>
+                    <li class="nav-item"><button class="nav-link small py-2" data-bs-toggle="tab" data-bs-target="#pa-compra">Nova Compra</button></li>
+                    <li class="nav-item"><button class="nav-link small py-2" data-bs-toggle="tab" data-bs-target="#listar_mandatos">Listar</button></li>
+                    <li class="nav-item"><button class="nav-link small py-2" data-bs-toggle="tab" data-bs-target="#mandato_detalhes">Detalhes</button></li>
+                    <li class="nav-item"><button class="nav-link small py-2" data-bs-toggle="tab" data-bs-target="#mandato_cancelar">Cancelar</button></li>
+                </ul>
+
+                <div class="tab-content pt-3 border-top">
+                    <div class="tab-pane fade show active" id="pa-consulta">
+                        <div class="row g-3">
+                            <div class="col-md-4"><label class="form-label small fw-bold">Phone</label><input type="text" id="paPhone" class="form-control bg-light border-0"></div>
+                            <div class="col-md-4"><label class="form-label small fw-bold">Name</label><input type="text" id="paCustomerName" class="form-control bg-light border-0"></div>
+                            <div class="col-md-4"><label class="form-label small fw-bold">Merchant ID</label><input type="text" id="paMerchantTransactionId" class="form-control bg-light border-0"></div>
+                        </div>
+                        <button class="btn btn-primary mt-4 px-5 shadow-sm" style="border-radius: 10px;" onclick="consultarPagamentosAutorizados()">Consultar</button>
+                        <pre class="mt-4 p-3 bg-dark text-info rounded-3 small" id="paResultado" style="height: 100px;">Log de resultado...</pre>
+                    </div>
+
+                    <div class="tab-pane fade" id="pa-checkout">
+                        <div class="row g-3">
+                            <div class="col-md-4"><label class="form-label small fw-bold">Mandate ID</label><input type="text" id="checkoutMandateId" class="form-control bg-light border-0"></div>
+                            <div class="col-md-4"><label class="form-label small fw-bold">Merchant ID</label><input type="text" id="checkoutMerchantTransactionId" class="form-control bg-light border-0"></div>
+                            <div class="col-md-4"><label class="form-label small fw-bold">Customer Name</label><input type="text" id="checkoutCustomerName" class="form-control bg-light border-0"></div>
+                        </div>
+                        <button class="btn btn-primary mt-4" onclick="executarCheckoutMandate()">Executar Checkout</button>
+                        <pre class="mt-4 p-3 bg-dark text-info rounded-3 small" id="checkoutResultado">Log de resultado...</pre>
+                    </div>
+
+                    <div class="tab-pane fade" id="pa-compra">
+                        <div class="row g-3">
+                            <div class="col-md-4"><label class="form-label small fw-bold">Amount</label><input type="number" id="compraAmount" class="form-control bg-light border-0"></div>
+                            <div class="col-md-4"><label class="form-label small fw-bold">Merchant ID</label><input type="text" id="compraMerchantTransactionId" class="form-control bg-light border-0"></div>
+                            <div class="col-md-4"><label class="form-label small fw-bold">Name</label><input type="text" id="compraCustomerName" class="form-control bg-light border-0"></div>
+                        </div>
+                        <button class="btn btn-primary mt-4" onclick="executarCompra()">Executar Compra</button>
+                        <pre class="mt-4 p-3 bg-dark text-info rounded-3 small" id="compraResultado">Log de resultado...</pre>
+                    </div>
+
+                    <div class="tab-pane fade" id="listar_mandatos"><button class="btn btn-outline-primary" onclick="executarCompra()">Listar Mandatos</button></div>
+                    <div class="tab-pane fade" id="mandato_detalhes"><button class="btn btn-outline-primary" onclick="executarCompra()">Ver Detalhes</button></div>
+                    <div class="tab-pane fade" id="mandato_cancelar"><button class="btn btn-outline-danger" onclick="executarCompra()">Cancelar Mandato</button></div>
+                </div>
             </div>
-            <div class="col-md-4">
-              <label class="form-label">Valor da Captura</label>
-              <input type="number" id="captureValor" class="form-control">
+        </div>
+
+        <div class="tab-pane fade" id="pagamentos_refund" role="tabpanel">
+            <div class="card border-0 shadow-sm p-4" style="border-radius: 24px;">
+                <h5 class="fw-bold mb-4 text-primary"><i class="fas fa-undo me-2"></i>Solicitar Reembolso</h5>
+                <div class="row g-3 align-items-end">
+                    <div class="col-md-8">
+                        <label class="form-label small fw-bold">Transaction ID</label>
+                        <input type="text" class="form-control form-control-lg bg-light border-0" placeholder="Insira o ID para reembolso" style="border-radius: 12px;">
+                    </div>
+                    <div class="col-md-4">
+                        <button class="btn btn-primary btn-lg w-100 py-3" style="border-radius: 12px;">Solicitar Refund</button>
+                    </div>
+                </div>
             </div>
-            <div class="col-md-4 d-flex align-items-end">
-              <button class="btn btn-dark w-100" onclick="fazerCIT()">Executar Captura</button>
+        </div>
+
+        <div class="tab-pane fade" id="pagamentos_cancel" role="tabpanel">
+            <div class="card border-0 shadow-sm p-4" style="border-radius: 24px;">
+                <h5 class="fw-bold mb-4 text-danger"><i class="fas fa-ban me-2"></i>Anular Operação</h5>
+                <div class="row g-3 align-items-end">
+                    <div class="col-md-8">
+                        <label class="form-label small fw-bold">Transaction ID</label>
+                        <input type="text" class="form-control form-control-lg bg-light border-0" placeholder="Insira o ID para anulação" style="border-radius: 12px;">
+                    </div>
+                    <div class="col-md-4">
+                        <button class="btn btn-danger btn-lg w-100 py-3" style="border-radius: 12px;">Anular Agora</button>
+                    </div>
+                </div>
             </div>
-          </div>
-          <div class="row mt-3">
-            <div class="col-md-6"><pre id="bodyCompletoCIT">-</pre></div>
-            <div class="col-md-6">
-              <div class="p-3 bg-light rounded">
-                <p class="small mb-1">Status: <span id="captureStatus" class="fw-bold">-</span></p>
-                <p class="small mb-0">Mensagem: <span id="captureMsg">-</span></p>
-              </div>
-            </div>
-          </div>
         </div>
-      </div>
-
-      <div class="tab-pane fade" id="pagamentos_auto" role="tabpanel">
-        <ul class="nav nav-pills sub-tabs mb-4" role="tablist">
-          <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#pa-consulta">Criar Mandato</button></li>
-          <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#pa-checkout">Checkout</button></li>
-          <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#pa-compra">Pedido de Compra</button></li>
-          <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#listar_mandatos">Listar</button></li>
-          <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#mandato_detalhes">Detalhes</button></li>
-          <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#mandato_cancelar">Cancelar</button></li>
-        </ul>
-
-        <div class="tab-content p-3 bg-white border rounded">
-          <div class="tab-pane fade show active" id="pa-consulta">
-              <h6>Configuração de Mandato</h6>
-              <div class="row g-3">
-                <div class="col-md-4"><label class="form-label">Phone</label><input type="text" id="paPhone" class="form-control"></div>
-                <div class="col-md-4"><label class="form-label">Name</label><input type="text" id="paCustomerName" class="form-control"></div>
-                <div class="col-md-4"><label class="form-label">Merchant ID</label><input type="text" id="paMerchantTransactionId" class="form-control"></div>
-              </div>
-              <button class="btn btn-primary mt-3" onclick="consultarPagamentosAutorizados()">Consultar</button>
-              <pre class="mt-3" id="paResultado">Log de resultado...</pre>
-          </div>
-
-          <div class="tab-pane fade" id="pa-checkout">
-              <h6>Execução de Checkout</h6>
-              <div class="row g-3">
-                <div class="col-md-4"><label class="form-label">Mandate ID</label><input type="text" id="checkoutMandateId" class="form-control"></div>
-                <div class="col-md-4"><label class="form-label">Merchant ID</label><input type="text" id="checkoutMerchantTransactionId" class="form-control"></div>
-                <div class="col-md-4"><label class="form-label">Customer Name</label><input type="text" id="checkoutCustomerName" class="form-control"></div>
-              </div>
-              <button class="btn btn-primary mt-3" onclick="executarCheckoutMandate()">Executar Checkout</button>
-              <pre class="mt-3" id="checkoutResultado">Log de resultado...</pre>
-          </div>
-
-          <div class="tab-pane fade" id="pa-compra">
-              <h6>Nova Compra</h6>
-              <div class="row g-3">
-                <div class="col-md-4"><label class="form-label">Amount</label><input type="number" id="compraAmount" class="form-control"></div>
-                <div class="col-md-4"><label class="form-label">Merchant ID</label><input type="text" id="compraMerchantTransactionId" class="form-control"></div>
-                <div class="col-md-4"><label class="form-label">Name</label><input type="text" id="compraCustomerName" class="form-control"></div>
-              </div>
-              <button class="btn btn-primary mt-3" onclick="executarCompra()">Executar Compra</button>
-              <pre class="mt-3" id="compraResultado">Log de resultado...</pre>
-          </div>
-
-          <div class="tab-pane fade" id="listar_mandatos">
-            <button class="btn btn-outline-primary" onclick="executarCompra()">Listar Mandatos</button>
-          </div>
-          <div class="tab-pane fade" id="mandato_detalhes">
-            <button class="btn btn-outline-primary" onclick="executarCompra()">Ver Detalhes</button>
-          </div>
-          <div class="tab-pane fade" id="mandato_cancelar">
-            <button class="btn btn-outline-danger" onclick="executarCompra()">Cancelar Mandato</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="tab-pane fade" id="pagamentos_refund" role="tabpanel">
-        <div class="card p-4 rounded-3">
-          <h5 class="fw-bold mb-3"><i class="fas fa-undo me-2"></i>Solicitar Reembolso</h5>
-          <div class="row g-3 align-items-end">
-            <div class="col-md-6"><input type="text" class="form-control" placeholder="Transaction ID"></div>
-            <div class="col-md-3"><button class="btn btn-primary w-100">Ver Status</button></div>
-          </div>
-        </div>
-      </div>
-
-      <div class="tab-pane fade" id="pagamentos_cancel" role="tabpanel">
-        <div class="card p-4 rounded-3">
-          <h5 class="fw-bold mb-3 text-danger"><i class="fas fa-ban me-2"></i>Anular Operação</h5>
-          <div class="row g-3 align-items-end">
-            <div class="col-md-6"><input type="text" class="form-control" placeholder="Transaction ID"></div>
-            <div class="col-md-3"><button class="btn btn-danger w-100">Cancelar</button></div>
-          </div>
-        </div>
-      </div>
 
     </div>
-  </main>
+</main>
+
+<style>
+    /* Reset e Melhorias Visuais */
+    .nav-pills .nav-link { color: #64748b; font-weight: 600; padding: 10px 20px; transition: all 0.2s ease; border-radius: 12px !important; }
+    .nav-pills .nav-link.active { background-color: #4f46e5 !important; color: white !important; box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25); }
+    
+    .form-control:focus, .form-select:focus { 
+        background-color: #ffffff !important; 
+        box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1) !important; 
+        border: 1px solid #4f46e5 !important;
+    }
+    
+    pre { border-radius: 10px; overflow-y: auto; scrollbar-width: thin; }
+    
+    /* Layout das Subtabs (Auto Pay) */
+    .overflow-auto::-webkit-scrollbar { height: 4px; }
+    .overflow-auto::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+    .btn-primary { background: #4f46e5; border: none; transition: all 0.2s; }
+    .btn-primary:hover { background: #4338ca; transform: translateY(-1px); }
+</style>
 
   <div class="modal fade" id="successModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
