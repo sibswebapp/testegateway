@@ -48,7 +48,7 @@ window.addEventListener("DOMContentLoaded", () => {
   }
   
   // preencher terminalId, clientId e bearerToken do localStorage
-  const citRaw = localStorage.getItem("CITsConfigurada");
+  const citRaw = localStorage.getItem("CredenciaisConfigurada");
   if (citRaw) {
     const citData = JSON.parse(citRaw);
     const cit = Array.isArray(citData) ? citData[0] : citData;
@@ -67,6 +67,7 @@ window.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  preenchercheckoutMandato()
   preencherCaptureTransactionId()
 
 });
@@ -91,7 +92,36 @@ function preencherCaptureTransactionId() {
   }
 }
 
+function preenchercheckoutMandato() {
+ const mandato = localStorage.getItem("MandatoConfigurada");
 
+  if (mandato) {
+    try {
+
+      const dadosMandatoArray = JSON.parse(mandato);
+      const dadosMandato = Array.isArray(dadosMandatoArray) ? dadosMandatoArray[0] : dadosMandatoArray;
+
+      const checkoutMandateId = document.getElementById("checkoutMandateId");
+      const checkoutMerchantID = document.getElementById("checkoutMerchantID");
+      const checkoutCustomerName = document.getElementById("checkoutCustomerName");
+
+      if (checkoutMandateId && dadosMandato.mandateId) {
+        checkoutMandateId.value = dadosMandato.mandateId;
+      }
+
+      if (checkoutMerchantID && dadosMandato.CriarMandatoMerchantID) {
+        checkoutMerchantID.value = dadosMandato.CriarMandatoMerchantID;
+      }
+
+      if (checkoutCustomerName && dadosMandato.CriarMandatoCustomerName) {
+        checkoutCustomerName.value = dadosMandato.CriarMandatoCustomerName;
+      }
+    } catch (error) {
+      console.error("Erro ao ler MandatoConfigurada:", error);
+    }
+  }
+      
+}
 
 // PopUP de sucesso chamada
 const successModal = document.getElementById("successModal"),
@@ -427,12 +457,10 @@ async function fazerCIT() {
 
     // ===================== LOCALSTORAGE =====================
     localStorage.removeItem("CITsConfigurada");
+    localStorage.removeItem("CredenciaisConfigurada");
 
     const citArray = [
       {
-        terminalId,
-        clientId,
-        bearerToken,
         formContext: data?.formContext,
         transactionID: data?.transactionID,
         CitType,
@@ -440,7 +468,16 @@ async function fazerCIT() {
       }
     ];
 
+    const credenciaisArray = [
+      {
+        terminalId,
+        clientId,
+        bearerToken
+      }
+    ];
+
     localStorage.setItem("CITsConfigurada", JSON.stringify(citArray));
+    localStorage.setItem("CredenciaisConfigurada", JSON.stringify(credenciaisArray));
 
   } catch (err) {
     console.error(err);
@@ -507,18 +544,25 @@ async function fazerMIT() {
 
     // ===================== LOCALSTORAGE =====================
     localStorage.removeItem("MITsConfigurada");
+    localStorage.removeItem("CredenciaisConfigurada");
 
     const mitArray = [
       {
-        terminalId,
-        clientId,
-        bearerToken,
         transactionID: data?.transactionID,
         CitType
       }
     ];
 
+    const credenciaisArray = [
+      {
+        terminalId,
+        clientId,
+        bearerToken
+      }
+    ];
+
     localStorage.setItem("MITsConfigurada", JSON.stringify(mitArray));
+    localStorage.setItem("CredenciaisConfigurada", JSON.stringify(credenciaisArray));
 
     const captureInput = document.getElementById("captureTransactionId");
     if (captureInput && data?.transactionID) {
@@ -646,7 +690,7 @@ async function CancelarMandato() {
   const bearerToken = document.getElementById("bearerToken")?.value?.trim();
   const CancelMandatoMerchantID = document.getElementById("CancelMandatoMerchantID")?.value?.trim();
   const CancelMandatoTransactionId = document.getElementById("CancelMandatoTransactionId")?.value?.trim();
-  const CancelMandatoPhone = document.getElementById("CancelMandatoPhone")?.value?.trim();
+  const CancelMandatoPhone = decodeURIComponent(document.getElementById("CancelMandatoPhone")?.value?.trim());
 
   if (!terminalId || !clientId || !bearerToken) {
     showErrorModal("Todos os campos têm de estar preenchidos.");
@@ -700,5 +744,171 @@ async function CancelarMandato() {
     document.getElementById("CancelMandatoPagamento").innerText = "ERRO";
     document.getElementById("CancelMandatoPagamento").className = "h4 fw-bold text-danger mt-1";
     document.getElementById("bodyCompletoCancelMandato").innerText = JSON.stringify({ error: err.message }, null, 2);
+  }
+}
+
+
+//Detalhe Mandato
+async function DetalheMandato() {
+
+  const terminalId = document.getElementById("terminalId")?.value?.trim();
+  const clientId = document.getElementById("clientId")?.value?.trim();
+  const bearerToken = document.getElementById("bearerToken")?.value?.trim();
+  const DetalheMandatoTransactionId = document.getElementById("DetalheMandatoTransactionId")?.value?.trim();
+  const DetalheMandatoPhone = document.getElementById("DetalheMandatoPhone")?.value?.trim();
+
+  if (!terminalId || !clientId || !bearerToken) {
+    showErrorModal("Todos os campos têm de estar preenchidos.");
+    return;
+  }
+
+  if (!DetalheMandatoTransactionId) {
+    showErrorModal("TransactionID tem que estar preenchido");
+    return;
+  }
+
+   if (!DetalheMandatoPhone) {
+    showErrorModal("Telefone tem que estar preenchido");
+    return;
+  }
+
+
+  document.getElementById("DetalheMandatoPagamento").innerText = "...";
+  document.getElementById("statusCodeDetalheMandato").innerText = "CODE: -";
+  document.getElementById("bodyCompletoDetalheMandato").innerText = "{}";
+
+
+  try {
+    const params = new URLSearchParams({DetalheMandatoTransactionId, bearerToken, clientId, DetalheMandatoPhone});
+    const response = await fetch(`/api/DetalheMandato?${params.toString()}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" }
+    });
+
+    const data = await response.json();
+    document.getElementById("bodyCompletoDetalheMandato").innerText = JSON.stringify(data, null, 2);
+    document.getElementById("statusCodeDetalheMandato").innerText = `CODE: ${data.returnStatus.statusCode}`;
+
+    const status = data?.returnStatus.statusMsg || "-";
+    document.getElementById("DetalheMandatoPagamento").innerText = status;
+
+    if (status === "Success") {
+      document.getElementById("DetalheMandatoPagamento").className = "h4 fw-bold text-success mt-1";
+    } else {
+      document.getElementById("DetalheMandatoPagamento").className = "h4 fw-bold text-danger mt-1";
+    }
+
+  } catch (err) {
+    console.error(err);
+    document.getElementById("DetalheMandatoPagamento").innerText = "ERRO";
+    document.getElementById("DetalheMandatoPagamento").className = "h4 fw-bold text-danger mt-1";
+    document.getElementById("bodyCompletoDetalheMandato").innerText = JSON.stringify({ error: err.message }, null, 2);
+  }
+}
+
+
+//Criar Mandato
+async function CriarMandato() {
+
+  const terminalId = document.getElementById("terminalId")?.value?.trim();
+  const clientId = document.getElementById("clientId")?.value?.trim();
+  const bearerToken = document.getElementById("bearerToken")?.value?.trim();
+  const CriarMandatoMerchantID = document.getElementById("CriarMandatoMerchantID")?.value?.trim();
+  const CriarMandatoCustomerName = document.getElementById("CriarMandatoCustomerName")?.value?.trim();
+  const CriarMandatoPhone = document.getElementById("CriarMandatoPhone")?.value?.trim();
+
+  if (!terminalId || !clientId || !bearerToken) {
+    showErrorModal("Todos os campos têm de estar preenchidos.");
+    return;
+  }
+
+  if (!CriarMandatoMerchantID) {
+    showErrorModal("Merchant ID tem que estar preenchido");
+    return;
+  }
+
+   if (!CriarMandatoCustomerName) {
+    showErrorModal("Customer Name tem que estar preenchido");
+    return;
+  }
+
+  if (!CriarMandatoPhone) {
+    showErrorModal("Telefone tem que estar preenchido");
+    return;
+  }
+
+
+  document.getElementById("CriarMandatoPagamento").innerText = "...";
+  document.getElementById("statusCodeCriarMandato").innerText = "CODE: -";
+  document.getElementById("bodyCompletoCriarMandato").innerText = "{}";
+
+
+  try {
+    const params = new URLSearchParams({bearerToken, clientId});
+    const response = await fetch(`/api/CriarMandato?${params.toString()}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ terminalId, CriarMandatoCustomerName, CriarMandatoPhone, CriarMandatoMerchantID })
+    });
+
+    const data = await response.json();
+    document.getElementById("bodyCompletoCriarMandato").innerText = JSON.stringify(data, null, 2);
+    document.getElementById("statusCodeCriarMandato").innerText = `CODE: ${data.returnStatus.statusCode}`;
+
+    const status = data?.returnStatus.statusMsg || "-";
+    document.getElementById("CriarMandatoPagamento").innerText = status;
+
+    if (status === "Success") {
+      document.getElementById("CriarMandatoPagamento").className = "h4 fw-bold text-success mt-1";
+      showSuccessModal("Mandato criado com sucesso");
+
+    } else {
+      document.getElementById("CriarMandatoPagamento").className = "h4 fw-bold text-danger mt-1";
+    }
+
+     // ===================== LOCALSTORAGE =====================
+    localStorage.removeItem("MandatoConfigurada");
+    localStorage.removeItem("CredenciaisConfigurada");
+
+    const mitArray = [
+      {
+        mandateId: data?.mandate.mandateId,
+        CriarMandatoMerchantID,
+        CriarMandatoCustomerName
+      }
+    ];
+
+    const credenciaisArray = [
+      {
+        terminalId,
+        clientId,
+        bearerToken
+      }
+    ];
+
+    localStorage.setItem("MandatoConfigurada", JSON.stringify(mitArray));
+    localStorage.setItem("CredenciaisConfigurada", JSON.stringify(credenciaisArray));
+
+
+    const checkoutMandateId = document.getElementById("checkoutMandateId");
+    if (checkoutMandateId && data?.mandate.mandateId) {
+      checkoutMandateId.value = data.mandate.mandateId;
+    }
+
+    const checkoutMerchantID = document.getElementById("checkoutMerchantID");
+    if (checkoutMerchantID && CriarMandatoMerchantID) {
+      checkoutMerchantID.value = CriarMandatoMerchantID;
+    }
+
+    const checkoutCustomerName = document.getElementById("checkoutCustomerName");
+    if (checkoutCustomerName && CriarMandatoCustomerName) {
+      checkoutCustomerName.value = CriarMandatoCustomerName;
+    }
+
+  } catch (err) {
+    console.error(err);
+    document.getElementById("CriarMandatoPagamento").innerText = "ERRO";
+    document.getElementById("CriarMandatoPagamento").className = "h4 fw-bold text-danger mt-1";
+    document.getElementById("bodyCompletoCriarMandato").innerText = JSON.stringify({ error: err.message }, null, 2);
   }
 }

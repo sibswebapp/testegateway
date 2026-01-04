@@ -68,6 +68,12 @@ document.getElementById("carregarForm").addEventListener("click", function() {
       citTypeParam
     : window.location.href;
 
+     redirectUrl = isValidador
+      ? window.location.origin +
+      "/validador_multifuncoes/validador_multifuncoes.html?CITSucesso=1" +
+      citTypeParam
+    : window.location.href;
+
     // Remove qualquer widget/form anterior
     document.getElementById("sibsFormContainer").innerHTML = "";
 

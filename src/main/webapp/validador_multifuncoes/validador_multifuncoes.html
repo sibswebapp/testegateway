@@ -460,7 +460,7 @@
                     <label class="form-label small fw-bold">Telefone</label>
                     <div class="custom-input-container">
                       <input type="text"
-                            id="paPhone"
+                            id="CriarMandatoPhone"
                             placeholder="Inserir número de telefone (AliasMBWAY)"
                             class="form-control custom-input-field shadow-none">
                     </div>
@@ -470,17 +470,17 @@
                     <label class="form-label small fw-bold">Customer Name</label>
                     <div class="custom-input-container">
                       <input type="text"
-                            id="paCustomerName"
+                            id="CriarMandatoCustomerName"
                             placeholder="Inserir nome do cliente (customerName)"
                             class="form-control custom-input-field shadow-none">
                     </div>
                   </div>
 
                   <div class="col-md-4">
-                    <label class="form-label small fw-bold">Merchant ID</label>
+                    <label class="form-label small fw-bold">Merchant Transaction ID</label>
                     <div class="custom-input-container">
                       <input type="text"
-                            id="paMerchantTransactionId"
+                            id="CriarMandatoMerchantID"
                             placeholder="Inserir Merchant ID (merchantTransactionId)"
                             class="form-control custom-input-field shadow-none">
                     </div>
@@ -501,8 +501,8 @@
                   <div class="col-md-4" style="height: 100%;">
                     <div class="p-3 rounded-4 bg-light border border-dashed text-center h-100 d-flex flex-column justify-content-center">
                       <span class="text-muted small fw-bold">STATUS</span>
-                      <div id="CheckoutMandatoPagamento" class="h4 fw-bold text-primary mt-2">-</div>
-                        <span class="badge bg-dark mt-2" id="statusCodeCheckoutMandato">CODE: -</span>
+                      <div id="CriarMandatoPagamento" class="h4 fw-bold text-primary mt-2">-</div>
+                        <span class="badge bg-dark mt-2" id="statusCodeCriarMandato">CODE: -</span>
                       </div>
                     </div>
                     <div class="col-md-8">
@@ -510,7 +510,7 @@
                         <div class="px-3 py-2 border-bottom border-secondary d-flex justify-content-between align-items-center">
                           <small class="text-secondary fw-bold">RESPONSE BODY</small>
                         </div>
-                        <pre class="p-3 m-0 flex-grow-1" id="bodyCompletoCheckoutMandato" style="color: #38bdf8; font-size: 0.8rem; overflow-y: auto;">{}</pre>
+                        <pre class="p-3 m-0 flex-grow-1" id="bodyCompletoCriarMandato" style="color: #38bdf8; font-size: 0.8rem; overflow-y: auto;">{}</pre>
                       </div>
                     </div>
                   </div>
@@ -519,7 +519,7 @@
               <!-- CHECKOUT -->
               <div class="tab-pane fade" id="pa-checkout" role="tabpanel">
                 <div class="row g-3">
-                  <div class="col-md-4">
+                  <div class="col-md-3">
                     <label class="form-label small fw-bold">Mandate ID</label>
                     <div class="custom-input-container">
                       <input type="text"
@@ -529,22 +529,31 @@
                      </div>
                   </div>
 
-                  <div class="col-md-4">
-                    <label class="form-label small fw-bold">Merchant ID</label>
+                  <div class="col-md-3">
+                    <label class="form-label small fw-bold">Merchant Transaction ID</label>
                     <div class="custom-input-container">
                       <input type="text"
-                            id="checkoutMerchantTransactionId"
+                            id="checkoutMerchantID"
                             placeholder="Inserir Merchant ID (merchantTransactionId)"
                             class="form-control custom-input-field shadow-none">
                     </div>
                   </div>
 
-                  <div class="col-md-4">
+                  <div class="col-md-3">
                     <label class="form-label small fw-bold">Customer Name</label>
                     <div class="custom-input-container">
                       <input type="text"
                             id="checkoutCustomerName"
                             placeholder="Inserir nome do cliente (customerName)"
+                            class="form-control custom-input-field shadow-none">
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <label class="form-label small fw-bold">Valor</label>
+                    <div class="custom-input-container">
+                      <input type="text"
+                            id="checkoutamount"
+                            placeholder="Inserir o valor"
                             class="form-control custom-input-field shadow-none">
                     </div>
                   </div>
@@ -591,7 +600,7 @@
                   </div>
 
                   <div class="col-md-4">
-                    <label class="form-label small fw-bold">Merchant ID</label>
+                    <label class="form-label small fw-bold">Merchant Transaction ID</label>
                     <div class="custom-input-container">
                       <input type="text"
                             id="compraMerchantTransactionId"
@@ -668,14 +677,20 @@
 
               <div class="tab-pane fade" id="mandato_detalhes" role="tabpanel">
                  <div class="row align-items-end g-3 mb-4">
-                  <div class="col-md-8">
+                  <div class="col-md-4">
                     <label class="form-label fw-bold">Transaction ID</label>
                      <div class="custom-input-container">
-                        <input type="text" id="statusTransactionId" class="form-control custom-input-field shadow-none" placeholder="Ex: 123456..." style="border-radius: 12px;">
+                        <input type="text" id="DetalheMandatoTransactionId" class="form-control custom-input-field shadow-none" placeholder="Ex: 123456..." style="border-radius: 12px;">
                      </div>
                   </div>
                   <div class="col-md-4">
-                    <button class="btn btn-primary btn-lg w-100 shadow-sm py-3" onclick="executarCompra()" style="border-radius: 12px; font-weight: 700;">Ver Detalhes</button>
+                    <label class="form-label fw-bold">Telefone</label>
+                     <div class="custom-input-container">
+                        <input type="text" id="DetalheMandatoPhone" class="form-control custom-input-field shadow-none" placeholder="Ex: 351#915500372 (AliasMBWAY)" style="border-radius: 12px;">
+                     </div>
+                  </div>
+                  <div class="col-md-4">
+                    <button class="btn btn-primary btn-lg w-100 shadow-sm py-3" onclick="DetalheMandato()" style="border-radius: 12px; font-weight: 700;">Ver Detalhes</button>
                   </div>
                 </div>
 
@@ -683,8 +698,8 @@
                   <div class="col-md-4" style="height: 100%;">
                     <div class="p-3 rounded-4 bg-light border border-dashed text-center h-100 d-flex flex-column justify-content-center">
                       <span class="text-muted small fw-bold">STATUS</span>
-                      <div id="statusPagamento" class="h4 fw-bold text-primary mt-2">-</div>
-                      <span class="badge bg-dark mt-2" id="statusCode">CODE: -</span>
+                      <div id="DetalheMandatoPagamento" class="h4 fw-bold text-primary mt-2">-</div>
+                      <span class="badge bg-dark mt-2" id="statusCodeDetalheMandato">CODE: -</span>
                     </div>
                   </div>
                   <div class="col-md-8">
@@ -692,7 +707,7 @@
                       <div class="px-3 py-2 border-bottom border-secondary d-flex justify-content-between align-items-center">
                         <small class="text-secondary fw-bold">RESPONSE BODY</small>
                       </div>
-                      <pre class="p-3 m-0 flex-grow-1" id="bodyCompletoStatus" style="color: #38bdf8; font-size: 0.8rem; overflow-y: auto;">{}</pre>
+                      <pre class="p-3 m-0 flex-grow-1" id="bodyCompletoDetalheMandato" style="color: #38bdf8; font-size: 0.8rem; overflow-y: auto;">{}</pre>
                     </div>
                   </div>
                 </div>
@@ -746,7 +761,7 @@
                      </div>
                   </div>
                   <div class="col-md-3">
-                    <label class="form-label fw-bold">Merchant ID</label>
+                    <label class="form-label fw-bold">Merchant Transaction ID</label>
                      <div class="custom-input-container">
                         <input type="text" id="CancelMandatoMerchantID" class="form-control custom-input-field shadow-none" placeholder="Inserir Merchant ID (merchantTransactionId)" style="border-radius: 12px;">
                      </div>

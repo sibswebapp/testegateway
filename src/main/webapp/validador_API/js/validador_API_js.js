@@ -816,6 +816,7 @@ function validarPaymentReference(rows, pr) {
 async function validar() {
 
   const PAYMENT_METHODS_VALIDOS = ["REFERENCE", "CARD", "MBWAY"];
+  const PAYMENT_METHODS_VALIDOS_PA = ["MANDATE", "MBWAY"];
 
   const SCHEMA = {
     merchant: {
@@ -1119,31 +1120,60 @@ if (!body.transaction || typeof body.transaction !== "object") {
     validarMIT(rows, body);
   }
 
-  if (Array.isArray(body.transaction?.paymentMethod)) {
-    body.transaction.paymentMethod.forEach((pm, index) => {
-      if (!PAYMENT_METHODS_VALIDOS.includes(pm)) {
+  if(chkAuthAtivo){
+
+    if (Array.isArray(body.transaction?.paymentMethod)) {
+      body.transaction.paymentMethod.forEach((pm, index) => {
+        if (!PAYMENT_METHODS_VALIDOS_PA.includes(pm)) {
+          rows.push({
+            campo: `transaction.paymentMethod[${index}]`,
+            valor: JSON.stringify(pm),
+            status: "ERRO",
+            msg: `Método inválido. Permitidos: ${PAYMENT_METHODS_VALIDOS_PA.join(", ")}`
+          });
+        }
+      });
+    } else if (body.transaction?.paymentMethod !== undefined) {
+      rows.push({
+        campo: "transaction.paymentMethod",
+        valor: JSON.stringify(body.transaction.paymentMethod),
+        status: "ERRO",
+        msg: "paymentMethod deve ser um array"
+      });
+    }
+
+  }else{
+
+    if (Array.isArray(body.transaction?.paymentMethod)) {
+        body.transaction.paymentMethod.forEach((pm, index) => {
+          if (!PAYMENT_METHODS_VALIDOS.includes(pm)) {
+            rows.push({
+              campo: `transaction.paymentMethod[${index}]`,
+              valor: JSON.stringify(pm),
+              status: "ERRO",
+              msg: `Método inválido. Permitidos: ${PAYMENT_METHODS_VALIDOS.join(", ")}`
+            });
+          }
+        });
+      } else if (body.transaction?.paymentMethod !== undefined) {
         rows.push({
-          campo: `transaction.paymentMethod[${index}]`,
-          valor: JSON.stringify(pm),
+          campo: "transaction.paymentMethod",
+          valor: JSON.stringify(body.transaction.paymentMethod),
           status: "ERRO",
-          msg: `Método inválido. Permitidos: ${PAYMENT_METHODS_VALIDOS.join(", ")}`
+          msg: "paymentMethod deve ser um array"
         });
       }
-    });
-  } else if (body.transaction?.paymentMethod !== undefined) {
-    rows.push({
-      campo: "transaction.paymentMethod",
-      valor: JSON.stringify(body.transaction.paymentMethod),
-      status: "ERRO",
-      msg: "paymentMethod deve ser um array"
-    });
-  }
 
+
+  }
+  
   if (chkAuthAtivo) {
     validarAuthMandate(rows, body);
   }
 
-  validarCamposDesconhecidos(rows, body, SCHEMA);
+  if (!chkMITAtivo && !chkAuthAtivo) {
+    validarCamposDesconhecidos(rows, body, SCHEMA);
+  }
 
   // Gerar tabela
   let html = `<table>
@@ -1169,6 +1199,25 @@ if (!body.transaction || typeof body.transaction !== "object") {
   html += `</tbody></table>`;
 
   if (chkAuthAtivo) {
+    
+    if(chkCheckout){
+      // ===================== LOCALSTORAGE =====================
+      localStorage.removeItem("CredenciaisConfigurada");
+
+      const bearerToken = document.getElementById("bearerToken").value.trim();
+
+      const credenciaisArray = [
+        {
+          terminalId,
+          clientId,
+          bearerToken
+        }
+      ];
+
+      localStorage.setItem("CredenciaisConfigurada", JSON.stringify(credenciaisArray));
+    }
+    
+
     html += `
       <div class="row mt-3 g-2">
         <div class="col-md-6">
