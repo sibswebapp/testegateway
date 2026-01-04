@@ -1178,9 +1178,9 @@ if (!body.transaction || typeof body.transaction !== "object") {
         </div>
 
         <div class="col-md-6">
-          <button class="btn btn-secondary w-100" onclick="verMandatos()">
-            Ver listagem de mandatos
-          </button>
+          <a href="validador_multifuncoes/validador_multifuncoes.html" class="btn btn-secondary w-100">
+            Fazer Mandato
+          </a>
         </div>
       </div>
     `;

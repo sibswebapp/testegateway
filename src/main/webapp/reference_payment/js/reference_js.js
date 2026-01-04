@@ -104,6 +104,8 @@ document.addEventListener("DOMContentLoaded", async function () {
                             ${(() => {
                                 if (data.paymentStatus === "Pending") {
                                     return `<li class="list-group-item text-warning"><strong>Estado do Pagamento:</strong> Pendente</li>`;
+                                } else if (data.paymentReference.status == "CANC") {
+                                    return `<li class="list-group-item text-danger"><strong>Estado do Pagamento:</strong> Cancelado</li>`;
                                 } else if (data.paymentStatus === "Declined") {
                                     return `<li class="list-group-item text-danger"><strong>Estado do Pagamento:</strong> Sem sucesso</li>`;
                                 } else if (data.paymentStatus === "Success") {

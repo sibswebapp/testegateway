@@ -89,3 +89,104 @@ html, body {
       border: 1px solid #e5e7eb;
       white-space: pre-wrap;
     }
+    
+    /* Reset e Melhorias Visuais */
+    .nav-pills .nav-link { color: #64748b; font-weight: 600; padding: 10px 20px; transition: all 0.2s ease; border-radius: 12px !important; }
+    .nav-pills .nav-link.active { background-color: #4f46e5 !important; color: white !important; box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25); }
+    
+    .form-control:focus, .form-select:focus { 
+        background-color: #ffffff !important; 
+        box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1) !important; 
+        border: 1px solid #4f46e5 !important;
+    }
+    
+    pre { border-radius: 10px; overflow-y: auto; scrollbar-width: thin; }
+    
+    /* Layout das Subtabs (Auto Pay) */
+    .overflow-auto::-webkit-scrollbar { height: 4px; }
+    .overflow-auto::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+    .btn-primary { background: #4f46e5; border: none; transition: all 0.2s; }
+    .btn-primary:hover { background: #4338ca; transform: translateY(-1px); }
+
+     /* Estilo base para todos os containers de input */
+    .custom-input-container, 
+    .custom-password-group {
+        border: 1px solid #ced4da;
+        border-radius: 8px;
+        transition: border-color 0.2s, box-shadow 0.2s;
+        background-color: #fff;
+        display: flex;
+        align-items: center;
+    }
+
+    /* Estilo dos inputs individuais */
+    .custom-input-field, 
+    .custom-password-group .form-control {
+        border: none !important;
+        padding: 10px 15px;
+        border-radius: 8px !important;
+        height: 45px; /* Altura fixa para todos ficarem iguais */
+    }
+
+    /* Ajuste específico para o grupo da password para não arredondar o meio */
+    .custom-password-group .form-control {
+        border-radius: 8px 0 0 8px !important;
+    }
+
+    /* Ícone da password */
+    .custom-password-group .input-group-text {
+        border: none;
+        background: transparent;
+        cursor: pointer;
+        padding-right: 15px;
+    }
+
+    /* Efeito de Foco Unificado */
+    .custom-input-container:focus-within,
+    .custom-password-group:focus-within {
+        border-color: #86b7fe;
+        box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.15);
+    }
+
+    /*Cor do ícone no hover */
+    .custom-password-group .input-group-text:hover i {
+        color: #0d6efd !important;
+    }
+
+    .card {
+      border-radius: 20px;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    .card i {
+      transition: transform 0.3s;
+    }
+
+    .card:hover i {
+      transform: scale(1.2);
+    }
+
+    .card h4 {
+      font-weight: 600;
+    }
+
+    .card p {
+      font-size: 0.9rem;
+      color: #6c757d;
+    }
+
+   .tab-content {
+    max-width: 100%;  
+    width: 100%;        
+    /* min-height: 500px;*/
+  }
+
+  #bodyCompletoStatus {
+    height: 320px; /* ou o que quiseres */
+    overflow-y: auto;
+  }

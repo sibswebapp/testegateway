@@ -38,9 +38,34 @@ document.getElementById("carregarForm").addEventListener("click", function() {
     // Verificar se vem do validador
     const params = new URLSearchParams(window.location.search);
     const isValidador = params.get("validador") === "1";
+    const ValidadorMultifuncoes = params.get("ValidadorMultifuncoes") === "1";
 
-    const redirectUrl = isValidador
-    ? window.location.origin + "/validador_multifuncoes/validador_multifuncoes.html"
+    let redirectUrl
+    
+    redirectUrl = isValidador
+    ? window.location.origin + "/validador_multifuncoes/validador_multifuncoes.html?CITSucesso=1"
+    : window.location.href;
+
+    
+    let citTypeParam = "";
+
+    const citRaw = localStorage.getItem("CITsConfigurada");
+
+    if (citRaw) {
+      const citData = JSON.parse(citRaw);
+
+      // suporta tanto objeto como array
+      const citType =
+        Array.isArray(citData) ? citData[0]?.CitType : citData?.CitType;
+
+      if (citType) {
+        citTypeParam = `&CitType=${encodeURIComponent(citType)}`;
+      }
+}
+    redirectUrl = ValidadorMultifuncoes
+    ? window.location.origin +
+      "/validador_multifuncoes/validador_multifuncoes.html?CITSucesso=1" +
+      citTypeParam
     : window.location.href;
 
     // Remove qualquer widget/form anterior
@@ -104,5 +129,33 @@ document.getElementById("carregarForm").addEventListener("click", function() {
 
   if (formContextInput && formContext) {
     formContextInput.value = formContext;
+  }
+});
+
+window.addEventListener("DOMContentLoaded", () => {
+  // Pega os parâmetros da URL
+  const params = new URLSearchParams(window.location.search);
+  const isValidadorMultifuncoes = params.get("ValidadorMultifuncoes") === "1";
+
+  if (!isValidadorMultifuncoes) return;
+
+  // Pega o array do localStorage
+  const citArray = JSON.parse(localStorage.getItem("CITsConfigurada")) || [];
+
+  if (citArray.length === 0) return;
+
+  // Pega o último CIT configurado (pode mudar para outro critério se quiseres)
+  const lastCIT = citArray[citArray.length - 1];
+
+  // Preenche os campos no HTML se existirem
+  const transactionInput = document.getElementById("transactionId");
+  const formContextInput = document.getElementById("formContext");
+
+  if (transactionInput && lastCIT.transactionID) {
+    transactionInput.value = lastCIT.transactionID;
+  }
+
+  if (formContextInput && lastCIT.formContext) {
+    formContextInput.value = lastCIT.formContext;
   }
 });
