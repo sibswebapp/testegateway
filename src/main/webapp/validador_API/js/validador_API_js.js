@@ -1263,8 +1263,16 @@ if (!body.transaction || typeof body.transaction !== "object") {
 }
 
 function gerarForm() {
+  
+  const isCheckedMIT = document.getElementById("chkMIT").checked;
+
   // Redirecionar para a página do form
-  window.location.href = '/validador_form/validador_form.html?validador=1';
+  if(isCheckedMIT){
+    window.location.href = '/validador_form/validador_form.html?ValidadorMultifuncoes=1';
+  }else{
+    window.location.href = '/validador_form/validador_form.html?validador=1';
+  }
+
 }
 
 function preencherExemplo() {

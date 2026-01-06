@@ -12,6 +12,7 @@ window.addEventListener("DOMContentLoaded", () => {
     const newUrl =
       window.location.pathname + "?" + params.toString() + window.location.hash;
     window.history.replaceState({}, "", newUrl);
+
   }
 
   // preencher automaticamente o MIT Transaction ID
@@ -27,25 +28,23 @@ window.addEventListener("DOMContentLoaded", () => {
   // verifica CitType
   const citType = params.get("CitType");
   if (citType === "RCRR") {
-    // esconder tab e conteúdo
     const tab = document.getElementById("sub-mit-captura-tab");
-    const content = document.getElementById("sub-mit-captura");
-    if (tab) tab.classList.add("d-none");
-    if (content) content.classList.add("d-none");
 
-    // atualizar mitType
+    if (tab) tab.classList.add("d-none");
+
     const mitTypeInput = document.getElementById("mitType");
     if (mitTypeInput) {
       mitTypeInput.value = "RCRR";
       mitTypeInput.dispatchEvent(new Event("input"));
     }
-    // atualizar mitType
+
     const citTypeInput = document.getElementById("CitType");
     if (citTypeInput) {
       citTypeInput.value = "RCRR";
       citTypeInput.dispatchEvent(new Event("input"));
     }
   }
+
 
   // preencher terminalId, clientId e bearerToken do localStorage
   const citRaw = localStorage.getItem("CredenciaisConfigurada");
@@ -71,6 +70,7 @@ window.addEventListener("DOMContentLoaded", () => {
   preenchercheckoutMandato()
   preencherCaptureTransactionId()
   preenchercredenciais_form();
+
 });
 
 function preenchercredenciais_form() {
@@ -79,6 +79,29 @@ function preenchercredenciais_form() {
   if (params.get("TransacaoSucesso") === "1" &&
       params.get("validador_credenciais") === "1") {
     showSuccessModal("Transação com sucesso");
+
+    // preencher automaticamente o MIT Transaction ID
+    const IdInput = params.get("id");
+    if (IdInput) {
+      const statusTransactionIdInput = document.getElementById("statusTransactionId");
+      if (statusTransactionIdInput) {
+        statusTransactionIdInput.value = IdInput;
+        statusTransactionIdInput.dispatchEvent(new Event("input"));
+      }
+
+      const RefundTransactionIdInput = document.getElementById("RefundTransactionId");
+      if (RefundTransactionIdInput) {
+        RefundTransactionIdInput.value = IdInput;
+        RefundTransactionIdInput.dispatchEvent(new Event("input"));
+      }
+
+      const CancelTransactionIdInput = document.getElementById("CancelTransactionId");
+      if (CancelTransactionIdInput) {
+        CancelTransactionIdInput.value = IdInput;
+        CancelTransactionIdInput.dispatchEvent(new Event("input"));
+      }
+    }
+
   }
 
   const citRaw = localStorage.getItem("credenciaisForm");
@@ -114,7 +137,7 @@ function preenchercredenciais_form() {
   params.set("TransacaoSucesso", "0");
   window.history.replaceState({}, "", `${window.location.pathname}?${params}`);
 
-  localStorage.removeItem("CredenciaisConfigurada");
+  //localStorage.removeItem("CredenciaisConfigurada");
 
   if (terminalId || clientId || bearerToken) {
     localStorage.setItem(
@@ -196,6 +219,40 @@ function preencherCompraMandato() {
     }
   }
 
+}
+
+function limparCredenciais() {
+  ["terminalId", "clientId", "bearerToken"].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = "";
+  });
+}
+
+function sincronizarCredenciais() {
+  const credenciais = JSON.parse(localStorage.getItem("CredenciaisConfigurada") || "[]");
+
+  if (!credenciais.length) {
+    showErrorModal("Não tem dados para sincronizar!");
+    return;
+  }
+
+  // O array tem um único objeto com as credenciais
+  const dados = credenciais[0];
+
+  if (dados.terminalId) {
+    const terminal = document.getElementById("terminalId");
+    if (terminal) terminal.value = dados.terminalId;
+  }
+
+  if (dados.clientId) {
+    const client = document.getElementById("clientId");
+    if (client) client.value = dados.clientId;
+  }
+
+  if (dados.bearerToken) {
+    const token = document.getElementById("bearerToken");
+    if (token) token.value = dados.bearerToken;
+  }
 }
 
 
