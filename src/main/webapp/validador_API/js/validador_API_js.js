@@ -32,7 +32,7 @@ const eyeIcon = document.querySelector('#eyeIcon');
 togglePassword.addEventListener('click', function () {
   const type = passwordInput.type === 'password' ? 'text' : 'password';
   passwordInput.type = type;
-        
+
   // Alterna entre olho aberto e fechado
   eyeIcon.classList.toggle('fa-eye');
   eyeIcon.classList.toggle('fa-eye-slash');

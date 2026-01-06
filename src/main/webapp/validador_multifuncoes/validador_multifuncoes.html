@@ -136,13 +136,13 @@
                 <div class="row g-3 align-items-end">
                   <div class="col-md-4">
                     <label class="form-label small fw-bold">Transaction ID</label>
-                    <div class="custom-input-container">                     
+                    <div class="custom-input-container">
                       <input type="text" class="form-control custom-input-field shadow-none" id="RefundTransactionId" placeholder="Insira o Transaction ID para reembolso" style="border-radius: 12px;">
                     </div>
                   </div>
                   <div class="col-md-4">
                     <label class="form-label small fw-bold">Montante</label>
-                    <div class="custom-input-container">                     
+                    <div class="custom-input-container">
                       <input type="text" class="form-control custom-input-field shadow-none" id="RefundMontante" placeholder="Insira o montante para reembolso" style="border-radius: 12px;">
                     </div>
                   </div>
@@ -177,13 +177,13 @@
                 <div class="row g-3 align-items-end">
                   <div class="col-md-4">
                     <label class="form-label small fw-bold">Transaction ID</label>
-                    <div class="custom-input-container">                     
+                    <div class="custom-input-container">
                       <input type="text" class="form-control custom-input-field shadow-none" id="CancelTransactionId" placeholder="Insira o Transaction ID para cancelamento" style="border-radius: 12px;">
                     </div>
                   </div>
                   <div class="col-md-4">
                     <label class="form-label small fw-bold">Montante</label>
-                    <div class="custom-input-container">                     
+                    <div class="custom-input-container">
                       <input type="text" class="form-control custom-input-field shadow-none" id="CancelMontante" placeholder="Insira o montante para reembolso" style="border-radius: 12px;">
                     </div>
                   </div>
@@ -246,7 +246,7 @@
                             </div>
                             <div class="col-md-4" id="CITValorContainer">
                               <label class="form-label small fw-bold">Valor</label>
-                              <div class="custom-input-container">                             
+                              <div class="custom-input-container">
                                 <input type="number" placeholder="Insira o montante" id="CITValor" class="form-control custom-input-field shadow-none">
                               </div>
                             </div>
@@ -281,15 +281,15 @@
                   <div class="tab-content">
                       <div class="tab-pane fade show" id="sub-mit-cobrar">
                         <div class="row g-3">
-                            <div class="col-md-3">                     
+                            <div class="col-md-3">
                               <label class="form-label small fw-bold">Transaction ID</label>
-                              <div class="custom-input-container">                             
+                              <div class="custom-input-container">
                                 <input type="text" id="MITTransactionId" class="form-control custom-input-field shadow-none" placeholder="Insira o Transaction ID">
                               </div>
                             </div>
                             <div class="col-md-3">
                               <label class="form-label small fw-bold">Valor</label>
-                              <div class="custom-input-container">                             
+                              <div class="custom-input-container">
                                 <input type="number" id="MITValor" class="form-control custom-input-field shadow-none" placeholder="Insira o Montante">
                               </div>
                             </div>
@@ -436,7 +436,7 @@
                         data-bs-target="#mandato_Refund"
                         type="button"
                         role="tab">
-                  Refund Mandato
+                  Refund
                 </button>
               </li>
 
@@ -523,17 +523,17 @@
                     <label class="form-label small fw-bold">Mandate ID</label>
                     <div class="custom-input-container">
                       <input type="text"
-                            id="checkoutMandateId"
+                            id="checkoutMandateMandateId"
                             placeholder="Inserir Mandate ID (mandateId)"
                             class="form-control custom-input-field shadow-none">
-                     </div>
+                    </div>
                   </div>
 
                   <div class="col-md-3">
                     <label class="form-label small fw-bold">Merchant Transaction ID</label>
                     <div class="custom-input-container">
                       <input type="text"
-                            id="checkoutMerchantID"
+                            id="checkoutMandatoMerchantID"
                             placeholder="Inserir Merchant ID (merchantTransactionId)"
                             class="form-control custom-input-field shadow-none">
                     </div>
@@ -543,7 +543,7 @@
                     <label class="form-label small fw-bold">Customer Name</label>
                     <div class="custom-input-container">
                       <input type="text"
-                            id="checkoutCustomerName"
+                            id="checkoutMandatoCustomerName"
                             placeholder="Inserir nome do cliente (customerName)"
                             class="form-control custom-input-field shadow-none">
                     </div>
@@ -552,7 +552,7 @@
                     <label class="form-label small fw-bold">Valor</label>
                     <div class="custom-input-container">
                       <input type="text"
-                            id="checkoutamount"
+                            id="checkoutMandatoAmount"
                             placeholder="Inserir o valor"
                             class="form-control custom-input-field shadow-none">
                     </div>
@@ -560,7 +560,7 @@
                 </div>
 
                 <div class="col-md-12">
-                  <button class="btn btn-primary mt-4" onclick="executarCheckoutMandate()">
+                  <button class="btn btn-primary mt-4" onclick="CheckoutMandatoPagamento()">
                     Executar Checkout
                   </button>
                 </div>
@@ -588,43 +588,16 @@
 
               <!-- COMPRA -->
               <div class="tab-pane fade" id="pa-compra" role="tabpanel">
-                <div class="row g-3">
-                  <div class="col-md-4">
-                    <label class="form-label small fw-bold">Montante</label>
+                <div class="row align-items-end g-3 mb-4">
+                  <div class="col-md-8">
+                    <label class="form-label fw-bold">Transaction ID</label>
                     <div class="custom-input-container">
-                      <input type="number"
-                            id="compraAmount"
-                            placeholder="Inserir Montante"
-                            class="form-control custom-input-field shadow-none">
+                        <input type="text" id="CheckoutMandateTransactionId" class="form-control custom-input-field shadow-none" placeholder="Ex: 123456..." style="border-radius: 12px;">
                     </div>
                   </div>
-
                   <div class="col-md-4">
-                    <label class="form-label small fw-bold">Merchant Transaction ID</label>
-                    <div class="custom-input-container">
-                      <input type="text"
-                            id="compraMerchantTransactionId"
-                            placeholder="Inserir Merchant ID (merchantTransactionId)"
-                            class="form-control custom-input-field shadow-none">
-                    </div>
+                    <button class="btn btn-primary btn-lg w-100 shadow-sm py-3" onclick="CompraMandatoPagamento()" style="border-radius: 12px; font-weight: 700;">Fazer Compra com Mandato</button>
                   </div>
-
-                  <div class="col-md-4">
-                    <label class="form-label small fw-bold">Customer Name</label>
-                    <div class="custom-input-container">
-                      <input type="text"
-                            id="compraCustomerName"
-                            placeholder="Inserir nome do cliente (customerName)"
-                            class="form-control custom-input-field shadow-none">
-                    </div>
-                  </div>
-
-                </div>
-                
-                <div class="col-md-12">
-                  <button class="btn btn-primary mt-4" onclick="executarCompra()">
-                    Executar Compra
-                  </button>
                 </div>
 
                 <br>
@@ -633,8 +606,8 @@
                   <div class="col-md-4" style="height: 100%;">
                     <div class="p-3 rounded-4 bg-light border border-dashed text-center h-100 d-flex flex-column justify-content-center">
                       <span class="text-muted small fw-bold">STATUS</span>
-                      <div id="CheckoutMandatoPagamento" class="h4 fw-bold text-primary mt-2">-</div>
-                        <span class="badge bg-dark mt-2" id="statusCodeCheckoutMandato">CODE: -</span>
+                      <div id="CompraMandatoPagamento" class="h4 fw-bold text-primary mt-2">-</div>
+                        <span class="badge bg-dark mt-2" id="statusCodeCompraMandato">CODE: -</span>
                       </div>
                     </div>
                     <div class="col-md-8">
@@ -642,7 +615,7 @@
                         <div class="px-3 py-2 border-bottom border-secondary d-flex justify-content-between align-items-center">
                           <small class="text-secondary fw-bold">RESPONSE BODY</small>
                         </div>
-                        <pre class="p-3 m-0 flex-grow-1" id="bodyCompletoCheckoutMandato" style="color: #38bdf8; font-size: 0.8rem; overflow-y: auto;">{}</pre>
+                        <pre class="p-3 m-0 flex-grow-1" id="bodyCompletoCompraMandato" style="color: #38bdf8; font-size: 0.8rem; overflow-y: auto;">{}</pre>
                       </div>
                     </div>
                   </div>
@@ -676,18 +649,18 @@
               </div>
 
               <div class="tab-pane fade" id="mandato_detalhes" role="tabpanel">
-                 <div class="row align-items-end g-3 mb-4">
+                <div class="row align-items-end g-3 mb-4">
                   <div class="col-md-4">
                     <label class="form-label fw-bold">Transaction ID</label>
-                     <div class="custom-input-container">
+                    <div class="custom-input-container">
                         <input type="text" id="DetalheMandatoTransactionId" class="form-control custom-input-field shadow-none" placeholder="Ex: 123456..." style="border-radius: 12px;">
-                     </div>
+                    </div>
                   </div>
                   <div class="col-md-4">
                     <label class="form-label fw-bold">Telefone</label>
-                     <div class="custom-input-container">
+                    <div class="custom-input-container">
                         <input type="text" id="DetalheMandatoPhone" class="form-control custom-input-field shadow-none" placeholder="Ex: 351#915500372 (AliasMBWAY)" style="border-radius: 12px;">
-                     </div>
+                    </div>
                   </div>
                   <div class="col-md-4">
                     <button class="btn btn-primary btn-lg w-100 shadow-sm py-3" onclick="DetalheMandato()" style="border-radius: 12px; font-weight: 700;">Ver Detalhes</button>
@@ -695,11 +668,11 @@
                 </div>
 
                 <div class="row g-3">
-                  <div class="col-md-4" style="height: 100%;">
+                  <div class="col-md-4" style="height: 100%;">refund
                     <div class="p-3 rounded-4 bg-light border border-dashed text-center h-100 d-flex flex-column justify-content-center">
                       <span class="text-muted small fw-bold">STATUS</span>
                       <div id="DetalheMandatoPagamento" class="h4 fw-bold text-primary mt-2">-</div>
-                      <span class="badge bg-dark mt-2" id="statusCodeDetalheMandato">CODE: -</span>
+                      <span class="badge bg-warning mt-2" id="statusCodeDetalheMandato">Montante disponível: -</span>
                     </div>
                   </div>
                   <div class="col-md-8">
@@ -714,21 +687,21 @@
               </div>
 
               <div class="tab-pane fade" id="mandato_Refund" role="tabpanel">
-                 <div class="row align-items-end g-3 mb-4">
+                <div class="row align-items-end g-3 mb-4">
                   <div class="col-md-4">
                     <label class="form-label fw-bold">Transaction ID</label>
-                     <div class="custom-input-container">
-                        <input type="text" id="RefundTransactionId" class="form-control custom-input-field shadow-none" placeholder="Ex: 123456..." style="border-radius: 12px;">
-                     </div>
+                    <div class="custom-input-container">
+                        <input type="text" id="RefundMandatoTransactionId" class="form-control custom-input-field shadow-none" placeholder="Ex: 123456..." style="border-radius: 12px;">
+                    </div>
                   </div>
                   <div class="col-md-4">
                     <label class="form-label fw-bold">Montante</label>
-                     <div class="custom-input-container">
-                        <input type="text" id="MontanteRefund" class="form-control custom-input-field shadow-none" placeholder="Inserir montante para reembolso" style="border-radius: 12px;">
-                     </div>
+                    <div class="custom-input-container">
+                        <input type="text" id="MontanteRefundMandato" class="form-control custom-input-field shadow-none" placeholder="Inserir montante para reembolso" style="border-radius: 12px;">
+                    </div>
                   </div>
                   <div class="col-md-4">
-                    <button class="btn btn-primary btn-lg w-100 shadow-sm py-3" onclick="executarCompra()" style="border-radius: 12px; font-weight: 700;">Fazer Refund</button>
+                    <button class="btn btn-primary btn-lg w-100 shadow-sm py-3" onclick="RefundMandatoPagamento()" style="border-radius: 12px; font-weight: 700;">Fazer Refund</button>
                   </div>
                 </div>
 
@@ -736,8 +709,8 @@
                   <div class="col-md-4" style="height: 100%;">
                     <div class="p-3 rounded-4 bg-light border border-dashed text-center h-100 d-flex flex-column justify-content-center">
                       <span class="text-muted small fw-bold">STATUS</span>
-                      <div id="statusPagamento" class="h4 fw-bold text-primary mt-2">-</div>
-                      <span class="badge bg-dark mt-2" id="statusCode">CODE: -</span>
+                      <div id="refundMandatoPagamento" class="h4 fw-bold text-primary mt-2">-</div>
+                      <span class="badge bg-dark mt-2" id="statusCodeRefundMandato">CODE: -</span>
                     </div>
                   </div>
                   <div class="col-md-8">
@@ -745,7 +718,7 @@
                       <div class="px-3 py-2 border-bottom border-secondary d-flex justify-content-between align-items-center">
                         <small class="text-secondary fw-bold">RESPONSE BODY</small>
                       </div>
-                      <pre class="p-3 m-0 flex-grow-1" id="bodyCompletoStatus" style="color: #38bdf8; font-size: 0.8rem; overflow-y: auto;">{}</pre>
+                      <pre class="p-3 m-0 flex-grow-1" id="bodyCompletoRefundMandato" style="color: #38bdf8; font-size: 0.8rem; overflow-y: auto;">{}</pre>
                     </div>
                   </div>
                 </div>
@@ -753,18 +726,18 @@
 
 
               <div class="tab-pane fade" id="mandato_cancelar" role="tabpanel">
-                 <div class="row align-items-end g-3 mb-4">
+                <div class="row align-items-end g-3 mb-4">
                   <div class="col-md-3">
                     <label class="form-label fw-bold">Transaction ID</label>
-                     <div class="custom-input-container">
+                    <div class="custom-input-container">
                         <input type="text" id="CancelMandatoTransactionId" class="form-control custom-input-field shadow-none" placeholder="Ex: 123456..." style="border-radius: 12px;">
-                     </div>
+                    </div>
                   </div>
                   <div class="col-md-3">
                     <label class="form-label fw-bold">Merchant Transaction ID</label>
-                     <div class="custom-input-container">
+                    <div class="custom-input-container">
                         <input type="text" id="CancelMandatoMerchantID" class="form-control custom-input-field shadow-none" placeholder="Inserir Merchant ID (merchantTransactionId)" style="border-radius: 12px;">
-                     </div>
+                    </div>
                   </div>
                   <div class="col-md-3">
                     <label class="form-label small fw-bold">Telefone</label>

@@ -41,12 +41,11 @@ document.getElementById("carregarForm").addEventListener("click", function() {
     const ValidadorMultifuncoes = params.get("ValidadorMultifuncoes") === "1";
 
     let redirectUrl
-    
+
     redirectUrl = isValidador
-    ? window.location.origin + "/validador_multifuncoes/validador_multifuncoes.html?CITSucesso=1"
+    ? window.location.origin + "/validador_multifuncoes/validador_multifuncoes.html"
     : window.location.href;
 
-    
     let citTypeParam = "";
 
     const citRaw = localStorage.getItem("CITsConfigurada");
@@ -68,9 +67,9 @@ document.getElementById("carregarForm").addEventListener("click", function() {
       citTypeParam
     : window.location.href;
 
-     redirectUrl = isValidador
+    redirectUrl = isValidador
       ? window.location.origin +
-      "/validador_multifuncoes/validador_multifuncoes.html?CITSucesso=1" +
+      "/validador_multifuncoes/validador_multifuncoes.html?TransacaoSucesso=1&validador_credenciais=1" +
       citTypeParam
     : window.location.href;
 

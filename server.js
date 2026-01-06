@@ -709,8 +709,8 @@ app.post('/api/DetalheMandato', async (req, res) => {
 
     if (!DetalheMandatoTransactionId || !bearerToken || !clientId || !DetalheMandatoPhone) {
       return res.status(400).json({ error: "Parâmetros obrigatórios em falta" });
-    }    
-    
+    }
+
     const sibsResponse = await fetch(
       `https://api.qly.sibspayments.com/sibs/spg/v2/mbway-mandates/${DetalheMandatoTransactionId}/inquiry-detail`,
       {
@@ -739,7 +739,7 @@ app.post('/api/DetalheMandato', async (req, res) => {
 
 //Criar Mandato
 app.post('/api/CriarMandato', async (req, res) => {
-  
+
   try {
     const { terminalId, CriarMandatoCustomerName, CriarMandatoPhone, CriarMandatoMerchantID } = req.body;
     const { bearerToken, clientId } = req.query;
@@ -749,7 +749,7 @@ app.post('/api/CriarMandato', async (req, res) => {
     }
 
     let payload;
-    
+
     payload = {
       merchant: {
         terminalId: Number(terminalId),
@@ -771,6 +771,165 @@ app.post('/api/CriarMandato', async (req, res) => {
         headers: {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${bearerToken}`,
+          "X-IBM-Client-Id": clientId
+        },
+        body: JSON.stringify(payload)
+      }
+    );
+
+    const data = await sibsResponse.json();
+    res.status(sibsResponse.status).json(data);
+
+  } catch (err) {
+    console.error("Erro proxy SIBS:", err);
+    res.status(500).json({
+      error: "Erro ao comunicar com a SIBS",
+      details: err.message
+    });
+  }
+});
+
+//Refund Mandato
+app.post('/api/RefundMandato', async (req, res) => {
+  try {
+    const { montante, clientId, bearerToken, terminalId } = req.body;
+    const { transactionId } = req.query;
+
+    if (!montante || !clientId || !bearerToken || !terminalId || !transactionId) {
+      return res.status(400).json({ error: "Parâmetros obrigatórios em falta" });
+    }
+
+    const payload = {
+      merchant: {
+        terminalId: Number(terminalId),
+        channel: "web",
+        merchantTransactionId: "Refund PA"
+      },
+      transaction: {
+        transactionTimestamp: new Date().toISOString(),
+        description: "Refund PA",
+        amount: {
+          value: Number(montante),
+          currency: "EUR"
+        }
+      }
+    };
+
+    const sibsResponse = await fetch(
+      `https://spg.qly.site1.sibs.pt/api/v2/payments/${transactionId}/refund`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${bearerToken}`,
+          "X-IBM-Client-Id": clientId
+        },
+        body: JSON.stringify(payload)
+      }
+    );
+
+    const data = await sibsResponse.json();
+    res.status(sibsResponse.status).json(data);
+
+  } catch (err) {
+    console.error("Erro proxy SIBS:", err);
+    res.status(500).json({
+      error: "Erro ao comunicar com a SIBS",
+      details: err.message
+    });
+  }
+});
+
+
+//Checkout Mandato
+app.post('/api/CheckoutMandato', async (req, res) => {
+  try {
+    const { terminalId , montante , checkoutMandateId, checkoutMerchantID, checkoutCustomerName } = req.body;
+    const { clientId, bearerToken } = req.query;
+
+    if (!terminalId || !montante || !checkoutMandateId || !checkoutMerchantID || !checkoutCustomerName || !clientId || !bearerToken) {
+      return res.status(400).json({ error: "Parâmetros obrigatórios em falta" });
+    }
+
+    const payload = {
+      merchant: {
+        terminalId: Number(terminalId),
+        channel: "web",
+        merchantTransactionId: checkoutMerchantID
+      },
+      customer: {
+        customerInfo: {
+            customerName: checkoutCustomerName
+        }
+      },
+      transaction: {
+        transactionTimestamp: new Date().toISOString(),
+        description: "CHECKOUT MANDATO",
+        moto: false,
+        paymentType: "PURS",
+        amount: {
+          value: Number(montante),
+          currency: "EUR"
+        },
+        paymentMethod: [
+            "MANDATE",
+            "MBWAY"
+        ]
+      },
+      mandate: {
+        mandateId: checkoutMandateId
+      }
+    };
+
+    const sibsResponse = await fetch(
+      `https://api.qly.sibspayments.com/sibs/spg/v2/payments`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${bearerToken}`,
+          "X-IBM-Client-Id": clientId
+        },
+        body: JSON.stringify(payload)
+      }
+    );
+
+    const data = await sibsResponse.json();
+    res.status(sibsResponse.status).json(data);
+
+  } catch (err) {
+    console.error("Erro proxy SIBS:", err);
+    res.status(500).json({
+      error: "Erro ao comunicar com a SIBS",
+      details: err.message
+    });
+  }
+});
+
+//Compra Mandato
+app.post('/api/CompraMandato', async (req, res) => {
+  try {
+    const { bearerToken, mandateTransactionSignature } = req.query;
+    const { clientId, transactionID } = req.body;
+
+    if (!clientId || !bearerToken || !transactionID) {
+      return res.status(400).json({ error: "Parâmetros obrigatórios em falta" });
+    }
+
+    const payload = {
+      mandate: {
+        mandateCreation: false,
+        useMBWAYMandate: true
+        }
+    };
+
+    const sibsResponse = await fetch(
+      `https://api.qly.sibspayments.com/sibs/spg/v2/payments/${transactionID}/mbway-id/purchase`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Digest ${mandateTransactionSignature}`,
           "X-IBM-Client-Id": clientId
         },
         body: JSON.stringify(payload)

@@ -46,7 +46,7 @@ window.addEventListener("DOMContentLoaded", () => {
       citTypeInput.dispatchEvent(new Event("input"));
     }
   }
-  
+
   // preencher terminalId, clientId e bearerToken do localStorage
   const citRaw = localStorage.getItem("CredenciaisConfigurada");
   if (citRaw) {
@@ -67,10 +67,62 @@ window.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  preencherCompraMandato()
   preenchercheckoutMandato()
   preencherCaptureTransactionId()
-
+  preenchercredenciais_form();
 });
+
+function preenchercredenciais_form() {
+  const params = new URLSearchParams(window.location.search);
+
+  if (params.get("TransacaoSucesso") === "1" &&
+      params.get("validador_credenciais") === "1") {
+    showSuccessModal("Transação com sucesso");
+  }
+
+  const citRaw = localStorage.getItem("credenciaisForm");
+
+  let terminalId, clientId, bearerToken;
+
+  if (params.get("TransacaoSucesso") === "1") {
+    const citData = JSON.parse(citRaw);
+
+    terminalId  = citData[0]?.value;
+    clientId    = citData[1]?.value;
+    bearerToken = citData[2]?.value;
+
+    if (terminalId) {
+      const tInput = document.getElementById("terminalId");
+      if (tInput) tInput.value = terminalId;
+    }
+
+    if (clientId) {
+      const cInput = document.getElementById("clientId");
+      if (cInput) cInput.value = clientId;
+    }
+
+    if (bearerToken) {
+      const bInput = document.getElementById("bearerToken");
+      if (bInput) bInput.value = bearerToken;
+    }
+  }
+
+  params.set("validador_credenciais", "0");
+  window.history.replaceState({}, "", `${window.location.pathname}?${params}`);
+
+  params.set("TransacaoSucesso", "0");
+  window.history.replaceState({}, "", `${window.location.pathname}?${params}`);
+
+  localStorage.removeItem("CredenciaisConfigurada");
+
+  if (terminalId || clientId || bearerToken) {
+    localStorage.setItem(
+      "CredenciaisConfigurada",
+      JSON.stringify([{ terminalId, clientId, bearerToken }])
+    );
+  }
+}
 
 
 function preencherCaptureTransactionId() {
@@ -93,7 +145,7 @@ function preencherCaptureTransactionId() {
 }
 
 function preenchercheckoutMandato() {
- const mandato = localStorage.getItem("MandatoConfigurada");
+  const mandato = localStorage.getItem("MandatoConfigurada");
 
   if (mandato) {
     try {
@@ -101,9 +153,9 @@ function preenchercheckoutMandato() {
       const dadosMandatoArray = JSON.parse(mandato);
       const dadosMandato = Array.isArray(dadosMandatoArray) ? dadosMandatoArray[0] : dadosMandatoArray;
 
-      const checkoutMandateId = document.getElementById("checkoutMandateId");
-      const checkoutMerchantID = document.getElementById("checkoutMerchantID");
-      const checkoutCustomerName = document.getElementById("checkoutCustomerName");
+      const checkoutMandateId = document.getElementById("checkoutMandateMandateId");
+      const checkoutMerchantID = document.getElementById("checkoutMandatoMerchantID");
+      const checkoutCustomerName = document.getElementById("checkoutMandatoCustomerName");
 
       if (checkoutMandateId && dadosMandato.mandateId) {
         checkoutMandateId.value = dadosMandato.mandateId;
@@ -120,8 +172,32 @@ function preenchercheckoutMandato() {
       console.error("Erro ao ler MandatoConfigurada:", error);
     }
   }
-      
+
 }
+
+function preencherCompraMandato() {
+
+  const CheckoutMandato = localStorage.getItem("CheckoutMandatoConfigurado");
+
+  if (CheckoutMandato) {
+    try {
+
+      const dadosCheckoutMandatoArray = JSON.parse(CheckoutMandato);
+      const dadosMandato = Array.isArray(dadosCheckoutMandatoArray) ? dadosCheckoutMandatoArray[0] : dadosCheckoutMandatoArray;
+
+      const CompraMandateId = document.getElementById("CheckoutMandateTransactionId");
+
+      if (CompraMandateId && dadosMandato.checkoutmandateId) {
+        CompraMandateId.value = dadosMandato.checkoutmandateId;
+      }
+
+    } catch (error) {
+      console.error("Erro ao ler CheckoutMandatoConfigurado:", error);
+    }
+  }
+
+}
+
 
 // PopUP de sucesso chamada
 const successModal = document.getElementById("successModal"),
@@ -158,7 +234,7 @@ const eyeIcon = document.querySelector('#eyeIcon');
 togglePassword.addEventListener('click', function () {
   const type = passwordInput.type === 'password' ? 'text' : 'password';
   passwordInput.type = type;
-        
+
   // Alterna entre olho aberto e fechado
   eyeIcon.classList.toggle('fa-eye');
   eyeIcon.classList.toggle('fa-eye-slash');
@@ -274,6 +350,19 @@ async function getStatusPagamento() {
       document.getElementById("statusPagamento").className = "h4 fw-bold text-danger mt-1";
     }
 
+    // ===================== LOCALSTORAGE =====================
+    localStorage.removeItem("CredenciaisConfigurada");
+
+    const credenciaisArray = [
+      {
+        terminalId,
+        clientId,
+        bearerToken
+      }
+    ];
+
+    localStorage.setItem("CredenciaisConfigurada", JSON.stringify(credenciaisArray));
+
   } catch (err) {
     console.error(err);
     document.getElementById("statusPagamento").innerText = "ERRO";
@@ -336,6 +425,19 @@ async function RefundPagamento() {
     } else {
       document.getElementById("refundPagamento").className = "h4 fw-bold text-danger mt-1";
     }
+
+    // ===================== LOCALSTORAGE =====================
+    localStorage.removeItem("CredenciaisConfigurada");
+
+    const credenciaisArray = [
+      {
+        terminalId,
+        clientId,
+        bearerToken
+      }
+    ];
+
+    localStorage.setItem("CredenciaisConfigurada", JSON.stringify(credenciaisArray));
 
   } catch (err) {
     console.error(err);
@@ -400,6 +502,19 @@ async function CancelPagamento() {
       document.getElementById("CancelPagamento").className = "h4 fw-bold text-danger mt-1";
     }
 
+    // ===================== LOCALSTORAGE =====================
+    localStorage.removeItem("CredenciaisConfigurada");
+
+    const credenciaisArray = [
+      {
+        terminalId,
+        clientId,
+        bearerToken
+      }
+    ];
+
+    localStorage.setItem("CredenciaisConfigurada", JSON.stringify(credenciaisArray));
+
   } catch (err) {
     console.error(err);
     document.getElementById("Cancelagamento").innerText = "ERRO";
@@ -408,7 +523,7 @@ async function CancelPagamento() {
   }
 }
 
-//Fazer CIT 
+//Fazer CIT
 async function fazerCIT() {
   const terminalId = document.getElementById("terminalId")?.value?.trim();
   const clientId = document.getElementById("clientId")?.value?.trim();
@@ -509,7 +624,7 @@ async function fazerMIT() {
     return;
   }
 
-   if (!MITTransactionId) {
+  if (!MITTransactionId) {
     showErrorModal("TransactionID tem que estar preenchido");
     return;
   }
@@ -596,7 +711,7 @@ async function fazerCaptura() {
     return;
   }
 
-   if (!captureTransactionId) {
+  if (!captureTransactionId) {
     showErrorModal("TransactionID tem que estar preenchido");
     return;
   }
@@ -627,6 +742,19 @@ async function fazerCaptura() {
     } else {
       document.getElementById("capturePagamento").className = "h4 fw-bold text-danger mt-1";
     }
+
+    // ===================== LOCALSTORAGE =====================
+    localStorage.removeItem("CredenciaisConfigurada");
+
+    const credenciaisArray = [
+      {
+        terminalId,
+        clientId,
+        bearerToken
+      }
+    ];
+
+    localStorage.setItem("CredenciaisConfigurada", JSON.stringify(credenciaisArray));
 
   } catch (err) {
     console.error(err);
@@ -674,6 +802,19 @@ async function ListarMandato() {
       document.getElementById("ListarMandatoPagamento").className = "h4 fw-bold text-danger mt-1";
     }
 
+    // ===================== LOCALSTORAGE =====================
+    localStorage.removeItem("CredenciaisConfigurada");
+
+    const credenciaisArray = [
+      {
+        terminalId,
+        clientId,
+        bearerToken
+      }
+    ];
+
+    localStorage.setItem("CredenciaisConfigurada", JSON.stringify(credenciaisArray));
+
   } catch (err) {
     console.error(err);
     document.getElementById("ListarMandatoPagamento").innerText = "ERRO";
@@ -702,7 +843,7 @@ async function CancelarMandato() {
     return;
   }
 
-   if (!CancelMandatoTransactionId) {
+  if (!CancelMandatoTransactionId) {
     showErrorModal("TransactionID tem que estar preenchido");
     return;
   }
@@ -739,6 +880,19 @@ async function CancelarMandato() {
       document.getElementById("CancelMandatoPagamento").className = "h4 fw-bold text-danger mt-1";
     }
 
+    // ===================== LOCALSTORAGE =====================
+    localStorage.removeItem("CredenciaisConfigurada");
+
+    const credenciaisArray = [
+      {
+        terminalId,
+        clientId,
+        bearerToken
+      }
+    ];
+
+    localStorage.setItem("CredenciaisConfigurada", JSON.stringify(credenciaisArray));
+
   } catch (err) {
     console.error(err);
     document.getElementById("CancelMandatoPagamento").innerText = "ERRO";
@@ -767,14 +921,14 @@ async function DetalheMandato() {
     return;
   }
 
-   if (!DetalheMandatoPhone) {
+  if (!DetalheMandatoPhone) {
     showErrorModal("Telefone tem que estar preenchido");
     return;
   }
 
 
   document.getElementById("DetalheMandatoPagamento").innerText = "...";
-  document.getElementById("statusCodeDetalheMandato").innerText = "CODE: -";
+  document.getElementById("statusCodeDetalheMandato").innerText = "Montante disponível: -";
   document.getElementById("bodyCompletoDetalheMandato").innerText = "{}";
 
 
@@ -787,7 +941,7 @@ async function DetalheMandato() {
 
     const data = await response.json();
     document.getElementById("bodyCompletoDetalheMandato").innerText = JSON.stringify(data, null, 2);
-    document.getElementById("statusCodeDetalheMandato").innerText = `CODE: ${data.returnStatus.statusCode}`;
+    document.getElementById("statusCodeDetalheMandato").innerText = `Montante disponível: ${data.mandate.amountAvailable.value}`;
 
     const status = data?.returnStatus.statusMsg || "-";
     document.getElementById("DetalheMandatoPagamento").innerText = status;
@@ -797,6 +951,20 @@ async function DetalheMandato() {
     } else {
       document.getElementById("DetalheMandatoPagamento").className = "h4 fw-bold text-danger mt-1";
     }
+
+    // ===================== LOCALSTORAGE =====================
+    localStorage.removeItem("CredenciaisConfigurada");
+
+    const credenciaisArray = [
+      {
+        terminalId,
+        clientId,
+        bearerToken
+      }
+    ];
+
+    localStorage.setItem("CredenciaisConfigurada", JSON.stringify(credenciaisArray));
+
 
   } catch (err) {
     console.error(err);
@@ -827,7 +995,7 @@ async function CriarMandato() {
     return;
   }
 
-   if (!CriarMandatoCustomerName) {
+  if (!CriarMandatoCustomerName) {
     showErrorModal("Customer Name tem que estar preenchido");
     return;
   }
@@ -866,7 +1034,7 @@ async function CriarMandato() {
       document.getElementById("CriarMandatoPagamento").className = "h4 fw-bold text-danger mt-1";
     }
 
-     // ===================== LOCALSTORAGE =====================
+    // ===================== LOCALSTORAGE =====================
     localStorage.removeItem("MandatoConfigurada");
     localStorage.removeItem("CredenciaisConfigurada");
 
@@ -890,17 +1058,17 @@ async function CriarMandato() {
     localStorage.setItem("CredenciaisConfigurada", JSON.stringify(credenciaisArray));
 
 
-    const checkoutMandateId = document.getElementById("checkoutMandateId");
+    const checkoutMandateId = document.getElementById("checkoutMandateMandateId");
     if (checkoutMandateId && data?.mandate.mandateId) {
       checkoutMandateId.value = data.mandate.mandateId;
     }
 
-    const checkoutMerchantID = document.getElementById("checkoutMerchantID");
+    const checkoutMerchantID = document.getElementById("checkoutMandatoMerchantID");
     if (checkoutMerchantID && CriarMandatoMerchantID) {
       checkoutMerchantID.value = CriarMandatoMerchantID;
     }
 
-    const checkoutCustomerName = document.getElementById("checkoutCustomerName");
+    const checkoutCustomerName = document.getElementById("checkoutMandatoCustomerName");
     if (checkoutCustomerName && CriarMandatoCustomerName) {
       checkoutCustomerName.value = CriarMandatoCustomerName;
     }
@@ -910,5 +1078,260 @@ async function CriarMandato() {
     document.getElementById("CriarMandatoPagamento").innerText = "ERRO";
     document.getElementById("CriarMandatoPagamento").className = "h4 fw-bold text-danger mt-1";
     document.getElementById("bodyCompletoCriarMandato").innerText = JSON.stringify({ error: err.message }, null, 2);
+  }
+}
+
+//REFUND Mandato
+async function RefundMandatoPagamento() {
+
+  const terminalId = document.getElementById("terminalId")?.value?.trim();
+  const clientId = document.getElementById("clientId")?.value?.trim();
+  const bearerToken = document.getElementById("bearerToken")?.value?.trim();
+  const transactionId = document.getElementById("RefundMandatoTransactionId")?.value?.trim();
+  const montante = document.getElementById("MontanteRefundMandato")?.value?.trim();
+
+  if (!terminalId || !clientId || !bearerToken ) {
+    showErrorModal("Todos os campos têm de estar preenchidos.");
+    return;
+  }
+
+  if (!transactionId) {
+    showErrorModal("TransactionID tem que estar preenchido");
+    return;
+  }
+
+  if (!montante) {
+    showErrorModal("Montante tem que estar preenchido");
+    return;
+  }
+
+  document.getElementById("refundMandatoPagamento").innerText = "...";
+  document.getElementById("statusCodeRefundMandato").innerText = "CODE: -";
+  document.getElementById("bodyCompletoRefundMandato").innerText = "{}";
+
+  try {
+
+    const params = new URLSearchParams({
+      transactionId
+    });
+
+
+    const response = await fetch(`/api/RefundMandato?${params.toString()}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ montante , clientId , terminalId, bearerToken  })
+    });
+
+    const data = await response.json();
+
+    document.getElementById("bodyCompletoRefundMandato").innerText = JSON.stringify(data, null, 2);
+    document.getElementById("statusCodeRefundMandato").innerText = `CODE: ${data.returnStatus.statusCode}`;
+
+    const status = data?.paymentStatus || data?.status || data?.transactionStatus || "-";
+    document.getElementById("refundMandatoPagamento").innerText = status;
+    if (["Success"].includes(status)) {
+      document.getElementById("refundMandatoPagamento").className = "h4 fw-bold text-success mt-1";
+    } else {
+      document.getElementById("refundMandatoPagamento").className = "h4 fw-bold text-danger mt-1";
+    }
+
+    // ===================== LOCALSTORAGE =====================
+    localStorage.removeItem("CredenciaisConfigurada");
+
+    const credenciaisArray = [
+      {
+        terminalId,
+        clientId,
+        bearerToken
+      }
+    ];
+
+    localStorage.setItem("CredenciaisConfigurada", JSON.stringify(credenciaisArray));
+
+  } catch (err) {
+    console.error(err);
+    document.getElementById("refundMandatoPagamento").innerText = "ERRO";
+    document.getElementById("refundMandatoPagamento").className = "h4 fw-bold text-danger mt-1";
+    document.getElementById("bodyCompletoRefundMandato").innerText = JSON.stringify({ error: err.message }, null, 2);
+  }
+}
+
+//Checkout Mandato
+async function CheckoutMandatoPagamento() {
+
+  const terminalId = document.getElementById("terminalId")?.value?.trim();
+  const clientId = document.getElementById("clientId")?.value?.trim();
+  const bearerToken = document.getElementById("bearerToken")?.value?.trim();
+  const montante = document.getElementById("checkoutMandatoAmount")?.value?.trim();
+  const checkoutMandateId = document.getElementById("checkoutMandateMandateId")?.value?.trim();
+  const checkoutMerchantID = document.getElementById("checkoutMandatoMerchantID")?.value?.trim();
+  const checkoutCustomerName = document.getElementById("checkoutMandatoCustomerName")?.value?.trim();
+
+  if (!terminalId || !clientId || !bearerToken ) {
+    showErrorModal("Todos os campos têm de estar preenchidos.");
+    return;
+  }
+
+  if (!checkoutMandateId) {
+    showErrorModal("Mandate ID tem que estar preenchido");
+    return;
+  }
+
+  if (!checkoutMerchantID) {
+    showErrorModal("Merchant ID tem que estar preenchido");
+    return;
+  }
+
+  if (!checkoutCustomerName) {
+    showErrorModal("Customer Name tem que estar preenchido");
+    return;
+  }
+
+  if (!montante) {
+    showErrorModal("Montante tem que estar preenchido");
+    return;
+  }
+
+  document.getElementById("CheckoutMandatoPagamento").innerText = "...";
+  document.getElementById("statusCodeCheckoutMandato").innerText = "CODE: -";
+  document.getElementById("bodyCompletoCheckoutMandato").innerText = "{}";
+
+  try {
+
+    const params = new URLSearchParams({
+      clientId, bearerToken
+    });
+
+
+    const response = await fetch(`/api/CheckoutMandato?${params.toString()}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ terminalId , montante , checkoutMandateId, checkoutMerchantID, checkoutCustomerName  })
+    });
+
+    const data = await response.json();
+
+    document.getElementById("bodyCompletoCheckoutMandato").innerText = JSON.stringify(data, null, 2);
+    document.getElementById("statusCodeCheckoutMandato").innerText = `CODE: ${data.returnStatus.statusCode}`;
+
+    const status = data?.returnStatus?.statusMsg || "-";
+    document.getElementById("CheckoutMandatoPagamento").innerText = status;
+    if (["Success"].includes(status)) {
+      document.getElementById("CheckoutMandatoPagamento").className = "h4 fw-bold text-success mt-1";
+      showSuccessModal("Checkout com Mandato criado com sucesso");
+    } else {
+      document.getElementById("CheckoutMandatoPagamento").className = "h4 fw-bold text-danger mt-1";
+    }
+
+    // ===================== LOCALSTORAGE =====================
+    localStorage.removeItem("CredenciaisConfigurada");
+    localStorage.removeItem("CheckoutMandatoConfigurado");
+
+    const credenciaisArray = [
+      {
+        terminalId,
+        clientId,
+        bearerToken
+      }
+    ];
+
+    const CheckoutMandatoArray = [
+      {
+        checkoutmandateId: data?.transactionID,
+        MandateTransactionSignature: data?.transactionSignature
+      }
+    ];
+
+    localStorage.setItem("CredenciaisConfigurada", JSON.stringify(credenciaisArray));
+    localStorage.setItem("CheckoutMandatoConfigurado", JSON.stringify(CheckoutMandatoArray));
+
+    const checkoutmandateId = document.getElementById("CheckoutMandateTransactionId");
+    if (checkoutmandateId && data?.transactionID) {
+      checkoutmandateId.value = data?.transactionID;
+    }
+
+  } catch (err) {
+    console.error(err);
+    document.getElementById("CheckoutMandatoPagamento").innerText = "ERRO";
+    document.getElementById("CheckoutMandatoPagamento").className = "h4 fw-bold text-danger mt-1";
+    document.getElementById("bodyCompletoCheckoutMandato").innerText = JSON.stringify({ error: err.message }, null, 2);
+  }
+}
+
+//Compra Mandato
+async function CompraMandatoPagamento() {
+
+  const terminalId = document.getElementById("terminalId")?.value?.trim();
+  const clientId = document.getElementById("clientId")?.value?.trim();
+  const bearerToken = document.getElementById("bearerToken")?.value?.trim();
+  const transactionID = document.getElementById("CheckoutMandateTransactionId")?.value?.trim();
+
+  const raw = localStorage.getItem("CheckoutMandatoConfigurado");
+  const arrayMandato = raw ? JSON.parse(raw) : [];
+  const mandateTransactionSignature = Array.isArray(arrayMandato) ? arrayMandato?.[0]?.MandateTransactionSignature || "" : "";
+
+
+  if (!terminalId || !clientId || !bearerToken ) {
+    showErrorModal("Todos os campos têm de estar preenchidos.");
+    return;
+  }
+
+  if (!transactionID) {
+    showErrorModal("Transaction ID tem que estar preenchido");
+    return;
+  }
+
+  document.getElementById("CompraMandatoPagamento").innerText = "...";
+  document.getElementById("statusCodeCompraMandato").innerText = "CODE: -";
+  document.getElementById("bodyCompletoCompraMandato").innerText = "{}";
+
+  try {
+
+    const params = new URLSearchParams({
+      bearerToken, mandateTransactionSignature
+    });
+
+
+    const response = await fetch(`/api/CompraMandato?${params.toString()}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        clientId,
+        transactionID
+      })
+    });
+
+    const data = await response.json();
+
+    document.getElementById("bodyCompletoCompraMandato").innerText = JSON.stringify(data, null, 2);
+    document.getElementById("statusCodeCompraMandato").innerText = `CODE: ${data.returnStatus.statusCode}`;
+
+    const status = data?.returnStatus?.statusMsg || "-";
+    document.getElementById("CompraMandatoPagamento").innerText = status;
+    if (["Success"].includes(status)) {
+      document.getElementById("CompraMandatoPagamento").className = "h4 fw-bold text-success mt-1";
+      showSuccessModal("Compra com Mandato criado com sucesso");
+    } else {
+      document.getElementById("CompraMandatoPagamento").className = "h4 fw-bold text-danger mt-1";
+    }
+
+    // ===================== LOCALSTORAGE =====================
+    localStorage.removeItem("CredenciaisConfigurada");
+
+    const credenciaisArray = [
+      {
+        terminalId,
+        clientId,
+        bearerToken
+      }
+    ];
+
+    localStorage.setItem("CredenciaisConfigurada", JSON.stringify(credenciaisArray));
+
+  } catch (err) {
+    console.error(err);
+    document.getElementById("CompraMandatoPagamento").innerText = "ERRO";
+    document.getElementById("CompraMandatoPagamento").className = "h4 fw-bold text-danger mt-1";
+    document.getElementById("bodyCompletoCompraMandato").innerText = JSON.stringify({ error: err.message }, null, 2);
   }
 }
