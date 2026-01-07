@@ -190,3 +190,19 @@ html, body {
     height: 320px; /* ou o que quiseres */
     overflow-y: auto;
   }
+
+  
+  .btn-clear {
+    background: transparent;
+    border: none;
+    color: var(--muted);
+    font-size: 13px;
+    cursor: pointer;
+    padding: 6px 10px;
+    border-radius: 8px;
+  }
+
+  .btn-clear:hover {
+    color: var(--text);
+    background: #f1f3f5;
+  }

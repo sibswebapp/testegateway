@@ -42,10 +42,6 @@ document.getElementById("carregarForm").addEventListener("click", function() {
 
     let redirectUrl
 
-    redirectUrl = isValidador
-    ? window.location.origin + "/validador_multifuncoes/validador_multifuncoes.html"
-    : window.location.href;
-
     let citTypeParam = "";
 
     const citRaw = localStorage.getItem("CITsConfigurada");
@@ -60,18 +56,24 @@ document.getElementById("carregarForm").addEventListener("click", function() {
       if (citType) {
         citTypeParam = `&CitType=${encodeURIComponent(citType)}`;
       }
-}
-    redirectUrl = ValidadorMultifuncoes
-    ? window.location.origin +
-      "/validador_multifuncoes/validador_multifuncoes.html?CITSucesso=1" +
-      citTypeParam
-    : window.location.href;
+    }
 
-    redirectUrl = isValidador
+    if(ValidadorMultifuncoes){
+      redirectUrl = ValidadorMultifuncoes
+      ? window.location.origin +
+        "/validador_multifuncoes/validador_multifuncoes.html?CITSucesso=1" +
+        citTypeParam
+      : window.location.href;
+    }
+
+    if(isValidador){
+      redirectUrl = isValidador
       ? window.location.origin +
       "/validador_multifuncoes/validador_multifuncoes.html?TransacaoSucesso=1&validador_credenciais=1" +
       citTypeParam
-    : window.location.href;
+      : window.location.href;
+    }
+    
 
     // Remove qualquer widget/form anterior
     document.getElementById("sibsFormContainer").innerHTML = "";

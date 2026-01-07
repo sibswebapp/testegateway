@@ -33,15 +33,31 @@
       <div class="card-body p-4">
 
         <div class="panel-header" style="margin-bottom: 30px;">
-          <div class="panel-title" style="display: flex; align-items: center; gap: 12px; margin-bottom: 4px;">
-            <i class="bi bi-diagram-3" style="color: #1a73e8; font-size: 26px;"></i>
+          <div style="display: flex; align-items: center; justify-content: space-between;">
 
-            <span style="font-size: 22px; color: #202124; letter-spacing: -0.5px;">
-              <b style="font-weight: 400;">Gateway</b>
-              <b style="font-weight: 600;">SIBS</b>
-              <span style="color: #dadce0; margin: 0 8px; font-weight: 300;">|</span>
-              <span style="color: #5f6368; font-weight: 400;">Vários métodos</span>
-            </span>
+            <!-- TÍTULO -->
+            <div class="panel-title" style="display: flex; align-items: center; gap: 12px;">
+              <i class="bi bi-diagram-3" style="color: #1a73e8; font-size: 26px;"></i>
+
+              <span style="font-size: 22px; color: #202124; letter-spacing: -0.5px;">
+                <b style="font-weight: 400;">Gateway</b>
+                <b style="font-weight: 600;">SIBS</b>
+                <span style="color: #dadce0; margin: 0 8px; font-weight: 300;">|</span>
+                <span style="color: #5f6368; font-weight: 400;">Vários métodos</span>
+              </span>
+            </div>
+
+            <!-- BOTÕES À DIREITA -->
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <button type="button" id="btnLimparCredenciais" class="btn-clear ms-auto" style="display: inline-block;" onclick="limparCredenciais()">
+                Limpar
+              </button>
+
+              <button type="button" class="btn btn-primary" onclick="sincronizarCredenciais()">
+                SINCRONIZAR DADOS
+              </button>
+            </div>
+
           </div>
         </div>
 
