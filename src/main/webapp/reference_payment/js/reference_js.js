@@ -39,9 +39,9 @@ document.addEventListener("DOMContentLoaded", async function () {
                 ServerToServer = credential_default_variable.ServerToServer;
                 paymentMethods= credential_default_variable.paymentMethods;
                 gatewayVersion= credential_default_variable.gatewayVersion;
-                
+
             }
-            
+
             encodedPaymentMethods = encodeURIComponent(paymentMethods);
 
             const paymentId = getQueryParam("id");
@@ -94,7 +94,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                 // Mostra corpo no debug
                 debugBody.textContent = JSON.stringify(data, null, 2);
 
-               referenceDiv.innerHTML = `
+                referenceDiv.innerHTML = `
                 <div class="card shadow-sm p-3 mt-3 bg-light">
                         <ul class="list-group list-group-flush text-start text-center">
                             <li class="list-group-item"><strong>Entidade:</strong> ${data.paymentReference.paymentEntity}</li>

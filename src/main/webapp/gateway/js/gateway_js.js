@@ -797,11 +797,11 @@
       debugHeader.className = "card-header bg-primary text-white fw-bold d-flex justify-content-between align-items-center";
 
       const debugTitle = document.createElement("span");
-      debugTitle.innerHTML = '<i class="fa fa-bug me-2"></i>Debug da Requisição';
+      debugTitle.innerHTML = '<i class="fa fa-bug me-2"></i>Debug do Request API';
 
       const responseButton = document.createElement("button");
       responseButton.className = "btn btn-light btn-sm fw-bold";
-      responseButton.textContent = "Resposta";
+      responseButton.textContent = "Ver API reply";
 
       debugHeader.appendChild(debugTitle);
       debugHeader.appendChild(responseButton);
@@ -814,7 +814,7 @@
       // Elementos do debug original
       const headersTitle = document.createElement("h6");
       headersTitle.className = "fw-bold";
-      headersTitle.textContent = "Headers da Requisição:";
+      headersTitle.textContent = "Request Header:";
 
       const headersPre = document.createElement("pre");
       headersPre.className = "bg-light p-3 rounded";
@@ -825,7 +825,7 @@
 
       const bodyTitle = document.createElement("h6");
       bodyTitle.className = "fw-bold mt-3";
-      bodyTitle.textContent = "Corpo da Requisição:";
+      bodyTitle.textContent = "Request Body:";
 
       const bodyPre = document.createElement("pre");
       bodyPre.className = "bg-light p-3 rounded";
@@ -849,20 +849,20 @@
         if (!showingResponse) {
           // Mostrar a resposta recebida (vinda como parâmetro 'data')
           debugContent.innerHTML = `
-            <h6 class="fw-bold">Status Code da Resposta:</h6>
+            <h6 class="fw-bold">Status Code response:</h6>
             <pre class="bg-light p-3 rounded">${data?.status || "200"}</pre>
 
-            <h6 class="fw-bold mt-3">Corpo da Resposta:</h6>
+            <h6 class="fw-bold mt-3">Body response:</h6>
             <pre class="bg-light p-3 rounded" style="max-height:400px;overflow-y:auto;font-size:0.8rem;">
               ${JSON.stringify(data, null, 2)}
             </pre>
           `;
 
-          responseButton.textContent = "Requisição";
-          debugTitle.innerHTML = '<i class="fa fa-bug me-2 "></i>Resposta da API';
+          responseButton.textContent = "Ver API request";
+          debugTitle.innerHTML = '<i class="fa fa-bug me-2 "></i>Response API';
           showingResponse = true;
         } else {
-        
+
           // Voltar à visualização original
           debugContent.innerHTML = "";
           debugContent.appendChild(headersTitle);
@@ -870,8 +870,8 @@
           debugContent.appendChild(bodyTitle);
           debugContent.appendChild(bodyPre);
 
-          responseButton.textContent = "Resposta";
-          debugTitle.innerHTML = '<i class="fa fa-bug me-2"></i>Debug da Requisição';
+          responseButton.textContent = "Ver API reply";
+          debugTitle.innerHTML = '<i class="fa fa-bug me-2"></i>Debug do Request API';
 
           showingResponse = false;
         }
@@ -891,11 +891,11 @@
       debugHeader.className = "card-header bg-danger text-white fw-bold d-flex justify-content-between align-items-center";
 
       const debugTitle = document.createElement("span");
-      debugTitle.innerHTML = '<i class="fa fa-bug me-2"></i>Debug da Requisição - Erro';
+      debugTitle.innerHTML = '<i class="fa fa-bug me-2"></i>Debug do Request API - Erro';
 
       const responseButton = document.createElement("button");
       responseButton.className = "btn btn-light btn-sm fw-bold";
-      responseButton.textContent = "Resposta";
+      responseButton.textContent = "Ver API reply";
 
       debugHeader.appendChild(debugTitle);
       debugHeader.appendChild(responseButton);
@@ -907,7 +907,7 @@
 
       const headersTitle = document.createElement("h6");
       headersTitle.className = "fw-bold";
-      headersTitle.textContent = "Headers da Requisição:";
+      headersTitle.textContent = "Request Header:";
 
       const headersPre = document.createElement("pre");
       headersPre.className = "bg-light p-3 rounded";
@@ -918,7 +918,7 @@
 
       const bodyTitle = document.createElement("h6");
       bodyTitle.className = "fw-bold mt-3";
-      bodyTitle.textContent = "Corpo da Requisição:";
+      bodyTitle.textContent = "Request Body:";
 
       const bodyPre = document.createElement("pre");
       bodyPre.className = "bg-light p-3 rounded";
@@ -940,16 +940,16 @@
       responseButton.onclick = () => {
         if (!showingResponse) {
           debugContent.innerHTML = `
-            <h6 class="fw-bold">Status Code da Resposta:</h6>
+            <h6 class="fw-bold">Status Code response:</h6>
             <pre class="bg-light p-3 rounded">${responseData?.status || "200"}</pre>
 
-            <h6 class="fw-bold mt-3">Corpo da Resposta:</h6>
+            <h6 class="fw-bold mt-3">Body response:</h6>
             <pre class="bg-light p-3 rounded" style="max-height:400px;overflow-y:auto;font-size:0.8rem;">
     ${JSON.stringify(responseData, null, 2)}
             </pre>
           `;
-          responseButton.textContent = "Requisição";
-          debugTitle.innerHTML = '<i class="fa fa-bug me-2 "></i>Resposta da API - Erro';
+          responseButton.textContent = "Ver API request";
+          debugTitle.innerHTML = '<i class="fa fa-bug me-2 "></i>Response API - Erro';
           showingResponse = true;
         } else {
           debugContent.innerHTML = "";
@@ -957,8 +957,8 @@
           debugContent.appendChild(headersPre);
           debugContent.appendChild(bodyTitle);
           debugContent.appendChild(bodyPre);
-          responseButton.textContent = "Resposta";
-          debugTitle.innerHTML = '<i class="fa fa-bug me-2 "></i>Debug da Requisição - Erro';
+          responseButton.textContent = "Ver API reply";
+          debugTitle.innerHTML = '<i class="fa fa-bug me-2 "></i>Debug do Request API - Erro';
           showingResponse = false;
         }
       };

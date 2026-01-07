@@ -1,5 +1,5 @@
- document.addEventListener("DOMContentLoaded", async function () {
-      
+document.addEventListener("DOMContentLoaded", async function () {
+
       function getQueryParam(param) {
         const urlParams = new URLSearchParams(window.location.search);
         return urlParams.get(param);
@@ -19,7 +19,7 @@
       let paymentMethods
       let encodedPaymentMethods
       let gatewayVersion
-            
+
       if(useDefault == "0"){
         token = credential_config_variable.bearerToken;
         clientId = credential_config_variable.clientId;

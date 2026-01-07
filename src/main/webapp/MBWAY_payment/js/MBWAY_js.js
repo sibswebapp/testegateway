@@ -79,22 +79,22 @@
           originalDebugHTML = debugContent.innerHTML;
 
           debugContent.innerHTML = `
-            <h6 class="fw-bold">Status Code da Resposta:</h6>
+            <h6 class="fw-bold">Status Code Response:</h6>
             <div class="bg-light rounded p-2 mb-3">
               <pre class="m-0">${lastResponseStatus ?? "Sem status disponível"}</pre>
             </div>
 
-            <h6 class="fw-bold">Corpo da Resposta:</h6>
+            <h6 class="fw-bold">Body Response:</h6>
             <div class="bg-light rounded p-2" style="max-height: 300px; overflow: auto;">
               <pre id="debugResponseBody" class="m-0" style="white-space: pre; overflow-x: auto;">${JSON.stringify(lastResponseBody, null, 2)}</pre>
             </div>
           `;
 
-          toggleButton.textContent = "Requisição";
+          toggleButton.textContent = "Ver API request";
         } else {
           // Restaurar conteúdo original
           debugContent.innerHTML = originalDebugHTML;
-          toggleButton.textContent = "Resposta";
+          toggleButton.textContent = "Ver API reply";
         }
       });
     }
@@ -154,7 +154,7 @@
         if(data.transactionStatusCode == "000") data.transactionStatusCode = "200"
         updateResponseDebug(data.transactionStatusCode, data);
 
-        
+
         if (data.paymentStatus === "Declined" && data.transactionStatusCode == "E0506") {
           const timerParagraph = document.querySelector('p');
           if (timerParagraph) timerParagraph.style.display = "none";
@@ -404,12 +404,12 @@ function updateDebug(headers, body) {
 function renderRequestDebug() {
   const debugContent = document.getElementById("debugContent");
   debugContent.innerHTML = `
-    <h6 class="fw-bold"><i class="fa fa-bug me-2"></i>Headers da Requisição:</h6>
+    <h6 class="fw-bold"><i class="fa fa-bug me-2"></i>Request Header:</h6>
     <div class="bg-light rounded p-2 mb-3" style="max-height: 200px; overflow: auto;">
       <pre id="debugHeaders" class="m-0" style="white-space: pre; overflow-x: auto;">${JSON.stringify(lastRequestHeaders, null, 2)}</pre>
     </div>
 
-    <h6 class="fw-bold">Corpo da Requisição:</h6>
+    <h6 class="fw-bold">Request Body:</h6>
     <div class="bg-light rounded p-2" style="max-height: 300px; overflow: auto;">
       <pre id="debugBody" class="m-0" style="white-space: pre; overflow-x: auto;">${JSON.stringify(lastRequestBody, null, 2)}</pre>
     </div>
@@ -420,12 +420,12 @@ function renderRequestDebug() {
 function renderResponseDebug() {
   const debugContent = document.getElementById("debugContent");
   debugContent.innerHTML = `
-    <h6 class="fw-bold">Status Code da Resposta:</h6>
+    <h6 class="fw-bold">Status Code Response:</h6>
     <div class="bg-light rounded p-2 mb-3">
       <pre class="m-0">${lastResponseStatus ?? "Sem status disponível"}</pre>
     </div>
 
-    <h6 class="fw-bold">Corpo da Resposta:</h5>
+    <h6 class="fw-bold">Body response:</h5>
     <div class="bg-light rounded p-2" style="max-height: 300px; overflow: auto;">
       <pre id="debugResponseBody" class="m-0" style="white-space: pre; overflow-x: auto;">${JSON.stringify(lastResponseBody, null, 2)}</pre>
     </div>
