@@ -425,7 +425,7 @@ app.post('/api/cit', async (req, res) => {
           },
           paymentMethod: ["CARD"]
         },
-         customer: {
+        customer: {
           customerInfo: {
             customerName: "John Doe",
             customerEmail: "john.doe@xptomail.com",
@@ -758,7 +758,7 @@ app.post('/api/CriarMandato', async (req, res) => {
         transactionDescription: `Mandatos -> ${CriarMandatoMerchantID}`
       },
       mandate: {
-        mandateType : "SUBSCRIPTION",
+        mandateType : "ONECLICK",
         aliasMBWAY : CriarMandatoPhone,
         customerName : CriarMandatoCustomerName
       }
