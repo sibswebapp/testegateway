@@ -9,8 +9,8 @@ const webappDir = path.join(__dirname, 'src', 'main', 'webapp');
 // --------------------------------------------------
 // BASIC AUTH
 // --------------------------------------------------
-const USER = "admin";
-const PASS = "1234";
+const USER = "Onboarding_menu";
+const PASS = ".Onboarding_team10";
 
 function basicAuth(req, res, next) {
   const auth = req.headers.authorization;
