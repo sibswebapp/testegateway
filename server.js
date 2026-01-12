@@ -382,7 +382,7 @@ app.post('/api/cit', async (req, res) => {
           transactionTimestamp: new Date().toISOString(),
           description: "CIT RCRR",
           moto: false,
-          paymentType: "AUTH",
+          paymentType: "PURS",
           amount: {
             value: Number(montante),
             currency: "EUR"
