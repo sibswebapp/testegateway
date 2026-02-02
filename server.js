@@ -25,6 +25,7 @@ const app = express();
 app.set('trust proxy', true);
 
 const webappDir = path.join(__dirname, 'src', 'main', 'webapp');
+const BASE_PATH = process.env.BASE_PATH || '/SimuladorSIBS';
 
 // --------------------------------------------------
 // BASIC AUTH
@@ -48,10 +49,24 @@ function basicAuth(req, res, next) {
   return res.status(401).send('Invalid credentials');
 }
 
+
 // --------------------------------------------------
 // MIDDLEWARES
 // --------------------------------------------------
 app.use(express.json());
+
+// --------------------------------------------------
+// ROTAS
+// --------------------------------------------------
+
+// Página inicial
+app.get('/', (req, res) => {
+  res.sendFile(path.join(webappDir, 'gateway_menu', 'gateway_menu.html'));
+  //res.sendFile(path.join(webappDir, 'gateway', 'gateway.html'));
+});
+
+// Health check
+app.get('/health', (req, res) => res.json({ status: 'ok' }));
 
 // --------------------------------------------------
 // PROXY SIBS – VALIDADOR CLIENTID
@@ -387,7 +402,7 @@ app.post('/api/cit', async (req, res) => {
           transactionTimestamp: new Date().toISOString(),
           description: "CIT RCRR",
           moto: false,
-          paymentType: "AUTH",
+          paymentType: "PURS",
           amount: {
             value: Number(montante),
             currency: "EUR"
@@ -976,10 +991,7 @@ app.use('/webhooks', basicAuth, express.static(path.join(webappDir, 'webhooks'))
 app.use('/validador_form', basicAuth, express.static(path.join(webappDir, 'validador_form')));
 app.use('/validador_multifuncoes', basicAuth, express.static(path.join(webappDir, 'validador_multifuncoes')));
 
-// --------------------------------------------------
-// ROTAS PÚBLICAS
-// --------------------------------------------------
-app.get('/health', (req, res) => res.json({ status: 'ok' }));
+// Resto da webapp (sem proteção)
 app.use(express.static(webappDir));
 
 // --------------------------------------------------
