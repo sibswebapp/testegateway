@@ -5,6 +5,7 @@ const app = express();
 app.set('trust proxy', true);
 
 const webappDir = path.join(__dirname, 'src', 'main', 'webapp');
+const BASE_PATH = process.env.BASE_PATH || '/SimuladorSIBS';
 
 // --------------------------------------------------
 // BASIC AUTH
@@ -41,13 +42,13 @@ app.use(express.json());
 // --------------------------------------------------
 
 // Página inicial
-app.get('/', (req, res) => {
+app.get(['/', `${BASE_PATH}/`], (req, res) => {
   res.sendFile(path.join(webappDir, 'gateway_menu', 'gateway_menu.html'));
   //res.sendFile(path.join(webappDir, 'gateway', 'gateway.html'));
 });
 
 // Health check
-app.get('/health', (req, res) => res.json({ status: 'ok' }));
+app.get('${BASE_PATH}/health', (req, res) => res.json({ status: 'ok' }));
 
 // --------------------------------------------------
 // PROXY SIBS – VALIDADOR CLIENTID
@@ -383,7 +384,7 @@ app.post('/api/cit', async (req, res) => {
           transactionTimestamp: new Date().toISOString(),
           description: "CIT RCRR",
           moto: false,
-          paymentType: "AUTH",
+          paymentType: "PURS",
           amount: {
             value: Number(montante),
             currency: "EUR"
@@ -991,7 +992,7 @@ app.use(
 );
 
 // Resto da webapp (sem proteção)
-app.use(express.static(webappDir));
+app.use(BASE_PATH,express.static(webappDir));
 
 // --------------------------------------------------
 // START SERVER
