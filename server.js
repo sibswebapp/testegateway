@@ -30,6 +30,7 @@ function basicAuth(req, res, next) {
   return res.status(401).send("Invalid credentials.");
 }
 
+
 // --------------------------------------------------
 // MIDDLEWARES
 // --------------------------------------------------
