@@ -52,7 +52,7 @@ app.get('${BASE_PATH}/health', (req, res) => res.json({ status: 'ok' }));
 // --------------------------------------------------
 // PROXY SIBS – VALIDADOR CLIENTID
 // --------------------------------------------------
-app.post('${BASE_PATH}/api/validar-clientid', async (req, res) => {
+app.post('/api/validar-clientid', async (req, res) => {
   try {
     const { nome, clientId, token, terminalID } = req.body;
 
@@ -108,7 +108,7 @@ app.post('${BASE_PATH}/api/validar-clientid', async (req, res) => {
 });
 
 // GET STATUS
-app.get("${BASE_PATH}/api/status", async (req, res) => {
+app.get("/api/status", async (req, res) => {
   try {
     const { terminalId, clientId, transactionId, token } = req.query;
 
@@ -157,7 +157,7 @@ app.get("${BASE_PATH}/api/status", async (req, res) => {
 
 
 // Validar checkout em QLY
-app.post('${BASE_PATH}/api/validar-clientid_qly', async (req, res) => {
+app.post('/api/validar-clientid_qly', async (req, res) => {
   try {
     const { nome, clientId, token, terminalID } = req.body;
 
@@ -213,7 +213,7 @@ app.post('${BASE_PATH}/api/validar-clientid_qly', async (req, res) => {
 });
 
 //Fazer checkout com o body do validador
-app.post('${BASE_PATH}/api/validar-body_qly', async (req, res) => {
+app.post('/api/validar-body_qly', async (req, res) => {
   try {
     const { body, clientId, token } = req.body;
 
@@ -259,7 +259,7 @@ app.post('${BASE_PATH}/api/validar-body_qly', async (req, res) => {
 });
 
 //Refund
-app.post('${BASE_PATH}/api/Refund', async (req, res) => {
+app.post('/api/Refund', async (req, res) => {
   try {
     const { montante, clientId, bearerToken, terminalId } = req.body;
     const { transactionId } = req.query;
@@ -310,7 +310,7 @@ app.post('${BASE_PATH}/api/Refund', async (req, res) => {
 });
 
 //Cancel
-app.post('${BASE_PATH}/api/Cancel', async (req, res) => {
+app.post('/api/Cancel', async (req, res) => {
   try {
     const { montante, clientId, bearerToken, terminalId } = req.body;
     const { transactionId } = req.query;
@@ -361,7 +361,7 @@ app.post('${BASE_PATH}/api/Cancel', async (req, res) => {
 });
 
 //CIT
-app.post('${BASE_PATH}/api/cit', async (req, res) => {
+app.post('/api/cit', async (req, res) => {
   try {
     const { montante, clientId, terminalId, bearerToken } = req.body;
     const { CitType } = req.query;
@@ -472,7 +472,7 @@ app.post('${BASE_PATH}/api/cit', async (req, res) => {
 });
 
 //MIT
-app.post('${BASE_PATH}/api/Mit', async (req, res) => {
+app.post('/api/Mit', async (req, res) => {
   try {
     const { montante, clientId, terminalId, bearerToken } = req.body;
     const { mitType, MITTransactionId } = req.query;
@@ -554,7 +554,7 @@ app.post('${BASE_PATH}/api/Mit', async (req, res) => {
 });
 
 //Capture
-app.post('${BASE_PATH}/api/capture', async (req, res) => {
+app.post('/api/capture', async (req, res) => {
   try {
     const { montante, clientId, terminalId, bearerToken } = req.body;
     const { captureTransactionId } = req.query;
@@ -608,7 +608,7 @@ app.post('${BASE_PATH}/api/capture', async (req, res) => {
 });
 
 // Listar Mandatos
-app.post("${BASE_PATH}/api/ListarMandato", async (req, res) => {
+app.post("/api/ListarMandato", async (req, res) => {
   try {
     const { clientId, bearerToken } = req.query;
 
@@ -657,7 +657,7 @@ app.post("${BASE_PATH}/api/ListarMandato", async (req, res) => {
 
 
 //Cancelar Mandato
-app.post('${BASE_PATH}/api/CancelarMandato', async (req, res) => {
+app.post('/api/CancelarMandato', async (req, res) => {
   try {
     const { terminalId, CancelMandatoMerchantID } = req.body;
     const { CancelMandatoTransactionId, bearerToken, clientId, CancelMandatoPhone } = req.query;
@@ -703,7 +703,7 @@ app.post('${BASE_PATH}/api/CancelarMandato', async (req, res) => {
 });
 
 //Detalhe Mandato
-app.post('${BASE_PATH}/api/DetalheMandato', async (req, res) => {
+app.post('/api/DetalheMandato', async (req, res) => {
   try {
 
     const { DetalheMandatoTransactionId, bearerToken, clientId, DetalheMandatoPhone } = req.query;
@@ -739,7 +739,7 @@ app.post('${BASE_PATH}/api/DetalheMandato', async (req, res) => {
 });
 
 //Criar Mandato
-app.post('${BASE_PATH}/api/CriarMandato', async (req, res) => {
+app.post('/api/CriarMandato', async (req, res) => {
 
   try {
     const { terminalId, CriarMandatoCustomerName, CriarMandatoPhone, CriarMandatoMerchantID } = req.body;
@@ -791,7 +791,7 @@ app.post('${BASE_PATH}/api/CriarMandato', async (req, res) => {
 });
 
 //Refund Mandato
-app.post('${BASE_PATH}/api/RefundMandato', async (req, res) => {
+app.post('/api/RefundMandato', async (req, res) => {
   try {
     const { montante, clientId, bearerToken, terminalId } = req.body;
     const { transactionId } = req.query;
@@ -843,7 +843,7 @@ app.post('${BASE_PATH}/api/RefundMandato', async (req, res) => {
 
 
 //Checkout Mandato
-app.post('${BASE_PATH}/api/CheckoutMandato', async (req, res) => {
+app.post('/api/CheckoutMandato', async (req, res) => {
   try {
     const { terminalId , montante , checkoutMandateId, checkoutMerchantID, checkoutCustomerName } = req.body;
     const { clientId, bearerToken } = req.query;
@@ -908,7 +908,7 @@ app.post('${BASE_PATH}/api/CheckoutMandato', async (req, res) => {
 });
 
 //Compra Mandato
-app.post('${BASE_PATH}/api/CompraMandato', async (req, res) => {
+app.post('/api/CompraMandato', async (req, res) => {
   try {
     const { bearerToken, mandateTransactionSignature } = req.query;
     const { clientId, transactionID } = req.body;
