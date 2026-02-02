@@ -1,6 +1,26 @@
 const express = require('express');
 const path = require('path');
+const fs = require('fs');
 
+require('dotenv').config({
+  path: path.join(__dirname, 'pass.env')
+});
+
+// --------------------------------------------------
+// VARIÁVEIS DE AMBIENTE
+// --------------------------------------------------
+const USER = process.env.BASIC_AUTH_USER;
+const PASS = process.env.BASIC_AUTH_PASS;
+const PORT = process.env.PORT || 8002;
+const HOST = process.env.HOST || '127.0.0.1';
+
+if (!USER || !PASS) {
+  throw new Error('BASIC_AUTH_USER ou BASIC_AUTH_PASS não estão definidos!');
+}
+
+// --------------------------------------------------
+// EXPRESS
+// --------------------------------------------------
 const app = express();
 app.set('trust proxy', true);
 
@@ -9,44 +29,29 @@ const webappDir = path.join(__dirname, 'src', 'main', 'webapp');
 // --------------------------------------------------
 // BASIC AUTH
 // --------------------------------------------------
-const USER = "Onboarding_menu";
-const PASS = ".Onboarding_team10";
-
 function basicAuth(req, res, next) {
   const auth = req.headers.authorization;
-  if (!auth) {
+
+  if (!auth || !auth.startsWith('Basic ')) {
     res.setHeader('WWW-Authenticate', 'Basic realm="SecureArea"');
-    return res.status(401).send("Authentication required.");
+    return res.status(401).send('Authentication required');
   }
 
-  const base64 = auth.split(" ")[1];
-  const [user, pass] = Buffer.from(base64, "base64")
-    .toString()
-    .split(":");
+  const base64 = auth.split(' ')[1];
+  const [user, pass] = Buffer.from(base64, 'base64').toString().split(':');
 
-  if (user === USER && pass === PASS) return next();
+  if (user === USER && pass === PASS) {
+    return next();
+  }
 
   res.setHeader('WWW-Authenticate', 'Basic realm="SecureArea"');
-  return res.status(401).send("Invalid credentials.");
+  return res.status(401).send('Invalid credentials');
 }
 
 // --------------------------------------------------
 // MIDDLEWARES
 // --------------------------------------------------
 app.use(express.json());
-
-// --------------------------------------------------
-// ROTAS
-// --------------------------------------------------
-
-// Página inicial
-app.get('/', (req, res) => {
-  res.sendFile(path.join(webappDir, 'gateway_menu', 'gateway_menu.html'));
-  //res.sendFile(path.join(webappDir, 'gateway', 'gateway.html'));
-});
-
-// Health check
-app.get('/health', (req, res) => res.json({ status: 'ok' }));
 
 // --------------------------------------------------
 // PROXY SIBS – VALIDADOR CLIENTID
@@ -948,57 +953,39 @@ app.post('/api/CompraMandato', async (req, res) => {
   }
 });
 
+
+// Página inicial
+app.get('/', (req, res) => {
+  const indexPath = path.join(webappDir, 'gateway_menu', 'gateway_menu.html');
+  if (!fs.existsSync(indexPath)) return res.status(404).send('Página inicial não encontrada!');
+  res.sendFile(indexPath);
+});
+
+// Assets públicos da home
+app.use('/gateway_menu', express.static(path.join(webappDir, 'gateway_menu')));
+app.use('/navbar', express.static(path.join(webappDir, 'navbar')));
+app.use('/footer', express.static(path.join(webappDir, 'footer')));
+app.use('/public', express.static(path.join(webappDir, 'public'))); // se tiveres outros assets
+
+
+// Pastas protegidas
+app.use('/validador_API', basicAuth, express.static(path.join(webappDir, 'validador_API')));
+app.use('/validador', basicAuth, express.static(path.join(webappDir, 'validador')));
+app.use('/Onboarding', basicAuth, express.static(path.join(webappDir, 'Onboarding_menu')));
+app.use('/webhooks', basicAuth, express.static(path.join(webappDir, 'webhooks')));
+app.use('/validador_form', basicAuth, express.static(path.join(webappDir, 'validador_form')));
+app.use('/validador_multifuncoes', basicAuth, express.static(path.join(webappDir, 'validador_multifuncoes')));
+
 // --------------------------------------------------
-// SERVIR CONTEÚDO ESTÁTICO
+// ROTAS PÚBLICAS
 // --------------------------------------------------
-
-// Protege páginas do Onboarding
-app.use(
-  '/validador_API',
-  basicAuth,
-  express.static(path.join(webappDir, 'validador_API'))
-);
-
-app.use(
-  '/validador',
-  basicAuth,
-  express.static(path.join(webappDir, 'validador'))
-);
-
-app.use(
-  '/Onboarding',
-  basicAuth,
-  express.static(path.join(webappDir, 'Onboarding_menu'))
-);
-
-app.use(
-  '/webhooks',
-  basicAuth,
-  express.static(path.join(webappDir, 'webhooks'))
-);
-
-app.use(
-  '/validador_form',
-  basicAuth,
-  express.static(path.join(webappDir, 'validador_form'))
-);
-
-app.use(
-  '/validador_multifuncoes',
-  basicAuth,
-  express.static(path.join(webappDir, 'validador_multifuncoes'))
-);
-
-// Resto da webapp (sem proteção)
+app.get('/health', (req, res) => res.json({ status: 'ok' }));
 app.use(express.static(webappDir));
 
 // --------------------------------------------------
-// START SERVER
+// START
 // --------------------------------------------------
-const PORT = process.env.PORT || 8002;
-const HOST = process.env.HOST || '127.0.0.1';
-
 app.listen(PORT, HOST, () => {
-  console.log(`testesgateway listening on http://${HOST}:${PORT}`);
-  console.log(`Serving webapp from ${webappDir}`);
+  console.log(`Servidor iniciado em http://${HOST}:${PORT}`);
+  console.log(`Servindo webapp a partir de: ${webappDir}`);
 });
