@@ -25,7 +25,6 @@ const app = express();
 app.set('trust proxy', true);
 
 const webappDir = path.join(__dirname, 'src', 'main', 'webapp');
-const BASE_PATH = process.env.BASE_PATH || '/SimuladorSIBS';
 
 // --------------------------------------------------
 // BASIC AUTH
@@ -980,7 +979,7 @@ app.get('/', (req, res) => {
 app.use('/gateway_menu', express.static(path.join(webappDir, 'gateway_menu')));
 app.use('/navbar', express.static(path.join(webappDir, 'navbar')));
 app.use('/footer', express.static(path.join(webappDir, 'footer')));
-app.use('/public', express.static(path.join(webappDir, 'public'))); // se tiveres outros assets
+app.use('/public', express.static(path.join(webappDir, 'public'))); 
 
 
 // Pastas protegidas
