@@ -25,7 +25,7 @@
     const credential_config_variable = JSON.parse(localStorage.getItem('credential_config'))
     const default_Configs = JSON.parse(localStorage.getItem('default'))
 
-  
+
     //Se ele clicar voltar para tras isto da reset a tudo
     window.addEventListener('pageshow', function(event) {
       if (event.persisted || performance.getEntriesByType("navigation")[0].type === "back_forward") {
