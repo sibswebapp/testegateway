@@ -962,10 +962,33 @@ app.post('/api/CompraMandato', async (req, res) => {
 });
 
 // Assets públicos da home
-app.use('/gateway_menu', express.static(path.join(webappDir, 'gateway_menu')));
-app.use('/navbar', express.static(path.join(webappDir, 'navbar')));
+app.use('/public', express.static(path.join(webappDir, 'public')));
+app.use('/AllmethodsPayment', express.static(path.join(webappDir, 'AllmethodsPayment')));
+app.use('/Bizum_stargate_payment', express.static(path.join(webappDir, 'Bizum_stargate_payment')));
+app.use('/BLIK_stargate_payment', express.static(path.join(webappDir, 'BLIK_stargate_payment')));
+app.use('/Cancellation_gateway', express.static(path.join(webappDir, 'Cancellation_gateway')));
+app.use('/card_payment', express.static(path.join(webappDir, 'card_payment')));
+app.use('/card_stargate_payment', express.static(path.join(webappDir, 'card_stargate_payment')));
+app.use('/config_gateway', express.static(path.join(webappDir, 'config_gateway')));
+app.use('/config_stargate', express.static(path.join(webappDir, 'config_stargate')));
 app.use('/footer', express.static(path.join(webappDir, 'footer')));
-app.use('/public', express.static(path.join(webappDir, 'public'))); 
+app.use('/gateway', express.static(path.join(webappDir, 'gateway')));
+app.use('/gateway_menu', express.static(path.join(webappDir, 'gateway_menu')));
+app.use('/MBWAY_payment', express.static(path.join(webappDir, 'MBWAY_payment')));
+app.use('/MBWAY_payment', express.static(path.join(webappDir, 'MBWAY_payment')));
+app.use('/navbar', express.static(path.join(webappDir, 'navbar')));
+app.use('/Onboarding', express.static(path.join(webappDir, 'Onboarding')));
+app.use('/popups', express.static(path.join(webappDir, 'popups')));
+app.use('/reference_payment', express.static(path.join(webappDir, 'reference_payment')));
+app.use('/Refund_gateway', express.static(path.join(webappDir, 'Refund_gateway')));
+app.use('/stargate', express.static(path.join(webappDir, 'stargate')));
+app.use('/validador', express.static(path.join(webappDir, 'validador')));
+app.use('/validador_API', express.static(path.join(webappDir, 'validador_API')));
+app.use('/validador_form', express.static(path.join(webappDir, 'validador_form')));
+app.use('/validador_multifuncoes', express.static(path.join(webappDir, 'validador_multifuncoes')));
+app.use('/webhooks', express.static(path.join(webappDir, 'webhooks')));
+
+
 
 // Página inicial
 app.get('/', (req, res) => {
