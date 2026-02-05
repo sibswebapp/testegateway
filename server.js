@@ -58,12 +58,6 @@ app.use(express.json());
 // ROTAS
 // --------------------------------------------------
 
-// Página inicial
-app.get('/', (req, res) => {
-  res.sendFile(path.join(webappDir, 'gateway_menu', 'gateway_menu.html'));
-  //res.sendFile(path.join(webappDir, 'gateway', 'gateway.html'));
-});
-
 // Health check
 app.get('/health', (req, res) => res.json({ status: 'ok' }));
 
@@ -967,6 +961,11 @@ app.post('/api/CompraMandato', async (req, res) => {
   }
 });
 
+// Assets públicos da home
+app.use('/gateway_menu', express.static(path.join(webappDir, 'gateway_menu')));
+app.use('/navbar', express.static(path.join(webappDir, 'navbar')));
+app.use('/footer', express.static(path.join(webappDir, 'footer')));
+app.use('/public', express.static(path.join(webappDir, 'public'))); 
 
 // Página inicial
 app.get('/', (req, res) => {
@@ -975,12 +974,8 @@ app.get('/', (req, res) => {
   res.sendFile(indexPath);
 });
 
-// Assets públicos da home
-app.use('/gateway_menu', express.static(path.join(webappDir, 'gateway_menu')));
-app.use('/navbar', express.static(path.join(webappDir, 'navbar')));
-app.use('/footer', express.static(path.join(webappDir, 'footer')));
-app.use('/public', express.static(path.join(webappDir, 'public'))); 
-
+// Resto da webapp (sem proteção)
+app.use(express.static(webappDir));
 
 // Pastas protegidas
 app.use('/validador_API', basicAuth, express.static(path.join(webappDir, 'validador_API')));
@@ -989,9 +984,6 @@ app.use('/Onboarding', basicAuth, express.static(path.join(webappDir, 'Onboardin
 app.use('/webhooks', basicAuth, express.static(path.join(webappDir, 'webhooks')));
 app.use('/validador_form', basicAuth, express.static(path.join(webappDir, 'validador_form')));
 app.use('/validador_multifuncoes', basicAuth, express.static(path.join(webappDir, 'validador_multifuncoes')));
-
-// Resto da webapp (sem proteção)
-app.use(express.static(webappDir));
 
 // --------------------------------------------------
 // START
