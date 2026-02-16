@@ -495,7 +495,12 @@
       const isServerToServer = credential_config_variable?.ServerToServer ?? credential_default_variable?.ServerToServer;
       const gatewayVersion = credential_config_variable?.gatewayVersion ?? credential_default_variable?.gatewayVersion;
 
-      let baseUrl = window.location.origin + '/';
+      const isProd = window.location.hostname === 'https://sibsdigitalcommerce.com'; 
+
+      let baseUrl = isProd 
+      ? window.location.origin + '/SimuladorSIBS/' 
+      : window.location.origin + '/';
+
 
       let redirectUrl = `${baseUrl}reference_payment/REFERENCE_return.html`
 
