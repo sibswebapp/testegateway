@@ -26,7 +26,7 @@ function initPopups() {
   errorCloseBtn.addEventListener("click", () => errorModal.classList.remove("active"));
 }
 
-fetch("/popups/popups_layout.html")
+fetch("popups/popups_layout.html")
   .then(res => res.text())
   .then(html => {
     document.getElementById("popups").innerHTML = html;
