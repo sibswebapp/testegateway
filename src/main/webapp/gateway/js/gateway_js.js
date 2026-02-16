@@ -495,7 +495,7 @@
       const isServerToServer = credential_config_variable?.ServerToServer ?? credential_default_variable?.ServerToServer;
       const gatewayVersion = credential_config_variable?.gatewayVersion ?? credential_default_variable?.gatewayVersion;
 
-      const isProd = window.location.hostname === 'https://sibsdigitalcommerce.com'; 
+      const isProd = window.location.hostname === 'sibsdigitalcommerce.com'; 
 
       let baseUrl = isProd 
       ? window.location.origin + '/SimuladorSIBS/' 
