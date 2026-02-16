@@ -66,22 +66,26 @@
 
   <script>
 
-    // Carregar o ficheiro footer
-    fetch("/footer/footer_layout.html")
-    .then(res => res.text())
+    // Remova a barra inicial para que o navegador use a <base href="..."> definida no topo
+    fetch("footer/footer_layout.html") 
+    .then(res => {
+        if (!res.ok) throw new Error(`Status: ${res.status}`);
+        return res.text();
+    })
     .then(html => {
-      document.getElementById("footer").innerHTML = html;
+        document.getElementById("footer").innerHTML = html;
     })
     .catch(err => console.error("Erro ao carregar footer:", err));
 
-    // Carregar o ficheiro navbar
-    fetch("/navbar/navbar_gateway_menu.html")
-    .then(res => res.text())
+    fetch("navbar/navbar_gateway_menu.html")
+    .then(res => {
+        if (!res.ok) throw new Error(`Status: ${res.status}`);
+        return res.text();
+    })
     .then(html => {
-      document.getElementById("navbar").innerHTML = html;
+        document.getElementById("navbar").innerHTML = html;
     })
     .catch(err => console.error("Erro ao carregar navbar:", err));
-
   </script>
 
 
