@@ -87,7 +87,7 @@
   <script>
 
     // Carregar o ficheiro footer
-    fetch("/footer/footer_layout.html")
+    fetch("footer/footer_layout.html")
     .then(res => res.text())
     .then(html => {
       document.getElementById("footer").innerHTML = html;
@@ -95,7 +95,7 @@
     .catch(err => console.error("Erro ao carregar footer:", err));
 
     // Carregar o layout dos popups
-    fetch("/popups/popups_layout.html")
+    fetch("popups/popups_layout.html")
       .then(res => res.text())
       .then(html => {
         document.getElementById("popups").innerHTML = html;
@@ -103,7 +103,7 @@
       .catch(err => console.error("Erro ao carregar popups:", err));
 
     // Carregar o ficheiro navbar
-    fetch("/navbar/navbar_stargate.html")
+    fetch("navbar/navbar_stargate.html")
     .then(res => res.text())
     .then(html => {
       document.getElementById("navbar").innerHTML = html;
