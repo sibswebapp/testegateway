@@ -6,9 +6,6 @@ require('dotenv').config({
   path: path.join(__dirname, 'pass.env')
 });
 
-// --------------------------------------------------
-// VARIÁVEIS DE AMBIENTE
-// --------------------------------------------------
 const USER = process.env.BASIC_AUTH_USER;
 const PASS = process.env.BASIC_AUTH_PASS;
 const PORT = process.env.PORT || 8002;
@@ -18,48 +15,26 @@ if (!USER || !PASS) {
   throw new Error('BASIC_AUTH_USER ou BASIC_AUTH_PASS não estão definidos!');
 }
 
-// --------------------------------------------------
-// EXPRESS
-// --------------------------------------------------
 const app = express();
 app.set('trust proxy', true);
-
 const webappDir = path.join(__dirname, 'src', 'main', 'webapp');
 
-// --------------------------------------------------
-// BASIC AUTH
-// --------------------------------------------------
+// Middleware para Basic Auth
 function basicAuth(req, res, next) {
   const auth = req.headers.authorization;
-
   if (!auth || !auth.startsWith('Basic ')) {
     res.setHeader('WWW-Authenticate', 'Basic realm="SecureArea"');
     return res.status(401).send('Authentication required');
   }
-
   const base64 = auth.split(' ')[1];
   const [user, pass] = Buffer.from(base64, 'base64').toString().split(':');
-
-  if (user === USER && pass === PASS) {
-    return next();
-  }
-
+  if (user === USER && pass === PASS) return next();
+  
   res.setHeader('WWW-Authenticate', 'Basic realm="SecureArea"');
   return res.status(401).send('Invalid credentials');
 }
 
-
-// --------------------------------------------------
-// MIDDLEWARES
-// --------------------------------------------------
 app.use(express.json());
-
-// --------------------------------------------------
-// ROTAS
-// --------------------------------------------------
-
-// Health check
-app.get('/health', (req, res) => res.json({ status: 'ok' }));
 
 // --------------------------------------------------
 // PROXY SIBS – VALIDADOR CLIENTID
@@ -961,59 +936,67 @@ app.post('/api/CompraMandato', async (req, res) => {
   }
 });
 
-// Pastas protegidas
-app.use('/validador_API', basicAuth, express.static(path.join(webappDir, 'validador_API')));
-app.use('/validador', basicAuth, express.static(path.join(webappDir, 'validador')));
-app.use('/Onboarding', basicAuth, express.static(path.join(webappDir, 'Onboarding_menu')));
-app.use('/webhooks', basicAuth, express.static(path.join(webappDir, 'webhooks')));
-app.use('/validador_form', basicAuth, express.static(path.join(webappDir, 'validador_form')));
-app.use('/validador_multifuncoes', basicAuth, express.static(path.join(webappDir, 'validador_multifuncoes')));
+// 1. ROTAS PROTEGIDAS (Acesso restrito)
+const protectedRoutes = [
+  '/validador_API',
+  '/validador',
+  '/Onboarding_menu', // Garanta que o nome da pasta no Linux é exatamente este
+  '/webhooks',
+  '/validador_form',
+  '/validador_multifuncoes'
+];
 
-
-
-
-// Assets públicos da home
-app.use('/public', express.static(path.join(webappDir, 'public')));
-app.use('/AllmethodsPayment', express.static(path.join(webappDir, 'AllmethodsPayment')));
-app.use('/Bizum_stargate_payment', express.static(path.join(webappDir, 'Bizum_stargate_payment')));
-app.use('/BLIK_stargate_payment', express.static(path.join(webappDir, 'BLIK_stargate_payment')));
-app.use('/Cancellation_gateway', express.static(path.join(webappDir, 'Cancellation_gateway')));
-app.use('/card_payment', express.static(path.join(webappDir, 'card_payment')));
-app.use('/card_stargate_payment', express.static(path.join(webappDir, 'card_stargate_payment')));
-app.use('/config_gateway', express.static(path.join(webappDir, 'config_gateway')));
-app.use('/config_stargate', express.static(path.join(webappDir, 'config_stargate')));
-app.use('/footer', express.static(path.join(webappDir, 'footer')));
-app.use('/gateway', express.static(path.join(webappDir, 'gateway')));
-app.use('/gateway_menu', express.static(path.join(webappDir, 'gateway_menu')));
-app.use('/MBWAY_payment', express.static(path.join(webappDir, 'MBWAY_payment')));
-app.use('/MBWAY_payment', express.static(path.join(webappDir, 'MBWAY_payment')));
-app.use('/navbar', express.static(path.join(webappDir, 'navbar')));
-app.use('/Onboarding', express.static(path.join(webappDir, 'Onboarding')));
-app.use('/popups', express.static(path.join(webappDir, 'popups')));
-app.use('/reference_payment', express.static(path.join(webappDir, 'reference_payment')));
-app.use('/Refund_gateway', express.static(path.join(webappDir, 'Refund_gateway')));
-app.use('/stargate', express.static(path.join(webappDir, 'stargate')));
-app.use('/validador', express.static(path.join(webappDir, 'validador')));
-app.use('/validador_API', express.static(path.join(webappDir, 'validador_API')));
-app.use('/validador_form', express.static(path.join(webappDir, 'validador_form')));
-app.use('/validador_multifuncoes', express.static(path.join(webappDir, 'validador_multifuncoes')));
-app.use('/webhooks', express.static(path.join(webappDir, 'webhooks')));
-
-
-// Página inicial
-app.get('/', (req, res) => {
-  const indexPath = path.join(webappDir, 'gateway_menu', 'gateway_menu.html');
-  if (!fs.existsSync(indexPath)) return res.status(404).send('Página inicial não encontrada!');
-  res.sendFile(indexPath);
+protectedRoutes.forEach(route => {
+  // O path.join aqui deve apontar para a pasta real no disco
+  const folderName = route.replace('/', '');
+  app.use(route, basicAuth, express.static(path.join(webappDir, folderName)));
 });
 
-// Resto da webapp (sem proteção)
+// 2. ROTAS PÚBLICAS (Sem Auth)
+const publicRoutes = [
+  '/public',
+  '/AllmethodsPayment',
+  '/Bizum_stargate_payment',
+  '/BLIK_stargate_payment',
+  '/Cancellation_gateway',
+  '/card_payment',
+  '/card_stargate_payment',
+  '/config_gateway',
+  '/config_stargate',
+  '/footer',
+  '/gateway',
+  '/gateway_menu',
+  '/MBWAY_payment',
+  '/navbar',
+  '/Onboarding',
+  '/popups',
+  '/reference_payment',
+  '/Refund_gateway',
+  '/stargate'
+];
+
+publicRoutes.forEach(route => {
+  const folderName = route.replace('/', '');
+  app.use(route, express.static(path.join(webappDir, folderName)));
+});
+
+// 3. PÁGINA INICIAL
+app.get('/', (req, res) => {
+  const indexPath = path.join(webappDir, 'gateway_menu', 'gateway_menu.html');
+  if (fs.existsSync(indexPath)) {
+    res.sendFile(indexPath);
+  } else {
+    res.status(404).send('Página inicial não encontrada! Verifique o caminho: ' + indexPath);
+  }
+});
+
+// 4. FALLBACK (Arquivos na raiz de webapp)
 app.use(express.static(webappDir));
 
-// --------------------------------------------------
-// START
-// --------------------------------------------------
+// Health check
+app.get('/health', (req, res) => res.json({ status: 'ok' }));
+
 app.listen(PORT, HOST, () => {
-  console.log(`Servidor iniciado em http://${HOST}:${PORT}`);
-  console.log(`Servindo webapp a partir de: ${webappDir}`);
+  console.log(`Servidor rodando em http://${HOST}:${PORT}`);
+  console.log(`Webapp root: ${webappDir}`);
 });
