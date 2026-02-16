@@ -961,6 +961,17 @@ app.post('/api/CompraMandato', async (req, res) => {
   }
 });
 
+// Pastas protegidas
+app.use('/validador_API', basicAuth, express.static(path.join(webappDir, 'validador_API')));
+app.use('/validador', basicAuth, express.static(path.join(webappDir, 'validador')));
+app.use('/Onboarding', basicAuth, express.static(path.join(webappDir, 'Onboarding_menu')));
+app.use('/webhooks', basicAuth, express.static(path.join(webappDir, 'webhooks')));
+app.use('/validador_form', basicAuth, express.static(path.join(webappDir, 'validador_form')));
+app.use('/validador_multifuncoes', basicAuth, express.static(path.join(webappDir, 'validador_multifuncoes')));
+
+
+
+
 // Assets públicos da home
 app.use('/public', express.static(path.join(webappDir, 'public')));
 app.use('/AllmethodsPayment', express.static(path.join(webappDir, 'AllmethodsPayment')));
@@ -989,7 +1000,6 @@ app.use('/validador_multifuncoes', express.static(path.join(webappDir, 'validado
 app.use('/webhooks', express.static(path.join(webappDir, 'webhooks')));
 
 
-
 // Página inicial
 app.get('/', (req, res) => {
   const indexPath = path.join(webappDir, 'gateway_menu', 'gateway_menu.html');
@@ -999,14 +1009,6 @@ app.get('/', (req, res) => {
 
 // Resto da webapp (sem proteção)
 app.use(express.static(webappDir));
-
-// Pastas protegidas
-app.use('/validador_API', basicAuth, express.static(path.join(webappDir, 'validador_API')));
-app.use('/validador', basicAuth, express.static(path.join(webappDir, 'validador')));
-app.use('/Onboarding', basicAuth, express.static(path.join(webappDir, 'Onboarding_menu')));
-app.use('/webhooks', basicAuth, express.static(path.join(webappDir, 'webhooks')));
-app.use('/validador_form', basicAuth, express.static(path.join(webappDir, 'validador_form')));
-app.use('/validador_multifuncoes', basicAuth, express.static(path.join(webappDir, 'validador_multifuncoes')));
 
 // --------------------------------------------------
 // START
