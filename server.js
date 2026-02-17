@@ -10,6 +10,7 @@ const USER = process.env.BASIC_AUTH_USER;
 const PASS = process.env.BASIC_AUTH_PASS;
 const PORT = process.env.PORT || 8002;
 const HOST = process.env.HOST || '127.0.0.1';
+const prefix = process.env.APP_PREFIX || '/SimuladorSIBS';
 
 if (!USER || !PASS) {
   throw new Error('BASIC_AUTH_USER ou BASIC_AUTH_PASS não estão definidos!');
@@ -37,9 +38,10 @@ function basicAuth(req, res, next) {
 app.use(express.json());
 
 // --------------------------------------------------
-// PROXY SIBS – VALIDADOR CLIENTID
+// Chamadas API
 // --------------------------------------------------
-app.post('/api/validar-clientid', async (req, res) => {
+
+app.post(`${prefix}api/validar-clientid`, async (req, res) => {
   try {
     const { nome, clientId, token, terminalID } = req.body;
 
@@ -940,7 +942,7 @@ app.post('/api/CompraMandato', async (req, res) => {
 const protectedRoutes = [
   '/validador_API',
   '/validador',
-  '/Onboarding_menu', // Garanta que o nome da pasta no Linux é exatamente este
+  '/Onboarding_menu',
   '/webhooks',
   '/validador_form',
   '/validador_multifuncoes'

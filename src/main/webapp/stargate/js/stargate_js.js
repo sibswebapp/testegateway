@@ -152,7 +152,11 @@
       
       let redirectUrl = "";
 
-      let baseUrl = window.location.origin + '/';
+      const isProd = window.location.hostname === 'sibsdigitalcommerce.com'; 
+
+      let baseUrl = isProd 
+      ? window.location.origin + '/SimuladorSIBS/' 
+      : window.location.origin + '/';
 
       
       if (paymentMethodArray.length === 0) {
