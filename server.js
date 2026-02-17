@@ -1,4 +1,5 @@
 const express = require('express');
+const router = express.Router();
 const path = require('path');
 const fs = require('fs');
 
@@ -42,7 +43,7 @@ app.use(express.json());
 // --------------------------------------------------
 
 
-app.post(`${prefix}api/validar-clientid`, async (req, res) => {
+app.post(`/api/validar-clientid`, async (req, res) => {
   try {
     const { nome, clientId, token, terminalID } = req.body;
 
@@ -938,6 +939,8 @@ app.post('/api/CompraMandato', async (req, res) => {
     });
   }
 });
+
+app.use(prefix, router);
 
 // 1. ROTAS PROTEGIDAS (Acesso restrito)
 const protectedRoutes = [
