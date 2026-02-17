@@ -10,7 +10,7 @@ const USER = process.env.BASIC_AUTH_USER;
 const PASS = process.env.BASIC_AUTH_PASS;
 const PORT = process.env.PORT || 8002;
 const HOST = process.env.HOST || '127.0.0.1';
-const prefix = (HOST === '127.0.0.1') ? '/' : '/SimuladorSIBS';
+const prefix = (HOST === '127.0.0.1') ? '/' : '/SimuladorSIBS/';
 
 if (!USER || !PASS) {
   throw new Error('BASIC_AUTH_USER ou BASIC_AUTH_PASS não estão definidos!');
@@ -1002,4 +1002,5 @@ app.get('/health', (req, res) => res.json({ status: 'ok' }));
 app.listen(PORT, HOST, () => {
   console.log(`Servidor rodando em http://${HOST}:${PORT}`);
   console.log(`Webapp root: ${webappDir}`);
+  console.log("Prefixo ativo:", prefix)
 });
