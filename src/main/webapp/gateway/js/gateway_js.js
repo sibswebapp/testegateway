@@ -648,7 +648,12 @@
               return;
             }
 
-            let baseUrl_MBWAY =  window.location.origin + '/';
+            const isProd = window.location.hostname === 'sibsdigitalcommerce.com'; 
+
+            let baseUrl_MBWAY = isProd 
+            ? window.location.origin + '/SimuladorSIBS/' 
+            : window.location.origin + '/';
+            
             const redirectWithPhone = `${baseUrl_MBWAY}MBWAY_payment/MBWAY_return.html?id=${transactionID}`;
 
             window.location.href = redirectWithPhone;
@@ -666,7 +671,12 @@
             const referenceButton = document.createElement("button");
             referenceButton.className = "btn btn-primary";
             referenceButton.textContent = "Gerar Referência de Pagamento";
-            let baseUrl = window.location.origin + '/';
+
+            const isProd = window.location.hostname === 'sibsdigitalcommerce.com'; 
+
+            let baseUrl = isProd 
+            ? window.location.origin + '/SimuladorSIBS/' 
+            : window.location.origin + '/';
 
             referenceButton.onclick = () => {
 
