@@ -1,46 +1,50 @@
-.fixed-payment-form {
-      width: 100%;
-      height: 1050px;
-      overflow: hidden;
-    }
+html, body {
+          height: 100%;
+          margin: 0;
+          padding: 0;
+          background: #f9fafb;
+          color: #333;
+          font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+          display: flex;
+          flex-direction: column;
+          min-height: 100vh;
+        }
 
-    html, body {
-      height: 100%;
-      margin: 0;
-      padding: 0;
-      background: #f9fafb;
-      color: #333;
-      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-      }
-
-    * {
-      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    }
-
-    main {
-      flex: 1;
-    }
-
-    /*letra css*/
-    h2 {
-      font-family: 'Montserrat', sans-serif;
-      font-weight: bold;
-    }
-
-    .method-badge {
-      display: inline-block;
-      background-color: #eaf5ff;
-      color: #0366d6;
-      padding: 2px 6px;
-      border-radius: 4px;
-      font-family: monospace;
-      font-weight: bold;
-    }
+        main {
+          flex: 1 0 auto;
+        }
 
 
+        /*letra css*/
+        h2 {
+          font-weight: bold;
+        }
+
+        
+        /* Estado ativo */
+        #errorModal.active .overlay {
+          opacity: 1;
+          visibility: visible;
+        }
+        #errorModal.active .modal-box {
+          opacity: 1;
+          visibility: visible;
+          transform: translate(-50%, -50%) scale(1);
+        }
+      
+        /* Garante que o input e o select têm o mesmo tamanho e alinhamento */
+        #referenceExpiry,
+        #referenceExpiryUnit {
+          height: 38px;
+        }
+
+        .gap-2 {
+          gap: 10px !important;
+        }
+
+
+
+        
     :root {
         --brand-blue: #0061ff;
         --brand-blue-hover: #0052d9;
@@ -84,6 +88,7 @@
         width: 42px;
         height: 42px;
         background: linear-gradient(135deg, #ff6a00 0%, #ffa500 100%);        border-radius: 12px;
+        border-radius: 12px;
         display: flex;
         align-items: center;
         justify-content: center;

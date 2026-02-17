@@ -131,7 +131,7 @@ async function refund() {
 
     const debugHeaders = document.getElementById("debug-headers");
     const debugBody = document.getElementById("debug-body");
-    const debugSection = document.getElementById("debug-section");
+    const debugSection = document.getElementById("container_debug");
 
     try {
         const response = await fetch(apiUrl, {
@@ -154,12 +154,8 @@ async function refund() {
         const debugHeader = document.getElementById("debug-header");
 
         if (response.ok) {
-            debugHeader.classList.remove("bg-danger");
-            debugHeader.classList.add("bg-primary");
             showSuccessModal("✅ Reembolso efetuado com sucesso!");
         } else {
-            debugHeader.classList.remove("bg-primary");
-            debugHeader.classList.add("bg-danger");
             showErrorModal("❌ Erro ao efetuar o reembolso.");
         }
 

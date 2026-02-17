@@ -13,7 +13,9 @@
   <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.1/mdb.min.css" />
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet" />
-
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
   <link rel="stylesheet" href="/gateway/css/gateway_css.css">
   <link rel="stylesheet" href="/navbar/css/navbar_css.css">
   <link rel="stylesheet" href="/footer/css/footer_css.css">
@@ -31,118 +33,184 @@
     <div class="container mt-4">
 
       <!--Cartão-->
-      <div class="card"  id="Div_Status_Card">
-        <div class="card-header text-center d-flex justify-content-between align-items-center" style="background-color: #cae3ff;">
-          <h2 style="color: #454545; margin: 0 auto;"><b>Status do Pagamento</b></h2>
-          <button type="button" class="btn btn-light btn-sm ms-2" data-bs-toggle="modal" data-bs-target="#infoModal" title="Informações">
-            <i class="fa fa-question-circle"></i>
+      <div class="dashboard-header shadow-sm card p-3"  id="Div_Status_Card" style="background: #49b2ff12;">
+        <div class="brand-container d-flex align-items-center justify-content-between w-100">
+          <div class="d-flex align-items-center">
+            <div class="logo-square me-3">
+              <i class="fa-solid fa-shield-halved"></i>
+            </div>
+            <div class="title-group">
+              <span style="font-size: 22px; color: #202124; letter-spacing: -0.5px;">
+                <b style="font-weight: 400;">Gateway</b>
+                <b style="font-weight: 600;">SIBS</b>
+                <span style="color: #dadce0; margin: 0 8px; font-weight: 300;">|</span>
+                <span style="color: #5f6368; font-weight: 400;">Status do Pagamento</span>
+              </span>
+            </div>
+          </div>
+
+          <button type="button" class="btn-info-minimal" data-bs-toggle="modal" data-bs-target="#infoModal" title="Informações">
+            <i class="fa-solid fa-circle-info"></i>
           </button>
         </div>
 
-        <div class="card-body">
-          <h4 class="text-primary text-center"><b>Detalhes do Pagamento</b></h4>
-          <div id="payment-status" class="text-center"></div>
+        <div class="card-body p-4">
+          <div class="text-center mb-4">
+              <h5 class="text-uppercase fw-bold shadow-text" style="color: #4a5568; letter-spacing: 1px; font-size: 0.9rem;">
+                  Detalhes do pagamento
+              </h5>
+              <hr class="mx-auto" style="width: 50px; height: 3px; background: #0d6efd; border: none; opacity: 1; border-radius: 10px;">
+          </div>
+
+          <div id="payment-status" class="d-flex justify-content-center align-items-center" style="min-height: 200px;">
+              <div class="spinner-border text-primary opacity-25" role="status">
+                  <span class="visually-hidden">A carregar...</span>
+              </div>
+          </div>
         </div>
       </div>
 
       <!--MB WAY-->
-      <div class="card"  id="Div_Status_MBWAY">
-        <div class="card-header text-center d-flex justify-content-between align-items-center" style="background-color: #cae3ff;">
-          <h2 style="color: #454545; margin: 0 auto;"><b>Status do Pagamento</b></h2>
-          <button type="button" class="btn btn-light btn-sm ms-2" data-bs-toggle="modal" data-bs-target="#infoModal" title="Informações">
-            <i class="fa fa-question-circle"></i>
+      <div class="dashboard-header shadow-sm card p-3" id="Div_Status_MBWAY" style="background: #49b2ff12;">
+        <div class="brand-container d-flex align-items-center justify-content-between w-100">
+          <div class="d-flex align-items-center">
+            <div class="logo-square me-3">
+              <i class="fa-solid fa-shield-halved"></i>
+            </div>
+            <div class="title-group">
+              <span style="font-size: 22px; color: #202124; letter-spacing: -0.5px;">
+                <b style="font-weight: 400;">Gateway</b>
+                <b style="font-weight: 600;">SIBS</b>
+                <span style="color: #dadce0; margin: 0 8px; font-weight: 300;">|</span>
+                <span style="color: #5f6368; font-weight: 400;">MBWAY</span>
+              </span>
+            </div>
+          </div>
+
+          <button type="button" class="btn-info-minimal" data-bs-toggle="modal" data-bs-target="#infoModal" title="Informações">
+            <i class="fa-solid fa-circle-info"></i>
           </button>
         </div>
-
-        <div class="card-body">
-          <h4 class="text-primary text-center"><b>Detalhes do Pagamento (Possui 4 minutos para realizar o pagamento via MB WAY)</b></h4>
-          <div id="payment-status_MBWAY" class="text-center"></div>
+        <div class="card-body text-center">
+          <p><b id="payment-status_MBWAY">Detalhes do Pagamento (Possui 4 minutos para realizar o pagamento via MB WAY)</b></p>
         </div>
       </div>
 
       <!--Referencias-->
-      <div class="card" id="Div_Status_reference">
-        <div class="card-header text-center d-flex justify-content-between align-items-center" style="background-color: #cae3ff;">
-          <h2 style="color: #454545; margin: 0 auto;"><b>Geração de Referência de Pagamento</b></h2>
-          <button type="button" class="btn btn-light btn-sm ms-2" data-bs-toggle="modal" data-bs-target="#infoModal" title="Informações">
-            <i class="fa fa-question-circle"></i>
-          </button>
-        </div>
+      <div class="dashboard-header shadow-sm card p-3" style="background: #49b2ff12;" id="Div_Status_reference">
+            <div class="brand-container d-flex align-items-center justify-content-between w-100">
+                <div class="d-flex align-items-center">
+                    <div class="logo-square me-3">
+                        <i class="fa-solid fa-shield-halved"></i>
+                    </div>
+                    <div class="title-group">
+                        <span style="font-size: 22px; color: #202124; letter-spacing: -0.5px;">
+                            <b style="font-weight: 400;">Gateway</b>
+                            <b style="font-weight: 600;">SIBS</b>
+                            <span style="color: #dadce0; margin: 0 8px; font-weight: 300;">|</span>
+                            <span style="color: #5f6368; font-weight: 400;">Referência Bancária</span>
+                        </span>
+                    </div>
+                </div>
 
-        <div class="card-body">
-          <div id="service-reference" class="text-center"></div>
+                <button type="button" class="btn-info-minimal" data-bs-toggle="modal" data-bs-target="#infoModal" title="Informações">
+                    <i class="fa-solid fa-circle-info"></i>
+                </button>
+            </div>
+            <div id="service-reference" class="text-center mt-3"></div>
+            <br>
         </div>
-      </div>
 
     </div>
   </main>
 
 
-  <!--para o corpo do debug (debug - body do checkout)-->
-  <div class="container my-4">
-    <div class="card shadow-sm border-0">
-        <div class="card-header fw-bold text-white" style="background-color: #0d6efd;">
-        <i class="fa fa-bug me-2"></i>Debug da Response API
-        </div>
-        <div class="card-body bg-white">
-        <h6 class="fw-bold">Response Headers:</h6>
-        <div class="bg-light rounded p-2 mb-3" style="max-height: 200px; overflow: auto;">
-            <pre id="debug-headers" class="m-0" style="white-space: pre; overflow-x: auto;">Carregando...</pre>
-        </div>
+   <!--para o corpo do debug (debug - body do checkout)-->
+    <div class="container my-4">
+        <div class="debug-container my-5">
+            <div class="debug-card shadow-lg">
+                <div class="debug-header">
+                    <div class="terminal-dots">
+                        <div class="dot-red"></div>
+                        <div class="dot-yellow"></div>
+                        <div class="dot-green"></div>
+                    </div>
+                    <div class="debug-title">
+                        <i class="fa-solid fa-bug me-2"></i> Debug SIBS API Inspector
+                    </div>
+                    <div class="status_badge_debug text_info_debug" id="insp-badge">JSON Response</div>
+                </div>
 
-        <h6 class="fw-bold">Response Body:</h6>
-        <div class="bg-light rounded p-2" style="max-height: 300px; overflow: auto;">
-            <pre id="debug-body" class="m-0" style="white-space: pre; overflow-x: auto;">Carregando...</pre>
-        </div>
+                <div class="debug-section p-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="text-muted small fw-bold">DEBUG CONSOLE</span>
+                    </div>
+
+                    <div id="insp-content">
+                        <div class="mb-4">
+                            <div class="section-label"> <i class="fa-solid fa-list-check"></i> HEADER</div>
+                            <div class="code-window position-relative">
+                                <pre id="debug-headers" class="bg-dark p-3 rounded" style="max-height:150px; overflow-y:auto; font-size:0.8rem; color:white">A carregar headers...</pre>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="section-label">PAYLOAD</div>
+                            <div class="code-window position-relative">
+                                <pre id="debug-body" class="bg-dark text_info_debug p-3 rounded" style="max-height:350px; overflow-y:auto; font-size:0.8rem;">A carregar body...</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-  </div>
 
 
-  <!--Icons para colocar no status-->
-  <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
-    <symbol id="check-circle-fill" fill="currentColor" viewBox="0 0 16 16">
-      <path
-        d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
-    </symbol>
-    <symbol id="exclamation-triangle-fill" fill="currentColor" viewBox="0 0 16 16">
-      <path
-        d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
-    </symbol>
-  </svg>
+    <!--Icons para colocar no status-->
+    <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+      <symbol id="check-circle-fill" fill="currentColor" viewBox="0 0 16 16">
+        <path
+          d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
+      </symbol>
+      <symbol id="exclamation-triangle-fill" fill="currentColor" viewBox="0 0 16 16">
+        <path
+          d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
+      </symbol>
+    </svg>
 
 
-  <!-- Modal -->
-  <div class="modal fade" id="infoModal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content shadow">
-        <div class="modal-header bg-light">
-          <h5 class="modal-title">
-            <i class="fa fa-info-circle text-primary me-2"></i> Processo de Integração Gateway
-          </h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-        </div>
-        <div class="modal-body">
-          <p>
-            Nesta página pode verificar qual o status do pagamento, se foi <b>recusado</b> ou <b>aceite</b>. Para isso, utilize o método:
-          </p>
-          <p style="white-space: nowrap;">
-            <span class="badge bg-success align-middle">GET</span>
-            <code class="align-middle" style="font-size: 0.70rem;">https://spg.qly.site1.sibs.pt/api/v2/payments/{transactionID}/status</code>
-          </p>
+    <!-- Modal -->
+    <div class="modal fade" id="infoModal" tabindex="-1">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content shadow">
+          <div class="modal-header bg-light">
+            <h5 class="modal-title">
+              <i class="fa fa-info-circle text-primary me-2"></i> Processo de Integração Gateway
+            </h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <p>
+              Nesta página pode verificar qual o status do pagamento, se foi <b>recusado</b> ou <b>aceite</b>. Para isso, utilize o método:
+            </p>
+            <p style="white-space: nowrap;">
+              <span class="badge bg-success align-middle">GET</span>
+              <code class="align-middle" style="font-size: 0.70rem;">https://spg.qly.site1.sibs.pt/api/v2/payments/{transactionID}/status</code>
+            </p>
 
-          <br/>
-          <p>Para visualização de toda a documentação, visite:</p>
-          <a href="https://www.docs.pay.sibs.com/portugal/sibs-gateway/integrations/api/integration-guide/" class="btn btn-outline-primary btn-sm" target="_blank">
-            <i class="fa fa-external-link me-1"></i> Documentação SIBS Gateway
-          </a>
-        </div>
-        <div class="modal-footer">
-          <button class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Fechar</button>
+            <br/>
+            <p>Para visualização de toda a documentação, visite:</p>
+            <a href="https://www.docs.pay.sibs.com/portugal/sibs-gateway/integrations/api/integration-guide/" class="btn btn-outline-primary btn-sm" target="_blank">
+              <i class="fa fa-external-link me-1"></i> Documentação SIBS Gateway
+            </a>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Fechar</button>
+          </div>
         </div>
       </div>
     </div>
-  </div>
+    
 </body>
 
 <div id="footer"></div>

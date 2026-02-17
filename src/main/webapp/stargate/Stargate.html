@@ -13,8 +13,9 @@
   <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.1/mdb.min.css" />
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
-
-  <link rel="stylesheet" href="/gateway/css/gateway_css.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
   <link rel="stylesheet" href="/popups/css/popups_css.css">
   <link rel="stylesheet" href="/navbar/css/navbar_css.css">
   <link rel="stylesheet" href="/footer/css/footer_css.css">
@@ -26,55 +27,101 @@
 
   <div id="navbar"></div>
 
-  <main>
-    <div class="container mt-4">
-      <br>
-      <h1 class="text-center mb-4"></h1>
-
-      <div class="card">
-        <div class="card-header text-center d-flex justify-content-between align-items-center" style="background-color: #e65100;">
-          <h2 style="color: #f2f2f2; margin: 0 auto;"><b>Stargate SIBS Testes</b></h2>
-        </div>
-
-      <div class="card-body">
-
-        <!--Opção para escolher os paises-->
-        <div class="mb-3">
-          <label class="form-label">País:</label><br>
-          <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="country" id="spain" value="Spain" onchange="updatePaymentMethods(); makePayment()" checked>
-            <label class="form-check-label" for="spain">Spain (BIZM)</label>
+  <main class="container py-5">
+    <div class="dashboard-header shadow-sm card">
+      <div class="brand-container d-flex align-items-center justify-content-between">
+        <div class="d-flex align-items-center">
+          <div class="logo-square me-3">
+            <i class="fa-solid fa-shield-halved"></i>
           </div>
-          <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="country" id="poland" value="Poland" onchange="updatePaymentMethods(); makePayment()" >
-            <label class="form-check-label" for="poland">Poland (BLIK)</label>
+          <div class="title-group">
+            <span style="font-size: 22px; color: #202124; letter-spacing: -0.5px;">
+              <b style="font-weight: 400;">Stargate</b>
+              <b style="font-weight: 600;">SIBS</b>
+              <span style="color: #dadce0; margin: 0 8px; font-weight: 300;">|</span>
+              <span style="color: #5f6368; font-weight: 400;">Testes Ambiente de qualidade</span>
+            </span>
           </div>
         </div>
-
-        <!--Inputs-->
-        <div class="mb-3">
-          <label class="form-label">Montante (Valor máximo 200€):</label>
-          <input type="number" id="amount" class="form-control" value="1" min="1" max="200" step="0.01" 
-            onchange="makePayment()" 
-            oninput="if(this.value > 200) this.value = 200;">
-        </div>
-
-        <div class="mb-3" id="payment-method_Div">
-          <label for="payment-method" class="form-label">Método de Pagamento:</label>
-          <select id="payment-method" class="form-select" onchange="makePayment()">
-          </select>
-        </div>
-
-        <button class="btn w-100" style="background-color: #ff9800; color: #f2f2f2;" onclick="makePayment()">Iniciar Pagamento</button>
       </div>
+
+      <div class="card-body p-4">
+          <div class="row mb-4">
+              <div class="col-12">
+                  <label class="form-label small fw-bold text-muted text-uppercase" style="letter-spacing: 0.8px;">País de Origem</label>
+                  <div class="d-flex gap-2 p-1 bg-light rounded-4 border shadow-sm" style="max-width: 400px; height: 50px;">
+                      <div class="flex-grow-1">
+                          <input type="radio" class="btn-check" name="country" id="spain" value="Spain" onchange="updatePaymentMethods(); makePayment()" checked>
+                          <label class="btn btn-outline-primary border-0 rounded-3 w-100 h-100 d-flex align-items-center justify-content-center fw-bold" for="spain">
+                              <span class="me-2">🇪🇸</span> SPAIN (BIZM)
+                          </label>
+                      </div>
+                      <div class="flex-grow-1">
+                          <input type="radio" class="btn-check" name="country" id="poland" value="Poland" onchange="updatePaymentMethods(); makePayment()">
+                          <label class="btn btn-outline-primary border-0 rounded-3 w-100 h-100 d-flex align-items-center justify-content-center fw-bold" for="poland">
+                              <span class="me-2">🇵🇱</span> POLAND (BLIK)
+                          </label>
+                      </div>
+                  </div>
+              </div>
+          </div>
+
+          <div class="row g-3 align-items-end">
+              <div class="col-lg-3">
+                  <label class="form-label small fw-bold text-muted text-uppercase" style="letter-spacing: 0.8px;">Montante Final</label>
+                  <div class="position-relative">
+                      <span class="position-absolute top-50 start-0 translate-middle-y ps-3 text-muted fw-bold" style="margin: 0.1% 0% 0% -1%;">€</span>
+                      <input type="number" id="amount" class="form-control rounded-3 border-light-subtle shadow-sm ps-4 fw-bold" 
+                            value="1" min="1" max="200" step="0.01" 
+                            style="height: 48px; background: #fdfdfd;"
+                            onchange="makePayment()" 
+                            oninput="if(this.value > 200) this.value = 200;">
+                  </div>
+              </div>
+
+              <div class="col-lg-5" id="payment-method_Div">
+                  <label class="form-label small fw-bold text-muted text-uppercase" style="letter-spacing: 0.8px;">Método de Liquidação</label>
+                  <select id="payment-method" class="form-select rounded-3 border-light-subtle shadow-sm fw-semibold" 
+                          style="height: 48px; background: #fdfdfd;" 
+                          onchange="makePayment(); showDummyFieldsIfNeeded();">
+                  </select>
+              </div>
+
+              <div class="col-lg-4">
+                  <button class="btn btn-primary w-100 rounded-pill fw-bold shadow-sm d-flex align-items-center justify-content-center gap-2" 
+                          style="height: 48px; background-color: #ff9800; border-color: #ff9800; letter-spacing: 0.5px;" 
+                          onclick="makePayment()">
+                      INICIAR PAGAMENTO <i class="fa-solid fa-chevron-right small"></i>
+                  </button>
+              </div>
+          </div>
+      </div>
+
     </div>
 
-    <div id="payment-form" style="width:100%; overflow:hidden;"></div>
+    <div class="preview-canvas shadow-lg">
+      <div class="canvas-tag">
+        <span class="spinner-grow spinner-grow-sm text-primary" role="status" style="width: 8px; height: 8px;"></span>
+        Interface Preview
+      </div>
+      <br>
+      <div id="loader-area" class="p-4">
+        <div id="loader-placeholder" class="empty-state">
+            <div class="empty-icon-blob">
+                <i class="fa-solid fa-fingerprint"></i>
+            </div>
+            <h5 class="fw-bold text-dark">Pronto para Carregar</h5>
+            <p class="small text-muted text-center">Aguardando parâmetros para inicializar o iframe seguro da SIBS.</p>
+        </div>
 
-    <div id="debug-container"></div>
+        <div id="payment-form" class="mt-2"></div>
 
-    <br>
+        <div id="debug-area" class="mt-4"></div>
+      </div>
+    </div>
+    
   </main>
+
 
   <div id="footer"></div>
 

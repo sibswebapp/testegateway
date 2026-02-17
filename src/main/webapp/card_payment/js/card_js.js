@@ -94,52 +94,76 @@ document.addEventListener("DOMContentLoaded", async function () {
         // Mostrar o corpo da resposta no debug
         document.getElementById("debug-body").textContent = JSON.stringify(data, null, 2);
 
-        if (data.paymentStatus === "Success") {
-           document.getElementById("payment-status").innerHTML = `
-            <div class="alert alert-success d-flex flex-column align-items-center text-center" role="alert">
-              <svg class="bi mb-2" width="50" height="50" role="img" aria-label="Success:">
-                  <use href="#check-circle-fill"/>
-              </svg>
-              <div>
-                  <strong>Status do pagamento:</strong> ${data.paymentStatus}
-              </div>
-              <div class="text-center mt-3">
-                <button type="button" id="refund-btn" class="btn btn-warning">
-                  Reembolso da Compra
-                </button>
-              </div>
+       if (data.paymentStatus === "Success") {
+        document.getElementById("payment-status").innerHTML = `
+            <div class="card border-0 shadow-lg mx-auto mt-3" style="max-width: 750px; border-radius: 20px; overflow: hidden;">
+                <div class="row g-0">
+                    <div class="col-md-4 d-flex align-items-center justify-content-center p-5" style="background: #ecfdf5;">
+                        <div class="text-center">
+                            <div class="mb-3" style="color: #10b981; font-size: 4rem;">
+                                <i class="fa-solid fa-circle-check"></i>
+                            </div>
+                            <span class="badge rounded-pill px-3 py-2" style="background: rgba(16, 185, 129, 0.2); color: #065f46; font-size: 0.75rem; letter-spacing: 1px;">SISTEMA OK</span>
+                        </div>
+                    </div>
+                    <div class="col-md-8 p-5">
+                        <h3 class="fw-bold text-dark mb-2">Pagamento Confirmado</h3>
+                        <p class="text-muted mb-4">A sua transação foi concluída com sucesso.</p>
+                        
+                        <div class="p-3 bg-light rounded-3 mb-4">
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <span class="text-muted small fw-bold">ID DA TRANSAÇÃO</span>
+                            </div>
+                            <span class="font-monospace fw-bold text-dark" style="word-break: break-all; font-size: 0.9rem;">${paymentId}</span>
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="button" id="refund-btn" class="btn btn-warning fw-bold py-3 rounded-pill shadow-sm">
+                                <i class="fa-solid fa-arrow-rotate-left me-2"></i>Solicitar Reembolso da Compra
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
-          `;
+        `;
 
-          // Adicionar event listener ao botão de reembolso
-          document.getElementById("refund-btn").addEventListener("click", function() {
-
+        document.getElementById("refund-btn").addEventListener("click", function() {
             let refunds = JSON.parse(localStorage.getItem("refunds")) || [];
-
             refunds.push({
-              paymentId: paymentId,
-              amount: data.amount.value,
-              redirect: 1
+                paymentId: paymentId,
+                amount: data.amount.value,
+                redirect: 1
             });
-
             localStorage.setItem("refunds", JSON.stringify(refunds));
-
             window.location.href = "Refund_gateway/Refund_gateway.html";
-          });
+        });
 
-        } else {
-          document.getElementById("payment-status").innerHTML = `<div class="alert alert-danger d-flex flex-column align-items-center text-center" role="alert">
-                            <svg class="bi mb-2" width="50" height="50" role="img" aria-label="Erro:">
-                                <use href="#exclamation-triangle-fill"/>
-                            </svg>
-                            <div>
-                                <strong>Status do pagamento:</strong> ${data.paymentStatus}
+    } else {
+        document.getElementById("payment-status").innerHTML = `
+            <div class="card border-0 shadow-lg mx-auto mt-3" style="max-width: 750px; border-radius: 20px; overflow: hidden;">
+                <div class="row g-0">
+                    <div class="col-md-4 d-flex align-items-center justify-content-center p-5" style="background: #fef2f2;">
+                        <div class="text-center">
+                            <div class="mb-3" style="color: #ef4444; font-size: 4rem;">
+                                <i class="fa-solid fa-circle-exclamation"></i>
                             </div>
-                            <div>
-                                <strong>Descrição:</strong>${data.transactionStatusDescription}
-                            </div>
-                        </div>`;
-        }
+                            <span class="badge rounded-pill px-3 py-2" style="background: rgba(239, 68, 68, 0.2); color: #991b1b; font-size: 0.75rem; letter-spacing: 1px;">ERRO</span>
+                        </div>
+                    </div>
+                    <div class="col-md-8 p-5">
+                        <h3 class="fw-bold text-dark mb-2">Falha no Pagamento</h3>
+                        <p class="text-muted mb-4">Infelizmente, não foi possível realizar esta operação.</p>
+                        
+                        <div class="alert alert-danger border-0 p-3 mb-4" style="background: #fff1f2; border-left: 4px solid #ef4444 !important; border-radius: 8px;">
+                            <p class="small fw-bold mb-1" style="color: #991b1b;">MOTIVO DA RECUSA:</p>
+                            <span class="small" style="color: #b91c1c;">${data.transactionStatusDescription || "Erro de comunicação com o gateway."}</span>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        `;
+    }
       } catch (error) {
         console.error("Erro ao buscar status do pagamento:", error);
         document.getElementById("payment-status").innerHTML =

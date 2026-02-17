@@ -13,128 +13,128 @@
   <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.1/mdb.min.css" />
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
-
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <link rel="stylesheet" href="/gateway/css/gateway_css.css">
   <link rel="stylesheet" href="/popups/css/popups_css.css">
   <link rel="stylesheet" href="/navbar/css/navbar_css.css">
   <link rel="stylesheet" href="/footer/css/footer_css.css">
+  
 </head>
 
 <body>
 
   <div id="navbar"></div>
 
-  <main>
-    <div class="container mt-4">
+  <main class="container py-5">
+      <div class="dashboard-header shadow-sm card">
+          <div class="brand-container d-flex align-items-center justify-content-between">
+              <div class="d-flex align-items-center">
+                  <div class="logo-square me-3">
+                      <i class="fa-solid fa-shield-halved"></i>
+                  </div>
+                  <div class="title-group">
+                    <span style="font-size: 22px; color: #202124; letter-spacing: -0.5px;">
+                      <b style="font-weight: 400;">Gateway</b>
+                      <b style="font-weight: 600;">SIBS</b>
+                      <span style="color: #dadce0; margin: 0 8px; font-weight: 300;">|</span>
+                      <span style="color: #5f6368; font-weight: 400;">Testes Ambiente de qualidade</span>
+                    </span>
+                  </div>
+              </div>
+              <button type="button" class="btn-info-minimal ms-auto" data-bs-toggle="modal" data-bs-target="#infoModal" title="Informações">
+                  <i class="fa-solid fa-circle-info"></i>
+              </button>
+          </div>
 
-      <br>
-      <h1 class="text-center mb-4"></h1>
+          <div class="row g-4 align-items-end">
+              <div class="col-lg-3">
+                  <label class="form-label">Montante Final</label>
+                  <div class="position-relative">
+                      <span class="position-absolute top-50 start-0 translate-middle-y ps-3 text-muted fw-bold" style="margin: 0.1% 0% 0% -1%;">€</span>
+                      <input type="number" id="amount" class="form-control modern-input ps-4" value="1" min="1" max="200" step="0.01" onchange="makePayment()" oninput="if(this.value > 200) this.value = 200;">
+                  </div>
+              </div>
 
-      <div class="card">
-        <div class="card-header text-center d-flex justify-content-between align-items-center" style="background-color: #cae3ff;">
-          <h2 style="color: #454545; margin: 0 auto;"><b>Gateway SIBS Testes</b></h2>
-          <button type="button" class="btn btn-light btn-sm ms-2" data-bs-toggle="modal" data-bs-target="#infoModal" title="Informações">
-            <i class="fa fa-question-circle"></i>
-          </button>
+              <div class="col-lg-6" id="payment-method_Div">
+                  <label class="form-label">Método de Liquidação</label>
+                  <select id="payment-method" class="form-select modern-input" onchange="makePayment(); showDummyFieldsIfNeeded();"></select>
+                  </select>
+              </div>
+
+              <div class="col-lg-3">
+                  <button class="btn btn-generate" onclick="makePayment()">
+                     Iniciar Pagamento <i class="fa-solid fa-arrow-right"></i>
+                  </button>
+              </div>
+          </div>
+
+          <div id="dummyCustomerFields" class="mt-4 pt-4 border-top" style="display: none;">
+            <h6 class="fw-bold mb-3 text-primary"><i class="fa-solid fa-user-tag me-2"></i>Informações de Faturação</h6>
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label small">Nome Completo</label>
+                    <input type="text" id="customerName" class="form-control form-control-sm" value="Diego">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label small">Email</label>
+                    <input type="email" id="customerEmail" class="form-control form-control-sm" value="onboarding@teste.com">
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label small">Rua 1</label>
+                    <input type="text" id="billingStreet1" class="form-control form-control-sm" value="Rua de Teste 123">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label small">Rua 2</label>
+                    <input type="text" id="billingStreet2" class="form-control form-control-sm" value="Rua de Teste 123">
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label small">Cidade</label>
+                    <input type="text" id="billingCity" class="form-control form-control-sm" value="Lisboa">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label small">Código Postal</label>
+                    <input type="text" id="billingPostcode" class="form-control form-control-sm" value="1000-001">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label small">País</label>
+                    <select id="billingCountry" class="form-select form-select-sm">
+                        <option value="PT" selected>Portugal</option>
+                        <option value="ES">Espanha</option>
+                        <option value="FR">França</option>
+                    </select>
+                </div>
+            </div>
         </div>
 
-        <!--Inputs-->
-        <div class="card-body">
-          <div class="mb-3">
-            <label class="form-label">Montante (Valor máximo 200€):</label>
-            <input type="number" id="amount" class="form-control" value="1" min="1" max="200" step="0.01"
-              onchange="makePayment()" oninput="if(this.value > 200) this.value = 200;">
-          </div>
-
-          <div class="mb-3" id="payment-method_Div">
-            <label for="payment-method" class="form-label">Método de Pagamento:</label>
-            <select id="payment-method" class="form-select" onchange="makePayment(); showDummyFieldsIfNeeded();"></select>
-          </div>
-
-          <!--Inputs do customer info-->
-          <div id="dummyCustomerFields" class="mt-4" style="display: none;">
-
-            <br>
-            <hr>
-            <h5 class="mb-3">Informações do Cliente</h5>
-
-            <div class="mb-3">
-              <label class="form-label">Nome:</label>
-              <input type="text" id="customerName" class="form-control" value="Diego">
-            </div>
-
-            <div class="mb-3">
-              <label class="form-label">Email:</label>
-              <input type="email" id="customerEmail" class="form-control" value="Onboarding@teste.com">
-            </div>
-
-            <h6 class="mt-4">Morada de Envio</h6>
-            <div class="row">
-              <div class="col-md-6 mb-3">
-                <label>Rua 1:</label>
-                <input type="text" id="shippingStreet1" class="form-control" value="Rua 123">
-              </div>
-              <div class="col-md-6 mb-3">
-                <label>Rua 2:</label>
-                <input type="text" id="shippingStreet2" class="form-control" value="Porta 456">
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-4 mb-3">
-                <label>Cidade:</label>
-                <input type="text" id="shippingCity" class="form-control" value="Lisboa">
-              </div>
-              <div class="col-md-4 mb-3">
-                <label>Código Postal:</label>
-                <input type="text" id="shippingPostcode" class="form-control" value="1200-999">
-              </div>
-              <div class="col-md-4 mb-3">
-                <label>País:</label>
-                <select id="shippingCountry" class="form-select">
-                  <option value="PT" selected>Portugal</option>
-                </select>
-              </div>
-            </div>
-
-            <h6 class="mt-4">Morada de Faturação</h6>
-            <div class="row">
-              <div class="col-md-6 mb-3">
-                <label>Rua 1:</label>
-                <input type="text" id="billingStreet1" class="form-control" value="Rua teste 1">
-              </div>
-              <div class="col-md-6 mb-3">
-                <label>Rua 2:</label>
-                <input type="text" id="billingStreet2" class="form-control" value="Rua teste 2">
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-4 mb-3">
-                <label>Cidade:</label>
-                <input type="text" id="billingCity" class="form-control" value="Lisboa">
-              </div>
-              <div class="col-md-4 mb-3">
-                <label>Código Postal:</label>
-                <input type="text" id="billingPostcode" class="form-control" value="1700-123">
-              </div>
-              <div class="col-md-4 mb-3">
-                <label>País:</label>
-                <select id="billingCountry" class="form-select">
-                  <option value="PT" selected>Portugal</option>
-                </select>
-              </div>
-            </div>
-          </div>
-          
-          <button class="btn btn-primary w-100 mt-3" onclick="makePayment()">Iniciar Pagamento</button>
-
-        </div>
       </div>
 
-      <div id="payment-form" class="mt-4"></div>
+      <div class="preview-canvas shadow-lg">
+        <div class="canvas-tag">
+            <span class="spinner-grow spinner-grow-sm text-primary" role="status" style="width: 8px; height: 8px;"></span>
+            Interface Preview
+        </div>
+        <br>
+        <div id="loader-area" class="p-4">
+        
+        <div id="loader-placeholder" class="empty-state">
+            <div class="empty-icon-blob">
+                <i class="fa-solid fa-fingerprint"></i>
+            </div>
+            <h5 class="fw-bold text-dark">Pronto para Carregar</h5>
+            <p class="small text-muted text-center">Aguardando parâmetros para inicializar o iframe seguro da SIBS.</p>
+        </div>
 
+        <div id="payment-form" class="mt-2"></div>
+
+        <div id="debug-area" class="mt-4"></div>
+
+      </div>
     </div>
-    <br>
+    
   </main>
   
   <div id="footer"></div>

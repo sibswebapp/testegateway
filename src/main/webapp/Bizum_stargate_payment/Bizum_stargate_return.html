@@ -14,6 +14,8 @@
   <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.1/mdb.min.css" />
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <link rel="stylesheet" href="/gateway/css/gateway_css.css">
   <link rel="stylesheet" href="/popups/css/popups_css.css">
@@ -28,40 +30,84 @@
   <div id="navbar"></div>
 
   <!--Main - Ter o status do pagamento-->
-  <main>
-    <div class="container mt-4">
-      <div class="card">
-        <div class="card-header text-center d-flex justify-content-between align-items-center" style="background-color: #e65100;">
-          <h2 style="color: #f2f2f2; margin: 0 auto;"><b>Status do Pagamento</b></h2>
+  <main class="container py-5">
+    <div class="dashboard-header shadow-sm card p-3" style="background: #ef630073;">
+      <div class="brand-container d-flex align-items-center justify-content-between w-100">
+        <div class="d-flex align-items-center">
+          <div class="logo-square me-3">
+            <i class="fa-solid fa-shield-halved"></i>
+          </div>
+          <div class="title-group">
+            <span style="font-size: 22px; color: #202124; letter-spacing: -0.5px;">
+              <b style="font-weight: 400;">Gateway</b>
+              <b style="font-weight: 600;">SIBS</b>
+              <span style="color: #dadce0; margin: 0 8px; font-weight: 300;">|</span>
+              <span style="color: #5f6368; font-weight: 400;">Status do Pagamento</span>
+            </span>
+          </div>
         </div>
 
-        <div class="card-body">
-          <h4 class="text-primary text-center"><b style="color: #ff9800;">Detalhes do Pagamento</b></h4>
-          <div id="payment-status" class="text-center"></div>
+      </div>
+
+      <div class="card-body p-4">
+        <div class="text-center mb-4">
+            <h5 class="text-uppercase fw-bold shadow-text" style="color: #4a5568; letter-spacing: 1px; font-size: 0.9rem;">
+                Detalhes do pagamento
+            </h5>
+            <hr class="mx-auto" style="width: 50px; height: 3px; background: #0d6efd; border: none; opacity: 1; border-radius: 10px;">
+        </div>
+
+        <div id="payment-status" class="d-flex justify-content-center align-items-center" style="min-height: 200px;">
+            <div class="spinner-border text-primary opacity-25" role="status">
+                <span class="visually-hidden">A carregar...</span>
+            </div>
         </div>
       </div>
+      <br>
+
     </div>
   </main>
 
-  <!--para o corpo do debug (debug - body do checkout)-->
-  <div class="container my-4">
-    <div class="card shadow-sm border-0">
-        <div class="card-header fw-bold text-white" style="background-color: #e65100;">
-          <i class="fa fa-bug me-2"></i>Debug da Response API
-        </div>
-        <div class="card-body bg-white">
-        <h6 class="fw-bold">Response Headers:</h6>
-        <div class="bg-light rounded p-2 mb-3" style="max-height: 200px; overflow: auto;">
-            <pre id="debug-headers" class="m-0" style="white-space: pre; overflow-x: auto;">Carregando...</pre>
-        </div>
 
-        <h6 class="fw-bold">Response Body:</h6>
-        <div class="bg-light rounded p-2" style="max-height: 300px; overflow: auto;">
-            <pre id="debug-body" class="m-0" style="white-space: pre; overflow-x: auto;">Carregando...</pre>
-        </div>
+  <!--para o corpo do debug (debug - body do checkout)-->
+    <div class="container my-4">
+        <div class="my-5">
+            <div class="debug-card shadow-lg">
+                <div class="debug-header">
+                    <div class="terminal-dots">
+                        <div class="dot-red"></div>
+                        <div class="dot-yellow"></div>
+                        <div class="dot-green"></div>
+                    </div>
+                    <div class="debug-title">
+                        <i class="fa-solid fa-bug me-2"></i> Debug SIBS API Inspector
+                    </div>
+                    <div class="status_badge_debug text_info_debug" id="insp-badge">JSON Response</div>
+                </div>
+
+                <div class="debug-section p-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="text-muted small fw-bold">DEBUG CONSOLE</span>
+                    </div>
+
+                    <div id="insp-content">
+                        <div class="mb-4">
+                            <div class="section-label"> <i class="fa-solid fa-list-check"></i> HEADER</div>
+                            <div class="code-window position-relative">
+                                <pre id="debug-headers" class="bg-dark p-3 rounded" style="max-height:150px; overflow-y:auto; font-size:0.8rem; color:white">A carregar headers...</pre>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="section-label">PAYLOAD</div>
+                            <div class="code-window position-relative">
+                                <pre id="debug-body" class="bg-dark text_info_debug p-3 rounded" style="max-height:350px; overflow-y:auto; font-size:0.8rem;">A carregar body...</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-  </div>
 
   <!--Icons para colocar no status-->
   <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">

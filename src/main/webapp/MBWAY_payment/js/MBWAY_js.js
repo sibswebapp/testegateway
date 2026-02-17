@@ -106,131 +106,170 @@
     }
 
     function showMessage(text, type) {
-      messageElement.textContent = text;
-      messageElement.classList.remove("d-none", "alert-danger", "alert-success", "alert-warning");
-      messageElement.classList.add("alert-" + type);
-      buttonElement.classList.remove("d-none");
+     const timerElement = document.getElementById("timer");
+    if (timerElement) timerElement.parentElement.style.display = "none";
+    if (typeof buttonElement !== 'undefined') buttonElement.classList.add("d-none");
+
+    statusList.innerHTML = `
+        <div class="card border-0 shadow-lg mx-auto w-100 animate__animated animate__fadeIn" style="max-width: 1000px; border-radius: 20px; overflow: hidden;">
+            <div class="row g-0">
+                <div class="col-md-4 d-flex align-items-center justify-content-center p-5" style="background: #fff7ed;">
+                    <div class="text-center">
+                        <div class="mb-3" style="color: #f97316; font-size: 5rem;">
+                            <i class="fa-solid fa-hourglass-end"></i>
+                        </div>
+                        <span class="badge rounded-pill px-3 py-2" style="background: rgba(249, 115, 22, 0.2); color: #9a3412; letter-spacing: 1px;">SESSÃO EXPIRADA</span>
+                    </div>
+                </div>
+
+                <div class="col-md-8 p-5 bg-white text-start">
+                    <h2 class="fw-bold text-dark mb-3">O tempo limite foi atingido</h2>
+                    <p class="text-muted fs-5 mb-4">
+                       O pagamento MBWAY gerado expirou.
+                    </p>
+                    
+                    <div class="alert border-0 p-3 mb-4" style="background: #fffaf5; border-left: 5px solid #f97316 !important;">
+                        <span class="small text-dark">
+                            <i class="fa-solid fa-circle-info me-2"></i>
+                            Por favor, gerar um novo pedido MBWAY.
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
     }
 
     //Função que irá fazer o getstatus da transação MB WAY e ver em qual estado esta o pagamento para colocar a mensagem certa na tela do utilizador
-    async function checkRemotePaymentStatus() {
+ async function checkRemotePaymentStatus() {
+    let token_payment, clientId_payment, gatewayVersion;
 
-      let token_payment
-      let clientId_payment
-      let gatewayVersion
-
-      if(useDefault == "0"){
+    if (useDefault == "0") {
         token_payment = credential_config_variable.bearerToken;
         clientId_payment = credential_config_variable.clientId;
         gatewayVersion = credential_config_variable.gatewayVersion;
-      }else{
+    } else {
         token_payment = credential_default_variable.bearerToken;
         clientId_payment = credential_default_variable.clientId;
         gatewayVersion = credential_default_variable.gatewayVersion;
-      }
+    }
 
-      const version = gatewayVersion === "1" ? "v1" : "v2";
-      const apiUrl = `https://spg.qly.site1.sibs.pt/api/${version}/payments/${currentTransactionID}/status`;
+    const version = gatewayVersion === "1" ? "v1" : "v2";
+    const apiUrl = `https://spg.qly.site1.sibs.pt/api/${version}/payments/${currentTransactionID}/status`;
 
-      const headers = {
+    const headers = {
         Authorization: `Bearer ${token_payment}`,
         "X-IBM-Client-Id": clientId_payment,
         "Content-Type": "application/json",
         "Accept": "application/json"
-      };
+    };
 
-      try {
+    try {
         const response = await fetch(apiUrl, { method: "GET", headers });
         if (!response.ok) throw new Error(`Erro na requisição: ${response.status}`);
 
         let responseHeadersObj = {};
-        response.headers.forEach((value, key) => {
-          responseHeadersObj[key] = value;
-        });
+        response.headers.forEach((value, key) => { responseHeadersObj[key] = value; });
 
         const data = await response.json();
         updateDebug(responseHeadersObj, data);
 
-        if(data.transactionStatusCode == "000") data.transactionStatusCode = "200"
+        if (data.transactionStatusCode == "000") data.transactionStatusCode = "200";
         updateResponseDebug(data.transactionStatusCode, data);
 
+        // --- LÓGICA DE INTERFACE ---
+        const timerElement = document.getElementById("timer");
+        
+        // Função auxiliar para limpar mensagens e timers
+        const clearUI = () => {
+            if (timerElement) timerElement.parentElement.style.display = "none";
+            if (typeof messageElement !== 'undefined') messageElement.classList.add("d-none");
+        };
 
-        if (data.paymentStatus === "Declined" && data.transactionStatusCode == "E0506") {
-          const timerParagraph = document.querySelector('p');
-          if (timerParagraph) timerParagraph.style.display = "none";
-          messageElement.textContent = 'O número colocado não está registado no MB WAY.';
-          messageElement.classList.remove("d-none");
-          messageElement.classList.add("alert", "alert-danger");
-          buttonElement.classList.add("d-none");
-          return { success: false, status: data.paymentStatus };
-        }
-
+        // 1. CASO: SUCESSO
         if (data.paymentStatus === "Success") {
-          document.getElementById("timer").parentElement.style.display = "none";
-          messageElement.classList.add("d-none");
-          statusList.innerHTML = `
-          <div class="alert alert-success" role="alert">
-            <strong>Estado do Pagamento:</strong> Sucesso
-          </div>`;
-          
-          statusList.innerHTML = `
-            <div class="alert alert-success" role="alert">
-              <strong>Estado do Pagamento:</strong> Sucesso
-            </div>
-            <!-- Botão de Reembolso -->
-            <div class="text-center mt-3">
-              <button type="button" id="refund-btn" class="btn btn-warning">
-                Reembolso da Compra
-              </button>
-            </div>
-          `;
+            clearUI();
+            statusList.innerHTML = `
+                <div class="card border-0 shadow-lg mx-auto w-100 mb-4" style="max-width: 1000px; border-radius: 20px; overflow: hidden;">
+                    <div class="row g-0">
+                        <div class="col-md-4 d-flex align-items-center justify-content-center p-5" style="background: #ecfdf5;">
+                            <div class="text-center">
+                                <i class="fa-solid fa-circle-check mb-3" style="color: #10b981; font-size: 5rem;"></i>
+                                <br>
+                                <span class="badge rounded-pill px-3 py-2" style="background: rgba(16, 185, 129, 0.2); color: #065f46;">PAGAMENTO OK</span>
+                            </div>
+                        </div>
+                        <div class="col-md-8 p-5 bg-white text-start">
+                            <h2 class="fw-bold text-dark mb-3">Pagamento Confirmado</h2>
+                            <p class="text-muted fs-5 mb-4">A transação de <strong>${data.amount.value} ${data.amount.currency}</strong> foi processada com sucesso.</p>
+                            <div class="p-3 bg-light rounded-3 mb-4 border">
+                                <small class="text-muted d-block fw-bold mb-1">ID DA TRANSAÇÃO</small>
+                                <code class="text-dark fw-bold">${currentTransactionID}</code>
+                            </div>
+                            <div class="d-grid">
+                                <button type="button" id="refund-btn" class="btn btn-warning fw-bold py-3 rounded-pill shadow-sm">
+                                    <i class="fa-solid fa-arrow-rotate-left me-2"></i>Reembolso da Compra
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
 
-          document.getElementById("refund-btn").addEventListener("click", function() {
-            let refunds = JSON.parse(localStorage.getItem("refunds")) || [];
-
-            refunds.push({
-              paymentId: currentTransactionID,
-              amount: data.amount.value,
-              redirect: 1
+            // Re-adicionar o listener ao botão injetado
+            document.getElementById("refund-btn").addEventListener("click", function() {
+                let refunds = JSON.parse(localStorage.getItem("refunds")) || [];
+                refunds.push({
+                    paymentId: currentTransactionID,
+                    amount: data.amount.value,
+                    redirect: 1
+                });
+                localStorage.setItem("refunds", JSON.stringify(refunds));
+                window.location.href = "Refund_gateway/Refund_gateway.html";
             });
 
-            localStorage.setItem("refunds", JSON.stringify(refunds));
-            window.location.href = "Refund_gateway/Refund_gateway.html";
-          });
-
-          return { success: true, status: data.paymentStatus };
-
+            return { success: true, status: data.paymentStatus };
         }
 
-        
+        // 2. CASO: RECUSADO OU ERROS ESPECÍFICOS
         if (data.paymentStatus === "Declined") {
-          document.getElementById("timer").parentElement.style.display = "none";
-          messageElement.classList.add("d-none");
-          statusList.innerHTML = `
-          <div class="alert alert-danger" role="alert">
-            <strong>Estado do Pagamento:</strong> Recusado
-          </div>`;
-          return { success: false, status: data.paymentStatus };
+            clearUI();
+            
+            let customError = "A transação foi recusada.";
+            if (data.transactionStatusCode == "E0506") customError = "O número colocado não está registado no MB WAY.";
+            if (data.transactionStatusCode == "E0500") customError = "O cliente não efetuou o pagamento na APP (Timeout).";
 
-        }
-
-        
-        if (data.paymentStatus === "Declined" && data.transactionStatusCode == "E0500") {
-          document.getElementById("timer").parentElement.style.display = "none";
-          messageElement.classList.add("d-none");
-          statusList.innerHTML = `
-          <div class="alert alert-danger" role="alert">
-            <strong>Estado do Pagamento:</strong> Recusado (Cliente não efetou o pagamento na APP)
-          </div>`;
-          return { success: false, status: data.paymentStatus };
+            statusList.innerHTML = `
+                <div class="card border-0 shadow-lg mx-auto w-100" style="max-width: 1000px; border-radius: 20px; overflow: hidden;">
+                    <div class="row g-0">
+                        <div class="col-md-4 d-flex align-items-center justify-content-center p-5" style="background: #fef2f2;">
+                            <div class="text-center">
+                                <i class="fa-solid fa-circle-xmark mb-3" style="color: #ef4444; font-size: 5rem;"></i>
+                                <br>
+                                <span class="badge rounded-pill px-3 py-2" style="background: rgba(239, 68, 68, 0.2); color: #991b1b;">FALHA</span>
+                            </div>
+                        </div>
+                        <div class="col-md-8 p-5 bg-white text-start">
+                            <h2 class="fw-bold text-dark mb-3">Pagamento Recusado</h2>
+                            <p class="text-muted fs-5 mb-4">${customError}</p>
+                            <div class="alert alert-danger border-0 p-3" style="background: #fff1f2; border-left: 5px solid #ef4444 !important;">
+                                <strong>Código:</strong> ${data.transactionStatusCode}<br>
+                                <strong>Descrição:</strong> ${data.transactionStatusDescription || 'Sem descrição adicional.'}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            return { success: false, status: data.paymentStatus };
         }
 
         return { success: false, status: data.paymentStatus };
-      } catch (error) {
+
+    } catch (error) {
         console.error("Erro ao buscar status remoto:", error);
-        return true;
-      }
+        return { success: false, error: true };
     }
+}
 
     //Função que irá fazer novamente o get status por uma segunda vez apos os 4 minutos expirar
     async function checkFinalPaymentStatus() {

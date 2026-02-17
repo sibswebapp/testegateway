@@ -15,6 +15,10 @@
   <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.1/mdb.min.css" />
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <link rel="stylesheet" href="/navbar/css/navbar_css.css">
   <link rel="stylesheet" href="/popups/css/popups_css.css">
@@ -26,176 +30,185 @@
 <body>
 
   <div id="navbar"></div>
-
-  <main class="container mt-4">
-    <div class="card">
-      <div class="card-header text-center d-flex justify-content-between align-items-center" style="background-color: #cae3ff;">   
-        <h2 style="color: #454545; margin: 0 auto;"><b>Gateway SIBS - Configuração</b></h2>
-
-        <!--botao para ver informação-->
-        <button type="button" class="btn btn-light btn-sm" data-bs-toggle="modal" data-bs-target="#infoModal">
-          <i class="fa fa-question-circle"></i>
-        </button>
-      </div>
-      
-      <div class="card-body">
-
-        <!-- Nav tabs -->
-        <ul class="nav nav-tabs mb-4" id="configTabs" role="tablist">
-          <li class="nav-item" role="presentation">
-            <button class="nav-link active" id="normal-tab" data-bs-toggle="tab" data-bs-target="#normal" type="button" role="tab">Configurações</button>
-          </li>
-           <!-- 
-          <li class="nav-item" role="presentation">
-            <button class="nav-link" id="mits-tab" data-bs-toggle="tab" data-bs-target="#mits" type="button" role="tab">MITs</button>
-          </li> -->
-        </ul>
-
-        <!-- Tab panes -->
-        <div class="tab-content" id="configTabsContent">
-          <!-- Configurações Normais -->
-          <div class="tab-pane fade show active" id="normal" role="tabpanel" aria-labelledby="normal-tab">
-
-            <!--Aqui você coloca TODO o conteúdo que estava antes no card-body-->
-            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3 mb-4">
-
-              <div class="col">
-                <div class="form-check form-switch">
-                  <input class="form-check-input" type="checkbox" id="defaultToggle"
-                        onchange="toggleDefaults(this); toggleEntityField();">
-                  <label class="form-check-label" for="defaultToggle">Usar Terminal default</label>
-                </div>
+    <main class="container py-5">
+      <div class="dashboard-header shadow-sm card" >
+          <div class="brand-container d-flex align-items-center justify-content-between">
+              <div class="d-flex align-items-center">
+                  <div class="logo-square me-3">
+                      <i class="fa-solid fa-shield-halved"></i>
+                  </div>
+                  <div class="title-group">
+                    <span style="font-size: 22px; color: #202124; letter-spacing: -0.5px;">
+                      <b style="font-weight: 400;">Gateway</b>
+                      <b style="font-weight: 600;">SIBS</b>
+                      <span style="color: #dadce0; margin: 0 8px; font-weight: 300;">|</span>
+                      <span style="color: #5f6368; font-weight: 400;">Configurações do Sistema</span>
+                    </span>
+                  </div>
               </div>
-
-              <div class="col" id="dummyCustomerToggleContainer" style="display: none;">
-                <div class="form-check form-switch">
-                  <input class="form-check-input" type="checkbox" id="dummyCustomerToggle"
-                        onchange="toggleDummyCustomer(this);">
-                  <label class="form-check-label" for="dummyCustomerToggle">Customer Info Personalizado</label>
-                </div>
-              </div>
-
-              <div class="col">
-                <div class="form-check form-switch">
-                  <input class="form-check-input" type="checkbox" id="ServerToServerCheckbox"
-                        onchange="toggleServerToServer(this);">
-                  <label class="form-check-label" for="ServerToServerCheckbox">
-                    Integração Server to Server (Apenas MBWAY e Multibanco)
-                  </label>
-                </div>
-              </div>
-
-              <div class="col">
-                <div class="form-check form-switch">
-                  <input class="form-check-input" type="checkbox" id="AllMethodsPay"
-                        onchange="toggleAllMethodsPay(this)">
-                  <label class="form-check-label" for="AllMethodsPay">Usar todos os métodos de pagamento</label>
-                </div>
-              </div>
-
-            </div>
-
-
-            <!--Inputs restantes-->
-            <div class="mb-4" id="inputTerminalId">
-              <label for="terminalId" class="form-label">Terminal ID:</label>
-              <input type="number" id="terminalId" class="form-control" placeholder="Insira o terminal ID fornecido pela SIBS">
-            </div>
-
-            <div class="mb-4" id="inputClientId">
-              <label for="clientId" class="form-label">Client ID:</label>
-              <input type="text" id="clientId" class="form-control" placeholder="Insira o Client ID fornecido pela SIBS">
-            </div>
-
-            <div class="mb-4" id="inputBearerToken">
-              <label for="bearerToken" class="form-label">Bearer Token:</label>
-              <textarea id="bearerToken" class="form-control" rows="4" placeholder="Insira o Bearer Token via SIBS BackOffice"></textarea>
-            </div>
-
-            <div class="mb-4" id="paymentMethodsLabels">
-              <label class="form-label">Métodos de Pagamento:</label>
-              <div class="d-flex align-items-start gap-3 flex-wrap" id="paymentMethodsWrapper">
-                <div id="paymentMethodsContainer" style="flex: 1; min-width: 260px;">
-                  <select id="paymentMethods" multiple class="form-select" onchange="handlePaymentMethodChange()">
-                    <option value="1">MB WAY</option>
-                    <option value="2">Multibanco</option>
-                    <option value="3">Cartões</option>
-                  </select>
-                  <div id="paymentMethodsText" class="form-text">Use Ctrl (Windows) ou Cmd (Mac) para selecionar múltiplos.</div>
-                </div>
-
-                <div id="LayoutVersionContainer" style="width: 220px;">
-                  <label for="LayoutVersion" class="form-label">Versão do Layout:</label>
-                  <select id="LayoutVersion" class="form-select">
-                    <option value="1" selected>spg_form_tabs</option>
-                    <option value="2">spg_form</option>
-                  </select>
-                </div>
-
-                <div id="gatewayVersionContainer" style="width: 220px;">
-                  <label for="gatewayVersion" class="form-label">Versão da Gateway:</label>
-                  <select id="gatewayVersion" class="form-select">
-                    <option value="2" selected>v2</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-
-            <div class="mb-4" id="inputReferenceExpiry">
-              <label for="referenceExpiry" class="form-label">Data de Expiração das Referências Bancárias:</label>
-              <div class="d-flex align-items-center gap-2">
-                <input type="number" id="referenceExpiry" class="form-control" placeholder="Ex: 24" style="flex: 1;" min="1" max="31" value="1" oninput="if(this.valueAsNumber > 31) this.value = 31; if(this.valueAsNumber < 1) this.value = 1;">
-                <select id="referenceExpiryUnit" class="form-select" style="width: 140px;">
-                  <option value="hours">Horas</option>
-                  <option value="days" selected>Dias</option>
-                  <option value="months">Meses</option>
-                </select>
-              </div>
-            </div>
-
-            <div class="mb-4" id="inputEntity">
-              <label for="entity" class="form-label">Entidade (Multibanco):</label>
-              <input type="text" id="entity" class="form-control" placeholder="Insira a entidade de pagamento">
-            </div>
-
+              <button type="button" class="btn-info-minimal ms-auto" data-bs-toggle="modal" data-bs-target="#infoModal" title="Informações">
+                  <i class="fa-solid fa-circle-info"></i>
+              </button>
           </div>
+          <div class="card-body">
 
-          <!-- MITs
-          <div class="tab-pane fade" id="mits" role="tabpanel" aria-labelledby="mits-tab">
+          <!-- Nav tabs -->
+          <ul class="nav nav-tabs mb-4" id="configTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+              <button class="nav-link active" id="normal-tab" data-bs-toggle="tab" data-bs-target="#normal" type="button" role="tab">Configurações</button>
+            </li>
+            <!-- 
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="mits-tab" data-bs-toggle="tab" data-bs-target="#mits" type="button" role="tab">MITs</button>
+            </li> -->
+          </ul>
 
-            <div class="row align-items-center mb-4">
-                
-              <div class="col-md-3 mb-3 mb-md-0">
-                <div class="form-check form-switch">
-                  <input class="form-check-input" type="checkbox" id="MITs" onchange="toggleMITS(this);">
-                  <label class="form-check-label" for="MITs">
-                    Ativar a opção das MITs
-                  </label>
+          <!-- Tab panes -->
+          <div class="tab-content" id="configTabsContent">
+            <!-- Configurações Normais -->
+            <div class="tab-pane fade show active" id="normal" role="tabpanel" aria-labelledby="normal-tab">
+
+              <!--Aqui você coloca TODO o conteúdo que estava antes no card-body-->
+              <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3 mb-4">
+
+                <div class="col">
+                  <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="defaultToggle"
+                          onchange="toggleDefaults(this); toggleEntityField();">
+                    <label class="form-check-label" for="defaultToggle">Usar Terminal default</label>
+                  </div>
+                </div>
+
+                <div class="col" id="dummyCustomerToggleContainer" style="display: none;">
+                  <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="dummyCustomerToggle"
+                          onchange="toggleDummyCustomer(this);">
+                    <label class="form-check-label" for="dummyCustomerToggle">Customer Info Personalizado</label>
+                  </div>
+                </div>
+
+                <div class="col">
+                  <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="ServerToServerCheckbox"
+                          onchange="toggleServerToServer(this);">
+                    <label class="form-check-label" for="ServerToServerCheckbox">
+                      Integração Server to Server (Apenas MBWAY e Multibanco)
+                    </label>
+                  </div>
+                </div>
+
+                <div class="col">
+                  <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="AllMethodsPay"
+                          onchange="toggleAllMethodsPay(this)">
+                    <label class="form-check-label" for="AllMethodsPay">Usar todos os métodos de pagamento</label>
+                  </div>
+                </div>
+
+              </div>
+
+
+              <!--Inputs restantes-->
+              <div class="mb-4" id="inputTerminalId">
+                <label for="terminalId" class="form-label">Terminal ID:</label>
+                <input type="number" id="terminalId" class="form-control" placeholder="Insira o terminal ID fornecido pela SIBS">
+              </div>
+
+              <div class="mb-4" id="inputClientId">
+                <label for="clientId" class="form-label">Client ID:</label>
+                <input type="text" id="clientId" class="form-control" placeholder="Insira o Client ID fornecido pela SIBS">
+              </div>
+
+              <div class="mb-4" id="inputBearerToken">
+                <label for="bearerToken" class="form-label">Bearer Token:</label>
+                <textarea id="bearerToken" class="form-control" rows="4" placeholder="Insira o Bearer Token via SIBS BackOffice"></textarea>
+              </div>
+
+              <div class="mb-4" id="paymentMethodsLabels">
+                <label class="form-label">Métodos de Pagamento:</label>
+                <div class="d-flex align-items-start gap-3 flex-wrap" id="paymentMethodsWrapper">
+                  <div id="paymentMethodsContainer" style="flex: 1; min-width: 260px;">
+                    <select id="paymentMethods" multiple class="form-select" onchange="handlePaymentMethodChange()">
+                      <option value="1">MB WAY</option>
+                      <option value="2">Multibanco</option>
+                      <option value="3">Cartões</option>
+                    </select>
+                    <div id="paymentMethodsText" class="form-text">Use Ctrl (Windows) ou Cmd (Mac) para selecionar múltiplos.</div>
+                  </div>
+
+                  <div id="LayoutVersionContainer" style="width: 220px;">
+                    <label for="LayoutVersion" class="form-label">Versão do Layout:</label>
+                    <select id="LayoutVersion" class="form-select">
+                      <option value="1" selected>spg_form_tabs</option>
+                      <option value="2">spg_form</option>
+                    </select>
+                  </div>
+
+                  <div id="gatewayVersionContainer" style="width: 220px;">
+                    <label for="gatewayVersion" class="form-label">Versão da Gateway:</label>
+                    <select id="gatewayVersion" class="form-select">
+                      <option value="2" selected>v2</option>
+                    </select>
+                  </div>
                 </div>
               </div>
 
-              <div class="col-md-4" id="LayoutVersionMITS">
-                <label for="VersionMITS" class="form-label fw-semibold">Tipo de MITs:</label>
-                <select id="VersionMITS" class="form-select">
-                  <option value="1" selected>One Click</option>
-                  <option value="2">Recorrentes</option>
-                  <option value="3">UCOF</option>
-                </select>
+              <div class="mb-4" id="inputReferenceExpiry">
+                <label for="referenceExpiry" class="form-label">Data de Expiração das Referências Bancárias:</label>
+                <div class="d-flex align-items-center gap-2">
+                  <input type="number" id="referenceExpiry" class="form-control" placeholder="Ex: 24" style="flex: 1;" min="1" max="31" value="1" oninput="if(this.valueAsNumber > 31) this.value = 31; if(this.valueAsNumber < 1) this.value = 1;">
+                  <select id="referenceExpiryUnit" class="form-select" style="width: 140px;">
+                    <option value="hours">Horas</option>
+                    <option value="days" selected>Dias</option>
+                    <option value="months">Meses</option>
+                  </select>
+                </div>
               </div>
-            </div> -->
-        
-            <br>
 
-          </div>
+              <div class="mb-4" id="inputEntity">
+                <label for="entity" class="form-label">Entidade (Multibanco):</label>
+                <input type="text" id="entity" class="form-control" placeholder="Insira a entidade de pagamento">
+              </div>
+
+            </div>
+
+            <!-- MITs
+            <div class="tab-pane fade" id="mits" role="tabpanel" aria-labelledby="mits-tab">
+
+              <div class="row align-items-center mb-4">
+                  
+                <div class="col-md-3 mb-3 mb-md-0">
+                  <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="MITs" onchange="toggleMITS(this);">
+                    <label class="form-check-label" for="MITs">
+                      Ativar a opção das MITs
+                    </label>
+                  </div>
+                </div>
+
+                <div class="col-md-4" id="LayoutVersionMITS">
+                  <label for="VersionMITS" class="form-label fw-semibold">Tipo de MITs:</label>
+                  <select id="VersionMITS" class="form-select">
+                    <option value="1" selected>One Click</option>
+                    <option value="2">Recorrentes</option>
+                    <option value="3">UCOF</option>
+                  </select>
+                </div>
+              </div> -->
           
-          <!--Botão de salvar os dados-->
-          <button class="btn btn-primary w-100" onclick="saveConfig()">Guardar Configuração</button>
+              <br>
+
+            </div>
+            
+            <!--Botão de salvar os dados-->
+            <button class="btn btn-primary w-100" onclick="saveConfig()">Guardar Configuração</button>
 
         </div>
       </div>
-    </div>
-
   </main>
+  
+
+
   <br>
   <div id="footer"></div>
 

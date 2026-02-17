@@ -1,0 +1,322 @@
+<main>
+    <div class="container mt-4">
+
+      <br>
+      <h1 class="text-center mb-4"></h1>
+
+      <div class="card">
+        <div class="card-header text-center d-flex justify-content-between align-items-center" style="background-color: #cae3ff;">
+          <h2 style="color: #454545; margin: 0 auto;"><b>Gateway SIBS Testes</b></h2>
+          <button type="button" class="btn btn-light btn-sm ms-2" data-bs-toggle="modal" data-bs-target="#infoModal" title="Informações">
+            <i class="fa fa-question-circle"></i>
+          </button>
+        </div>
+
+        <!--Inputs-->
+        <div class="card-body">
+          <div class="mb-3">
+            <label class="form-label">Montante (Valor máximo 200€):</label>
+            <input type="number" id="amount" class="form-control" value="1" min="1" max="200" step="0.01"
+              onchange="makePayment()" oninput="if(this.value > 200) this.value = 200;">
+          </div>
+
+          <div class="mb-3" id="payment-method_Div">
+            <label for="payment-method" class="form-label">Método de Pagamento:</label>
+            <select id="payment-method" class="form-select" onchange="makePayment(); showDummyFieldsIfNeeded();"></select>
+          </div>
+
+          <!--Inputs do customer info-->
+          <div id="dummyCustomerFields" class="mt-4" style="display: none;">
+
+            <br>
+            <hr>
+            <h5 class="mb-3">Informações do Cliente</h5>
+
+            <div class="mb-3">
+              <label class="form-label">Nome:</label>
+              <input type="text" id="customerName" class="form-control" value="Diego">
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Email:</label>
+              <input type="email" id="customerEmail" class="form-control" value="Onboarding@teste.com">
+            </div>
+
+            <h6 class="mt-4">Morada de Envio</h6>
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label>Rua 1:</label>
+                <input type="text" id="shippingStreet1" class="form-control" value="Rua 123">
+              </div>
+              <div class="col-md-6 mb-3">
+                <label>Rua 2:</label>
+                <input type="text" id="shippingStreet2" class="form-control" value="Porta 456">
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-4 mb-3">
+                <label>Cidade:</label>
+                <input type="text" id="shippingCity" class="form-control" value="Lisboa">
+              </div>
+              <div class="col-md-4 mb-3">
+                <label>Código Postal:</label>
+                <input type="text" id="shippingPostcode" class="form-control" value="1200-999">
+              </div>
+              <div class="col-md-4 mb-3">
+                <label>País:</label>
+                <select id="shippingCountry" class="form-select">
+                  <option value="PT" selected>Portugal</option>
+                </select>
+              </div>
+            </div>
+
+            <h6 class="mt-4">Morada de Faturação</h6>
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label>Rua 1:</label>
+                <input type="text" id="billingStreet1" class="form-control" value="Rua teste 1">
+              </div>
+              <div class="col-md-6 mb-3">
+                <label>Rua 2:</label>
+                <input type="text" id="billingStreet2" class="form-control" value="Rua teste 2">
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-4 mb-3">
+                <label>Cidade:</label>
+                <input type="text" id="billingCity" class="form-control" value="Lisboa">
+              </div>
+              <div class="col-md-4 mb-3">
+                <label>Código Postal:</label>
+                <input type="text" id="billingPostcode" class="form-control" value="1700-123">
+              </div>
+              <div class="col-md-4 mb-3">
+                <label>País:</label>
+                <select id="billingCountry" class="form-select">
+                  <option value="PT" selected>Portugal</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          
+          <button class="btn btn-primary w-100 mt-3" onclick="makePayment()">Iniciar Pagamento</button>
+
+        </div>
+      </div>
+
+      <div id="payment-form" class="mt-4"></div>
+
+    </div>
+    <br>
+  </main>
+
+
+
+
+
+    function loadGateway() {
+      const loader = document.getElementById('loader-area');
+      const container = document.getElementById('payment-form-container');
+        
+      loader.innerHTML = '<div class="spinner-border text-primary" role="status"></div><p class="mt-3">A encriptar sessão...</p>';
+        
+      setTimeout(() => {
+        loader.classList.add('d-none');
+        container.classList.remove('d-none');
+        container.innerHTML = `
+          <div class="text-center py-5">
+            <div class="p-4 border-2 border-dashed rounded-4 d-inline-block">
+              <i class="fa-solid fa-lock text-success mb-2"></i>
+              <p class="mb-0 fw-bold text-muted">Formulário SIBS Injetado com Sucesso</p>
+              <p class="small text-muted">O Checkout seguro apareceria neste espaço.</p>
+            </div>
+          </div>`;
+        }, 800);
+    }
+
+
+
+
+    <!DOCTYPE html>
+<html lang="pt">
+<head>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --debug-bg: #0f172a; /* Azul escuro profundo */
+            --debug-panel: #1e293b;
+            --debug-accent: #38bdf8; /* Azul cyan para destaque */
+            --header-text: #94a3b8;
+            --code-text: #e2e8f0;
+        }
+
+        .debug-container {
+            font-family: 'Inter', sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .debug-card {
+            background-color: var(--debug-bg);
+            border-radius: 16px;
+            border: 1px solid #334155;
+            overflow: hidden;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Barra de Título estilo Terminal */
+        .debug-header {
+            background-color: #1e293b;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #334155;
+        }
+
+        .terminal-dots {
+            display: flex;
+            gap: 6px;
+        }
+
+        .dot { width: 10px; height: 10px; border-radius: 50%; }
+        .dot-red { background: #ff5f56; }
+        .dot-yellow { background: #ffbd2e; }
+        .dot-green { background: #27c93f; }
+
+        .debug-title {
+            color: var(--header-text);
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* Áreas de Código */
+        .debug-section {
+            padding: 20px;
+        }
+
+        .section-label {
+            color: var(--debug-accent);
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .code-window {
+            background-color: var(--debug-panel);
+            border-radius: 8px;
+            padding: 15px;
+            border: 1px solid #334155;
+            position: relative;
+        }
+
+        pre {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            color: var(--code-text);
+            margin: 0;
+            max-height: 250px;
+            overflow: auto;
+            scrollbar-width: thin;
+            scrollbar-color: #475569 transparent;
+        }
+
+        /* Custom Scrollbar */
+        pre::-webkit-scrollbar { width: 6px; height: 6px; }
+        pre::-webkit-scrollbar-thumb { background: #475569; border-radius: 10px; }
+
+        /* Badge de Status */
+        .status-badge {
+            font-size: 0.7rem;
+            background: rgba(56, 189, 248, 0.1);
+            color: var(--debug-accent);
+            padding: 2px 8px;
+            border-radius: 4px;
+            border: 1px solid rgba(56, 189, 248, 0.2);
+        }
+
+        .btn-copy {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(255,255,255,0.05);
+            border: none;
+            color: var(--header-text);
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            transition: all 0.2s;
+        }
+
+        .btn-copy:hover {
+            background: var(--debug-accent);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+<div class="debug-container my-5">
+    <div class="debug-card">
+        <div class="debug-header">
+            <div class="terminal-dots">
+                <div class="dot dot-red"></div>
+                <div class="dot dot-yellow"></div>
+                <div class="dot dot-green"></div>
+            </div>
+            <div class="debug-title">
+                <i class="fa-solid fa-code me-2"></i> SIBS API Inspector
+            </div>
+            <div class="status-badge">JSON Response</div>
+        </div>
+
+        <div class="debug-section">
+            <div class="mb-4">
+                <div class="section-label">
+                    <i class="fa-solid fa-list-check"></i> Response Headers
+                </div>
+                <div class="code-window">
+                    <button class="btn-copy" onclick="copyText('debug-headers')"><i class="fa-regular fa-copy"></i></button>
+                    <pre id="debug-headers">HTTP/1.1 200 OK
+Content-Type: application/json
+Date: Fri, 09 Jan 2026 15:35:31 GMT</pre>
+                </div>
+            </div>
+
+            <div>
+                <div class="section-label">
+                    <i class="fa-solid fa-brackets-curly"></i> Response Body
+                </div>
+                <div class="code-window">
+                    <button class="btn-copy" onclick="copyText('debug-body')"><i class="fa-regular fa-copy"></i></button>
+                    <pre id="debug-body">{
+  "status": "success",
+  "transaction_id": "8a829417-x921",
+  "amount": 1.00,
+  "currency": "EUR"
+}</pre>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function copyText(id) {
+        const text = document.getElementById(id).innerText;
+        navigator.clipboard.writeText(text);
+        alert('Copiado para a área de transferência!');
+    }
+</script>
+
+</body>
+</html>

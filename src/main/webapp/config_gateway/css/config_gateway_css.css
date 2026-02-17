@@ -41,3 +41,407 @@ html, body {
         .gap-2 {
           gap: 10px !important;
         }
+
+
+
+        
+    :root {
+        --brand-blue: #0061ff;
+        --brand-blue-hover: #0052d9;
+        --bg-main: #f8fafc;
+        --text-dark: #0f172a;
+        --text-muted: #64748b;
+        --border-color: #e2e8f0;
+        --debug-bg: #0f172a; 
+        --debug-panel: #1e293b;
+        --debug-accent: #38bdf8; 
+        --header-text: #94a3b8;
+        --code-text: #e2e8f0;
+    }
+
+    body {
+        background-color: var(--bg-main);
+        font-family: 'Inter', sans-serif;
+        color: var(--text-dark);
+        letter-spacing: -0.01em;
+    }
+
+    /* Container de Configuração com Glassmorphism */
+    .dashboard-header {
+        background: rgba(255, 255, 255, 0.8);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 24px;
+        padding: 2.5rem;
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.02);
+    }
+
+    /* Logo & Título Style */
+    .brand-container {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 2.5rem;
+    }
+
+    .logo-square {
+        width: 42px;
+        height: 42px;
+        background: linear-gradient(135deg, var(--brand-blue) 0%, #60a5fa 100%);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.2rem;
+        box-shadow: 0 10px 15px -3px rgba(0, 97, 255, 0.3);
+    }
+
+    .title-group h1 {
+        font-size: 1.25rem;
+        font-weight: 800;
+        margin-bottom: 0;
+        color: var(--text-dark);
+        display: flex;
+        align-items: center;
+    }
+
+    .status-badge {
+        font-size: 0.65rem;
+        background: #ecfdf5;
+        color: #059669;
+        padding: 4px 10px;
+        border-radius: 20px;
+        margin-left: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    /* Inputs Modernizados */
+    .form-label {
+        font-weight: 600;
+        font-size: 0.75rem;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-bottom: 10px;
+    }
+
+    .modern-input {
+        background-color: #ffffff;
+        border: 1.5px solid var(--border-color);
+        border-radius: 14px;
+        padding: 0.85rem 1.1rem;
+        font-size: 0.95rem;
+        font-weight: 500;
+        transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .modern-input:focus {
+        border-color: var(--brand-blue);
+        box-shadow: 0 0 0 4px rgba(0, 97, 255, 0.1);
+        outline: none;
+    }
+
+    /* Botão de Ação "Pulsante" */
+    .btn-generate {
+        background-color: var(--brand-blue);
+        color: white;
+        border: none;
+        border-radius: 14px;
+        padding: 1rem 2rem;
+        font-weight: 700;
+        font-size: 0.95rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        width: 100%;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 12px rgba(0, 97, 255, 0.25);
+    }
+
+    .btn-generate:hover {
+        background-color: var(--brand-blue-hover);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(0, 97, 255, 0.35);
+    }
+
+    /* Preview Canvas */
+    .preview-canvas {
+        margin-top: 3rem;
+        background: #ffffff;
+        border: 1px solid var(--border-color);
+        border-radius: 32px;
+        min-height: 500px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .canvas-tag {
+        position: absolute;
+        top: 24px;
+        left: 32px;
+        font-size: 0.7rem;
+        font-weight: 700;
+        color: #94a3b8;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .empty-state {
+        height: 500px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        color: #94a3b8;
+    }
+
+    .empty-icon-blob {
+        width: 80px;
+        height: 80px;
+        background: #f1f5f9;
+        border-radius: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        margin-bottom: 1.5rem;
+        color: #cbd5e1;
+    }
+
+    .btn-info-minimal {
+    background: #e9ecef;
+    border: none;
+    color: #6c757d;
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    font-size: 0.9rem;
+  }
+
+  .btn-info-minimal:hover {
+      background: #dee2e6;
+      color: #0d6efd;
+      transform: scale(1.1);
+  }
+
+  .status-badge {
+      vertical-align: middle;
+      font-size: 0.5em;
+      padding: 0.35em 0.65em;
+      margin-left: 5px;
+  }
+
+  .preview-canvas {
+    background: #ffffff;
+    border-radius: 12px;
+    width: 100%;
+    min-height: 450px;
+    height: auto;     
+    overflow: visible; 
+    display: flex;
+    flex-direction: column;
+    transition: all 0.4s ease;
+}
+
+.empty-state {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 20px;
+}
+
+
+
+/* Container Principal */
+.debug-container {
+    font-family: 'Fira Code', 'Courier New', monospace; /* Fonte estilo código */
+}
+
+.debug-card {
+    background-color: #0f172a; /* Fundo azul marinho escuro */
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid #1e293b;
+}
+
+.debug-card-error {
+    background-color: #d7cece;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid #ffffff;
+}
+
+/* Cabeçalho Estilo Terminal */
+.debug-header {
+    background-color: #1e293b;
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.terminal-dots {
+    display: flex;
+    gap: 8px;
+}
+
+.dot-red { 
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: #ff5f56; 
+}
+
+.dot-yellow { 
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: #ffbd2e; 
+}
+.dot-green { 
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: #27c93f; 
+}
+
+.debug-title {
+    color: #94a3b8;
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.status_badge_debug {
+   font-size: 0.7rem;
+    background: rgba(56, 189, 248, 0.1);
+    color: var(--debug-accent);
+    padding: 2px 8px;
+    border-radius: 4px;
+    border: 1px solid rgba(56, 189, 248, 0.2);
+}
+
+.status_badge_debug_error {
+    font-size: 0.7rem;
+    background: rgb(248 180 56 / 10%);
+    color: #ffffff;
+    padding: 2px 8px;
+    border-radius: 4px;
+    border: 1px solid rgb(255 255 255 / 20%);
+}
+
+/* Secções de Código */
+.debug-section {
+    background-color: #0f172a;
+}
+
+.section-label {
+    color: #38bdf8; 
+    font-size: 0.8rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-transform: uppercase;
+}
+
+
+.section-label_error {
+    color: #ffffff; 
+    font-size: 0.8rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-transform: uppercase;
+}
+
+.code-window {
+    background-color: #0f172a !important; /* Cor idêntica à das imagens que enviaste */
+    border-radius: 8px;
+    position: relative;
+    border: 1px solid #334155;
+    overflow: hidden; /* Garante que o pre não saia das bordas arredondadas */
+}
+
+.code-window pre {
+    background-color: transparent !important; /* Força a transparência */
+    margin: 0;
+    padding: 15px;
+    scrollbar-width: thin;
+    scrollbar-color: #475569 transparent;
+}
+
+/* Botão de Cópia */
+.btn-copy {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    background: transparent;
+    border: none;
+    color: #64748b;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.btn-copy:hover {
+    color: #38bdf8;
+}
+
+/* Scrollbar para o código */
+.code-window pre::-webkit-scrollbar {
+    width: 6px;
+}
+.code-window pre::-webkit-scrollbar-thumb {
+    background-color: #475569;
+    border-radius: 10px;
+}
+
+.text_info_debug{
+  color:white
+}
+
+ .card {
+    border-radius: 20px;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+
+  .card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.15);
+  }
+
+  .card i {
+    transition: transform 0.3s;
+  }
+
+  .card:hover i {
+    transform: scale(1.2);
+  }
+
+  .card h4 {
+    font-weight: 600;
+  }
+
+  .card p {
+    font-size: 0.9rem;
+    color: #6c757d;
+  }
+  

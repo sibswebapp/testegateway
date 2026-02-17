@@ -24,8 +24,7 @@
     const credential_default_variable = JSON.parse(localStorage.getItem('credential_default'))
     const credential_config_variable = JSON.parse(localStorage.getItem('credential_config'))
     const default_Configs = JSON.parse(localStorage.getItem('default'))
-
-
+  
     //Se ele clicar voltar para tras isto da reset a tudo
     window.addEventListener('pageshow', function(event) {
       if (event.persisted || performance.getEntriesByType("navigation")[0].type === "back_forward") {
@@ -218,8 +217,17 @@
       const amountValue = parseFloat(document.getElementById("amount").value);
       const selectedMethod = document.getElementById("payment-method").value;
 
+      const placeholder = document.getElementById('loader-placeholder');
+      if (placeholder) {
+          placeholder.style.display = 'none'; 
+      }
 
-     //caso o AllMethodsPay tiver a 1 então o array do payment Method fica vazio
+      const formContainer = document.getElementById('payment-form');
+      if (formContainer) {
+          formContainer.classList.remove('d-none');
+      }
+
+      //caso o AllMethodsPay tiver a 1 então o array do payment Method fica vazio
       const paymentMethodArray = (AllMethodsPay == "1") ? [] : [selectedMethod];
 
       const version = gatewayVersion === "1" ? "v1" : "v2";
@@ -317,11 +325,11 @@
             customerName: document.getElementById("customerName").value,
             customerEmail: document.getElementById("customerEmail").value,
             shippingAddress: {
-              street1: document.getElementById("shippingStreet1").value,
-              street2: document.getElementById("shippingStreet2").value,
-              city: document.getElementById("shippingCity").value,
-              postcode: document.getElementById("shippingPostcode").value,
-              country: document.getElementById("shippingCountry").value
+              street1: document.getElementById("billingStreet1").value,
+              street2: document.getElementById("billingStreet2").value,
+              city: document.getElementById("billingCity").value,
+              postcode: document.getElementById("billingPostcode").value,
+              country: document.getElementById("billingCountry").value
             },
             billingAddress: {
               street1: document.getElementById("billingStreet1").value,
@@ -424,11 +432,11 @@
                   customerName: document.getElementById("customerName").value,
                   customerEmail: document.getElementById("customerEmail").value,
                   shippingAddress: {
-                    street1: document.getElementById("shippingStreet1").value,
-                    street2: document.getElementById("shippingStreet2").value,
-                    city: document.getElementById("shippingCity").value,
-                    postcode: document.getElementById("shippingPostcode").value,
-                    country: document.getElementById("shippingCountry").value
+                    street1: document.getElementById("billingStreet1").value,
+                    street2: document.getElementById("billingStreet2").value,
+                    city: document.getElementById("billingCity").value,
+                    postcode: document.getElementById("billingPostcode").value,
+                    country: document.getElementById("billingCountry").value
                   },
                   billingAddress: {
                     street1: document.getElementById("billingStreet1").value,
@@ -777,11 +785,11 @@
             customerName: document.getElementById("customerName").value,
             customerEmail: document.getElementById("customerEmail").value,
             shippingAddress: {
-              street1: document.getElementById("shippingStreet1").value,
-              street2: document.getElementById("shippingStreet2").value,
-              city: document.getElementById("shippingCity").value,
-              postcode: document.getElementById("shippingPostcode").value,
-              country: document.getElementById("shippingCountry").value
+              street1: document.getElementById("billingStreet1").value,
+              street2: document.getElementById("billingStreet2").value,
+              city: document.getElementById("billingCity").value,
+              postcode: document.getElementById("billingPostcode").value,
+              country: document.getElementById("billingCountry").value
             },
             billingAddress: {
               street1: document.getElementById("billingStreet1").value,
@@ -803,180 +811,138 @@
         "Accept": "application/json"
       };
 
-      // --- Debug Container ---
-      const debugContainer = document.createElement("div");
-      debugContainer.className = "card mt-4";
-
-      // Cabeçalho com título e botão
-      const debugHeader = document.createElement("div");
-      debugHeader.className = "card-header bg-primary text-white fw-bold d-flex justify-content-between align-items-center";
-
-      const debugTitle = document.createElement("span");
-      debugTitle.innerHTML = '<i class="fa fa-bug me-2"></i>Debug do Request API';
-
-      const responseButton = document.createElement("button");
-      responseButton.className = "btn btn-light btn-sm fw-bold";
-      responseButton.textContent = "Ver API reply";
-
-      debugHeader.appendChild(debugTitle);
-      debugHeader.appendChild(responseButton);
-      debugContainer.appendChild(debugHeader);
-
-      // Corpo inicial do debug (requisição)
-      const debugContent = document.createElement("div");
-      debugContent.className = "card-body";
-
-      // Elementos do debug original
-      const headersTitle = document.createElement("h6");
-      headersTitle.className = "fw-bold";
-      headersTitle.textContent = "Request Header:";
-
-      const headersPre = document.createElement("pre");
-      headersPre.className = "bg-light p-3 rounded";
-      headersPre.style.maxHeight = "150px";
-      headersPre.style.overflowY = "auto";
-      headersPre.style.fontSize = "0.8rem";
-      headersPre.textContent = JSON.stringify(debugHeaders, null, 2);
-
-      const bodyTitle = document.createElement("h6");
-      bodyTitle.className = "fw-bold mt-3";
-      bodyTitle.textContent = "Request Body:";
-
-      const bodyPre = document.createElement("pre");
-      bodyPre.className = "bg-light p-3 rounded";
-      bodyPre.style.maxHeight = "300px";
-      bodyPre.style.overflowY = "auto";
-      bodyPre.style.fontSize = "0.8rem";
-      bodyPre.textContent = JSON.stringify(debugBody, null, 2);
-
-      // Montar conteúdo original
-      debugContent.appendChild(headersTitle);
-      debugContent.appendChild(headersPre);
-      debugContent.appendChild(bodyTitle);
-      debugContent.appendChild(bodyPre);
-      debugContainer.appendChild(debugContent);
-      formContainer.appendChild(debugContainer);
-
-      // --- Alternar entre Request e Response ---
-      let showingResponse = false;
-
-      responseButton.onclick = () => {
-        if (!showingResponse) {
-          // Mostrar a resposta recebida (vinda como parâmetro 'data')
-          debugContent.innerHTML = `
-            <h6 class="fw-bold">Status Code response:</h6>
-            <pre class="bg-light p-3 rounded">${data?.status || "200"}</pre>
-
-            <h6 class="fw-bold mt-3">Body response:</h6>
-            <pre class="bg-light p-3 rounded" style="max-height:400px;overflow-y:auto;font-size:0.8rem;">
-              ${JSON.stringify(data, null, 2)}
-            </pre>
-          `;
-
-          responseButton.textContent = "Ver API request";
-          debugTitle.innerHTML = '<i class="fa fa-bug me-2 "></i>Response API';
-          showingResponse = true;
-        } else {
-
-          // Voltar à visualização original
-          debugContent.innerHTML = "";
-          debugContent.appendChild(headersTitle);
-          debugContent.appendChild(headersPre);
-          debugContent.appendChild(bodyTitle);
-          debugContent.appendChild(bodyPre);
-
-          responseButton.textContent = "Ver API reply";
-          debugTitle.innerHTML = '<i class="fa fa-bug me-2"></i>Debug do Request API';
-
-          showingResponse = false;
-        }
-      };
+      renderApiInspector(debugHeaders, debugBody, data);
     }
 
-    //Caso der erro, irá fazer mesmo assimm o modo debug da resposta
+    function renderApiInspector(headers, body, responseData) {
+        const formContainer = document.getElementById("payment-form");
+        
+        // Criar o elemento do Inspetor se não existir
+        let inspectorDiv = document.getElementById("sibs-inspector-root");
+        if (!inspectorDiv) {
+            inspectorDiv = document.createElement("div");
+            inspectorDiv.id = "sibs-inspector-root";
+            formContainer.appendChild(inspectorDiv);
+        }
+
+        const reqHeadersStr = JSON.stringify(headers, null, 2);
+        const reqBodyStr = JSON.stringify(body, null, 2);
+        const resStr = JSON.stringify(responseData, null, 2);
+
+        inspectorDiv.innerHTML = `
+            <div class="debug-container my-5">
+                <div class="debug-card shadow-lg">
+                    <div class="debug-header">
+                        <div class="terminal-dots">
+                            <div class="dot-red"></div>
+                            <div class="dot-yellow"></div>
+                            <div class="dot-green"></div>
+                        </div>
+                        <div class="debug-title">
+                           <i class="fa-solid fa-bug me-2"></i> Debug SIBS API Inspector
+                        </div>
+                        <div class="status_badge_debug text_info_debug" id="insp-badge">Request Mode</div>
+                    </div>
+
+                    <div class="debug-section p-4">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="text-muted small fw-bold">DEBUG CONSOLE</span>
+                            <button class="btn btn-sm btn-outline-primary" id="insp-toggle">
+                                <i class="fa-solid fa-arrows-rotate me-1"></i> Ver API Reply
+                            </button>
+                        </div>
+
+                        <div id="insp-content">
+                            <div class="mb-4">
+                                <div class="section-label"> <i class="fa-solid fa-list-check"></i> HEADER</div>
+                                <div class="code-window position-relative">
+                                    <pre id="pre-h" class="bg-dark p-3 rounded" style="max-height:150px; overflow-y:auto; font-size:0.8rem; color:white">${reqHeadersStr}</pre>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="section-label">PAYLOAD</div>
+                                <div class="code-window position-relative">
+                                    <pre id="pre-b" class="bg-dark text_info_debug p-3 rounded" style="max-height:350px; overflow-y:auto; font-size:0.8rem;">${reqBodyStr}</pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        // Lógica de Toggle
+        let isResponseView = false;
+        const btn = document.getElementById("insp-toggle");
+        const badge = document.getElementById("insp-badge");
+        const preH = document.getElementById("pre-h");
+        const preB = document.getElementById("pre-b");
+
+        btn.onclick = () => {
+            isResponseView = !isResponseView;
+            if (isResponseView) {
+                preH.textContent = `Status: ${responseData?.status || "200 OK"}`;
+                preH.className = "bg-dark p-3 text_info_debug rounded";
+                preB.textContent = resStr;
+                preB.className = "bg-dark p-3 text_info_debug rounded";
+                badge.textContent = "JSON Response";
+                badge.className = "status_badge_debug text_info_debug";
+                btn.innerHTML = '<i class="fa-solid fa-arrows-rotate me-1"></i> Ver API Request';
+            } else {
+                preH.textContent = reqHeadersStr;
+                preH.className = "bg-dark text_info_debug p-3 rounded";
+                preB.textContent = reqBodyStr;
+                preB.className = "bg-dark text_info_debug p-3 rounded";
+                badge.textContent = "Request Mode";
+                badge.className = "status_badge_debug text_info_debug";
+                btn.innerHTML = '<i class="fa-solid fa-arrows-rotate me-1"></i> Ver API Reply';
+            }
+        };
+    }
+
     function createDebugContainer(debugHeaders, debugBody, responseData) {
       const formContainer = document.getElementById("payment-form");
-      formContainer.innerHTML = "";
+      formContainer.innerHTML = ""; 
 
-      const debugContainer = document.createElement("div");
-      debugContainer.className = "card mt-4";
+      // Preparação dos dados da Resposta
+      const resStr = JSON.stringify(responseData, null, 2);
+      const status = responseData?.status || "Error";
 
-      // Cabeçalho
-      const debugHeader = document.createElement("div");
-      debugHeader.className = "card-header bg-danger text-white fw-bold d-flex justify-content-between align-items-center";
+      formContainer.innerHTML = `
+          <div class="debug-container my-5">
+              <div class="debug-card-error shadow-lg">
+                  <div class="debug-header" style="background-color: #a11b0adb;"> 
+                      <div class="terminal-dots">
+                          <div class="dot-red"></div>
+                          <div class="dot-yellow"></div>
+                          <div class="dot-green"></div>
+                      </div>
+                       <div class="debug-title" style="color:white">
+                           <i class="fa-solid fa-bug me-2" style="color:white"></i> SIBS API - RESPONSE ERROR
+                        </div>
+                      <div class="status_badge_debug_error">JSON Response</div>
+                  </div>
 
-      const debugTitle = document.createElement("span");
-      debugTitle.innerHTML = '<i class="fa fa-bug me-2"></i>Debug do Request API - Erro';
+                  <div class="debug-section p-4">
+                      <div id="error-content-area">
+                          <div class="mb-4">
+                              <div class="section-label_error">RESPONSE STATUS</div>
+                              <div class="code-window">
+                                  <pre class="text_info_debug p-3" style="font-size:0.9rem; background: transparent; margin:0;">Status: ${status}</pre>
+                              </div>
+                          </div>
 
-      const responseButton = document.createElement("button");
-      responseButton.className = "btn btn-light btn-sm fw-bold";
-      responseButton.textContent = "Ver API reply";
-
-      debugHeader.appendChild(debugTitle);
-      debugHeader.appendChild(responseButton);
-      debugContainer.appendChild(debugHeader);
-
-      // Corpo (request)
-      const debugContent = document.createElement("div");
-      debugContent.className = "card-body";
-
-      const headersTitle = document.createElement("h6");
-      headersTitle.className = "fw-bold";
-      headersTitle.textContent = "Request Header:";
-
-      const headersPre = document.createElement("pre");
-      headersPre.className = "bg-light p-3 rounded";
-      headersPre.style.maxHeight = "150px";
-      headersPre.style.overflowY = "auto";
-      headersPre.style.fontSize = "0.8rem";
-      headersPre.textContent = JSON.stringify(debugHeaders, null, 2);
-
-      const bodyTitle = document.createElement("h6");
-      bodyTitle.className = "fw-bold mt-3";
-      bodyTitle.textContent = "Request Body:";
-
-      const bodyPre = document.createElement("pre");
-      bodyPre.className = "bg-light p-3 rounded";
-      bodyPre.style.maxHeight = "300px";
-      bodyPre.style.overflowY = "auto";
-      bodyPre.style.fontSize = "0.8rem";
-      bodyPre.textContent = JSON.stringify(debugBody, null, 2);
-
-      debugContent.appendChild(headersTitle);
-      debugContent.appendChild(headersPre);
-      debugContent.appendChild(bodyTitle);
-      debugContent.appendChild(bodyPre);
-      debugContainer.appendChild(debugContent);
-      formContainer.appendChild(debugContainer);
-
-      // Alternar request / response
-      let showingResponse = false;
-
-      responseButton.onclick = () => {
-        if (!showingResponse) {
-          debugContent.innerHTML = `
-            <h6 class="fw-bold">Status Code response:</h6>
-            <pre class="bg-light p-3 rounded">${responseData?.status || "200"}</pre>
-
-            <h6 class="fw-bold mt-3">Body response:</h6>
-            <pre class="bg-light p-3 rounded" style="max-height:400px;overflow-y:auto;font-size:0.8rem;">
-    ${JSON.stringify(responseData, null, 2)}
-            </pre>
-          `;
-          responseButton.textContent = "Ver API request";
-          debugTitle.innerHTML = '<i class="fa fa-bug me-2 "></i>Response API - Erro';
-          showingResponse = true;
-        } else {
-          debugContent.innerHTML = "";
-          debugContent.appendChild(headersTitle);
-          debugContent.appendChild(headersPre);
-          debugContent.appendChild(bodyTitle);
-          debugContent.appendChild(bodyPre);
-          responseButton.textContent = "Ver API reply";
-          debugTitle.innerHTML = '<i class="fa fa-bug me-2 "></i>Debug do Request API - Erro';
-          showingResponse = false;
-        }
-      };
+                          <div>
+                              <div class="section-label_error">RESPONSE BODY</div>
+                              <div class="code-window">
+                                  <pre class="text_info_debug p-3" style="max-height:450px; overflow-y:auto; font-size:0.85rem; background: transparent; margin:0;">${resStr}</pre>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      `;
     }
 
     const currentDefault = localStorage.getItem('default');

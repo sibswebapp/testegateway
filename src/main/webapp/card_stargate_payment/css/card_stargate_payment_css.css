@@ -38,3 +38,153 @@
     margin-bottom: 8px;
     color: #444;
     }
+
+    
+
+    .card {
+            border-radius: 20px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .card i {
+            transition: transform 0.3s;
+        }
+
+        .card:hover i {
+            transform: scale(1.2);
+        }
+
+        .card h4 {
+            font-weight: 600;
+        }
+
+        .card p {
+            font-size: 0.9rem;
+            color: #6c757d;
+        }
+       .debug-container {
+            font-family: 'Inter', sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .debug-card {
+            background-color: var(--debug-bg);
+            border-radius: 16px;
+            border: 1px solid #334155;
+            overflow: hidden;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Barra de Título estilo Terminal */
+        .debug-header {
+            background-color: #1e293b;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #334155;
+        }
+
+        .terminal-dots {
+            display: flex;
+            gap: 6px;
+        }
+
+        .dot { width: 10px; height: 10px; border-radius: 50%; }
+        .dot-red { background: #ff5f56; }
+        .dot-yellow { background: #ffbd2e; }
+        .dot-green { background: #27c93f; }
+
+        .debug-title {
+            color: var(--header-text);
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* Áreas de Código */
+        .debug-section {
+            padding: 20px;
+        }
+
+        .section-label {
+            color: var(--debug-accent);
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .code-window {
+            background-color: var(--debug-panel);
+            border-radius: 8px;
+            padding: 15px;
+            border: 1px solid #334155;
+            position: relative;
+        }
+
+        pre {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            color: var(--code-text);
+            margin: 0;
+            max-height: 250px;
+            overflow: auto;
+            scrollbar-width: thin;
+            scrollbar-color: #475569 transparent;
+        }
+
+        /* Custom Scrollbar */
+        pre::-webkit-scrollbar { width: 6px; height: 6px; }
+        pre::-webkit-scrollbar-thumb { background: #475569; border-radius: 10px; }
+
+        /* Badge de Status */
+        .status-badge {
+            font-size: 0.7rem;
+            background: rgba(56, 189, 248, 0.1);
+            color: var(--debug-accent);
+            padding: 2px 8px;
+            border-radius: 4px;
+            border: 1px solid rgba(56, 189, 248, 0.2);
+        }
+
+        .btn-copy {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(255,255,255,0.05);
+            border: none;
+            color: var(--header-text);
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            transition: all 0.2s;
+        }
+
+        .btn-copy:hover {
+            background: var(--debug-accent);
+            color: white;
+        }
+
+        .logo-square {
+        width: 42px;
+        height: 42px;
+        background: linear-gradient(135deg, #ff6a00 0%, #ffa500 100%);        border-radius: 12px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.2rem;
+        box-shadow: 0 10px 15px -3px rgba(0, 97, 255, 0.3);
+    }
