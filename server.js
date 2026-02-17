@@ -10,7 +10,9 @@ const USER = process.env.BASIC_AUTH_USER;
 const PASS = process.env.BASIC_AUTH_PASS;
 const PORT = process.env.PORT || 8002;
 const HOST = process.env.HOST || '127.0.0.1';
-const prefix = process.env.APP_PREFIX || '/';
+const prefix = (HOST === '127.0.0.1') 
+    ? (process.env.APP_PREFIX)
+    : '/SimuladorSIBS/' ;
 
 if (!USER || !PASS) {
   throw new Error('BASIC_AUTH_USER ou BASIC_AUTH_PASS não estão definidos!');
@@ -40,6 +42,7 @@ app.use(express.json());
 // --------------------------------------------------
 // Chamadas API
 // --------------------------------------------------
+
 
 app.post(`${prefix}api/validar-clientid`, async (req, res) => {
   try {
