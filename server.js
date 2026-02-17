@@ -42,7 +42,7 @@ app.use(express.json());
 // --------------------------------------------------
 
 
-app.post(`/SimuladorSIBS/api/validar-clientid`, async (req, res) => {
+app.post(`${prefix}api/validar-clientid`, async (req, res) => {
   try {
     const { nome, clientId, token, terminalID } = req.body;
 
