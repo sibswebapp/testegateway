@@ -141,7 +141,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                                     <div class="d-flex justify-content-between align-items-center">
                                         <span class="text-muted small">
                                             <i class="fa-regular fa-calendar-check me-1"></i> 
-                                            Limite de pagamento: <strong>${new Date(data.paymentReference.expireDate).toLocaleDateString()}</strong>
+                                            Limite de pagamento: <strong>${new Date(data.paymentReference.expireDate).toLocaleDateString('pt-BR', {day:'2-digit', month:'2-digit', year:'numeric'})}</strong>
                                         </span>
                                         
                                         <div class="d-flex gap-2">
