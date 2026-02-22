@@ -15,7 +15,8 @@
       gatewayVersion: "2",
       LayoutVersion: "1",
       MITs: "0",
-      VersionMITS: "0"
+      VersionMITS: "0",
+      typeOfPayment: "1",
     };
 
     localStorage.setItem('credential_default', JSON.stringify(credential_default));
@@ -56,12 +57,14 @@
         paymentMethodsParam = credential_config_variable.paymentMethods
         AllMethodsPay = credential_config_variable.AllMethodsPay
         gatewayVersion = credential_config_variable.gatewayVersion
+        typeOfPayment = credential_config_variable.typeOfPayment
         LayoutVersion = credential_config_variable.LayoutVersion
 
       }else{
         paymentMethodsParam = credential_default_variable.paymentMethods
         AllMethodsPay = credential_default_variable.AllMethodsPay
         gatewayVersion = credential_default_variable.gatewayVersion
+        typeOfPayment = credential_default_variable.typeOfPayment
         LayoutVersion = credential_default_variable.LayoutVersion
 
       }
@@ -183,6 +186,7 @@
       let referenceExpiry;
       let referenceExpiryUnit;
       let gatewayVersion;
+      let typeOfPayment;
       let LayoutVersion;
       let apiUrl;
       let MITs;
@@ -204,12 +208,14 @@
         referenceExpiry = credential_config_variable.referenceExpiry;
         referenceExpiryUnit = credential_config_variable.referenceExpiryUnit;
         gatewayVersion = credential_config_variable.gatewayVersion;
+        typeOfPayment = credential_config_variable.typeOfPayment;
         LayoutVersion = credential_config_variable.LayoutVersion;
         MITs = credential_config_variable.MITs;
       }else{
         referenceExpiry = credential_default_variable.referenceExpiry;
         referenceExpiryUnit = credential_default_variable.referenceExpiryUnit;
         gatewayVersion = credential_default_variable.gatewayVersion;
+        typeOfPayment = credential_default_variable.typeOfPayment;
         LayoutVersion = credential_default_variable.LayoutVersion
         MITs = credential_default_variable.MITs;
       }
@@ -231,6 +237,8 @@
       const paymentMethodArray = (AllMethodsPay == "1") ? [] : [selectedMethod];
 
       const version = gatewayVersion === "1" ? "v1" : "v2";
+      const versionTypePayment = typeOfPayment === "1" ? "PURS" : "AUTH";
+
       apiUrl = `https://spg.qly.site1.sibs.pt/api/${version}/payments`;
 
 
@@ -295,7 +303,7 @@
           transactionTimestamp: new Date().toISOString(),
           description: "Transaction short description",
           moto: false,
-          paymentType: "PURS",
+          paymentType: versionTypePayment,
           amount: {
             value: amountValue,
             currency: "EUR"
@@ -407,7 +415,7 @@
                 transactionTimestamp: new Date().toISOString(),
                 description: "Transaction short description",
                 moto: false,
-                paymentType: "PURS",
+                paymentType: versionTypePayment,
                 amount: {
                   value: amount,
                   currency: "EUR"
@@ -502,6 +510,7 @@
       const paymentMethods = credential_config_variable?.paymentMethods ?? credential_default_variable?.paymentMethods;
       const isServerToServer = credential_config_variable?.ServerToServer ?? credential_default_variable?.ServerToServer;
       const gatewayVersion = credential_config_variable?.gatewayVersion ?? credential_default_variable?.gatewayVersion;
+      const typeOfPayment = credential_config_variable?.typeOfPayment ?? credential_default_variable?.typeOfPayment;
 
       const isProd = window.location.hostname === 'sibsdigitalcommerce.com'; 
 
@@ -621,6 +630,7 @@
             messageElement.classList.remove("alert", "alert-danger");
 
             version = gatewayVersion === "1" ? "v1" : "v2";
+            
             apiUrl = `https://spg.qly.site1.sibs.pt/api/${version}/payments/${transactionID}/mbway-id/purchase`;
 
             const headers = {
@@ -749,7 +759,8 @@
       const initialDatetime = new Date().toISOString();
       const finalDatetime = new Date();
       finalDatetime.setMonth(finalDatetime.getMonth() + 2);
-      
+      const versionTypePayment = typeOfPayment === "1" ? "PURS" : "AUTH";
+
       const debugBody = {
         merchant: {
           terminalId: terminalId,
@@ -760,7 +771,7 @@
           transactionTimestamp: new Date().toISOString(),
           description: "Transaction short description",
           moto: false,
-          paymentType: "PURS",
+          paymentType: versionTypePayment,
           amount: {
             value: amount,
             currency: "EUR"

@@ -242,6 +242,7 @@
       let isDummyCustomer = document.getElementById('dummyCustomerToggle').checked ? 1 : 0;
       let ServerToServer = document.getElementById('ServerToServerCheckbox').checked ? 1 : 0;
       let gatewayVersion = document.getElementById("gatewayVersion").value;
+      let typeOfPayment = document.getElementById("typeOfPayment").value;
       let LayoutVersion = document.getElementById("LayoutVersion").value;
       let MITs = "0"; //document.getElementById('MITs').checked ? 1 : 0;
       let VersionMITS = "0"; //document.getElementById('VersionMITS').value;
@@ -296,6 +297,7 @@
         ServerToServer: ServerToServer.toString(),
         AllMethodsPay: AllMethodsPay,
         gatewayVersion: gatewayVersion,
+        typeOfPayment: typeOfPayment,
         LayoutVersion: LayoutVersion,
         MITs: MITs,
         VersionMITS: VersionMITS
@@ -320,6 +322,7 @@
       let referenceExpiryUnit
       let ServerToServer
       let gatewayVersion
+      let typeOfPayment
       let LayoutVersion
       //let MITs
       //let VersionMITS
@@ -332,6 +335,7 @@
         referenceExpiryUnit = credentialDefaultObj.referenceExpiryUnit;
         ServerToServer = credentialDefaultObj.ServerToServer;
         gatewayVersion = credentialDefaultObj.gatewayVersion;
+        typeOfPayment = credentialDefaultObj.typeOfPayment;
         LayoutVersion = credentialDefaultObj.LayoutVersion;
         //MITs = credentialDefaultObj.MITs;
         //VersionMITS = credentialDefaultObj.VersionMITS;
@@ -344,6 +348,7 @@
         referenceExpiryUnit = credential_config_variable.referenceExpiryUnit;
         ServerToServer = credential_config_variable.ServerToServer;
         gatewayVersion = credential_config_variable.gatewayVersion;
+        typeOfPayment = credential_config_variable.typeOfPayment;
         LayoutVersion = credential_config_variable.LayoutVersion;
         //MITs = credential_config_variable.MITs;
         //VersionMITS = credential_config_variable.VersionMITS;
@@ -362,6 +367,7 @@
         document.getElementById('referenceExpiry').value = credential_config_variable.referenceExpiry;
         document.getElementById('referenceExpiryUnit').value = credential_config_variable.referenceExpiryUnit;
         document.getElementById('gatewayVersion').value = credential_config_variable.gatewayVersion;
+        document.getElementById('typeOfPayment').value = credential_config_variable.typeOfPayment;
         document.getElementById('LayoutVersion').value = credential_config_variable.LayoutVersion;
         //document.getElementById('MITs').value = credential_config_variable.MITs;
         //document.getElementById('VersionMITS').value = credential_config_variable.VersionMITS;
