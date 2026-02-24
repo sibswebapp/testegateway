@@ -225,7 +225,7 @@
 
       const placeholder = document.getElementById('loader-placeholder');
       if (placeholder) {
-          placeholder.style.display = 'none'; 
+          placeholder.style.display = 'none';
       }
 
       const formContainer = document.getElementById('payment-form');
@@ -292,32 +292,57 @@
       }
 
       const finalDatetimeStr = finalDatetime.toISOString();
+      let requestData
 
-      const requestData = {
-        merchant: {
-          terminalId: terminalId,
-          channel: "web",
-          merchantTransactionId: "OrderID"
-        },
-        transaction: {
-          transactionTimestamp: new Date().toISOString(),
-          description: "Transaction short description",
-          moto: false,
-          paymentType: versionTypePayment,
-          amount: {
-            value: amountValue,
-            currency: "EUR"
+      if (selectedMethod == "REFERENCE") {
+        requestData = {
+          merchant: {
+            terminalId: terminalId,
+            channel: "web",
+            merchantTransactionId: "OrderID"
           },
-          paymentMethod: paymentMethodArray,
-          paymentReference: {
-            initialDatetime: initialDatetimeStr,
-            finalDatetime: finalDatetimeStr,
-            maxAmount: { value: amountValue, currency: "EUR" },
-            minAmount: { value: amountValue, currency: "EUR" },
-            entity: entity
+          transaction: {
+            transactionTimestamp: new Date().toISOString(),
+            description: "Transaction short description",
+            moto: false,
+            paymentType: versionTypePayment,
+            amount: {
+              value: amountValue,
+              currency: "EUR"
+            },
+            paymentMethod: paymentMethodArray,
+            paymentReference: {
+              initialDatetime: initialDatetimeStr,
+              finalDatetime: finalDatetimeStr,
+              maxAmount: { value: amountValue, currency: "EUR" },
+              minAmount: { value: amountValue, currency: "EUR" },
+              entity: entity
+            }
           }
-        }
-      };
+        };
+
+      }else{
+
+        requestData = {
+          merchant: {
+            terminalId: terminalId,
+            channel: "web",
+            merchantTransactionId: "OrderID"
+          },
+          transaction: {
+            transactionTimestamp: new Date().toISOString(),
+            description: "Transaction short description",
+            moto: false,
+            paymentType: versionTypePayment,
+            amount: {
+              value: amountValue,
+              currency: "EUR"
+            },
+            paymentMethod: paymentMethodArray
+          }
+        };
+
+      }
 
       let isDummyCustomer;
 
