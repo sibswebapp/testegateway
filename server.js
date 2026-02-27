@@ -983,13 +983,9 @@ publicRoutes.forEach(route => {
 });
 
 // 3. PÁGINA INICIAL
-app.get('/', (req, res) => {
+app.get(['/','/SimuladorSIBS','/SimuladorSIBS/'], (req, res) => {
   const indexPath = path.join(webappDir, 'gateway_menu', 'gateway_menu.html');
-  if (fs.existsSync(indexPath)) {
-    res.sendFile(indexPath);
-  } else {
-    res.status(404).send('Página inicial não encontrada! Verifique o caminho: ' + indexPath);
-  }
+  res.sendFile(indexPath);
 });
 
 // 4. FALLBACK (Arquivos na raiz de webapp)
