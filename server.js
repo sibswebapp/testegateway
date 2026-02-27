@@ -10,7 +10,7 @@ const USER = process.env.BASIC_AUTH_USER;
 const PASS = process.env.BASIC_AUTH_PASS;
 const PORT = process.env.PORT || 8002;
 const HOST = process.env.HOST || '127.0.0.1';
-const prefix = HOST === '127.0.0.1' ? '/' : '/SimuladorSIBS/';
+const prefix = HOST === '127.0.0.1' ? '' : '/SimuladorSIBS';
 
 if (!USER || !PASS) {
   throw new Error('BASIC_AUTH_USER ou BASIC_AUTH_PASS não estão definidos!');
@@ -98,7 +98,7 @@ app.post(`${prefix}api/validar-clientid`, async (req, res) => {
 });
 
 // GET STATUS
-app.get("/api/status", async (req, res) => {
+app.get("${prefix}/api/status", async (req, res) => {
   try {
     const { terminalId, clientId, transactionId, token } = req.query;
 
@@ -984,7 +984,7 @@ publicRoutes.forEach(route => {
 });
 
 // 3. PÁGINA INICIAL
-app.get('/', (req, res) => {
+app.get(['/', `${prefix}/`], (req, res) => {
   const indexPath = path.join(webappDir, 'gateway_menu', 'gateway_menu.html');
   if (fs.existsSync(indexPath)) {
     res.sendFile(indexPath);
