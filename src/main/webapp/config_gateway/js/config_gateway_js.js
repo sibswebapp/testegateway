@@ -244,9 +244,10 @@
       let gatewayVersion = document.getElementById("gatewayVersion").value;
       let typeOfPayment = document.getElementById("typeOfPayment").value;
       let LayoutVersion = document.getElementById("LayoutVersion").value;
-      let MITs = "0"; //document.getElementById('MITs').checked ? 1 : 0;
       let VersionMITS = "0"; //document.getElementById('VersionMITS').value;
-
+      let MITs = "0"; //document.getElementById('MITs').checked ? 1 : 0;
+      let VersionpagamentosAutorizados = document.getElementById('VersionpagamentosAutorizados').value;
+      let pagamentosAutorizados = document.getElementById('pagamentosAutorizadoschecked').checked ? 1 : 0;
 
       const methods = Array.from(document.getElementById('paymentMethods').selectedOptions).map(opt => opt.value);
       const AllMethodsPay = document.getElementById('AllMethodsPay').checked ? 1 : 0;
@@ -300,7 +301,9 @@
         typeOfPayment: typeOfPayment,
         LayoutVersion: LayoutVersion,
         MITs: MITs,
-        VersionMITS: VersionMITS
+        VersionMITS: VersionMITS,
+        pagamentosAutorizados: pagamentosAutorizados,
+        VersionpagamentosAutorizados: VersionpagamentosAutorizados
       };
 
       localStorage.setItem('credential_config', JSON.stringify(credential_obj));
@@ -326,6 +329,8 @@
       let LayoutVersion
       //let MITs
       //let VersionMITS
+      let pagamentosAutorizados
+      let VersionpagamentosAutorizados
     
       if(useDefault == "1"){
         checkbox_option = credentialDefaultObj.useDefaultConfig;
@@ -339,6 +344,8 @@
         LayoutVersion = credentialDefaultObj.LayoutVersion;
         //MITs = credentialDefaultObj.MITs;
         //VersionMITS = credentialDefaultObj.VersionMITS;
+        pagamentosAutorizados = credentialDefaultObj.pagamentosAutorizados;
+        VersionpagamentosAutorizados = credentialDefaultObj.VersionpagamentosAutorizados;
 
       }else{
         checkbox_option = credential_config_variable.useDefaultConfig;
@@ -352,7 +359,9 @@
         LayoutVersion = credential_config_variable.LayoutVersion;
         //MITs = credential_config_variable.MITs;
         //VersionMITS = credential_config_variable.VersionMITS;
-
+        pagamentosAutorizados = credential_config_variable.pagamentosAutorizados;
+        VersionpagamentosAutorizados = credential_config_variable.VersionpagamentosAutorizados;
+      
       }
 
       checkbox.checked = checkbox_option === "true" || checkbox_option === true || checkbox_option === 1 || checkbox_option === "1" ;
@@ -371,7 +380,8 @@
         document.getElementById('LayoutVersion').value = credential_config_variable.LayoutVersion;
         //document.getElementById('MITs').value = credential_config_variable.MITs;
         //document.getElementById('VersionMITS').value = credential_config_variable.VersionMITS;
-
+        document.getElementById('pagamentosAutorizadoschecked').value = credential_config_variable.pagamentosAutorizados;
+        document.getElementById('VersionpagamentosAutorizados').value = credential_config_variable.VersionpagamentosAutorizados;
       }
 
       if(useDefault){
@@ -387,6 +397,15 @@
         document.getElementById('MITs').checked = false;
         document.getElementById("LayoutVersionMITS").style.display = "none";
       }*/
+
+        //document.getElementById("LayoutVersionMITS").style.display = "block";
+
+      if (pagamentosAutorizados == "1") {
+        document.getElementById('pagamentosAutorizadoschecked').checked = true;
+      } else {
+        document.getElementById('pagamentosAutorizadoschecked').checked = false;
+        document.getElementById("LayoutVersionpagamentosAutorizados").style.display = "none";
+      }
 
       const select = document.getElementById('paymentMethods');
       Array.from(select.options).forEach(opt => {
@@ -436,3 +455,9 @@
       const paymentMethodsContainer = document.getElementById("LayoutVersionMITS");
       paymentMethodsContainer.style.display = element.checked ? "block" : "none";
     }*/
+
+    //Função caso ele selecionar as pagamentos autorizados irá aparecer a checkbox
+    function togglepagamentosAutorizados(element) {
+      const paymentMethodsContainer = document.getElementById("LayoutVersionpagamentosAutorizados");
+      paymentMethodsContainer.style.display = element.checked ? "block" : "none";
+    }

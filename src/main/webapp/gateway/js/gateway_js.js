@@ -17,6 +17,8 @@
       MITs: "0",
       VersionMITS: "0",
       typeOfPayment: "1",
+      VersionpagamentosAutorizados: "1",
+      pagamentosAutorizados: "0"
     };
 
     localStorage.setItem('credential_default', JSON.stringify(credential_default));
@@ -59,6 +61,7 @@
         gatewayVersion = credential_config_variable.gatewayVersion
         typeOfPayment = credential_config_variable.typeOfPayment
         LayoutVersion = credential_config_variable.LayoutVersion
+        pagamentosAutorizados = credential_config_variable.pagamentosAutorizados
 
       }else{
         paymentMethodsParam = credential_default_variable.paymentMethods
@@ -66,6 +69,7 @@
         gatewayVersion = credential_default_variable.gatewayVersion
         typeOfPayment = credential_default_variable.typeOfPayment
         LayoutVersion = credential_default_variable.LayoutVersion
+        pagamentosAutorizados = credential_default_variable.pagamentosAutorizados
 
       }
 
@@ -75,6 +79,13 @@
         document.getElementById("payment-method_Div").style.display = "block";
       }
 
+      paymentMethodsParam = JSON.parse(paymentMethodsParam);
+
+      if (pagamentosAutorizados == 1) {
+          if (!paymentMethodsParam.includes("4")) {
+              paymentMethodsParam.push("4");
+          }
+      }
 
       const select = document.getElementById("payment-method");
       select.innerHTML = "";
@@ -84,6 +95,10 @@
           "2": { label: "Multibanco", value: "REFERENCE" },
           "3": { label: "Cartão", value: "CARD" }
       };
+
+      if (pagamentosAutorizados == 1) {
+        methodMap["4"] = { label: "Criação Mandato", value: "PA" };
+      }
 
       if (paymentMethodsParam) {
 
@@ -190,6 +205,9 @@
       let LayoutVersion;
       let apiUrl;
       let MITs;
+      let pagamentosAutorizados;
+      let VersionpagamentosAutorizados;
+
 
       if(default_Configs == "0" && credential_config_variable.useDefaultConfig == "true"){
         token = credential_default_variable.bearerToken;
@@ -211,6 +229,9 @@
         typeOfPayment = credential_config_variable.typeOfPayment;
         LayoutVersion = credential_config_variable.LayoutVersion;
         MITs = credential_config_variable.MITs;
+        pagamentosAutorizados = credential_config_variable.pagamentosAutorizados;
+        VersionpagamentosAutorizados = credential_config_variable.VersionpagamentosAutorizados;
+
       }else{
         referenceExpiry = credential_default_variable.referenceExpiry;
         referenceExpiryUnit = credential_default_variable.referenceExpiryUnit;
@@ -218,6 +239,9 @@
         typeOfPayment = credential_default_variable.typeOfPayment;
         LayoutVersion = credential_default_variable.LayoutVersion
         MITs = credential_default_variable.MITs;
+        pagamentosAutorizados = credential_default_variable.pagamentosAutorizados;
+        VersionpagamentosAutorizados = credential_default_variable.VersionpagamentosAutorizados;
+
       }
 
       const amountValue = parseFloat(document.getElementById("amount").value);
@@ -239,7 +263,11 @@
       const version = gatewayVersion === "1" ? "v1" : "v2";
       const versionTypePayment = typeOfPayment === "1" ? "PURS" : "AUTH";
 
-      apiUrl = `https://spg.qly.site1.sibs.pt/api/${version}/payments`;
+      if(selectedMethod != "PA"){
+        apiUrl = `https://spg.qly.site1.sibs.pt/api/${version}/payments`;
+      }else{
+        apiUrl = `https://api.qly.sibspayments.com/sibs/spg/v2/mbway-mandates/creation`;
+      }
 
 
       if (!selectedMethod  && AllMethodsPay != "1") {
@@ -294,7 +322,12 @@
       const finalDatetimeStr = finalDatetime.toISOString();
       let requestData
 
-      if (selectedMethod == "REFERENCE") {
+
+      if(selectedMethod == "PA"){
+        pagamentosAutorizados_form(apiUrl);
+        //return;
+      }
+      else if (selectedMethod == "REFERENCE") {
         requestData = {
           merchant: {
             terminalId: terminalId,
@@ -980,6 +1013,12 @@
           </div>
       `;
     }
+
+
+     function pagamentosAutorizados_form(apiUrl) {
+      // é para aparecer o form
+    }
+
 
     const currentDefault = localStorage.getItem('default');
 
