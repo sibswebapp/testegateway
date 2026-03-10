@@ -376,6 +376,8 @@ async function getStatusPagamento() {
   document.getElementById("statusCode").innerText = "CODE: -";
   document.getElementById("bodyCompletoStatus").innerText = "{}";
 
+  const prefix = window.location.hostname === '127.0.0.1' ? '' : '/SimuladorSIBS';
+
   try {
 
     const params = new URLSearchParams({
@@ -385,7 +387,7 @@ async function getStatusPagamento() {
       transactionId
     });
 
-    const response = await fetch(`/api/status?${params.toString()}`, {
+    const response = await fetch(`${prefix}/api/status?${params.toString()}`, {
       method: "GET"
     });
 
@@ -456,6 +458,8 @@ async function RefundPagamento() {
   document.getElementById("statusCodeRefund").innerText = "CODE: -";
   document.getElementById("bodyCompletoRefund").innerText = "{}";
 
+  const prefix = window.location.hostname === '127.0.0.1' ? '' : '/SimuladorSIBS';
+
   try {
 
     const params = new URLSearchParams({
@@ -463,7 +467,7 @@ async function RefundPagamento() {
     });
 
 
-    const response = await fetch(`/api/Refund?${params.toString()}`, {
+    const response = await fetch(`${prefix}/api/Refund?${params.toString()}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ montante , clientId , terminalId, bearerToken  })
@@ -532,6 +536,8 @@ async function CancelPagamento() {
   document.getElementById("statusCodeCancel").innerText = "CODE: -";
   document.getElementById("bodyCompletoCancel").innerText = "{}";
 
+  const prefix = window.location.hostname === '127.0.0.1' ? '' : '/SimuladorSIBS';
+
   try {
 
     const params = new URLSearchParams({
@@ -539,7 +545,7 @@ async function CancelPagamento() {
     });
 
 
-    const response = await fetch(`/api/Cancel?${params.toString()}`, {
+    const response = await fetch(`${prefix}/api/Cancel?${params.toString()}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ montante , clientId , terminalId, bearerToken  })
@@ -603,9 +609,11 @@ async function fazerCIT() {
   document.getElementById("CITPagamento").innerText = "...";
   document.getElementById("bodyCompletoCIT").innerText = "{}";
 
+  const prefix = window.location.hostname === '127.0.0.1' ? '' : '/SimuladorSIBS';
+
   try {
     const params = new URLSearchParams({ CitType });
-    const response = await fetch(`/api/cit?${params.toString()}`, {
+    const response = await fetch(`${prefix}/api/cit?${params.toString()}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ montante, clientId, terminalId, bearerToken })
@@ -691,10 +699,12 @@ async function fazerMIT() {
   document.getElementById("statusCodeMIT").innerText = "CODE: -";
   document.getElementById("bodyCompletoMIT").innerText = "{}";
 
+  const prefix = window.location.hostname === '127.0.0.1' ? '' : '/SimuladorSIBS';
+
 
   try {
     const params = new URLSearchParams({ mitType, MITTransactionId});
-    const response = await fetch(`/api/mit?${params.toString()}`, {
+    const response = await fetch(`${prefix}/api/mit?${params.toString()}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ montante, clientId, terminalId, bearerToken })
@@ -778,10 +788,12 @@ async function fazerCaptura() {
   document.getElementById("statusCodecapture").innerText = "CODE: -";
   document.getElementById("bodyCompletocapture").innerText = "{}";
 
+  const prefix = window.location.hostname === '127.0.0.1' ? '' : '/SimuladorSIBS';
+
 
   try {
     const params = new URLSearchParams({captureTransactionId});
-    const response = await fetch(`/api/capture?${params.toString()}`, {
+    const response = await fetch(`${prefix}/api/capture?${params.toString()}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ montante, clientId, terminalId, bearerToken })
@@ -837,11 +849,13 @@ async function ListarMandato() {
   document.getElementById("ListarMandatoCode").innerText = "CODE: -";
   document.getElementById("bodyCompletoListarMandato").innerText = "{}";
 
+  const prefix = window.location.hostname === '127.0.0.1' ? '' : '/SimuladorSIBS';
+
 
   try {
 
     const params = new URLSearchParams({clientId, bearerToken});
-    const response = await fetch(`/api/ListarMandato?${params.toString()}`, {
+    const response = await fetch(`${prefix}/api/ListarMandato?${params.toString()}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" }
     });
@@ -915,10 +929,12 @@ async function CancelarMandato() {
   document.getElementById("statusCodeCancelMandato").innerText = "CODE: -";
   document.getElementById("bodyCompletoCancelMandato").innerText = "{}";
 
+  const prefix = window.location.hostname === '127.0.0.1' ? '' : '/SimuladorSIBS';
+
 
   try {
     const params = new URLSearchParams({CancelMandatoTransactionId, bearerToken, clientId, CancelMandatoPhone});
-    const response = await fetch(`/api/CancelarMandato?${params.toString()}`, {
+    const response = await fetch(`${prefix}/api/CancelarMandato?${params.toString()}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ terminalId,CancelMandatoMerchantID })
@@ -988,10 +1004,12 @@ async function DetalheMandato() {
   document.getElementById("statusCodeDetalheMandato").innerText = "Montante disponível: -";
   document.getElementById("bodyCompletoDetalheMandato").innerText = "{}";
 
+  const prefix = window.location.hostname === '127.0.0.1' ? '' : '/SimuladorSIBS';
+
 
   try {
     const params = new URLSearchParams({DetalheMandatoTransactionId, bearerToken, clientId, DetalheMandatoPhone});
-    const response = await fetch(`/api/DetalheMandato?${params.toString()}`, {
+    const response = await fetch(`${prefix}/api/DetalheMandato?${params.toString()}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" }
     });
@@ -1067,10 +1085,12 @@ async function CriarMandato() {
   document.getElementById("statusCodeCriarMandato").innerText = "CODE: -";
   document.getElementById("bodyCompletoCriarMandato").innerText = "{}";
 
+  const prefix = window.location.hostname === '127.0.0.1' ? '' : '/SimuladorSIBS';
+
 
   try {
     const params = new URLSearchParams({bearerToken, clientId});
-    const response = await fetch(`/api/CriarMandato?${params.toString()}`, {
+    const response = await fetch(`${prefix}/api/CriarMandato?${params.toString()}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ terminalId, CriarMandatoCustomerName, CriarMandatoPhone, CriarMandatoMerchantID })
@@ -1166,6 +1186,8 @@ async function RefundMandatoPagamento() {
   document.getElementById("statusCodeRefundMandato").innerText = "CODE: -";
   document.getElementById("bodyCompletoRefundMandato").innerText = "{}";
 
+  const prefix = window.location.hostname === '127.0.0.1' ? '' : '/SimuladorSIBS';
+
   try {
 
     const params = new URLSearchParams({
@@ -1173,7 +1195,7 @@ async function RefundMandatoPagamento() {
     });
 
 
-    const response = await fetch(`/api/RefundMandato?${params.toString()}`, {
+    const response = await fetch(`${prefix}/api/RefundMandato?${params.toString()}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ montante , clientId , terminalId, bearerToken  })
@@ -1253,6 +1275,9 @@ async function CheckoutMandatoPagamento() {
   document.getElementById("statusCodeCheckoutMandato").innerText = "CODE: -";
   document.getElementById("bodyCompletoCheckoutMandato").innerText = "{}";
 
+   const prefix = window.location.hostname === '127.0.0.1' ? '' : '/SimuladorSIBS';
+
+
   try {
 
     const params = new URLSearchParams({
@@ -1260,7 +1285,7 @@ async function CheckoutMandatoPagamento() {
     });
 
 
-    const response = await fetch(`/api/CheckoutMandato?${params.toString()}`, {
+    const response = await fetch(`${prefix}/api/CheckoutMandato?${params.toString()}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ terminalId , montante , checkoutMandateId, checkoutMerchantID, checkoutCustomerName  })
@@ -1342,6 +1367,9 @@ async function CompraMandatoPagamento() {
   document.getElementById("statusCodeCompraMandato").innerText = "CODE: -";
   document.getElementById("bodyCompletoCompraMandato").innerText = "{}";
 
+  const prefix = window.location.hostname === '127.0.0.1' ? '' : '/SimuladorSIBS';
+
+
   try {
 
     const params = new URLSearchParams({
@@ -1349,7 +1377,7 @@ async function CompraMandatoPagamento() {
     });
 
 
-    const response = await fetch(`/api/CompraMandato?${params.toString()}`, {
+    const response = await fetch(`${prefix}/api/CompraMandato?${params.toString()}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

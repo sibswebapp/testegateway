@@ -42,7 +42,7 @@ app.use(express.json());
 // --------------------------------------------------
 
 
-app.post(`/SimuladorSIBS/api/validar-clientid`, async (req, res) => {
+app.post(`${prefix}/api/validar-clientid`, async (req, res) => {
   try {
     const { nome, clientId, token, terminalID } = req.body;
 
@@ -98,7 +98,7 @@ app.post(`/SimuladorSIBS/api/validar-clientid`, async (req, res) => {
 });
 
 // GET STATUS
-app.get("${prefix}/api/status", async (req, res) => {
+app.get(`${prefix}/api/status`, async (req, res) => {
   try {
     const { terminalId, clientId, transactionId, token } = req.query;
 
@@ -145,9 +145,8 @@ app.get("${prefix}/api/status", async (req, res) => {
 });
 
 
-
 // Validar checkout em QLY
-app.post('/api/validar-clientid_qly', async (req, res) => {
+app.post(`${prefix}/api/validar-clientid_qly`, async (req, res) => {
   try {
     const { nome, clientId, token, terminalID } = req.body;
 
@@ -203,7 +202,7 @@ app.post('/api/validar-clientid_qly', async (req, res) => {
 });
 
 //Fazer checkout com o body do validador
-app.post('/api/validar-body_qly', async (req, res) => {
+app.post(`${prefix}/api/validar-body_qly`, async (req, res) => {
   try {
     const { body, clientId, token } = req.body;
 
@@ -249,7 +248,7 @@ app.post('/api/validar-body_qly', async (req, res) => {
 });
 
 //Refund
-app.post('/api/Refund', async (req, res) => {
+app.post(`${prefix}/api/Refund`, async (req, res) => {
   try {
     const { montante, clientId, bearerToken, terminalId } = req.body;
     const { transactionId } = req.query;
@@ -300,7 +299,7 @@ app.post('/api/Refund', async (req, res) => {
 });
 
 //Cancel
-app.post('/api/Cancel', async (req, res) => {
+app.post(`${prefix}/api/Cancel`, async (req, res) => {
   try {
     const { montante, clientId, bearerToken, terminalId } = req.body;
     const { transactionId } = req.query;
@@ -351,7 +350,7 @@ app.post('/api/Cancel', async (req, res) => {
 });
 
 //CIT
-app.post('/api/cit', async (req, res) => {
+app.post(`${prefix}/api/cit`, async (req, res) => {
   try {
     const { montante, clientId, terminalId, bearerToken } = req.body;
     const { CitType } = req.query;
@@ -462,7 +461,7 @@ app.post('/api/cit', async (req, res) => {
 });
 
 //MIT
-app.post('/api/Mit', async (req, res) => {
+app.post(`${prefix}/api/Mit`, async (req, res) => {
   try {
     const { montante, clientId, terminalId, bearerToken } = req.body;
     const { mitType, MITTransactionId } = req.query;
@@ -544,7 +543,7 @@ app.post('/api/Mit', async (req, res) => {
 });
 
 //Capture
-app.post('/api/capture', async (req, res) => {
+app.post(`${prefix}/api/capture`, async (req, res) => {
   try {
     const { montante, clientId, terminalId, bearerToken } = req.body;
     const { captureTransactionId } = req.query;
@@ -598,7 +597,7 @@ app.post('/api/capture', async (req, res) => {
 });
 
 // Listar Mandatos
-app.post("/api/ListarMandato", async (req, res) => {
+app.post(`${prefix}/api/ListarMandato`, async (req, res) => {
   try {
     const { clientId, bearerToken } = req.query;
 
@@ -647,7 +646,7 @@ app.post("/api/ListarMandato", async (req, res) => {
 
 
 //Cancelar Mandato
-app.post('/api/CancelarMandato', async (req, res) => {
+app.post(`${prefix}/api/CancelarMandato`, async (req, res) => {
   try {
     const { terminalId, CancelMandatoMerchantID } = req.body;
     const { CancelMandatoTransactionId, bearerToken, clientId, CancelMandatoPhone } = req.query;
@@ -693,7 +692,7 @@ app.post('/api/CancelarMandato', async (req, res) => {
 });
 
 //Detalhe Mandato
-app.post('/api/DetalheMandato', async (req, res) => {
+app.post(`${prefix}/api/DetalheMandato`, async (req, res) => {
   try {
 
     const { DetalheMandatoTransactionId, bearerToken, clientId, DetalheMandatoPhone } = req.query;
@@ -729,7 +728,7 @@ app.post('/api/DetalheMandato', async (req, res) => {
 });
 
 //Criar Mandato
-app.post('/api/CriarMandato', async (req, res) => {
+app.post(`${prefix}/api/CriarMandato`, async (req, res) => {
 
   try {
     const { terminalId, CriarMandatoCustomerName, CriarMandatoPhone, CriarMandatoMerchantID } = req.body;
@@ -781,7 +780,7 @@ app.post('/api/CriarMandato', async (req, res) => {
 });
 
 //Refund Mandato
-app.post('/api/RefundMandato', async (req, res) => {
+app.post(`${prefix}/api/RefundMandato`, async (req, res) => {
   try {
     const { montante, clientId, bearerToken, terminalId } = req.body;
     const { transactionId } = req.query;
@@ -833,7 +832,7 @@ app.post('/api/RefundMandato', async (req, res) => {
 
 
 //Checkout Mandato
-app.post('/api/CheckoutMandato', async (req, res) => {
+app.post(`${prefix}/api/CheckoutMandato`, async (req, res) => {
   try {
     const { terminalId , montante , checkoutMandateId, checkoutMerchantID, checkoutCustomerName } = req.body;
     const { clientId, bearerToken } = req.query;
@@ -898,7 +897,7 @@ app.post('/api/CheckoutMandato', async (req, res) => {
 });
 
 //Compra Mandato
-app.post('/api/CompraMandato', async (req, res) => {
+app.post(`${prefix}/api/CompraMandato`, async (req, res) => {
   try {
     const { bearerToken, mandateTransactionSignature } = req.query;
     const { clientId, transactionID } = req.body;
@@ -943,7 +942,6 @@ app.post('/api/CompraMandato', async (req, res) => {
 const protectedRoutes = [
   '/validador_API',
   '/validador',
-  '/Onboarding_menu',
   '/webhooks',
   '/validador_form',
   '/Onboarding',
