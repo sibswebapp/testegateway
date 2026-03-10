@@ -50,8 +50,10 @@ async function chamarAPI(nome, clientId, token, terminalID) {
     let estado = "";
     let erro = "";
 
+    const prefix = window.location.hostname === '127.0.0.1' ? '' : '/SimuladorSIBS';
+
     try {
-        const response = await fetch("/api/validar-clientid", {
+        const response = await fetch(`${prefix}/api/validar-clientid`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
