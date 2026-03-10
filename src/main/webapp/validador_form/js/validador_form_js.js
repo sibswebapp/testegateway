@@ -69,7 +69,7 @@ document.getElementById("carregarForm").addEventListener("click", function() {
 
     if(ValidadorMultifuncoes){
       redirectUrl = ValidadorMultifuncoes
-      ? window.location.origin +
+      ?
       `${baseUrl}validador_multifuncoes/validador_multifuncoes.html?CITSucesso=1` +
       citTypeParam
       : window.location.href;
@@ -77,7 +77,7 @@ document.getElementById("carregarForm").addEventListener("click", function() {
 
     if(isValidador){
       redirectUrl = isValidador
-      ? window.location.origin +
+      ?
       `${baseUrl}validador_multifuncoes/validador_multifuncoes.html?TransacaoSucesso=1&validador_credenciais=1` +
       citTypeParam
       : window.location.href;

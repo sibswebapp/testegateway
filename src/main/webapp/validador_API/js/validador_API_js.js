@@ -1271,11 +1271,17 @@ function gerarForm() {
   
   const isCheckedMIT = document.getElementById("chkMIT").checked;
 
+  const isProd = window.location.hostname === 'sibsdigitalcommerce.com'; 
+
+  let baseUrl = isProd 
+    ? window.location.origin + '/SimuladorSIBS/' 
+    : window.location.origin + '/';
+
   // Redirecionar para a página do form
   if(isCheckedMIT){
-    window.location.href = '/validador_form/validador_form.html?ValidadorMultifuncoes=1';
+    window.location.href = `${baseUrl}/validador_form/validador_form.html?ValidadorMultifuncoes=1`;
   }else{
-    window.location.href = '/validador_form/validador_form.html?validador=1';
+    window.location.href = `${baseUrl}/validador_form/validador_form.html?validador=1`;
   }
 
 }
