@@ -386,8 +386,10 @@ async function gerarCheckout() {
     return;
   }
 
+  const prefix = window.location.hostname === '127.0.0.1' ? '' : '/SimuladorSIBS';
+
   try {
-    const response = await fetch("/api/validar-body_qly", {
+    const response = await fetch(`${prefix}/api/validar-body_qly`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ body, clientId, token })
@@ -693,9 +695,12 @@ async function validarAcordos(rows) {
     token: token
   };
 
+  const prefix = window.location.hostname === '127.0.0.1' ? '' : '/SimuladorSIBS';
+
+
   try {
     // Chamada ao proxy Node.js
-    const response = await fetch('/api/validar-clientid_qly', {
+    const response = await fetch(`${prefix}/api/validar-clientid_qly`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(requestData)
