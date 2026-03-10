@@ -58,18 +58,27 @@ document.getElementById("carregarForm").addEventListener("click", function() {
       }
     }
 
+
+      const isProd = window.location.hostname === 'sibsdigitalcommerce.com'; 
+
+      let baseUrl = isProd 
+      ? window.location.origin + '/SimuladorSIBS/' 
+      : window.location.origin + '/';
+
+    redirectUrl = window.location.href;
+
     if(ValidadorMultifuncoes){
       redirectUrl = ValidadorMultifuncoes
       ? window.location.origin +
-        "/validador_multifuncoes/validador_multifuncoes.html?CITSucesso=1" +
-        citTypeParam
+      `${baseUrl}validador_multifuncoes/validador_multifuncoes.html?CITSucesso=1` +
+      citTypeParam
       : window.location.href;
     }
 
     if(isValidador){
       redirectUrl = isValidador
       ? window.location.origin +
-      "/validador_multifuncoes/validador_multifuncoes.html?TransacaoSucesso=1&validador_credenciais=1" +
+      `${baseUrl}validador_multifuncoes/validador_multifuncoes.html?TransacaoSucesso=1&validador_credenciais=1` +
       citTypeParam
       : window.location.href;
     }
@@ -79,8 +88,15 @@ document.getElementById("carregarForm").addEventListener("click", function() {
     document.getElementById("sibsFormContainer").innerHTML = "";
 
     // 1) chamar o form da SIBS
+    const gatewayCheckbox = document.getElementById("gatewayStargate");
     const script = document.createElement("script");
-    script.src = `https://spg.qly.site1.sibs.pt/assets/js/widget.js?id=${encodeURIComponent(transactionId)}`;
+
+    if (gatewayCheckbox.checked) {
+        script.src = `https://stargate.qly.site2.sibs.pt/assets/js/widget.js?id=${encodeURIComponent(transactionId)}`;
+    } else {
+        script.src = `https://spg.qly.site1.sibs.pt/assets/js/widget.js?id=${encodeURIComponent(transactionId)}`;
+    }
+
     document.getElementById("sibsFormContainer").appendChild(script);
 
     const form = document.createElement("form");

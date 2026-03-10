@@ -59,12 +59,12 @@
 
               <div class="col-lg-6" id="payment-method_Div">
                   <label class="form-label">Método de Pagamento:</label>
-                  <select id="payment-method" class="form-select modern-input" onchange="makePayment(); showDummyFieldsIfNeeded();"></select>
+                  <select id="payment-method" class="form-select modern-input" onchange="toggleMandateUI(); makePayment(); showDummyFieldsIfNeeded();"></select>
                   </select>
               </div>
 
-              <div class="col-lg-3">
-                  <button class="btn btn-generate" onclick="makePayment()">
+              <div class="col-lg-3" id="div_botaoPagamento">
+                  <button class="btn btn-generate" onclick="toggleMandateUI(); makePayment();">
                      Iniciar Pagamento <i class="fa-solid fa-arrow-right"></i>
                   </button>
               </div>
@@ -124,6 +124,64 @@
             </div>
             <h5 class="fw-bold text-dark">Pronto para Carregar</h5>
             <p class="small text-muted text-center">Aguardando parâmetros para inicializar o iframe seguro da SIBS.</p>
+        </div>
+
+        <div id="mandate-container" class="mt-5" style="display:none; font-family: 'Inter', system-ui, -apple-system, sans-serif;">
+          <div class="card border-0" style="border-radius: 30px; background: #ffffff; box-shadow: 0 5px 83px -8px rgba(0, 0, 0, 0.15);">
+            
+            <div class="card-body p-5">
+
+              <div class="text-center mb-5">
+                <div style="display: inline-flex; align-items: center; justify-content: center; width: 80px; height: 80px; background: linear-gradient(135deg, #f5f7fa 0%, #e4e7eb 100%); border-radius: 22px; margin-bottom: 24px;">
+                  <span style="font-size: 35px;">📱</span>
+                </div>
+                <h3 class="fw-bold" style="color: #111827; letter-spacing: -1px; font-size: 26px;">Criação de Mandato</h3>
+                <p style="color: #6b7280; font-size: 14px; line-height: 1.6; padding: 0 10px;">
+                  Introduza o seu telemóvel para configurar o mandato de pagamento.
+                </p>
+              </div>
+
+              <div class="mb-4">
+                <label for="phoneNumber" class="form-label small fw-bold" style="color: #374151; margin-left: 8px; margin-bottom: 10px;">
+                  NÚMERO DE TELEFONE
+                </label>
+
+                <div class="input-group shadow-sm" style="border: 2px solid #f3f4f6; border-radius: 18px; transition: all 0.3s ease; background: #f9fafb; align-items: center;">
+                  <span class="input-group-text border-0" style="background: transparent; color: #6b7280; font-weight: 700; padding-left: 20px; font-size: 16px; border-right: 1px solid #e5e7eb !important; border-radius: 0; margin: 12px 0;">
+                    +351
+                  </span>
+
+                  <input 
+                    type="tel"
+                    id="phoneNumberPA"
+                    class="form-control border-0 shadow-none"
+                    placeholder=""
+                    maxlength="9"
+                    style="background: transparent; font-size: 18px; height: 58px; font-weight: 600; color: #111827; padding-left: 15px;"
+                  >
+                </div>
+
+                <div class="d-flex justify-content-between mt-2 px-2">
+                  <small style="color: #9ca3af; font-size: 11px;">Exemplo: 915500234</small>
+                </div>
+              </div>
+
+              <button 
+                id="createMandateBtn" onclick="RoutoTomakePayment();"
+                class="btn btn-primary btn-lg w-100 fw-bold mt-3"
+                style="height: 42px; border-radius: 18px; background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); border: none; font-size: 11px; letter-spacing: 0.5px; box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.4); transition: all 0.3s ease;">
+                Criar Mandato
+              </button>
+
+              <div class="text-center mt-4">
+                <p style="font-size: 12px; color: #9ca3af; margin-bottom: 0;">
+                  <span style="vertical-align: middle; margin-right: 4px;">🔒</span> 
+                  Ligação protegida por SSL
+                </p>
+              </div>
+
+            </div>
+          </div>
         </div>
 
         <div id="payment-form" class="mt-2"></div>

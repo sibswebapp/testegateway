@@ -946,6 +946,7 @@ const protectedRoutes = [
   '/Onboarding_menu',
   '/webhooks',
   '/validador_form',
+  '/Onboarding',
   '/validador_multifuncoes'
 ];
 
@@ -971,7 +972,6 @@ const publicRoutes = [
   '/gateway_menu',
   '/MBWAY_payment',
   '/navbar',
-  '/Onboarding',
   '/popups',
   '/reference_payment',
   '/Refund_gateway',

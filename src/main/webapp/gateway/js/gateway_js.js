@@ -22,6 +22,7 @@
     };
 
     localStorage.setItem('credential_default', JSON.stringify(credential_default));
+    let PA_trigger = 1;
 
     //Buscar localStorage arrays
     const credential_default_variable = JSON.parse(localStorage.getItem('credential_default'))
@@ -194,6 +195,16 @@
     //função que faz o pagamento (checkout)
     async function makePayment() {
 
+      if (PA_trigger) return; 
+      let phoneNumberPA = document.getElementById("phoneNumberPA").value;
+      PA_trigger = 1;
+
+      const paymentform = document.getElementById('payment-form');
+      if (paymentform) {
+          paymentform.classList.remove('d-none');  
+          paymentform.style.display = 'block';  
+      }
+
       let token;
       let clientId;
       let terminalId;
@@ -323,9 +334,30 @@
       let requestData
 
 
-      if(selectedMethod == "PA"){
-        pagamentosAutorizados_form(apiUrl);
-        //return;
+      if (selectedMethod == "PA") {
+
+        if (VersionpagamentosAutorizados === "1") {
+            VersionpagamentosAutorizados = "ONECLICK";
+        } else if (VersionpagamentosAutorizados === "2") {
+            VersionpagamentosAutorizados = "SUBSCRIPTION";
+        }
+
+        let rawNumber = document.getElementById("phoneNumberPA").value;
+        let phoneNumberPA = `351#${rawNumber}`;
+
+        requestData = {
+          merchant:{
+            terminalId: terminalId,
+            channel: "web",
+            merchantTransactionId: "mandatosExemplo",
+            transactionDescription: "mandatosExemplo"
+          },
+          mandate: {
+            mandateType: VersionpagamentosAutorizados,
+            aliasMBWAY: phoneNumberPA,
+            customerName: "OnboardingTestes"
+          }
+        }
       }
       else if (selectedMethod == "REFERENCE") {
         requestData = {
@@ -636,6 +668,7 @@
 
         const wrapper = document.createElement("div");
         wrapper.className = "d-flex flex-column align-items-center justify-content-center p-4 border rounded bg-light";
+        wrapper.id = "divserverToserver";
 
         if (paymentMethodArray.length === 1 && paymentMethodArray[0] === "MBWAY") {
           const phoneGroup = document.createElement("div");
@@ -742,6 +775,7 @@
         else if (paymentMethodArray.length === 1 && paymentMethodArray[0] === "REFERENCE") {
             const referenceText = document.createElement("p");
             referenceText.className = "fw-semibold text-center mb-3";
+            referenceText.id = "divserverToserver";
             referenceText.textContent = "Clique no botão abaixo para gerar uma referência de pagamento:";
 
             const referenceButton = document.createElement("button");
@@ -1012,13 +1046,8 @@
               </div>
           </div>
       `;
+
     }
-
-
-     function pagamentosAutorizados_form(apiUrl) {
-      // é para aparecer o form
-    }
-
 
     const currentDefault = localStorage.getItem('default');
 
@@ -1084,3 +1113,60 @@
       console.error("Erro ao processar mensagem SPG:", err);
     }
   }, false);
+  
+  function toggleMandateUI() {
+
+    const method = document.getElementById("payment-method").value;
+    const btnDiv = document.getElementById("div_botaoPagamento");
+    const mandateDiv = document.getElementById("mandate-container");
+    const serverDiv = document.getElementById("divserverToserver");
+    const placeholder = document.getElementById('loader-placeholder');
+    const paymentform = document.getElementById('payment-form');
+
+    if(method === "PA"){
+
+      btnDiv.classList.add("d-none");
+
+      mandateDiv.classList.remove("d-none");
+      mandateDiv.style.display = "block";   // 👈 garante que aparece
+
+      if(serverDiv){
+        serverDiv.classList.add("d-none");
+      }
+
+      if (placeholder) {
+          placeholder.style.display = 'none';
+      }
+
+      if (paymentform) {
+          paymentform.style.display = 'none';
+      }
+      
+      PA_trigger = 1
+
+    } else {
+
+      btnDiv.classList.remove("d-none");
+
+      mandateDiv.classList.add("d-none");
+      mandateDiv.style.display = "none";
+
+      if(serverDiv){
+        serverDiv.classList.remove("d-none");
+      }
+
+      if(paymentform){
+        paymentform.classList.remove("d-none");
+      }
+
+      PA_trigger = 0
+    }
+
+  }
+
+  function RoutoTomakePayment() {
+    PA_trigger = 0
+    makePayment();
+  }
+
+  
