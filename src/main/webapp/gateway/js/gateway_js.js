@@ -17,7 +17,7 @@
       MITs: "0",
       VersionMITS: "0",
       typeOfPayment: "1",
-      VersionpagamentosAutorizados: "1",
+      VersionpagamentosAutorizados: "0",
       pagamentosAutorizados: "0"
     };
 

@@ -246,8 +246,8 @@
       let LayoutVersion = document.getElementById("LayoutVersion").value;
       let VersionMITS = "0"; //document.getElementById('VersionMITS').value;
       let MITs = "0"; //document.getElementById('MITs').checked ? 1 : 0;
-      let VersionpagamentosAutorizados = document.getElementById('VersionpagamentosAutorizados').value;
-      let pagamentosAutorizados = document.getElementById('pagamentosAutorizadoschecked').checked ? 1 : 0;
+      let VersionpagamentosAutorizados = "0"; //document.getElementById('VersionpagamentosAutorizados').value;
+      let pagamentosAutorizados = "0"; //document.getElementById('pagamentosAutorizadoschecked').checked ? 1 : 0;
 
       const methods = Array.from(document.getElementById('paymentMethods').selectedOptions).map(opt => opt.value);
       const AllMethodsPay = document.getElementById('AllMethodsPay').checked ? 1 : 0;
