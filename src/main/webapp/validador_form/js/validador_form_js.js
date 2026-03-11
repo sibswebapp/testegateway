@@ -61,8 +61,8 @@ document.getElementById("carregarForm").addEventListener("click", function() {
 
       const isProd = window.location.hostname === 'sibsdigitalcommerce.com'; 
 
-      let baseUrl = isProd 
-      ? window.location.origin + '/SimuladorSIBS/' 
+      let baseUrl = isProd
+      ? window.location.origin + '/SimuladorSIBS/'
       : window.location.origin + '/';
 
     redirectUrl = window.location.href;
@@ -82,19 +82,28 @@ document.getElementById("carregarForm").addEventListener("click", function() {
       citTypeParam
       : window.location.href;
     }
-    
+
 
     // Remove qualquer widget/form anterior
     document.getElementById("sibsFormContainer").innerHTML = "";
 
     // 1) chamar o form da SIBS
-    const gatewayCheckbox = document.getElementById("gatewayStargate");
+    const stargateCheckbox = document.getElementById("gatewayStargate");
+    const prodUrlCheckbox = document.getElementById("ProdURL");
+
     const script = document.createElement("script");
 
-    if (gatewayCheckbox.checked) {
+    if (stargateCheckbox.checked) {
         script.src = `https://stargate.qly.site2.sibs.pt/assets/js/widget.js?id=${encodeURIComponent(transactionId)}`;
     } else {
         script.src = `https://spg.qly.site1.sibs.pt/assets/js/widget.js?id=${encodeURIComponent(transactionId)}`;
+    }
+
+
+    if (stargateCheckbox.checked && prodUrlCheckbox.checked) {
+        script.src = `https://form.sibsgateway.com/assets/js/widget.js?id=${encodeURIComponent(transactionId)}`;
+    } else if (prodUrlCheckbox.checked) {
+        script.src = `https://api.sibspayments.com/assets/js/widget.js?id=${encodeURIComponent(transactionId)}`;
     }
 
     document.getElementById("sibsFormContainer").appendChild(script);

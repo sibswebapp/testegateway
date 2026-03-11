@@ -50,7 +50,33 @@
         </div>
       </div>
 
+      <div class="inputs-row-radio">
+
+        <div class="form-group">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <label class="switch">
+              <input type="checkbox" id="gatewayStargate">
+              <span class="slider"></span>
+            </label>
+            <span style="font-size: 14px; color: #3c4043; font-weight: 500;" for="gatewayStargate">Stargate Form</span>
+          </div>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 12px;">
+            <label class="switch">
+              <input type="checkbox" id="ProdURL">
+              <span class="slider"></span>
+            </label>
+            <span style="font-size: 14px; color: #3c4043; font-weight: 500;" for="ProdURL">Form Produção</span>
+          </div>
+        </div>
+
+      </div>
+
+      <br>
+
       <div class="inputs-row">
+
         <div class="form-group">
           <label class="form-label" for="transactionId">Transaction ID</label>
           <input type="text" id="transactionId" class="form-control" placeholder="Ex: 8a829417...">
@@ -61,21 +87,14 @@
           <input type="text" id="formContext" class="form-control" placeholder="Cole aqui o token de contexto da SIBS">
         </div>
 
-        <div class="form-group mt-2">
-          <div style="display: flex; align-items: center; gap: 12px;">
-            <label class="switch">
-              <input type="checkbox" id="gatewayStargate">
-              <span class="slider"></span>
-            </label>
-            <span style="font-size: 14px; color: #3c4043; font-weight: 500;">Stargate Form</span>
-          </div>
-        </div>
       </div>
+
       <br>
-       <button id="carregarForm" class="custom-btn d-flex align-items-center justify-content-center">
-          <span>Gerar Checkout</span>
-          <i class="bi bi-arrow-right-short ms-2"></i>
-        </button>
+
+      <button id="carregarForm" class="custom-btn d-flex align-items-center justify-content-center">
+        <span>Gerar Checkout</span>
+        <i class="bi bi-arrow-right-short ms-2"></i>
+      </button>
 
     </section>
 

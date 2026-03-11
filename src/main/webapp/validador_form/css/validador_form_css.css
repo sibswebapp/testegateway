@@ -266,3 +266,16 @@ input:checked + .slider {
 input:checked + .slider:before {
   transform: translateX(22px);
 }
+
+
+/* Layout dos Inputs em linha para poupar espaço vertical */
+  .inputs-row-radio {
+    display: grid;
+    grid-template-columns: 1fr 4fr auto; /* ID, Contexto e Botão lado a lado */
+    gap: 20px;
+    align-items: end;
+  }
+
+  @media (max-width: 992px) {
+    .inputs-row-radio { grid-template-columns: 1fr; }
+  }
