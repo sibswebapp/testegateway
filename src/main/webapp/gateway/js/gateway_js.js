@@ -80,7 +80,7 @@
         document.getElementById("payment-method_Div").style.display = "block";
       }
 
-      paymentMethodsParam = JSON.parse(paymentMethodsParam);
+      // isto apenas vai ser usado quando os pagamentos autorizados tiver desenvolvidos paymentMethodsParam = JSON.parse(paymentMethodsParam);
 
       if (pagamentosAutorizados == 1) {
           if (!paymentMethodsParam.includes("4")) {
