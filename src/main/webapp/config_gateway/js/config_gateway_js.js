@@ -37,7 +37,7 @@
     const credentialDefaultObj = JSON.parse(localStorage.getItem('credential_default'));
     const credential_config_variable = JSON.parse(localStorage.getItem('credential_config'))
     const default_Configs = JSON.parse(localStorage.getItem('default'))
-    
+
 
     function getSelectedPaymentMethods() {
       let selectedOptions = Array.from(document.getElementById("paymentMethods").selectedOptions)
@@ -137,7 +137,7 @@
     }
 
     function toggleAllMethodsPayRestored(AllMethodsPay) {
-      
+
       const checkbox = document.getElementById("AllMethodsPay");
       const paymentContainer = document.getElementById("paymentMethodsContainer");
       const paymentMethodsLabels = document.getElementById("paymentMethodsLabels");
@@ -201,9 +201,9 @@
         client.value = credentialDefaultObj.clientId;
         token.value = credentialDefaultObj.bearerToken;
         entitypag.value = credentialDefaultObj.entity;
-        
+
         inputs.forEach(id => document.getElementById(id).classList.add('d-none'));
-        
+
       } else {
         terminal.value = '';
         client.value = '';
@@ -224,7 +224,7 @@
       const showEntity = selectedValues.includes('2') && !useDefault;
 
       const isDummyCustomer = parseInt(credential_config_variable.isDummyCustomer || '0');
-      
+
       document.getElementById('dummyCustomerToggle').checked = isDummyCustomer === 1;
       entityInput.classList.toggle('d-none', !showEntity);
     }
@@ -258,7 +258,7 @@
         token = credentialDefaultObj.bearerToken;
         entity = credentialDefaultObj.entity;
       }
-      
+
       if (!useDefault && (!terminal || !client || !token || methods.length === 0)) {
         showErrorModal("Preencha todos os campos obrigatórios.")
         return;
@@ -268,7 +268,7 @@
         showErrorModal("Preencha a Entidade de pagamento para o método de Multibanco.");
         return;
       }
-      
+
       if ((methods.includes('2') || AllMethodsPay) && referenceExpiry === "") {
         showErrorModal("Preencha a data de expiração para o método de Multibanco.");
         return;
@@ -403,8 +403,8 @@
       if (pagamentosAutorizados == "1") {
         document.getElementById('pagamentosAutorizadoschecked').checked = true;
       } else {
-        document.getElementById('pagamentosAutorizadoschecked').checked = false;
-        document.getElementById("LayoutVersionpagamentosAutorizados").style.display = "none";
+        //document.getElementById('pagamentosAutorizadoschecked').checked = false;
+        //document.getElementById("LayoutVersionpagamentosAutorizados").style.display = "none";
       }
 
       const select = document.getElementById('paymentMethods');
