@@ -380,8 +380,8 @@
         document.getElementById('LayoutVersion').value = credential_config_variable.LayoutVersion;
         //document.getElementById('MITs').value = credential_config_variable.MITs;
         //document.getElementById('VersionMITS').value = credential_config_variable.VersionMITS;
-        document.getElementById('pagamentosAutorizadoschecked').value = credential_config_variable.pagamentosAutorizados;
-        document.getElementById('VersionpagamentosAutorizados').value = credential_config_variable.VersionpagamentosAutorizados;
+        //document.getElementById('pagamentosAutorizadoschecked').value = credential_config_variable.pagamentosAutorizados;
+        //document.getElementById('VersionpagamentosAutorizados').value = credential_config_variable.VersionpagamentosAutorizados;
       }
 
       if(useDefault){
