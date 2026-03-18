@@ -939,8 +939,10 @@ app.post(`${prefix}/api/CompraMandato`, async (req, res) => {
 });
 
 //pasta da apple para testes de apple pay
-app.use('/SimuladorSIBS/.well-known', express.static(path.join(__dirname, '.well-known')));
-
+app.use(
+  '/.well-known',
+  express.static(path.join(__dirname, 'src/main/webapp/.well-known'))
+);
 
 // 1. ROTAS PROTEGIDAS (Acesso restrito)
 const protectedRoutes = [
