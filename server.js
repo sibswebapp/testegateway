@@ -16,6 +16,9 @@ if (!USER || !PASS) {
   throw new Error('BASIC_AUTH_USER ou BASIC_AUTH_PASS não estão definidos!');
 }
 
+//pasta da apple para testes de apple pay
+app.use('/SimuladorSIBS/.well-known', express.static(wellKnownPath));
+
 const app = express();
 app.set('trust proxy', true);
 const webappDir = path.join(__dirname, 'src', 'main', 'webapp');
@@ -40,7 +43,6 @@ app.use(express.json());
 // --------------------------------------------------
 // Chamadas API
 // --------------------------------------------------
-
 
 app.post(`${prefix}/api/validar-clientid`, async (req, res) => {
   try {
@@ -937,9 +939,6 @@ app.post(`${prefix}/api/CompraMandato`, async (req, res) => {
     });
   }
 });
-
-//pasta da apple para testes de apple pay
-app.use('/.well-known', express.static(wellKnownPath));
 
 
 // 1. ROTAS PROTEGIDAS (Acesso restrito)
