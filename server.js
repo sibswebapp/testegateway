@@ -943,6 +943,11 @@ app.use(
   express.static(path.join(webappDir, '.well-known'))
 );
 
+app.use(
+  '/.well-known',
+  express.static(path.join(webappDir, '.well-known'))
+);
+
 // 1. ROTAS PROTEGIDAS (Acesso restrito)
 const protectedRoutes = [
   '/validador_API',
