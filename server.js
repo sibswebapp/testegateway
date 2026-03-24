@@ -41,12 +41,6 @@ app.use(express.json());
 // Chamadas API
 // --------------------------------------------------
 
-
-//pasta da apple para testes de apple pay
-app.get('/SimuladorSIBS/.well-known/apple-developer-merchantid-domain-association', (req, res) => {
-  res.sendFile(path.join(__dirname, '.well-known', 'apple-developer-merchantid-domain-association'));
-});
-
 app.post(`${prefix}/api/validar-clientid`, async (req, res) => {
   try {
     const { nome, clientId, token, terminalID } = req.body;
@@ -942,6 +936,12 @@ app.post(`${prefix}/api/CompraMandato`, async (req, res) => {
     });
   }
 });
+
+//pasta da apple para testes de apple pay
+app.use(
+  '/SimuladorSIBS/.well-known',
+  express.static(path.join(__dirname, '.well-known'))
+);
 
 
 // 1. ROTAS PROTEGIDAS (Acesso restrito)
