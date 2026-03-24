@@ -940,7 +940,7 @@ app.post(`${prefix}/api/CompraMandato`, async (req, res) => {
 
 //pasta da apple para testes de apple pay
 app.use(
-  '/SimuladorSIBS/.well-known',
+  '/.well-known',
   express.static(path.join(__dirname, 'src/main/webapp/.well-known'))
 );
 
