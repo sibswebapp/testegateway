@@ -939,10 +939,9 @@ app.post(`${prefix}/api/CompraMandato`, async (req, res) => {
 });
 
 //pasta da apple para testes de apple pay
-app.use(
-  '/.well-known',
-  express.static(path.join(__dirname, 'src/main/webapp/.well-known'))
-);
+const wellKnownPath = path.join(__dirname, 'src/main/webapp/.well-known');
+app.use(`${prefix}/.well-known`, express.static(wellKnownPath));
+
 
 // 1. ROTAS PROTEGIDAS (Acesso restrito)
 const protectedRoutes = [
@@ -979,7 +978,8 @@ const publicRoutes = [
   '/popups',
   '/reference_payment',
   '/Refund_gateway',
-  '/stargate'
+  '/stargate',
+  '/.well-known'
 ];
 
 publicRoutes.forEach(route => {
