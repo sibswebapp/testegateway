@@ -17,13 +17,13 @@ if (!USER || !PASS) {
 }
 
 
-
 const app = express();
 app.set('trust proxy', true);
 const webappDir = path.join(__dirname, 'src', 'main', 'webapp');
 
 //pasta da apple para testes de apple pay
 const wellKnownPath = path.join(__dirname, 'src/main/webapp/.well-known');
+app.use('/.well-known', express.static(wellKnownPath));
 app.use('/SimuladorSIBS/.well-known', express.static(wellKnownPath));
 
 // Middleware para Basic Auth
