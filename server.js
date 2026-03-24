@@ -978,9 +978,8 @@ const publicRoutes = [
   '/popups',
   '/reference_payment',
   '/Refund_gateway',
-  '/stargate',
-  '/.well-known'
-];
+  '/stargate'
+  ];
 
 publicRoutes.forEach(route => {
   const folderName = route.replace('/', '');
@@ -1006,5 +1005,6 @@ app.get('/health', (req, res) => res.json({ status: 'ok' }));
 app.listen(PORT, HOST, () => {
   console.log(`Servidor rodando em http://${HOST}:${PORT}`);
   console.log(`Webapp root: ${webappDir}`);
-  console.log("Prefixo ativo:", prefix)
+  console.log("Prefixo ativo:", prefix);
+  console.log("Well-known path:", wellKnownPath);
 });
