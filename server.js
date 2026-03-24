@@ -16,20 +16,9 @@ if (!USER || !PASS) {
   throw new Error('BASIC_AUTH_USER ou BASIC_AUTH_PASS não estão definidos!');
 }
 
-
 const app = express();
 app.set('trust proxy', true);
 const webappDir = path.join(__dirname, 'src', 'main', 'webapp');
-
-//pasta da apple para testes de apple pay
-const wellKnownPath = path.join(__dirname, 'src/main/webapp/.well-known');
-app.use('/.well-known', express.static(wellKnownPath));
-app.use('/SimuladorSIBS/.well-known', express.static(wellKnownPath));
-
-app.get('*', (req, res) => {
-  console.log("REQUEST URL:", req.url);
-  res.status(404).send("DEBUG");
-});
 
 // Middleware para Basic Auth
 function basicAuth(req, res, next) {
@@ -51,6 +40,12 @@ app.use(express.json());
 // --------------------------------------------------
 // Chamadas API
 // --------------------------------------------------
+
+
+//pasta da apple para testes de apple pay
+app.get('/SimuladorSIBS/.well-known/apple-developer-merchantid-domain-association', (req, res) => {
+  res.sendFile(path.join(__dirname, '.well-known', 'apple-developer-merchantid-domain-association'));
+});
 
 app.post(`${prefix}/api/validar-clientid`, async (req, res) => {
   try {
