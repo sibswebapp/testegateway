@@ -26,6 +26,11 @@ const wellKnownPath = path.join(__dirname, 'src/main/webapp/.well-known');
 app.use('/.well-known', express.static(wellKnownPath));
 app.use('/SimuladorSIBS/.well-known', express.static(wellKnownPath));
 
+app.get('*', (req, res) => {
+  console.log("REQUEST URL:", req.url);
+  res.status(404).send("DEBUG");
+});
+
 // Middleware para Basic Auth
 function basicAuth(req, res, next) {
   const auth = req.headers.authorization;
