@@ -16,12 +16,15 @@ if (!USER || !PASS) {
   throw new Error('BASIC_AUTH_USER ou BASIC_AUTH_PASS não estão definidos!');
 }
 
-//pasta da apple para testes de apple pay
-app.use('/SimuladorSIBS/.well-known', express.static(wellKnownPath));
+
 
 const app = express();
 app.set('trust proxy', true);
 const webappDir = path.join(__dirname, 'src', 'main', 'webapp');
+
+//pasta da apple para testes de apple pay
+const wellKnownPath = path.join(__dirname, 'src/main/webapp/.well-known');
+app.use('/SimuladorSIBS/.well-known', express.static(wellKnownPath));
 
 // Middleware para Basic Auth
 function basicAuth(req, res, next) {
