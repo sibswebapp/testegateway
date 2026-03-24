@@ -1006,5 +1006,4 @@ app.listen(PORT, HOST, () => {
   console.log(`Servidor rodando em http://${HOST}:${PORT}`);
   console.log(`Webapp root: ${webappDir}`);
   console.log("Prefixo ativo:", prefix);
-  console.log("Well-known path:", wellKnownPath);
 });
