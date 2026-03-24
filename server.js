@@ -35,6 +35,13 @@ function basicAuth(req, res, next) {
   return res.status(401).send('Invalid credentials');
 }
 
+app.use(
+  `${prefix}/.well-known`,
+  express.static(path.join(webappDir, '.well-known'), {
+    extensions: ['txt']
+  })
+);
+
 app.use(express.json());
 
 // --------------------------------------------------
@@ -936,12 +943,6 @@ app.post(`${prefix}/api/CompraMandato`, async (req, res) => {
     });
   }
 });
-
-//pasta da apple para testes de apple pay
-app.use(
-  `${prefix}/.well-known`,
-  express.static(path.join(webappDir, '.well-known'))
-);
 
 // 1. ROTAS PROTEGIDAS (Acesso restrito)
 const protectedRoutes = [
