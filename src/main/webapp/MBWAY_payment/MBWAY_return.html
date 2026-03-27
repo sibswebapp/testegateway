@@ -33,7 +33,7 @@
       <div class="brand-container d-flex align-items-center justify-content-between w-100">
         <div class="d-flex align-items-center">
           <div class="logo-square me-3">
-            <i class="fa-solid fa-shield-halved"></i>
+            <i class="fa-solid fa-money-bill-wave"></i>
           </div>
           <div class="title-group">
             <span style="font-size: 22px; color: #202124; letter-spacing: -0.5px;">
@@ -42,6 +42,16 @@
               <span style="color: #dadce0; margin: 0 8px; font-weight: 300;">|</span>
               <span style="color: #5f6368; font-weight: 400;">MBWAY</span>
             </span>
+            <p class="small mb-0 mt-1" style="color: #475569; line-height: 1.6;">
+              <i class="fa-solid fa-circle-info text-primary me-1"></i> 
+              Para ter o MBWAY de QLY. Para prosseguir, 
+              <a href="https://sibsonboarding.atlassian.net/servicedesk/customer/portal/6/group/8/create/121" 
+                target="_blank" 
+                class="fw-bold text-primary text-decoration-none border-bottom border-primary border-2 pb-1"
+                style="font-size: 0.85rem;">
+                abra o seu pedido aqui <i class="fa-solid fa-arrow-up-right-from-square ms-1" style="font-size: 0.65rem;"></i>
+              </a>
+            </p>
           </div>
         </div>
 
@@ -50,7 +60,20 @@
         </button>
       </div>
       <div class="card-body text-center">
-        <p>Tempo restante para pagamento: <strong id="timer"><!--4:00--></strong></p>
+          <div class="modern-timer-container mb-4">
+        <p class="text-uppercase text-muted small font-weight-bold mb-2" style="letter-spacing: 1px;">
+            Tempo restante para pagamento
+        </p>
+        
+        <div class="display-3 font-weight-bold" id="timer" style="font-family: 'Roboto Mono', monospace; color: #2c3e50; text-shadow: 1px 1px 0px #fff;">
+            04:00
+        </div>
+        
+        <div class="progress mt-3" style="height: 6px; border-radius: 10px; max-width: 300px; margin: 0 auto;">
+            <div id="timerBar" class="progress-bar bg-primary progress-bar-striped progress-bar-animated" role="progressbar" style="width: 100%"></div>
+        </div>
+    </div>
+
         <div id="message" class="alert d-none mt-4" role="alert"></div>
           <ul id="statusList" class="list-group mt-3"></ul>
           <a id="btnComParametros_button" href="#" class="btn btn-primary d-none mt-3">

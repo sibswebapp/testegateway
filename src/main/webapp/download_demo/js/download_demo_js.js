@@ -1,0 +1,193 @@
+// PopUP de sucesso chamada
+const successModal = document.getElementById("successModal"),
+overlay = successModal.querySelector(".overlay"),
+closeBtn = successModal.querySelector(".close-btn");
+
+function showSuccessModal() {
+  successModal.classList.add("active");
+}
+
+overlay.addEventListener("click", () => successModal.classList.remove("active"));
+closeBtn.addEventListener("click", () => successModal.classList.remove("active"));
+
+
+// PopUP de erro chamada
+const errorModal = document.getElementById("errorModal"),
+      errorOverlay = errorModal.querySelector(".overlay"),
+      errorCloseBtn = errorModal.querySelector(".close-btn");
+
+function showErrorModal(message) {
+  errorMessage.textContent = message;
+  errorModal.classList.add("active");
+}
+
+errorOverlay.addEventListener("click", () => errorModal.classList.remove("active"));
+errorCloseBtn.addEventListener("click", () => errorModal.classList.remove("active"));
+
+
+document.getElementById("carregarForm").addEventListener("click", function() {
+
+    const transactionId = document.getElementById("transactionId").value.trim();
+    const formContext = document.getElementById("formContext").value.trim();
+
+    if (!transactionId || !formContext) {
+      showErrorModal("Preencha ambos os campos!");
+      return;
+    }
+
+    // Verificar se vem do validador
+    const params = new URLSearchParams(window.location.search);
+    const isValidador = params.get("validador") === "1";
+    const ValidadorMultifuncoes = params.get("ValidadorMultifuncoes") === "1";
+
+    let redirectUrl
+
+    let citTypeParam = "";
+
+    const citRaw = localStorage.getItem("CITsConfigurada");
+
+    if (citRaw) {
+      const citData = JSON.parse(citRaw);
+
+      // suporta tanto objeto como array
+      const citType =
+        Array.isArray(citData) ? citData[0]?.CitType : citData?.CitType;
+
+      if (citType) {
+        citTypeParam = `&CitType=${encodeURIComponent(citType)}`;
+      }
+    }
+
+
+      const isProd = window.location.hostname === 'sibsdigitalcommerce.com'; 
+
+      let baseUrl = isProd
+      ? window.location.origin + '/SimuladorSIBS/'
+      : window.location.origin + '/';
+
+    redirectUrl = window.location.href;
+
+    if(ValidadorMultifuncoes){
+      redirectUrl = ValidadorMultifuncoes
+      ?
+      `${baseUrl}validador_multifuncoes/validador_multifuncoes.html?CITSucesso=1` +
+      citTypeParam
+      : window.location.href;
+    }
+
+    if(isValidador){
+      redirectUrl = isValidador
+      ?
+      `${baseUrl}validador_multifuncoes/validador_multifuncoes.html?TransacaoSucesso=1&validador_credenciais=1` +
+      citTypeParam
+      : window.location.href;
+    }
+
+
+    // Remove qualquer widget/form anterior
+    document.getElementById("sibsFormContainer").innerHTML = "";
+
+    // 1) chamar o form da SIBS
+    const stargateCheckbox = document.getElementById("gatewayStargate");
+    const prodUrlCheckbox = document.getElementById("ProdURL");
+
+    const script = document.createElement("script");
+
+    if (stargateCheckbox.checked) {
+        script.src = `https://stargate.qly.site2.sibs.pt/assets/js/widget.js?id=${encodeURIComponent(transactionId)}`;
+    } else {
+        script.src = `https://spg.qly.site1.sibs.pt/assets/js/widget.js?id=${encodeURIComponent(transactionId)}`;
+    }
+
+
+    if (stargateCheckbox.checked && prodUrlCheckbox.checked) {
+        script.src = `https://form.sibsgateway.com/assets/js/widget.js?id=${encodeURIComponent(transactionId)}`;
+    } else if (prodUrlCheckbox.checked) {
+        script.src = `https://api.sibspayments.com/assets/js/widget.js?id=${encodeURIComponent(transactionId)}`;
+    }
+
+    document.getElementById("sibsFormContainer").appendChild(script);
+
+    const form = document.createElement("form");
+    form.className = "paymentSPG";
+    form.setAttribute("spg-context", formContext);
+
+    const formConfig = {
+      paymentMethodList: [],
+      amount: { value: 0, currency: "EUR" },
+      language: "pt",
+      redirectUrl: redirectUrl
+    };
+    form.setAttribute("spg-config", JSON.stringify(formConfig));
+
+    const formstyle = {
+      layout: "spg_form_tabs",
+            theme: "default",
+            color: {
+                  "primary": "",
+                  "border": "",
+                  "surface": "",
+                  "body": {
+                      "text": "",
+                  }
+            },
+            font: ""
+    };
+    form.setAttribute("spg-style", JSON.stringify(formstyle));
+
+    document.getElementById("sibsFormContainer").appendChild(form);
+  });
+
+
+  //quando vem do validador_API preencher os campos automaticamente
+  window.addEventListener("DOMContentLoaded", () => {
+  const params = new URLSearchParams(window.location.search);
+
+  if (params.get("validador") !== "1") return;
+
+  const dados = JSON.parse(sessionStorage.getItem("credenciaisForm") || "[]");
+
+  if (!dados.length) return;
+
+  const transactionId = dados.find(d => d.id === "transactionID")?.value;
+  const formContext = dados.find(d => d.id === "formContext")?.value;
+
+  const transactionInput = document.getElementById("transactionId");
+  const formContextInput = document.getElementById("formContext");
+
+  if (transactionInput && transactionId) {
+    transactionInput.value = transactionId;
+  }
+
+  if (formContextInput && formContext) {
+    formContextInput.value = formContext;
+  }
+});
+
+window.addEventListener("DOMContentLoaded", () => {
+  // Pega os parâmetros da URL
+  const params = new URLSearchParams(window.location.search);
+  const isValidadorMultifuncoes = params.get("ValidadorMultifuncoes") === "1";
+
+  if (!isValidadorMultifuncoes) return;
+
+  // Pega o array do localStorage
+  const citArray = JSON.parse(localStorage.getItem("CITsConfigurada")) || [];
+
+  if (citArray.length === 0) return;
+
+  // Pega o último CIT configurado (pode mudar para outro critério se quiseres)
+  const lastCIT = citArray[citArray.length - 1];
+
+  // Preenche os campos no HTML se existirem
+  const transactionInput = document.getElementById("transactionId");
+  const formContextInput = document.getElementById("formContext");
+
+  if (transactionInput && lastCIT.transactionID) {
+    transactionInput.value = lastCIT.transactionID;
+  }
+
+  if (formContextInput && lastCIT.formContext) {
+    formContextInput.value = lastCIT.formContext;
+  }
+});

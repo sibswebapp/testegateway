@@ -937,12 +937,17 @@ app.post(`${prefix}/api/CompraMandato`, async (req, res) => {
   }
 });
 
-//pasta da apple para testes de apple pay
-app.use(
-  '/SimuladorSIBS/.well-known',
-  express.static(path.join(__dirname, '.well-known'))
-);
+app.get(`${prefix}/download`, (req, res) => {
+    const filePath = path.join(__dirname, 'Demo.zip');
 
+    console.log("A tentar enviar:", filePath);
+
+    res.download(filePath, 'Demo.zip', (err) => {
+        if (err) {
+            console.log("Erro no download:", err);
+        }
+    });
+});
 
 // 1. ROTAS PROTEGIDAS (Acesso restrito)
 const protectedRoutes = [
@@ -979,7 +984,8 @@ const publicRoutes = [
   '/popups',
   '/reference_payment',
   '/Refund_gateway',
-  '/stargate'
+  '/stargate',
+  '/download_demo'
   ];
 
 publicRoutes.forEach(route => {
@@ -1007,5 +1013,4 @@ app.listen(PORT, HOST, () => {
   console.log(`Servidor rodando em http://${HOST}:${PORT}`);
   console.log(`Webapp root: ${webappDir}`);
   console.log("Prefixo ativo:", prefix);
-  console.log("Well-known path:", wellKnownPath);
 });
