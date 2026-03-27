@@ -936,15 +936,16 @@ app.post(`${prefix}/api/CompraMandato`, async (req, res) => {
     });
   }
 });
-app.get('/download', (req, res) => {
+
+const downloadRouter = express.Router();
+
+downloadRouter.get('/download', (req, res) => {
+    console.log("DOWNLOAD OK");
     const filePath = path.join(__dirname, 'Demo.zip');
-
-    console.log("DOWNLOAD HIT:", req.originalUrl);
-
-    res.download(filePath, 'Demo.zip', (err) => {
-        if (err) console.log("Erro no download:", err);
-    });
+    res.download(filePath);
 });
+
+app.use('/SimuladorSIBS', downloadRouter);
 
 // 1. ROTAS PROTEGIDAS (Acesso restrito)
 const protectedRoutes = [
