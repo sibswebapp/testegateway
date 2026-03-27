@@ -937,15 +937,13 @@ app.post(`${prefix}/api/CompraMandato`, async (req, res) => {
   }
 });
 
-app.get(`/SimuladorSIBS/download`, (req, res) => {
+app.get(`${prefix}/download`, (req, res) => {
     const filePath = path.join(__dirname, 'Demo.zip');
 
     console.log("A tentar enviar:", filePath);
 
     res.download(filePath, 'Demo.zip', (err) => {
-        if (err) {
-            console.log("Erro no download:", err);
-        }
+        if (err) console.log("Erro no download:", err);
     });
 });
 
