@@ -937,7 +937,7 @@ app.post(`${prefix}/api/CompraMandato`, async (req, res) => {
   }
 });
 
-app.get(`${prefix}/download`, (req, res) => {
+app.get(`/SimuladorSIBS/download`, (req, res) => {
     const filePath = path.join(__dirname, 'Demo.zip');
 
     console.log("A tentar enviar:", filePath);
