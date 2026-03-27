@@ -35,17 +35,6 @@ function basicAuth(req, res, next) {
   return res.status(401).send('Invalid credentials');
 }
 
-app.use(
-  `${prefix}/.well-known`,
-  express.static(path.join(webappDir, '.well-known'))
-);
-
-// fallback explícito
-app.get(`${prefix}/.well-known/*`, (req, res) => {
-  const filePath = path.join(webappDir, '.well-known', req.params[0]);
-  res.sendFile(filePath);
-});
-
 app.use(express.json());
 
 // --------------------------------------------------
