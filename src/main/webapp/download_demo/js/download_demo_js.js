@@ -1,4 +1,6 @@
 window.addEventListener("DOMContentLoaded", () => {
-  const prefix = window.location.hostname === '127.0.0.1' ? '' : '/SimuladorSIBS';
+ const basePath = window.location.pathname.split('/')[1];
+  const prefix = basePath === 'SimuladorSIBS' ? '/SimuladorSIBS' : '';
+
   document.getElementById('downloadBtn').href = `${prefix}/download`;
 });
