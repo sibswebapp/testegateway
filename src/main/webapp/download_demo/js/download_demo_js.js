@@ -3,4 +3,6 @@ window.addEventListener("DOMContentLoaded", () => {
   const prefix = basePath === 'SimuladorSIBS' ? '/SimuladorSIBS' : '';
 
   document.getElementById('downloadBtn').href = `${prefix}/download`;
+
+  console.log( document.getElementById('downloadBtn'));
 });
