@@ -1017,5 +1017,5 @@ app.listen(PORT, HOST, () => {
   console.log(`Webapp root: ${webappDir}`);
   console.log("Prefixo ativo:", prefix);
   console.log("HOST:", HOST);
-  console.log("PREFIX FINAL:", prefix);
+  console.log("Filepath:", filePath);
 });
