@@ -937,14 +937,17 @@ app.post(`${prefix}/api/CompraMandato`, async (req, res) => {
   }
 });
 
-const filePath = path.join(__dirname, 'src', 'main', 'webapp', 'Demo.zip');
+const filePath = path.resolve(__dirname, 'src', 'main', 'webapp', 'Demo.zip');
 
 app.get(`${prefix}/download`, (req, res) => {
-    console.log("A tentar enviar:", filePath);
+    console.log("Caminho absoluto tentado:", filePath);
 
     res.download(filePath, 'Demo.zip', (err) => {
         if (err) {
-            console.log("Erro no download:", err);
+            console.error("Erro no download:", err);
+            if (!res.headersSent) {
+                res.status(500).send("Erro ao processar o ficheiro.");
+            }
         }
     });
 });
