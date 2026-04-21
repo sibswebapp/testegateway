@@ -941,8 +941,6 @@ app.post(`${prefix}/api/CompraMandato`, async (req, res) => {
   }
 });
 
-<<<<<<< HEAD
-
 //Cashout
 app.post(`${prefix}/api/Cashout`, async (req, res) => {
   try {
