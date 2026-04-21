@@ -167,31 +167,31 @@ document.addEventListener("DOMContentLoaded", async function () {
 
                 // Adicionar event listener para o botão de reembolso
                 if (data.paymentStatus === "Success") {
-                document.getElementById("refund-btn").addEventListener("click", function() {
-                    let refunds = JSON.parse(localStorage.getItem("refunds")) || [];
-                    refunds.push({
-                    paymentId: paymentId,
-                    amount: data.amount.value,
-                    redirect: 1
+                    document.getElementById("refund-btn").addEventListener("click", function() {
+                        let refunds = JSON.parse(localStorage.getItem("refunds")) || [];
+                        refunds.push({
+                        paymentId: paymentId,
+                        amount: data.amount.value,
+                        redirect: 1
+                        });
+                        localStorage.setItem("refunds", JSON.stringify(refunds));
+                        window.location.href = "Refund_gateway/Refund_gateway.html";
                     });
-                    localStorage.setItem("refunds", JSON.stringify(refunds));
-                    window.location.href = "Refund_gateway/Refund_gateway.html";
-                });
                 }
 
                 // Adicionar event listener para o botão de cancelar referência
                 if (data.paymentStatus === "Pending") {
-                document.getElementById("cancel-ref-btn").addEventListener("click", function() {
-                    // Guardar a referência a cancelar
-                    let cancels = JSON.parse(localStorage.getItem("cancels")) || [];
-                    cancels.push({
-                    paymentId: paymentId,
-                    amount: data.amount.value,
-                    redirect: 1
+                    document.getElementById("cancel-ref-btn").addEventListener("click", function() {
+                        // Guardar a referência a cancelar
+                        let cancels = JSON.parse(localStorage.getItem("cancels")) || [];
+                        cancels.push({
+                        paymentId: paymentId,
+                        amount: data.amount.value,
+                        redirect: 1
+                        });
+                        localStorage.setItem("cancels", JSON.stringify(cancels));
+                        window.location.href = "Cancellation_gateway/Cancellation_gateway.html"; 
                     });
-                    localStorage.setItem("cancels", JSON.stringify(cancels));
-                    window.location.href = "Cancellation_gateway/Cancellation_gateway.html"; 
-                });
                 }
 
             } catch (error) {

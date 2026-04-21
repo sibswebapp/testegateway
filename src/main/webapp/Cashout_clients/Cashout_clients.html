@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <script>(function(){var p=location.pathname;var b=p.indexOf("/SimuladorSIBS/")!==-1?"/SimuladorSIBS/":"/";var e=document.createElement("base");e.href=b;document.head.prepend(e);}());</script>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Validador Multi-funções</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.1/mdb.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+  <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+
+  <link rel="stylesheet" href="/Cashout_clients/css/Cashout_clients_css.css">
+  <link rel="stylesheet" href="/popups/css/popups_css.css">
+  <link rel="stylesheet" href="/navbar/css/navbar_css.css">
+  <link rel="stylesheet" href="/footer/css/footer_css.css">
+
+</head>
+
+<body>
+
+  <div id="navbar"></div>
+
+  <main class="container py-5" style="font-family: 'Inter', system-ui, sans-serif; color: #334155; max-width: 1500px;">
+  
+    <div class="card border-0 shadow-lg" style="border-radius: 24px; background: #ffffff; overflow: hidden;">
+      
+      <div class="p-4 border-bottom" style="background: linear-gradient(to right, #ffffff, #f8fafc);">
+        <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+          
+          <div class="d-flex align-items-center gap-3">
+            <div>
+              <i class="bi bi-cash-coin" style="color: #1a73e8; font-size: 26px;"></i>
+            </div>
+            <div>
+              <h1 class="m-0" style="font-size: 20px; color: #1e293b; letter-spacing: -0.5px;">
+                Gateway <span style="font-weight: 700;">SIBS</span>
+                <span style="color: #cbd5e1; margin: 0 8px; font-weight: 300;">|</span>
+                <span style="color: #64748b; font-weight: 400; font-size: 16px;">Cashout API</span>
+              </h1>
+            </div>
+
+          </div>
+
+          <div class="d-flex gap-2">
+            <button type="button" class="btn btn-link text-decoration-none fw-semibold text-danger" style="font-size: 14px;" onclick="limparCredenciais()">
+              <i class="fas fa-trash-alt me-1"></i> Limpar
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-body p-4">
+        
+        <div class="row align-items-end g-3 mb-4">
+          <div class="col-md-2">
+            <label class="form-label small fw-bold">Telefone</label>
+            <input type="text" id="aliasinput" class="form-control form-control-lg shadow-none" placeholder="Ex: 915500236" style="border-radius: 12px; border: 1px solid #cbd5e1; font-size: 16px;">
+          </div>
+
+          <div class="col-md-2">
+            <label class="form-label small fw-bold">Montante</label>
+            <input type="number" id="montanteinput" class="form-control form-control-lg shadow-none" placeholder="0.00" step="0.01" style="border-radius: 12px; border: 1px solid #cbd5e1; font-size: 16px;">
+          </div>
+
+          <!--<div class="col-md-3">
+            <div class="switch-container d-flex align-items-center justify-content-start" style="height: 52px; margin-bottom: 0;">
+              <span class="switch-label me-2 small fw-bold">Número português</span>
+              <label class="modern-switch mb-0">
+                <input type="checkbox" id="togglePTnumber" checked>
+                <span class="slider"></span>
+              </label>
+            </div>
+          </div>-->
+
+          <div class="col-md-3">
+            <button class="btn btn-dark btn-lg w-100 shadow-sm" onclick="getCashout()" style="border-radius: 12px; font-weight: 700; height: 52px; background: #1e293b;">
+              Chamar API Cashout
+            </button>
+          </div>
+        </div>
+
+        <br>
+
+        <div class="row g-3">
+          <div class="col-md-4">
+            <div class="p-4 rounded-4 text-center h-100 d-flex flex-column justify-content-center border" style="background: #f8fafc; border-style: dashed !important;">
+              <span class="text-uppercase letter-spacing-1 small fw-bold text-secondary mb-3">Resultado Atual</span>
+              <div id="CashoutPagamento" class="h3 fw-bold text-primary mb-1">-</div>
+              <div class="mt-2">
+                <span class="badge rounded-pill px-3 py-2" id="CashoutCode" style="background: #334155; font-size: 10px; letter-spacing: 1px;">CODE: -</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-8">
+            <div class="rounded-4 overflow-hidden d-flex flex-column h-100" style="background: #0f172a; box-shadow: inset 0 2px 10px rgba(0,0,0,0.5);">
+              <div class="px-3 py-2 border-bottom border-secondary d-flex justify-content-between align-items-center" style="background: rgba(255,255,255,0.05);">
+                <small class="text-secondary fw-bold" style="font-size: 10px;">RESPONSE BODY</small>
+                <div class="d-flex gap-1">
+                 <span style="width: 8px; height: 8px; border-radius: 50%; background: #ff5f56;"></span>
+                 <span style="width: 8px; height: 8px; border-radius: 50%; background: #ffbd2e;"></span>
+                 <span style="width: 8px; height: 8px; border-radius: 50%; background: #27c93f;"></span>
+              </div>
+              </div>
+              <pre class="p-4 m-0 flex-grow-1" id="bodyCompletoCashout" style="color: #38bdf8; font-family: 'Fira Code', monospace; font-size: 12px; line-height: 1.5; overflow-y: auto; max-height: 250px;">{}</pre>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <div id="footer"></div>
+
+  <div id="js_index"></div>
+
+  <!--PopUp sucesso-->
+  <section id="successModal">
+    <span class="overlay"></span>
+    <div class="modal-box">
+      <i class="fa-regular fa-circle-check icon-success"></i>
+      <h2> Configurada com sucesso</h2>
+      <p id="sucessMessage"></p>
+
+      <div class="buttons">
+        <button class="close-btn">Ok, Fechar</button>
+      </div>
+    </div>
+  </section>
+
+  <!--PopUp Erro-->
+  <section id="errorModal">
+    <span class="overlay"></span>
+    <div class="modal-box">
+      <i class="fa-regular fa-circle-xmark icon-error"></i>
+      <h2>Erro na Configuração</h2>
+      <p id="errorMessage">Ocorreu um problema ao gravar as definições.</p>
+
+      <div class="buttons">
+        <button class="close-btn">Ok, Fechar</button>
+      </div>
+    </div>
+  </section>
+
+
+  <script>
+
+    // Carregar o ficheiro footer
+    fetch("footer/footer_layout.html")
+    .then(res => res.text())
+    .then(html => {
+      document.getElementById("footer").innerHTML = html;
+    })
+    .catch(err => console.error("Erro ao carregar footer:", err));
+
+    // Carregar o ficheiro navbar
+    fetch("navbar/navbar_gateway_pages.html")
+    .then(res => res.text())
+    .then(html => {
+      document.getElementById("navbar").innerHTML = html;
+    })
+    .catch(err => console.error("Erro ao carregar navbar:", err));
+
+  </script>
+
+  <!--Carregar o js-->
+  <script src="/Cashout_clients/js/Cashout_clients_js.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.1/mdb.min.js"></script>
+
+</body>
+</html>

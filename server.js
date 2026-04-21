@@ -203,7 +203,7 @@ app.post(`${prefix}/api/validar-clientid_qly`, async (req, res) => {
 //Fazer checkout com o body do validador
 app.post(`${prefix}/api/validar-body_qly`, async (req, res) => {
   try {
-    const { body, clientId, token } = req.body;
+    const { body, clientId, token, isProducao } = req.body;
 
     if (!body || !clientId || !token) {
       return res.status(400).json({ error: "Parâmetros obrigatórios em falta" });
@@ -212,8 +212,12 @@ app.post(`${prefix}/api/validar-body_qly`, async (req, res) => {
     body.merchant = body.merchant || {};
     body.merchant.terminalId = body.merchant.terminalId || 0;
 
+    const urlSibs = isProducao 
+      ? "https://api.sibspayments.com/api/v2/payments" 
+      : "https://spg.qly.site1.sibs.pt/api/v2/payments";
+
     const sibsResponse = await fetch(
-      "https://spg.qly.site1.sibs.pt/api/v2/payments",
+      urlSibs,
       {
         method: "POST",
         headers: {
@@ -937,6 +941,136 @@ app.post(`${prefix}/api/CompraMandato`, async (req, res) => {
   }
 });
 
+
+//Cashout
+app.post(`${prefix}/api/Cashout`, async (req, res) => {
+  try {
+    const { terminalId, montanteinput, aliasinput, validadeinput, cartaoinput } = req.body;
+    const { clientId, bearerToken } = req.query;
+
+    if (!terminalId || !montanteinput || !aliasinput || !validadeinput || !cartaoinput || !clientId || !bearerToken) {
+      return res.status(400).json({ error: "Parâmetros obrigatórios em falta" });
+    }
+
+    const payload = {
+      alias: { aliasName: aliasinput },
+      billingProductType: "GATEWAY",
+      cardInfo: { PAN: cartaoinput, validationDate: validadeinput },
+      initiationMethod: 1,
+      merchant: {
+        terminalId: String(terminalId),
+        merchantTransactionId: `TX-${new Date().getTime()}`, 
+        merchantBrandName: "Brand Name Test",
+        operationDescription: "TEST"
+      },
+      originApplication: 1,
+      amount: { value: Number(montanteinput), currency: "EUR" }
+    };
+
+    const sibsResponse = await fetch(
+      `https://spg.qly.site1.sibs.pt/api/v2/payments/cashout`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${bearerToken}`,
+          "X-IBM-Client-Id": clientId
+        },
+        body: JSON.stringify(payload)
+      }
+    );
+
+    const contentType = sibsResponse.headers.get("content-type");
+
+    if (contentType && contentType.includes("application/json")) {
+      const data = await sibsResponse.json();
+      res.status(sibsResponse.status).json(data);
+    } else {
+      const textError = await sibsResponse.text();
+      console.error("A SIBS devolveu HTML (Provável erro de Firewall ou URL):", textError);
+      
+      res.status(sibsResponse.status).send({
+        error: "A SIBS não respondeu com JSON",
+        status: sibsResponse.status,
+        htmlResponse: textError 
+      });
+    }
+    // -------------------------
+
+  } catch (err) {
+    console.error("Erro proxy SIBS:", err);
+    res.status(500).json({
+      error: "Erro ao comunicar com a SIBS",
+      details: err.message
+    });
+  }
+});
+
+//Cashout para clientes
+app.post(`${prefix}/api/Cashout_clients`, async (req, res) => {
+  try {
+    const { terminalId, montanteinput, aliasinput } = req.body;
+    const { clientId, bearerToken } = req.query;
+
+    if (!terminalId || !montanteinput || !aliasinput || !clientId || !bearerToken) {
+      return res.status(400).json({ error: "Parâmetros obrigatórios em falta" });
+    }
+
+    const payload = {
+      alias: { aliasName: aliasinput },
+      billingProductType: "GATEWAY",
+      cardInfo: { PAN: "553906******6258", validationDate: "2028-03-31T00:00:00.000Z" },
+      initiationMethod: 1,
+      merchant: {
+        terminalId: String(terminalId),
+        merchantTransactionId: `TX-${new Date().getTime()}`,
+        merchantBrandName: "Brand Name Test",
+        operationDescription: "TEST"
+      },
+      originApplication: 1,
+      amount: { value: Number(montanteinput), currency: "EUR" }
+    };
+
+    const sibsResponse = await fetch(
+      `https://spg.qly.site1.sibs.pt/api/v2/payments/cashout`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${bearerToken}`,
+          "X-IBM-Client-Id": clientId
+        },
+        body: JSON.stringify(payload)
+      }
+    );
+
+    const contentType = sibsResponse.headers.get("content-type");
+
+    if (contentType && contentType.includes("application/json")) {
+      const data = await sibsResponse.json();
+      res.status(sibsResponse.status).json(data);
+    } else {
+      const textError = await sibsResponse.text();
+      console.error("A SIBS devolveu HTML (Provável erro de Firewall ou URL):", textError);
+      
+      res.status(sibsResponse.status).send({
+        error: "A SIBS não respondeu com JSON",
+        status: sibsResponse.status,
+        htmlResponse: textError 
+      });
+    }
+    // -------------------------
+
+  } catch (err) {
+    console.error("Erro proxy SIBS:", err);
+    res.status(500).json({
+      error: "Erro ao comunicar com a SIBS",
+      details: err.message
+    });
+  }
+});
+
+
 const filePath = path.join(__dirname, 'src', 'main', 'webapp', 'Demo.zip');
 
 app.get(`${prefix}/download`, (req, res) => {
@@ -956,7 +1090,8 @@ const protectedRoutes = [
   '/webhooks',
   '/validador_form',
   '/Onboarding',
-  '/validador_multifuncoes'
+  '/validador_multifuncoes',
+  '/Cashout'
 ];
 
 protectedRoutes.forEach(route => {
@@ -985,7 +1120,8 @@ const publicRoutes = [
   '/reference_payment',
   '/Refund_gateway',
   '/stargate',
-  '/download_demo'
+  '/download_demo',
+  '/Cashout_clients'
   ];
 
 publicRoutes.forEach(route => {

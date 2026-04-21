@@ -372,6 +372,7 @@ async function gerarCheckout() {
   const clientId = document.getElementById("clientId").value.trim();
   const token = document.getElementById("bearerToken").value.trim();
   const jsonInput = document.getElementById("jsonInput").value.trim();
+  const isProducao = document.getElementById('toggleProducao').checked;
 
   if (!terminalId || !clientId || !token || !jsonInput) {
     out.innerHTML = "<p class='erro'>Preenche todos os campos e o JSON</p>";
@@ -392,7 +393,7 @@ async function gerarCheckout() {
     const response = await fetch(`${prefix}/api/validar-body_qly`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ body, clientId, token })
+      body: JSON.stringify({ body, clientId, token, isProducao })
     });
 
     const data = await response.json();
@@ -1349,3 +1350,23 @@ function verMandatos() {
   alert("Abrir listagem de mandatos (aqui podes ligar à API ou nova página)");
 }
     
+
+document.getElementById('toggleProducao').addEventListener('change', function() {
+    // Selecionamos todos os elementos que têm o ID (ou classe) button_qly
+    // Nota: [id="button_qly"] garante que apanhamos todos mesmo que o HTML seja inválido (IDs duplicados)
+    const elementosQly = document.querySelectorAll('[id="button_qly"]');
+
+    if (this.checked) {
+        // Se PRODUÇÃO estiver ligado -> ESCONDE o QLY
+        elementosQly.forEach(el => {
+            el.style.display = 'none';
+        });
+        console.log("Modo Produção: Elementos QLY escondidos.");
+    } else {
+        // Se PRODUÇÃO estiver desligado -> MOSTRA o QLY
+        elementosQly.forEach(el => {
+            el.style.display = 'block'; // ou 'flex', 'inline-block' dependendo do teu layout
+        });
+        console.log("Modo Sandbox: Elementos QLY visíveis.");
+    }
+});

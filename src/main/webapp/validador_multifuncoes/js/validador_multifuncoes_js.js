@@ -283,7 +283,7 @@ function showErrorModal(message) {
 errorOverlay.addEventListener("click", () => errorModal.classList.remove("active"));
 errorCloseBtn.addEventListener("click", () => errorModal.classList.remove("active"));
 
-
+// ver password
 const togglePassword = document.querySelector('#togglePassword');
 const passwordInput = document.querySelector('#bearerToken');
 const eyeIcon = document.querySelector('#eyeIcon');

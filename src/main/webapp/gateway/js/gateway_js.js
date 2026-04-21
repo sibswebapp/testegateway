@@ -1,4 +1,3 @@
-
     //credenciais default
     const credential_default = {
       terminalId: "96167",
@@ -662,7 +661,7 @@
         const script = document.createElement("script");
         script.src = `https://spg.qly.site1.sibs.pt/assets/js/widget.js?id=${transactionID}`;
         document.body.appendChild(script);
-
+        
 
       } else {
 
@@ -828,6 +827,8 @@
         formContainer.appendChild(wrapper);
 
       }
+
+      verificarMensagemMBWAY(paymentMethodArray);
 
       let token;
       let clientId;
@@ -1057,6 +1058,18 @@
     }
 
 
+    function verificarMensagemMBWAY(paymentMethodArray) {
+        const mensagem = document.getElementById('MBWAY_mensagem');
+        
+        if (paymentMethodArray && paymentMethodArray[0] === "MBWAY") {
+            mensagem.style.display = 'block'; // Mostra
+        } else {
+            mensagem.style.display = 'none';  // Esconde
+        }
+    }
+
+// Exemplo de uso dentro do teu código existente:
+// verificarMensagemMBWAY(paymentMethodArray);
 
   window.addEventListener("message", function (event) {
     try {
