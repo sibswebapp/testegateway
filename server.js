@@ -941,6 +941,7 @@ app.post(`${prefix}/api/CompraMandato`, async (req, res) => {
   }
 });
 
+<<<<<<< HEAD
 
 //Cashout
 app.post(`${prefix}/api/Cashout`, async (req, res) => {
@@ -1071,18 +1072,6 @@ app.post(`${prefix}/api/Cashout_clients`, async (req, res) => {
 });
 
 
-const filePath = path.join(__dirname, 'src', 'main', 'webapp', 'Demo.zip');
-
-app.get(`${prefix}/download`, (req, res) => {
-    console.log("A tentar enviar:", filePath);
-
-    res.download(filePath, 'Demo.zip', (err) => {
-        if (err) {
-            console.log("Erro no download:", err);
-        }
-    });
-});
-
 // 1. ROTAS PROTEGIDAS (Acesso restrito)
 const protectedRoutes = [
   '/validador_API',
@@ -1150,5 +1139,5 @@ app.listen(PORT, HOST, () => {
   console.log(`Webapp root: ${webappDir}`);
   console.log("Prefixo ativo:", prefix);
   console.log("HOST:", HOST);
-  console.log("PREFIX FINAL:", prefix);
+  console.log("Filepath:", filePath);
 });
