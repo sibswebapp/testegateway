@@ -39,7 +39,10 @@ async function getCashout() {
   const credential_default = JSON.parse(localStorage.getItem('credential_default')) || {};
   const credential_config = JSON.parse(localStorage.getItem('credential_config')) || {};
   const default_Configs = localStorage.getItem('default'); // Normalmente é string "0" ou "1"
-  
+
+  let validadeinput  = document.getElementById("validadeinput")?.value?.trim();
+  let cartaoinput    = document.getElementById("cartaoinput")?.value?.trim();
+
   let clientId;
   let bearerToken;
   let terminalId;
@@ -63,31 +66,51 @@ async function getCashout() {
   clientId = finalData.clientId;
   bearerToken = finalData.token;
   terminalId = finalData.terminalId;
-  
+
   let montanteinput = document.getElementById("montanteinput")?.value?.trim();
   let aliasinput    = document.getElementById("aliasinput")?.value?.trim();
 
+  if (validadeinput && validadeinput.length === 5) {
+      const partes = validadeinput.split('/');
+      const mes = partes[0].padStart(2, '0');
+      const ano = "20" + partes[1];
 
-  if (/\D/.test(aliasinput.replace("351#", ""))) { 
+      validadeinput = `${ano}-${mes}-10T00:00:00.000Z`;
+  } else {
+      validadeinput = "2028-03-31T00:00:00.000Z";
+  }
+
+
+  if (/\D/.test(aliasinput.replace("351#", ""))) {
       showErrorModal("O número de telefone não pode conter letras ou caracteres especiais.");
       return;
   }
 
   if (aliasinput !== "") {
-      aliasinput = "351#" + aliasinput.replace("351#", ""); 
+      aliasinput = "351#" + aliasinput.replace("351#", "");
   }
- 
+
+  if (!cartaoinput) {
+    showErrorModal("O cartão tem que estar preenchido.");
+    return;
+  }
+
+  if (!validadeinput) {
+    showErrorModal("A validade tem que estar preenchida.");
+    return;
+  }
+
   if (!montanteinput) {
     showErrorModal("O montante tem que estar preenchido.");
     return;
   }
 
-   if (!aliasinput) {
+  if (!aliasinput) {
     showErrorModal("O número de telefone tem que estar preenchido.");
     return;
   }
 
-  if (!terminalId || !clientId || !bearerToken || !aliasinput || !montanteinput) {
+  if (!terminalId || !clientId || !bearerToken || !aliasinput || !montanteinput || !cartaoinput || !validadeinput) {
     showErrorModal("Todos os campos têm de estar preenchidos.");
     return;
   }
@@ -106,7 +129,7 @@ async function getCashout() {
     const response = await fetch(`${prefix}/api/Cashout_clients?${params.toString()}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ terminalId, montanteinput, aliasinput})
+      body: JSON.stringify({ terminalId, montanteinput, aliasinput, validadeinput, cartaoinput })
     });
 
     const data = await response.json();

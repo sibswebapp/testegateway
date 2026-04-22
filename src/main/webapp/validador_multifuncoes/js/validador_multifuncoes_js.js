@@ -426,7 +426,7 @@ async function getStatusPagamento() {
     console.error(err);
     document.getElementById("statusPagamento").innerText = "ERRO";
     document.getElementById("statusPagamento").className = "h4 fw-bold text-danger mt-1";
-    document.getElementById("bodyCompletoStatus").innerText = JSON.stringify({ error: err.message }, null, 2);
+    //document.getElementById("bodyCompletoStatus").innerText = JSON.stringify({ error: err.message }, null, 2);
   }
 }
 
@@ -504,7 +504,7 @@ async function RefundPagamento() {
     console.error(err);
     document.getElementById("refundPagamento").innerText = "ERRO";
     document.getElementById("refundPagamento").className = "h4 fw-bold text-danger mt-1";
-    document.getElementById("bodyCompletoRefund").innerText = JSON.stringify({ error: err.message }, null, 2);
+    //document.getElementById("bodyCompletoRefund").innerText = JSON.stringify({ error: err.message }, null, 2);
   }
 }
 
@@ -582,7 +582,7 @@ async function CancelPagamento() {
     console.error(err);
     document.getElementById("Cancelagamento").innerText = "ERRO";
     document.getElementById("CancelPagamento").className = "h4 fw-bold text-danger mt-1";
-    document.getElementById("bodyCompletoCancel").innerText = JSON.stringify({ error: err.message }, null, 2);
+    //document.getElementById("bodyCompletoCancel").innerText = JSON.stringify({ error: err.message }, null, 2);
   }
 }
 
@@ -663,7 +663,7 @@ async function fazerCIT() {
     console.error(err);
     document.getElementById("CITPagamento").innerText = "ERRO";
     document.getElementById("CITPagamento").className = "h4 fw-bold text-danger mt-1";
-    document.getElementById("bodyCompletoCIT").innerText = JSON.stringify({ error: err.message }, null, 2);
+    //document.getElementById("bodyCompletoCIT").innerText = JSON.stringify({ error: err.message }, null, 2);
 
     document.getElementById("btnIrForm").style.display = "none"; 
   }
@@ -755,7 +755,7 @@ async function fazerMIT() {
     console.error(err);
     document.getElementById("MITPagamento").innerText = "ERRO";
     document.getElementById("MITPagamento").className = "h4 fw-bold text-danger mt-1";
-    document.getElementById("bodyCompletoMIT").innerText = JSON.stringify({ error: err.message }, null, 2);
+    //document.getElementById("bodyCompletoMIT").innerText = JSON.stringify({ error: err.message }, null, 2);
   }
 }
 
@@ -829,7 +829,7 @@ async function fazerCaptura() {
     console.error(err);
     document.getElementById("capturePagamento").innerText = "ERRO";
     document.getElementById("capturePagamento").className = "h4 fw-bold text-danger mt-1";
-    document.getElementById("bodyCompletocapture").innerText = JSON.stringify({ error: err.message }, null, 2);
+    //document.getElementById("bodyCompletocapture").innerText = JSON.stringify({ error: err.message }, null, 2);
   }
 }
 
@@ -890,7 +890,7 @@ async function ListarMandato() {
     console.error(err);
     document.getElementById("ListarMandatoPagamento").innerText = "ERRO";
     document.getElementById("ListarMandatoPagamento").className = "h4 fw-bold text-danger mt-1";
-    document.getElementById("bodyCompletoListarMandato").innerText = JSON.stringify({ error: err.message }, null, 2);
+    //document.getElementById("bodyCompletoListarMandato").innerText = JSON.stringify({ error: err.message }, null, 2);
   }
 }
 
@@ -970,7 +970,7 @@ async function CancelarMandato() {
     console.error(err);
     document.getElementById("CancelMandatoPagamento").innerText = "ERRO";
     document.getElementById("CancelMandatoPagamento").className = "h4 fw-bold text-danger mt-1";
-    document.getElementById("bodyCompletoCancelMandato").innerText = JSON.stringify({ error: err.message }, null, 2);
+    //document.getElementById("bodyCompletoCancelMandato").innerText = JSON.stringify({ error: err.message }, null, 2);
   }
 }
 
@@ -1045,7 +1045,7 @@ async function DetalheMandato() {
     console.error(err);
     document.getElementById("DetalheMandatoPagamento").innerText = "ERRO";
     document.getElementById("DetalheMandatoPagamento").className = "h4 fw-bold text-danger mt-1";
-    document.getElementById("bodyCompletoDetalheMandato").innerText = JSON.stringify({ error: err.message }, null, 2);
+    //document.getElementById("bodyCompletoDetalheMandato").innerText = JSON.stringify({ error: err.message }, null, 2);
   }
 }
 
@@ -1154,7 +1154,7 @@ async function CriarMandato() {
     console.error(err);
     document.getElementById("CriarMandatoPagamento").innerText = "ERRO";
     document.getElementById("CriarMandatoPagamento").className = "h4 fw-bold text-danger mt-1";
-    document.getElementById("bodyCompletoCriarMandato").innerText = JSON.stringify({ error: err.message }, null, 2);
+    //document.getElementById("bodyCompletoCriarMandato").innerText = JSON.stringify({ error: err.message }, null, 2);
   }
 }
 
@@ -1231,7 +1231,7 @@ async function RefundMandatoPagamento() {
     console.error(err);
     document.getElementById("refundMandatoPagamento").innerText = "ERRO";
     document.getElementById("refundMandatoPagamento").className = "h4 fw-bold text-danger mt-1";
-    document.getElementById("bodyCompletoRefundMandato").innerText = JSON.stringify({ error: err.message }, null, 2);
+    //document.getElementById("bodyCompletoRefundMandato").innerText = JSON.stringify({ error: err.message }, null, 2);
   }
 }
 
@@ -1336,7 +1336,7 @@ async function CheckoutMandatoPagamento() {
     console.error(err);
     document.getElementById("CheckoutMandatoPagamento").innerText = "ERRO";
     document.getElementById("CheckoutMandatoPagamento").className = "h4 fw-bold text-danger mt-1";
-    document.getElementById("bodyCompletoCheckoutMandato").innerText = JSON.stringify({ error: err.message }, null, 2);
+    //document.getElementById("bodyCompletoCheckoutMandato").innerText = JSON.stringify({ error: err.message }, null, 2);
   }
 }
 
@@ -1417,6 +1417,6 @@ async function CompraMandatoPagamento() {
     console.error(err);
     document.getElementById("CompraMandatoPagamento").innerText = "ERRO";
     document.getElementById("CompraMandatoPagamento").className = "h4 fw-bold text-danger mt-1";
-    document.getElementById("bodyCompletoCompraMandato").innerText = JSON.stringify({ error: err.message }, null, 2);
+    //document.getElementById("bodyCompletoCompraMandato").innerText = JSON.stringify({ error: err.message }, null, 2);
   }
 }

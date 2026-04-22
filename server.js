@@ -474,8 +474,7 @@ app.post(`${prefix}/api/Mit`, async (req, res) => {
     }
 
     let payload;
-    
-    
+
     if (mitType === "RCRR") {
 
       payload = {
@@ -1008,17 +1007,17 @@ app.post(`${prefix}/api/Cashout`, async (req, res) => {
 //Cashout para clientes
 app.post(`${prefix}/api/Cashout_clients`, async (req, res) => {
   try {
-    const { terminalId, montanteinput, aliasinput } = req.body;
+    const { terminalId, montanteinput, aliasinput, validadeinput, cartaoinput } = req.body;
     const { clientId, bearerToken } = req.query;
 
-    if (!terminalId || !montanteinput || !aliasinput || !clientId || !bearerToken) {
+    if (!terminalId || !montanteinput || !aliasinput || !clientId || !bearerToken || !validadeinput || !cartaoinput) {
       return res.status(400).json({ error: "Parâmetros obrigatórios em falta" });
     }
 
     const payload = {
       alias: { aliasName: aliasinput },
       billingProductType: "GATEWAY",
-      cardInfo: { PAN: "553906******6258", validationDate: "2028-03-31T00:00:00.000Z" },
+      cardInfo: { PAN: cartaoinput, validationDate: validadeinput },
       initiationMethod: 1,
       merchant: {
         terminalId: String(terminalId),
@@ -1137,5 +1136,4 @@ app.listen(PORT, HOST, () => {
   console.log(`Webapp root: ${webappDir}`);
   console.log("Prefixo ativo:", prefix);
   console.log("HOST:", HOST);
-  console.log("Filepath:", filePath);
 });
