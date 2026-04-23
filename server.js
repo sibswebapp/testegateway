@@ -943,12 +943,17 @@ app.post(`${prefix}/api/CompraMandato`, async (req, res) => {
 //Cashout
 app.post(`${prefix}/api/Cashout`, async (req, res) => {
   try {
-    const { terminalId, montanteinput, aliasinput, validadeinput, cartaoinput } = req.body;
+    const { terminalId, montanteinput, aliasinput, validadeinput, cartaoinput, isProducao } = req.body;
     const { clientId, bearerToken } = req.query;
 
     if (!terminalId || !montanteinput || !aliasinput || !validadeinput || !cartaoinput || !clientId || !bearerToken) {
       return res.status(400).json({ error: "Parâmetros obrigatórios em falta" });
     }
+
+    const URL = isProducao == "1"
+    ? "https://api.sibspayments.com/api/v2/payments/cashout"
+    : "https://spg.qly.site1.sibs.pt/api/v2/payments/cashout";
+
 
     const payload = {
       alias: { aliasName: aliasinput },
@@ -957,7 +962,7 @@ app.post(`${prefix}/api/Cashout`, async (req, res) => {
       initiationMethod: 1,
       merchant: {
         terminalId: String(terminalId),
-        merchantTransactionId: `TX-${new Date().getTime()}`, 
+        merchantTransactionId: `TX-${new Date().getTime()}`,
         merchantBrandName: "Brand Name Test",
         operationDescription: "TEST"
       },
@@ -966,7 +971,7 @@ app.post(`${prefix}/api/Cashout`, async (req, res) => {
     };
 
     const sibsResponse = await fetch(
-      `https://spg.qly.site1.sibs.pt/api/v2/payments/cashout`,
+      URL,
       {
         method: "POST",
         headers: {
@@ -986,11 +991,11 @@ app.post(`${prefix}/api/Cashout`, async (req, res) => {
     } else {
       const textError = await sibsResponse.text();
       console.error("A SIBS devolveu HTML (Provável erro de Firewall ou URL):", textError);
-      
+
       res.status(sibsResponse.status).send({
         error: "A SIBS não respondeu com JSON",
         status: sibsResponse.status,
-        htmlResponse: textError 
+        htmlResponse: textError
       });
     }
     // -------------------------
@@ -1050,11 +1055,11 @@ app.post(`${prefix}/api/Cashout_clients`, async (req, res) => {
     } else {
       const textError = await sibsResponse.text();
       console.error("A SIBS devolveu HTML (Provável erro de Firewall ou URL):", textError);
-      
+
       res.status(sibsResponse.status).send({
         error: "A SIBS não respondeu com JSON",
         status: sibsResponse.status,
-        htmlResponse: textError 
+        htmlResponse: textError
       });
     }
     // -------------------------

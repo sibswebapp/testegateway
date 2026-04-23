@@ -93,21 +93,28 @@ async function getCashout() {
   let cartaoinput    = document.getElementById("cartaoinput")?.value?.trim();
 
   const isPT = document.getElementById("togglePTnumber").checked;
+  let isProducao = document.getElementById("toggleProducao").checked;
+
+  if(isProducao){
+    isProducao = "1";
+  }else{
+    isProducao = "0";
+  }
 
   if (isPT && aliasinput !== "") {
-      aliasinput = "351#" + aliasinput.replace("351#", ""); 
+      aliasinput = "351#" + aliasinput.replace("351#", "");
   }
 
   if (validadeinput && validadeinput.length === 5) {
       const partes = validadeinput.split('/');
-      const mes = partes[0].padStart(2, '0'); 
+      const mes = partes[0].padStart(2, '0');
       const ano = "20" + partes[1];
-      
+
       validadeinput = `${ano}-${mes}-10T00:00:00.000Z`;
   } else {
       validadeinput = "2028-03-31T00:00:00.000Z";
   }
-  
+
   if (!terminalId || !clientId || !bearerToken || !cartaoinput || !validadeinput || !aliasinput || !montanteinput) {
     showErrorModal("Todos os campos têm de estar preenchidos.");
     return;
@@ -126,11 +133,11 @@ async function getCashout() {
     const response = await fetch(`${prefix}/api/Cashout?${params.toString()}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ terminalId, montanteinput, aliasinput, validadeinput, cartaoinput })
+      body: JSON.stringify({ terminalId, montanteinput, aliasinput, validadeinput, cartaoinput, isProducao })
     });
 
     const data = await response.json();
-    
+
     document.getElementById("bodyCompletoCashout").innerText = JSON.stringify(data, null, 2);
 
     const codigoMostrar = data?.returnStatus?.statusCode ?? data?.statusCode ?? data?.status ?? "N/A";
@@ -181,7 +188,7 @@ document.getElementById('cartaoinput').addEventListener('input', function(e) {
     // 1. Se o utilizador apagou (backspace), limpamos a nossa memória
     if (valorAtual.length < panReal.length) {
         panReal = panReal.substring(0, valorAtual.length);
-    } 
+    }
     else {
         // 2. Pegamos apenas o último caractere digitado
         let ultimoChar = valorAtual.slice(-1);
