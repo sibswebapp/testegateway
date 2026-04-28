@@ -80,6 +80,15 @@
       }
 
       // isto apenas vai ser usado quando os pagamentos autorizados tiver desenvolvidos paymentMethodsParam = JSON.parse(paymentMethodsParam);
+      if (paymentMethodsParam) {
+        if (typeof paymentMethodsParam === "string") {
+          try {
+            paymentMethodsParam = JSON.parse(paymentMethodsParam);
+          } catch {
+            paymentMethodsParam = paymentMethodsParam.split(",");
+          }
+        }
+      }
 
       if (pagamentosAutorizados == 1) {
           if (!paymentMethodsParam.includes("4")) {

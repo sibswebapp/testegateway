@@ -246,8 +246,8 @@
       let LayoutVersion = document.getElementById("LayoutVersion").value;
       let VersionMITS = "0"; //document.getElementById('VersionMITS').value;
       let MITs = "0"; //document.getElementById('MITs').checked ? 1 : 0;
-      let VersionpagamentosAutorizados = "0"; //document.getElementById('VersionpagamentosAutorizados').value;
-      let pagamentosAutorizados = "0"; //document.getElementById('pagamentosAutorizadoschecked').checked ? 1 : 0;
+      let VersionpagamentosAutorizados = document.getElementById('VersionpagamentosAutorizados').value;
+      let pagamentosAutorizados = document.getElementById('pagamentosAutorizadoschecked').checked ? 1 : 0;
 
       const methods = Array.from(document.getElementById('paymentMethods').selectedOptions).map(opt => opt.value);
       const AllMethodsPay = document.getElementById('AllMethodsPay').checked ? 1 : 0;
@@ -380,8 +380,8 @@
         document.getElementById('LayoutVersion').value = credential_config_variable.LayoutVersion;
         //document.getElementById('MITs').value = credential_config_variable.MITs;
         //document.getElementById('VersionMITS').value = credential_config_variable.VersionMITS;
-        //document.getElementById('pagamentosAutorizadoschecked').value = credential_config_variable.pagamentosAutorizados;
-        //document.getElementById('VersionpagamentosAutorizados').value = credential_config_variable.VersionpagamentosAutorizados;
+        document.getElementById('pagamentosAutorizadoschecked').value = credential_config_variable.pagamentosAutorizados;
+        document.getElementById('VersionpagamentosAutorizados').value = credential_config_variable.VersionpagamentosAutorizados;
       }
 
       if(useDefault){
@@ -403,8 +403,8 @@
       if (pagamentosAutorizados == "1") {
         document.getElementById('pagamentosAutorizadoschecked').checked = true;
       } else {
-        //document.getElementById('pagamentosAutorizadoschecked').checked = false;
-        //document.getElementById("LayoutVersionpagamentosAutorizados").style.display = "none";
+        document.getElementById('pagamentosAutorizadoschecked').checked = false;
+        document.getElementById("LayoutVersionpagamentosAutorizados").style.display = "none";
       }
 
       const select = document.getElementById('paymentMethods');
