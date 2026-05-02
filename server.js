@@ -1073,6 +1073,58 @@ app.post(`${prefix}/api/Cashout_clients`, async (req, res) => {
   }
 });
 
+//Criar Mandato para clientes
+app.post(`${prefix}/api/CriarMandato_cli`, async (req, res) => {
+
+  try {
+    const { terminalId, CriarMandatoCustomerName, CriarMandatoPhone } = req.body;
+    const { bearerToken, clientId, typeofPA } = req.query;
+
+    if (!terminalId || !CriarMandatoCustomerName || !CriarMandatoPhone || !bearerToken || !clientId || !typeofPA) {
+      return res.status(400).json({ error: "Parâmetros obrigatórios em falta" });
+    }
+
+    let payload;
+
+    payload = {
+      merchant: {
+        terminalId: Number(terminalId),
+        channel: "web",
+        merchantTransactionId: `teste`,
+        transactionDescription: `Mandatos -> teste`
+      },
+      mandate: {
+        mandateType : typeofPA,
+        aliasMBWAY : CriarMandatoPhone,
+        customerName : CriarMandatoCustomerName
+      }
+    };
+
+    const sibsResponse = await fetch(
+      `https://api.qly.sibspayments.com/sibs/spg/v2/mbway-mandates/creation`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${bearerToken}`,
+          "X-IBM-Client-Id": clientId
+        },
+        body: JSON.stringify(payload)
+      }
+    );
+
+    const data = await sibsResponse.json();
+    res.status(sibsResponse.status).json(data);
+
+  } catch (err) {
+    console.error("Erro proxy SIBS:", err);
+    res.status(500).json({
+      error: "Erro ao comunicar com a SIBS",
+      details: err.message
+    });
+  }
+});
+
 
 // 1. ROTAS PROTEGIDAS (Acesso restrito)
 const protectedRoutes = [

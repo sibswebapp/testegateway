@@ -6,6 +6,9 @@ window.addEventListener("DOMContentLoaded", () => {
 
 });
 
+const credential_default = JSON.parse(localStorage.getItem('credential_default')) || {};
+const credential_config = JSON.parse(localStorage.getItem('credential_config')) || {};
+const default_Configs = localStorage.getItem('default'); // Normalmente é string "0" ou "1"~
 
 function preenchercheckoutMandato() {
   const mandato = localStorage.getItem("MandatoConfigurada");
@@ -306,22 +309,48 @@ async function DetalheMandato() {
 //Criar Mandato
 async function CriarMandato() {
 
-  const terminalId = document.getElementById("terminalId")?.value?.trim();
-  const clientId = document.getElementById("clientId")?.value?.trim();
-  const bearerToken = document.getElementById("bearerToken")?.value?.trim();
   const CriarMandatoCustomerName = document.getElementById("CriarMandatoCustomerName")?.value?.trim();
   const CriarMandatoPhone = document.getElementById("CriarMandatoPhone")?.value?.trim();
 
-  if (!CriarMandatoCustomerName) {
-    showErrorModal("Customer Name tem que estar preenchido");
-    return;
+  let clientId;
+  let bearerToken;
+  let terminalId;
+  let typeofPA;
+
+  if (default_Configs === "0" && credential_config.useDefaultConfig === "true") {
+    finalData = {
+      clientId: credential_default.clientId,
+      token: credential_default.bearerToken,
+      terminalId: credential_default.terminalId,
+    };
+  } else {
+    finalData = {
+      clientId: credential_config.clientId,
+      token: credential_config.bearerToken,
+      terminalId: credential_config.terminalId,
+    };
+  }
+
+  clientId = finalData.clientId;
+  bearerToken = finalData.token;
+  terminalId = finalData.terminalId;
+  typeofPA = credential_config.VersionpagamentosAutorizados;
+
+  if(typeofPA === "1"){
+    typeofPA = "ONECLICK";
+  }else{
+    typeofPA = "SUBSCRIPTION";
   }
 
   if (!CriarMandatoPhone) {
-    showErrorModal("Telefone tem que estar preenchido");
+    showErrorModal("O campo 'Telefone' tem que estar preenchido");
     return;
   }
 
+  if (!CriarMandatoCustomerName) {
+    showErrorModal("O campo 'Titular da conta' tem que estar preenchido");
+    return;
+  }
 
   document.getElementById("CriarMandatoPagamento").innerText = "...";
   document.getElementById("statusCodeCriarMandato").innerText = "CODE: -";
@@ -329,13 +358,12 @@ async function CriarMandato() {
 
   const prefix = window.location.hostname === '127.0.0.1' ? '' : '/SimuladorSIBS';
 
-
   try {
-    const params = new URLSearchParams({bearerToken, clientId});
-    const response = await fetch(`${prefix}/api/CriarMandato?${params.toString()}`, {
+    const params = new URLSearchParams({bearerToken, clientId, typeofPA});
+    const response = await fetch(`${prefix}/api/CriarMandato_cli?${params.toString()}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ terminalId, CriarMandatoCustomerName, CriarMandatoPhone, CriarMandatoMerchantID })
+      body: JSON.stringify({ terminalId, CriarMandatoCustomerName, CriarMandatoPhone })
     });
 
     const data = await response.json();
