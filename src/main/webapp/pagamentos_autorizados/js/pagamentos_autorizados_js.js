@@ -383,27 +383,15 @@ async function CriarMandato() {
 
     // ===================== LOCALSTORAGE =====================
     localStorage.removeItem("MandatoConfigurada");
-    localStorage.removeItem("CredenciaisConfigurada");
 
-    const mitArray = [
+    const MandatoArray = [
       {
         mandateId: data?.mandate.mandateId,
-        CriarMandatoMerchantID,
         CriarMandatoCustomerName
       }
     ];
 
-    const credenciaisArray = [
-      {
-        terminalId,
-        clientId,
-        bearerToken
-      }
-    ];
-
-    localStorage.setItem("MandatoConfigurada", JSON.stringify(mitArray));
-    localStorage.setItem("CredenciaisConfigurada", JSON.stringify(credenciaisArray));
-
+    localStorage.setItem("MandatoConfigurada", JSON.stringify(MandatoArray));
 
     const checkoutMandateId = document.getElementById("checkoutMandateMandateId");
     if (checkoutMandateId && data?.mandate.mandateId) {

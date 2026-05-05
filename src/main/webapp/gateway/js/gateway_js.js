@@ -202,9 +202,11 @@
 
     //função que faz o pagamento (checkout)
     async function makePayment() {
+      if (PA_trigger) return;
 
-      if (PA_trigger) return; 
-      let phoneNumberPA = document.getElementById("phoneNumberPA").value;
+      const phoneInput = document.getElementById("phoneNumberPA");
+      let phoneNumberPA = phoneInput ? phoneInput.value : null;
+
       PA_trigger = 1;
 
       const paymentform = document.getElementById('payment-form');
