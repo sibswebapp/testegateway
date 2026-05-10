@@ -48,3 +48,46 @@ html, body {
       font-size: 1.2rem;
       box-shadow: 0 10px 15px -3px rgba(0, 97, 255, 0.3);
     }
+
+    /* Remove a barra de scroll visualmente mas mantém a funcionalidade */
+    .custom-stepper::-webkit-scrollbar {
+        display: none;
+    }
+    .custom-stepper {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+
+    .step-content {
+    transition: all 0.4s ease-in-out;
+    display: none; /* Escondido por padrão */
+    }
+
+    .step-content.active {
+        display: block;
+        animation: fadeInSlide 0.5s forwards;
+    }
+
+    @keyframes fadeInSlide {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .custom-stepper .step-item {
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    /* Estado ativo do passo no stepper */
+    .step-active {
+        opacity: 1 !important;
+        border-color: var(--bs-primary) !important;
+        box-shadow: 0 .125rem .25rem rgba(0,0,0,.075)!important;
+    }
+    .step-active span { color: var(--bs-primary) !important; font-weight: bold !important; }
+    .step-active .rounded-circle { background-color: var(--bs-primary) !important; }
+
+    /* Estado inativo */
+    .step-inactive {
+        opacity: 0.5;
+    }
