@@ -1,8 +1,6 @@
 window.addEventListener("DOMContentLoaded", () => {
   const params = new URLSearchParams(window.location.search);
 
-  preencherCompraMandato()
-  preenchercheckoutMandato()
 
   const modalDetalhes = document.getElementById('modalDetalhesMandatos');
 
@@ -21,7 +19,7 @@ window.addEventListener("DOMContentLoaded", () => {
           </div>
           `;
   });
-    
+
 
   const modalCancelar = document.getElementById('modalCancelarMandatos');
 
@@ -34,7 +32,7 @@ window.addEventListener("DOMContentLoaded", () => {
         feedbackArea.innerHTML = '';
       }
   });
-    
+
   modalCancelar.addEventListener('shown.bs.modal', function () {
     document.getElementById('CancelarMandatoTransactionId').focus();
   });
@@ -44,7 +42,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
   modalLista.addEventListener('hidden.bs.modal', function () {
     const listaResultados = document.getElementById('listaTodosMandatosResultados');
-        
+
     if (listaResultados) {
       listaResultados.innerHTML = `
         <div class="p-5 text-center text-muted bg-light bg-opacity-50">
@@ -61,60 +59,6 @@ window.addEventListener("DOMContentLoaded", () => {
 const credential_default = JSON.parse(localStorage.getItem('credential_default')) || {};
 const credential_config = JSON.parse(localStorage.getItem('credential_config')) || {};
 const default_Configs = localStorage.getItem('default'); // Normalmente é string "0" ou "1"~
-
-function preenchercheckoutMandato() {
-  const mandato = localStorage.getItem("MandatoConfigurada");
-
-  if (mandato) {
-    try {
-
-      const dadosMandatoArray = JSON.parse(mandato);
-      const dadosMandato = Array.isArray(dadosMandatoArray) ? dadosMandatoArray[0] : dadosMandatoArray;
-
-      const checkoutMandateId = document.getElementById("checkoutMandateMandateId");
-      const checkoutMerchantID = document.getElementById("checkoutMandatoMerchantID");
-      const checkoutCustomerName = document.getElementById("checkoutMandatoCustomerName");
-
-      if (checkoutMandateId && dadosMandato.mandateId) {
-        checkoutMandateId.value = dadosMandato.mandateId;
-      }
-
-      if (checkoutMerchantID && dadosMandato.CriarMandatoMerchantID) {
-        checkoutMerchantID.value = dadosMandato.CriarMandatoMerchantID;
-      }
-
-      if (checkoutCustomerName && dadosMandato.CriarMandatoCustomerName) {
-        checkoutCustomerName.value = dadosMandato.CriarMandatoCustomerName;
-      }
-    } catch (error) {
-      console.error("Erro ao ler MandatoConfigurada:", error);
-    }
-  }
-
-}
-
-function preencherCompraMandato() {
-
-  const CheckoutMandato = localStorage.getItem("CheckoutMandatoConfigurado");
-
-  if (CheckoutMandato) {
-    try {
-
-      const dadosCheckoutMandatoArray = JSON.parse(CheckoutMandato);
-      const dadosMandato = Array.isArray(dadosCheckoutMandatoArray) ? dadosCheckoutMandatoArray[0] : dadosCheckoutMandatoArray;
-
-      const CompraMandateId = document.getElementById("CheckoutMandateTransactionId");
-
-      if (CompraMandateId && dadosMandato.checkoutmandateId) {
-        CompraMandateId.value = dadosMandato.checkoutmandateId;
-      }
-
-    } catch (error) {
-      console.error("Erro ao ler CheckoutMandatoConfigurado:", error);
-    }
-  }
-
-}
 
 // PopUP de sucesso chamada
 const successModal = document.getElementById("successModal"),
@@ -259,6 +203,7 @@ async function ListarMandato() {
 }
 
 
+// Cancelar Mandato
 async function CancelarMandato() {
     // 1. Obter valores dos inputs
     const transactionIdValue = document.getElementById("CancelarMandatoTransactionId")?.value?.trim();
@@ -432,6 +377,8 @@ async function DetalheMandato() {
       </div>`;
   }
 }
+
+
 //Criar Mandato
 async function CriarMandato() {
 
@@ -507,21 +454,10 @@ async function CriarMandato() {
       document.getElementById("CriarMandatoPagamento").className = "h4 fw-bold text-danger mt-1";
     }
 
-    // ===================== LOCALSTORAGE =====================
-    localStorage.removeItem("MandatoConfigurada");
 
-    const MandatoArray = [
-      {
-        mandateId: data?.mandate.mandateId,
-        CriarMandatoCustomerName
-      }
-    ];
-
-    localStorage.setItem("MandatoConfigurada", JSON.stringify(MandatoArray));
-
-    const checkoutMandateId = document.getElementById("checkoutMandateMandateId");
-    if (checkoutMandateId && data?.mandate.mandateId) {
-      checkoutMandateId.value = data.mandate.mandateId;
+    const MandateId = document.getElementById("checkoutMandateMandateId");
+    if (MandateId && data?.mandate.mandateId) {
+      MandateId.value = data.mandate.mandateId;
     }
 
     const checkoutMerchantID = document.getElementById("checkoutMandatoMerchantID");
@@ -582,7 +518,7 @@ async function CheckoutMandatoPagamento() {
   document.getElementById("statusCodeCheckoutMandato").innerText = "CODE: -";
   document.getElementById("bodyCompletoCheckoutMandato").innerText = "{}";
 
-   const prefix = window.location.hostname === '127.0.0.1' ? '' : '/SimuladorSIBS';
+  const prefix = window.location.hostname === '127.0.0.1' ? '' : '/SimuladorSIBS';
 
 
   try {
@@ -729,24 +665,19 @@ async function CompraMandatoPagamento() {
 }
 
 function goToStep(stepNumber) {
-    // 1. Esconder todos os conteúdos
     document.querySelectorAll('.step-content').forEach(content => {
         content.classList.remove('active');
     });
 
-    // 2. Mostrar o conteúdo selecionado
     document.getElementById('step-content-' + stepNumber).classList.add('active');
 
-    // 3. Atualizar visual do Stepper
     document.querySelectorAll('.step-item').forEach((item, index) => {
         const idx = index + 1;
         if (idx === stepNumber) {
             item.classList.add('step-active');
             item.classList.remove('step-inactive');
-            // Mudar cor do círculo para primary
             item.querySelector('.rounded-circle').classList.replace('bg-secondary', 'bg-primary');
         } else if (idx < stepNumber) {
-            // Passos anteriores (opcional: marcar como concluído)
             item.classList.remove('step-active');
             item.classList.add('step-inactive');
         } else {
@@ -759,8 +690,5 @@ function goToStep(stepNumber) {
 }
 
 function avancarParaCobranca() {
-    // Aqui podes colocar a tua lógica de chamada à API do CriarMandato
-    // E no sucesso da API, chamas a troca de página:
-    console.log("Mandato Criado! A avançar...");
     goToStep(2);
 }
