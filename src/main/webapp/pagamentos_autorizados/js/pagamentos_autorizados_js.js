@@ -211,8 +211,8 @@ async function CancelarMandato() {
     const feedbackArea = document.getElementById("feedbackCancelarMandato");
 
     // 2. Configurações de Credenciais
-    const config = (default_Configs === "0" && credential_config.useDefaultConfig === "true") 
-        ? credential_default 
+    const config = (default_Configs === "0" && credential_config.useDefaultConfig === "true")
+        ? credential_default
         : credential_config;
 
     const { clientId, bearerToken, terminalId } = config;
@@ -235,8 +235,8 @@ async function CancelarMandato() {
 
     try {
         // AJUSTE CRÍTICO: Os nomes das chaves aqui têm de ser IGUAIS ao que o teu server faz destructuring no req.query
-        const params = new URLSearchParams({ 
-            CancelMandatoTransactionId: transactionIdValue, 
+        const params = new URLSearchParams({
+            CancelMandatoTransactionId: transactionIdValue,
             bearerToken: bearerToken,
             clientId: clientId,
             CancelMandatoPhone: decodeURIComponent(phoneValue)
@@ -246,9 +246,9 @@ async function CancelarMandato() {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             // AJUSTE CRÍTICO: O body tem de ter estes nomes exatos para o req.body do server
-            body: JSON.stringify({ 
-                terminalId: terminalId, 
-                CancelMandatoMerchantID: CancelMandatoMerchantID 
+            body: JSON.stringify({
+                terminalId: terminalId,
+                CancelMandatoMerchantID: CancelMandatoMerchantID
             })
         });
 
@@ -450,6 +450,10 @@ async function CriarMandato() {
       document.getElementById("CriarMandatoPagamento").className = "h4 fw-bold text-success mt-1";
       showSuccessModal("Mandato criado com sucesso");
 
+      setTimeout(() => {
+          goToStep(2);
+      }, 800);
+
     } else {
       document.getElementById("CriarMandatoPagamento").className = "h4 fw-bold text-danger mt-1";
     }
@@ -460,14 +464,9 @@ async function CriarMandato() {
       MandateId.value = data.mandate.mandateId;
     }
 
-    const checkoutMerchantID = document.getElementById("checkoutMandatoMerchantID");
-    if (checkoutMerchantID && CriarMandatoMerchantID) {
-      checkoutMerchantID.value = CriarMandatoMerchantID;
-    }
-
-    const checkoutCustomerName = document.getElementById("checkoutMandatoCustomerName");
-    if (checkoutCustomerName && CriarMandatoCustomerName) {
-      checkoutCustomerName.value = CriarMandatoCustomerName;
+    const checkoutMandatoCustomerName = document.getElementById("checkoutMandatoCustomerName");
+    if (checkoutMandatoCustomerName && CriarMandatoCustomerName) {
+      checkoutMandatoCustomerName.value = CriarMandatoCustomerName;
     }
 
   } catch (err) {
@@ -478,39 +477,49 @@ async function CriarMandato() {
 }
 
 
-//Checkout Mandato
-async function CheckoutMandatoPagamento() {
+//Checkout e compra do Mandato
+async function CobrancaMandato() {
 
-  const terminalId = document.getElementById("terminalId")?.value?.trim();
-  const clientId = document.getElementById("clientId")?.value?.trim();
-  const bearerToken = document.getElementById("bearerToken")?.value?.trim();
+  let clientId;
+  let bearerToken;
+  let terminalId;
+
+  if (default_Configs === "0" && credential_config.useDefaultConfig === "true") {
+    finalData = {
+      clientId: credential_default.clientId,
+      token: credential_default.bearerToken,
+      terminalId: credential_default.terminalId,
+    };
+  } else {
+    finalData = {
+      clientId: credential_config.clientId,
+      token: credential_config.bearerToken,
+      terminalId: credential_config.terminalId,
+    };
+  }
+
+  clientId = finalData.clientId;
+  bearerToken = finalData.token;
+  terminalId = finalData.terminalId;
+
   const montante = document.getElementById("checkoutMandatoAmount")?.value?.trim();
   const checkoutMandateId = document.getElementById("checkoutMandateMandateId")?.value?.trim();
-  const checkoutMerchantID = document.getElementById("checkoutMandatoMerchantID")?.value?.trim();
   const checkoutCustomerName = document.getElementById("checkoutMandatoCustomerName")?.value?.trim();
+  const checkoutMerchantID = "123"
 
-  if (!terminalId || !clientId || !bearerToken ) {
-    showErrorModal("Todos os campos têm de estar preenchidos.");
-    return;
-  }
 
   if (!checkoutMandateId) {
-    showErrorModal("Mandate ID tem que estar preenchido");
-    return;
-  }
-
-  if (!checkoutMerchantID) {
-    showErrorModal("Merchant ID tem que estar preenchido");
+    showErrorModal("O campo 'Mandate ID' tem que estar preenchido");
     return;
   }
 
   if (!checkoutCustomerName) {
-    showErrorModal("Customer Name tem que estar preenchido");
+    showErrorModal("O campo 'Titular da conta' tem que estar preenchido");
     return;
   }
 
   if (!montante) {
-    showErrorModal("Montante tem que estar preenchido");
+    showErrorModal("O campo 'Montante' tem que estar preenchido");
     return;
   }
 
@@ -536,29 +545,8 @@ async function CheckoutMandatoPagamento() {
 
     const data = await response.json();
 
-    document.getElementById("bodyCompletoCheckoutMandato").innerText = JSON.stringify(data, null, 2);
-    document.getElementById("statusCodeCheckoutMandato").innerText = `CODE: ${data.returnStatus.statusCode}`;
-
-    const status = data?.returnStatus?.statusMsg || "-";
-    document.getElementById("CheckoutMandatoPagamento").innerText = status;
-    if (["Success"].includes(status)) {
-      document.getElementById("CheckoutMandatoPagamento").className = "h4 fw-bold text-success mt-1";
-      showSuccessModal("Checkout com Mandato criado com sucesso");
-    } else {
-      document.getElementById("CheckoutMandatoPagamento").className = "h4 fw-bold text-danger mt-1";
-    }
-
     // ===================== LOCALSTORAGE =====================
-    localStorage.removeItem("CredenciaisConfigurada");
     localStorage.removeItem("CheckoutMandatoConfigurado");
-
-    const credenciaisArray = [
-      {
-        terminalId,
-        clientId,
-        bearerToken
-      }
-    ];
 
     const CheckoutMandatoArray = [
       {
@@ -567,100 +555,54 @@ async function CheckoutMandatoPagamento() {
       }
     ];
 
-    localStorage.setItem("CredenciaisConfigurada", JSON.stringify(credenciaisArray));
     localStorage.setItem("CheckoutMandatoConfigurado", JSON.stringify(CheckoutMandatoArray));
 
-    const checkoutmandateId = document.getElementById("CheckoutMandateTransactionId");
-    if (checkoutmandateId && data?.transactionID) {
-      checkoutmandateId.value = data?.transactionID;
-    }
+    const raw = localStorage.getItem("CheckoutMandatoConfigurado");
+    const arrayMandato = raw ? JSON.parse(raw) : [];
+    const mandateTransactionSignature = Array.isArray(arrayMandato) ? arrayMandato?.[0]?.MandateTransactionSignature || "" : "";
+
+    try {
+
+        const params = new URLSearchParams({
+          bearerToken, mandateTransactionSignature
+        });
+
+        const transactionID = arrayMandato?.[0]?.checkoutmandateId || "";
+
+        const response = await fetch(`${prefix}/api/CompraMandato?${params.toString()}`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            clientId,
+            transactionID
+          })
+        });
+
+        const data = await response.json();
+
+        document.getElementById("bodyCompletoCheckoutMandato").innerText = JSON.stringify(data, null, 2);
+        document.getElementById("statusCodeCheckoutMandato").innerText = `CODE: ${data.returnStatus.statusCode}`;
+
+        const status = data?.returnStatus?.statusMsg || "-";
+        document.getElementById("CheckoutMandatoPagamento").innerText = status;
+        if (["Success"].includes(status)) {
+          document.getElementById("CheckoutMandatoPagamento").className = "h4 fw-bold text-success mt-1";
+          showSuccessModal("Compra com Mandato criado com sucesso");
+        } else {
+          document.getElementById("CheckoutMandatoPagamento").className = "h4 fw-bold text-danger mt-1";
+        }
+
+
+      } catch (err) {
+        console.error(err);
+        document.getElementById("CheckoutMandatoPagamento").innerText = "ERRO";
+        document.getElementById("CheckoutMandatoPagamento").className = "h4 fw-bold text-danger mt-1";
+      }
 
   } catch (err) {
     console.error(err);
     document.getElementById("CheckoutMandatoPagamento").innerText = "ERRO";
     document.getElementById("CheckoutMandatoPagamento").className = "h4 fw-bold text-danger mt-1";
-    //document.getElementById("bodyCompletoCheckoutMandato").innerText = JSON.stringify({ error: err.message }, null, 2);
-  }
-}
-
-//Compra Mandato
-async function CompraMandatoPagamento() {
-
-  const terminalId = document.getElementById("terminalId")?.value?.trim();
-  const clientId = document.getElementById("clientId")?.value?.trim();
-  const bearerToken = document.getElementById("bearerToken")?.value?.trim();
-  const transactionID = document.getElementById("CheckoutMandateTransactionId")?.value?.trim();
-
-  const raw = localStorage.getItem("CheckoutMandatoConfigurado");
-  const arrayMandato = raw ? JSON.parse(raw) : [];
-  const mandateTransactionSignature = Array.isArray(arrayMandato) ? arrayMandato?.[0]?.MandateTransactionSignature || "" : "";
-
-
-  if (!terminalId || !clientId || !bearerToken ) {
-    showErrorModal("Todos os campos têm de estar preenchidos.");
-    return;
-  }
-
-  if (!transactionID) {
-    showErrorModal("Transaction ID tem que estar preenchido");
-    return;
-  }
-
-  document.getElementById("CompraMandatoPagamento").innerText = "...";
-  document.getElementById("statusCodeCompraMandato").innerText = "CODE: -";
-  document.getElementById("bodyCompletoCompraMandato").innerText = "{}";
-
-  const prefix = window.location.hostname === '127.0.0.1' ? '' : '/SimuladorSIBS';
-
-
-  try {
-
-    const params = new URLSearchParams({
-      bearerToken, mandateTransactionSignature
-    });
-
-
-    const response = await fetch(`${prefix}/api/CompraMandato?${params.toString()}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        clientId,
-        transactionID
-      })
-    });
-
-    const data = await response.json();
-
-    document.getElementById("bodyCompletoCompraMandato").innerText = JSON.stringify(data, null, 2);
-    document.getElementById("statusCodeCompraMandato").innerText = `CODE: ${data.returnStatus.statusCode}`;
-
-    const status = data?.returnStatus?.statusMsg || "-";
-    document.getElementById("CompraMandatoPagamento").innerText = status;
-    if (["Success"].includes(status)) {
-      document.getElementById("CompraMandatoPagamento").className = "h4 fw-bold text-success mt-1";
-      showSuccessModal("Compra com Mandato criado com sucesso");
-    } else {
-      document.getElementById("CompraMandatoPagamento").className = "h4 fw-bold text-danger mt-1";
-    }
-
-    // ===================== LOCALSTORAGE =====================
-    localStorage.removeItem("CredenciaisConfigurada");
-
-    const credenciaisArray = [
-      {
-        terminalId,
-        clientId,
-        bearerToken
-      }
-    ];
-
-    localStorage.setItem("CredenciaisConfigurada", JSON.stringify(credenciaisArray));
-
-  } catch (err) {
-    console.error(err);
-    document.getElementById("CompraMandatoPagamento").innerText = "ERRO";
-    document.getElementById("CompraMandatoPagamento").className = "h4 fw-bold text-danger mt-1";
-    //document.getElementById("bodyCompletoCompraMandato").innerText = JSON.stringify({ error: err.message }, null, 2);
   }
 }
 
