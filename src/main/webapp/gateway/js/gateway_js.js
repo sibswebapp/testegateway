@@ -27,7 +27,38 @@
     const credential_default_variable = JSON.parse(localStorage.getItem('credential_default'))
     const credential_config_variable = JSON.parse(localStorage.getItem('credential_config'))
     const default_Configs = JSON.parse(localStorage.getItem('default'))
-  
+
+
+    function getQueryParam(param) {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get(param);
+    }
+
+    const PagamentoMBWAY_documentacao = getQueryParam("PagamentoMBWAY");
+    const PagamentoRefereciasMB_documentacao = getQueryParam("PagamentoRefereciasMB");
+    const PagamentoCartao_documentacao = getQueryParam("PagamentoCartao");
+    const PagamentoServerToServerMBWAY_documentacao = getQueryParam("PagamentoServerToServerMBWAY");
+    const PagamentoServerToServer_documentacao = getQueryParam("PagamentoServerToServer");
+    const RefereciasMB_documentacao = getQueryParam("RefereciasMB");
+    const PA_trigger_documentacao = getQueryParam("PA_trigger");
+
+    if (PagamentoMBWAY_documentacao == "1") {
+      PA_trigger = 0;
+      makePayment();
+    }
+
+    if (PagamentoCartao_documentacao == "1") {
+      document.getElementById("payment-method").value = "CARD";
+      PA_trigger = 0;
+      makePayment();
+    }
+
+    if (PagamentoRefereciasMB_documentacao == "1") {
+      document.getElementById("payment-method").value = "REFERENCE";
+      PA_trigger = 0;
+      makePayment();
+    }
+
     //Se ele clicar voltar para tras isto da reset a tudo
     window.addEventListener('pageshow', function(event) {
       if (event.persisted || performance.getEntriesByType("navigation")[0].type === "back_forward") {
@@ -207,13 +238,15 @@
       const phoneInput = document.getElementById("phoneNumberPA");
       let phoneNumberPA = phoneInput ? phoneInput.value : null;
 
-      PA_trigger = 1;
-
       const paymentform = document.getElementById('payment-form');
       if (paymentform) {
-          paymentform.classList.remove('d-none');  
-          paymentform.style.display = 'block';  
+          paymentform.classList.remove('d-none');
+          paymentform.style.display = 'block';
       }
+
+      const PagamentoServerToServerMBWAY_documentacao = getQueryParam("PagamentoServerToServerMBWAY");
+      const PagamentoServerToServer_documentacao = getQueryParam("PagamentoServerToServer");
+      const PA_trigger_documentacao = getQueryParam("PA_trigger");
 
       let token;
       let clientId;
@@ -267,6 +300,19 @@
 
       const amountValue = parseFloat(document.getElementById("amount").value);
       const selectedMethod = document.getElementById("payment-method").value;
+
+      if (PagamentoMBWAY_documentacao == "1") {
+        selectedMethod = "MBWAY";
+      }
+
+      if (PagamentoRefereciasMB_documentacao == "1") {
+        selectedMethod  = "REFERENCE";
+      }
+
+      if (PagamentoCartao_documentacao == "1") {
+        selectedMethod = "CARD";
+      }
+
 
       const placeholder = document.getElementById('loader-placeholder');
       if (placeholder) {

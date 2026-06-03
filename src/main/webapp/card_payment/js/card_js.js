@@ -1,26 +1,26 @@
 document.addEventListener("DOMContentLoaded", async function () {
 
-      function getQueryParam(param) {
+    function getQueryParam(param) {
         const urlParams = new URLSearchParams(window.location.search);
         return urlParams.get(param);
-      }
+    }
 
-      // variavies globais
-      const useDefault = JSON.parse(localStorage.getItem("default"));
-      const credential_default_variable = JSON.parse(localStorage.getItem('credential_default'))
-      const credential_config_variable = JSON.parse(localStorage.getItem('credential_config'))
+    // variavies globais
+    const useDefault = JSON.parse(localStorage.getItem("default"));
+    const credential_default_variable = JSON.parse(localStorage.getItem('credential_default'))
+    const credential_config_variable = JSON.parse(localStorage.getItem('credential_config'))
 
-      let token
-      let clientId
-      let terminalId
-      let entity
-      let isDummyCustomer
-      let ServerToServer
-      let paymentMethods
-      let encodedPaymentMethods
-      let gatewayVersion
+    let token
+    let clientId
+    let terminalId
+    let entity
+    let isDummyCustomer
+    let ServerToServer
+    let paymentMethods
+    let encodedPaymentMethods
+    let gatewayVersion
 
-      if(useDefault == "0"){
+    if(useDefault == "0"){
         token = credential_config_variable.bearerToken;
         clientId = credential_config_variable.clientId;
         terminalId = credential_config_variable.terminalId;
@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         paymentMethods = credential_config_variable.paymentMethods;
         gatewayVersion = credential_config_variable.gatewayVersion;
 
-      }else{
+    }else{
         token = credential_default_variable.bearerToken;
         clientId = credential_default_variable.clientId;
         terminalId = credential_default_variable.terminalId;
@@ -40,53 +40,54 @@ document.addEventListener("DOMContentLoaded", async function () {
         paymentMethods = credential_default_variable.paymentMethods;
         gatewayVersion = credential_default_variable.gatewayVersion;
 
-      }
-    
-      encodedPaymentMethods = encodeURIComponent(paymentMethods);
-      const paymentId = getQueryParam("id");
+    }
 
-      if (!paymentId) {
+    encodedPaymentMethods = encodeURIComponent(paymentMethods);
+    const paymentId = getQueryParam("id");
+
+    if (!paymentId) {
         document.getElementById("payment-status").innerHTML =
-          '<div class="alert alert-danger">ID do pagamento não encontrado.</div>';
+        '<div class="alert alert-danger">ID do pagamento não encontrado.</div>';
         return;
-      }
+    }
 
-      const version = gatewayVersion === "1" ? "v1" : "v2";
-      const apiUrl = `https://spg.qly.site1.sibs.pt/api/${version}/payments/${paymentId}/status`;
-      
-      let token_payment
-      let clientId_payment
+    const version = gatewayVersion === "1" ? "v1" : "v2";
+    const apiUrl = `https://spg.qly.site1.sibs.pt/api/${version}/payments/${paymentId}/status`;
 
-      if(useDefault == "0"){
+    let token_payment
+    let clientId_payment
+
+    if(useDefault == "0"){
         token_payment = credential_config_variable.bearerToken;
         clientId_payment = credential_config_variable.clientId;
 
-      }else{
+    }else{
         token_payment = credential_default_variable.bearerToken;
         clientId_payment = credential_default_variable.clientId;
-      }
-      const headers = {
+    }
+
+    const headers = {
         Authorization: `Bearer ${token_payment}`,
         "X-IBM-Client-Id": clientId_payment,
         "Content-Type": "application/json",
         Accept: "application/json",
-      };
+    };
 
-      try {
+    try {
         const response = await fetch(apiUrl, {
-          method: "GET",
-          headers: headers,
+        method: "GET",
+        headers: headers,
         });
 
         // Mostrar os headers da resposta no debug
         let headersObj = {};
         response.headers.forEach((value, key) => {
-          headersObj[key] = value;
+            headersObj[key] = value;
         });
         document.getElementById("debug-headers").textContent = JSON.stringify(headersObj, null, 2);
 
         if (!response.ok) {
-          throw new Error(`Erro na requisição: ${response.status}`);
+            throw new Error(`Erro na requisição: ${response.status}`);
         }
 
         const data = await response.json();
@@ -94,7 +95,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         // Mostrar o corpo da resposta no debug
         document.getElementById("debug-body").textContent = JSON.stringify(data, null, 2);
 
-       if (data.paymentStatus === "Success") {
+        if (data.paymentStatus === "Success") {
         document.getElementById("payment-status").innerHTML = `
             <div class="card border-0 shadow-lg mx-auto mt-3" style="max-width: 750px; border-radius: 20px; overflow: hidden;">
                 <div class="row g-0">
@@ -109,7 +110,6 @@ document.addEventListener("DOMContentLoaded", async function () {
                     <div class="col-md-8 p-5">
                         <h3 class="fw-bold text-dark mb-2">Pagamento Confirmado</h3>
                         <p class="text-muted mb-4">A sua transação foi concluída com sucesso.</p>
-                        
                         <div class="p-3 bg-light rounded-3 mb-4">
                             <div class="d-flex justify-content-between align-items-center mb-1">
                                 <span class="text-muted small fw-bold">ID DA TRANSAÇÃO</span>
@@ -153,7 +153,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                     <div class="col-md-8 p-5">
                         <h3 class="fw-bold text-dark mb-2">Falha no Pagamento</h3>
                         <p class="text-muted mb-4">Infelizmente, não foi possível realizar esta operação.</p>
-                        
+
                         <div class="alert alert-danger border-0 p-3 mb-4" style="background: #fff1f2; border-left: 4px solid #ef4444 !important; border-radius: 8px;">
                             <p class="small fw-bold mb-1" style="color: #991b1b;">MOTIVO DA RECUSA:</p>
                             <span class="small" style="color: #b91c1c;">${data.transactionStatusDescription || "Erro de comunicação com o gateway."}</span>
@@ -164,13 +164,13 @@ document.addEventListener("DOMContentLoaded", async function () {
             </div>
         `;
     }
-      } catch (error) {
+    } catch (error) {
         console.error("Erro ao buscar status do pagamento:", error);
         document.getElementById("payment-status").innerHTML =
-          '<div class="alert alert-danger">Erro ao buscar status do pagamento.</div>';
+        '<div class="alert alert-danger">Erro ao buscar status do pagamento.</div>';
 
         // No erro também limpar ou informar o debug
         document.getElementById("debug-headers").textContent = "";
         document.getElementById("debug-body").textContent = error.message;
-      }
+        }
     });
