@@ -34,13 +34,13 @@
       return urlParams.get(param);
     }
 
-    const PagamentoMBWAY_documentacao = getQueryParam("PagamentoMBWAY");
-    const PagamentoRefereciasMB_documentacao = getQueryParam("PagamentoRefereciasMB");
-    const PagamentoCartao_documentacao = getQueryParam("PagamentoCartao");
-    const PagamentoServerToServerMBWAY_documentacao = getQueryParam("PagamentoServerToServerMBWAY");
-    const PagamentoServerToServer_documentacao = getQueryParam("PagamentoServerToServer");
-    const RefereciasMB_documentacao = getQueryParam("RefereciasMB");
-    const PA_trigger_documentacao = getQueryParam("PA_trigger");
+    let PagamentoMBWAY_documentacao = getQueryParam("PagamentoMBWAY");
+    let PagamentoRefereciasMB_documentacao = getQueryParam("PagamentoRefereciasMB");
+    let PagamentoCartao_documentacao = getQueryParam("PagamentoCartao");
+    let PagamentoServerToServerMBWAY_documentacao = getQueryParam("PagamentoServerToServerMBWAY");
+    let PagamentoServerToServer_documentacao = getQueryParam("PagamentoServerToServerReferencia");
+    let RefereciasMB_documentacao = getQueryParam("RefereciasMB");
+    let PA_trigger_documentacao = getQueryParam("PA_trigger");
 
     if (PagamentoMBWAY_documentacao == "1") {
       PA_trigger = 0;
@@ -48,13 +48,21 @@
     }
 
     if (PagamentoCartao_documentacao == "1") {
-      document.getElementById("payment-method").value = "CARD";
       PA_trigger = 0;
       makePayment();
     }
 
     if (PagamentoRefereciasMB_documentacao == "1") {
-      document.getElementById("payment-method").value = "REFERENCE";
+      PA_trigger = 0;
+      makePayment();
+    }
+
+    if (PagamentoServerToServerMBWAY_documentacao == "1") {
+      PA_trigger = 0;
+      makePayment();
+    }
+
+    if (PagamentoServerToServer_documentacao == "1") {
       PA_trigger = 0;
       makePayment();
     }
@@ -102,6 +110,18 @@
         LayoutVersion = credential_default_variable.LayoutVersion
         pagamentosAutorizados = credential_default_variable.pagamentosAutorizados
 
+      }
+
+      if (PagamentoMBWAY_documentacao == "1" || PagamentoServerToServerMBWAY_documentacao == "1") {
+        paymentMethodsParam = ["1"];
+      }
+
+      if (PagamentoCartao_documentacao == "1") {
+        paymentMethodsParam = ["3"];
+      }
+
+      if (PagamentoRefereciasMB_documentacao == "1" || PagamentoServerToServer_documentacao == "1") {
+        paymentMethodsParam = ["2"];
       }
 
       if (AllMethodsPay == "1") {
@@ -244,8 +264,7 @@
           paymentform.style.display = 'block';
       }
 
-      const PagamentoServerToServerMBWAY_documentacao = getQueryParam("PagamentoServerToServerMBWAY");
-      const PagamentoServerToServer_documentacao = getQueryParam("PagamentoServerToServer");
+      //FALTA ESTES MÉTODOS DE PAGAMENTO
       const PA_trigger_documentacao = getQueryParam("PA_trigger");
 
       let token;
@@ -295,24 +314,42 @@
         MITs = credential_default_variable.MITs;
         pagamentosAutorizados = credential_default_variable.pagamentosAutorizados;
         VersionpagamentosAutorizados = credential_default_variable.VersionpagamentosAutorizados;
-
       }
 
       const amountValue = parseFloat(document.getElementById("amount").value);
-      const selectedMethod = document.getElementById("payment-method").value;
+      let selectedMethod
+
+      selectedMethod = document.getElementById("payment-method").value;
 
       if (PagamentoMBWAY_documentacao == "1") {
         selectedMethod = "MBWAY";
+        AllMethodsPay = 0;
       }
 
       if (PagamentoRefereciasMB_documentacao == "1") {
         selectedMethod  = "REFERENCE";
+        AllMethodsPay = 0;
       }
 
       if (PagamentoCartao_documentacao == "1") {
         selectedMethod = "CARD";
+        AllMethodsPay = 0;
       }
 
+      if (PagamentoServerToServerMBWAY_documentacao == "1") {
+        selectedMethod = "MBWAY";
+        credential_default_variable.ServerToServer = "1";
+        credential_config_variable.ServerToServer = "1";
+        AllMethodsPay = 0;
+      }
+
+      if (PagamentoServerToServer_documentacao == "1") {
+        selectedMethod = "REFERENCE";
+        credential_default_variable.ServerToServer = "1";
+        credential_config_variable.ServerToServer = "1";
+        AllMethodsPay = 0;
+      }
+    
 
       const placeholder = document.getElementById('loader-placeholder');
       if (placeholder) {
@@ -524,6 +561,8 @@
 
         data = await response.json();
 
+        window.history.replaceState({}, document.title, window.location.pathname);
+
         if (data.transactionID && data.formContext) {
           generatePaymentForm(
             data.transactionID,
@@ -626,6 +665,7 @@
 
     //função que gera o form (logo a seguir ao checkout)
     function generatePaymentForm(transactionID, formContext, transactionSignature, data, paymentMethodArray) {
+
       const formContainer = document.getElementById("payment-form");
       formContainer.innerHTML = "";
 
@@ -963,6 +1003,15 @@
         };
       }
 
+      if (PagamentoServerToServerMBWAY_documentacao == "1" || PagamentoServerToServer_documentacao == "1" || PagamentoMBWAY_documentacao == "1" || PagamentoCartao_documentacao == "1" || PagamentoRefereciasMB_documentacao == "1") {
+          credential_default_variable.ServerToServer = "0";
+          credential_config_variable.ServerToServer = "0";
+          PagamentoServerToServerMBWAY_documentacao = "0";
+          PagamentoServerToServer_documentacao = "0";
+          PagamentoMBWAY_documentacao = "0"; 
+          PagamentoCartao_documentacao = "0"; 
+          PagamentoRefereciasMB_documentacao = "0";
+      }
 
       //para o corpo do debug (debug - body do checkout)
       const debugHeaders = {

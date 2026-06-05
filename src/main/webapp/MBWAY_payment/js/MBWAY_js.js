@@ -125,13 +125,13 @@
                 <div class="col-md-8 p-5 bg-white text-start">
                     <h2 class="fw-bold text-dark mb-3">O tempo limite foi atingido</h2>
                     <p class="text-muted fs-5 mb-4">
-                       O pagamento MBWAY gerado expirou.
+                       O pagamento MB WAY gerado expirou.
                     </p>
                     
                     <div class="alert border-0 p-3 mb-4" style="background: #fffaf5; border-left: 5px solid #f97316 !important;">
                         <span class="small text-dark">
                             <i class="fa-solid fa-circle-info me-2"></i>
-                            Por favor, gerar um novo pedido MBWAY.
+                            Por favor, gerar um novo pedido MB WAY.
                         </span>
                     </div>
                 </div>
