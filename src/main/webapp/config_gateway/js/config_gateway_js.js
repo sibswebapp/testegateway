@@ -64,13 +64,27 @@
 
       const hasCardSelected = selectedOptions.includes("3") || selectedOptions.includes("CARD");
       const hasMultibancoSelected = selectedOptions.includes("2") || selectedOptions.includes("REFERENCE");
+      const hasMBWAYSelected = selectedOptions.includes("1") || selectedOptions.includes("MBWAY");
+
       const terminalDefault = document.getElementById("defaultToggle").checked;
 
       const toggleContainer = document.getElementById("dummyCustomerToggleContainer");
       const inputEntity = document.getElementById("inputEntity");
       const inputReferenceExpiry = document.getElementById("inputReferenceExpiry");
 
+      const inputMBWAYPREFILL = document.getElementById("inputMBWAYPREFILL");
+      const LayoutMBWAYNumberPrefillChecked = document.getElementById("LayoutMBWAYNumberPrefillChecked");
+
+
       toggleContainer.style.display = hasCardSelected ? "block" : "none";
+
+      if(hasMBWAYSelected){
+        inputMBWAYPREFILL.classList.remove("d-none");
+        LayoutMBWAYNumberPrefillChecked.classList.remove("d-none");
+      }else{
+        inputMBWAYPREFILL.classList.add("d-none");
+        LayoutMBWAYNumberPrefillChecked.classList.add("d-none");
+      }
 
       if (hasMultibancoSelected && !terminalDefault) {
         inputEntity.classList.remove("d-none");
@@ -121,7 +135,6 @@
         paymentMethodsText.style.display = "none";
 
         document.getElementById("dummyCustomerToggleContainer").style.display = "none";
-        document.getElementById("ServerToServerContainer").style.display = "none";
         inputReferenceExpiry.classList.remove("d-none");
 
       } else {
@@ -131,7 +144,6 @@
         paymentMethods.style.display = "block";
 
         document.getElementById("dummyCustomerToggleContainer").style.display = "block";
-        document.getElementById("ServerToServerContainer").style.display = "block";
         handlePaymentMethodChange();
       }
     }
@@ -149,7 +161,6 @@
         paymentMethodsLabels.style.display = "none";
         paymentMethodsText.style.display = "none";
         document.getElementById("dummyCustomerToggleContainer").style.display = "none";
-        document.getElementById("ServerToServerContainer").style.display = "none";
         inputReferenceExpiry.classList.remove("d-none");
       } else {
         checkbox.checked = false;
@@ -157,7 +168,6 @@
         paymentMethodsLabels.style.display = "block";
         paymentMethodsText.style.display = "block";
         document.getElementById("dummyCustomerToggleContainer").style.display = "block";
-        document.getElementById("ServerToServerContainer").style.display = "block";
         handlePaymentMethodChange();
       }
     }
@@ -244,10 +254,13 @@
       let gatewayVersion = document.getElementById("gatewayVersion").value;
       let typeOfPayment = document.getElementById("typeOfPayment").value;
       let LayoutVersion = document.getElementById("LayoutVersion").value;
-      let VersionMITS = "0"; //document.getElementById('VersionMITS').value;
-      let MITs = "0"; //document.getElementById('MITs').checked ? 1 : 0;
+      let VersionMITS = document.getElementById('VersionMITS').value;
+      let MITs = document.getElementById('MITSchecked').checked ? 1 : 0;
       let VersionpagamentosAutorizados = document.getElementById('VersionpagamentosAutorizados').value;
       let pagamentosAutorizados = document.getElementById('pagamentosAutorizadoschecked').checked ? 1 : 0;
+      let MBWAYPREFILL = document.getElementById('MBWAYPREFILL').value;
+      let MBWAYNumberPrefillchecked = document.getElementById('MBWAYNumberPrefillchecked').checked ? 1 : 0;
+
 
       const methods = Array.from(document.getElementById('paymentMethods').selectedOptions).map(opt => opt.value);
       const AllMethodsPay = document.getElementById('AllMethodsPay').checked ? 1 : 0;
@@ -279,6 +292,15 @@
         ServerToServer = 0;
       }
 
+      if (MBWAYNumberPrefillchecked && !MBWAYPREFILL) {
+          showErrorModal('O campo "Insira o seu número de telefone" é obrigatório quando a opção "Ativar Número de MB WAY pré preenchido" está ativo.');
+          return;
+      }
+
+      if (!MBWAYNumberPrefillchecked) {
+          MBWAYPREFILL = "";
+      }
+
       if(!methods.includes('2') && !AllMethodsPay){
         entity = "";
         referenceExpiry = "";
@@ -303,7 +325,9 @@
         MITs: MITs,
         VersionMITS: VersionMITS,
         pagamentosAutorizados: pagamentosAutorizados,
-        VersionpagamentosAutorizados: VersionpagamentosAutorizados
+        VersionpagamentosAutorizados: VersionpagamentosAutorizados,
+        MBWAYNumberPrefillchecked: MBWAYNumberPrefillchecked,
+        MBWAYPREFILL: MBWAYPREFILL
       };
 
       localStorage.setItem('credential_config', JSON.stringify(credential_obj));
@@ -327,11 +351,13 @@
       let gatewayVersion
       let typeOfPayment
       let LayoutVersion
-      //let MITs
-      //let VersionMITS
+      let MITs
+      let VersionMITS
       let pagamentosAutorizados
       let VersionpagamentosAutorizados
-    
+      let MBWAYNumberPrefillchecked
+      let MBWAYPREFILL
+
       if(useDefault == "1"){
         checkbox_option = credentialDefaultObj.useDefaultConfig;
         savedMethods = credentialDefaultObj.paymentMethods;
@@ -342,10 +368,12 @@
         gatewayVersion = credentialDefaultObj.gatewayVersion;
         typeOfPayment = credentialDefaultObj.typeOfPayment;
         LayoutVersion = credentialDefaultObj.LayoutVersion;
-        //MITs = credentialDefaultObj.MITs;
-        //VersionMITS = credentialDefaultObj.VersionMITS;
+        MITs = credentialDefaultObj.MITs;
+        VersionMITS = credentialDefaultObj.VersionMITS;
         pagamentosAutorizados = credentialDefaultObj.pagamentosAutorizados;
         VersionpagamentosAutorizados = credentialDefaultObj.VersionpagamentosAutorizados;
+        MBWAYNumberPrefillchecked = credentialDefaultObj.MBWAYNumberPrefillchecked;
+        MBWAYPREFILL = credentialDefaultObj.MBWAYPREFILL;
 
       }else{
         checkbox_option = credential_config_variable.useDefaultConfig;
@@ -357,11 +385,12 @@
         gatewayVersion = credential_config_variable.gatewayVersion;
         typeOfPayment = credential_config_variable.typeOfPayment;
         LayoutVersion = credential_config_variable.LayoutVersion;
-        //MITs = credential_config_variable.MITs;
-        //VersionMITS = credential_config_variable.VersionMITS;
+        MITs = credential_config_variable.MITs;
+        VersionMITS = credential_config_variable.VersionMITS;
         pagamentosAutorizados = credential_config_variable.pagamentosAutorizados;
         VersionpagamentosAutorizados = credential_config_variable.VersionpagamentosAutorizados;
-      
+        MBWAYNumberPrefillchecked = credential_config_variable.MBWAYNumberPrefillchecked;
+        MBWAYPREFILL = credential_config_variable.MBWAYPREFILL;
       }
 
       checkbox.checked = checkbox_option === "true" || checkbox_option === true || checkbox_option === 1 || checkbox_option === "1" ;
@@ -378,10 +407,12 @@
         document.getElementById('gatewayVersion').value = credential_config_variable.gatewayVersion;
         document.getElementById('typeOfPayment').value = credential_config_variable.typeOfPayment;
         document.getElementById('LayoutVersion').value = credential_config_variable.LayoutVersion;
-        //document.getElementById('MITs').value = credential_config_variable.MITs;
-        //document.getElementById('VersionMITS').value = credential_config_variable.VersionMITS;
+        document.getElementById('MITSchecked').value = credential_config_variable.MITs;
+        document.getElementById('VersionMITS').value = credential_config_variable.VersionMITS;
         document.getElementById('pagamentosAutorizadoschecked').value = credential_config_variable.pagamentosAutorizados;
         document.getElementById('VersionpagamentosAutorizados').value = credential_config_variable.VersionpagamentosAutorizados;
+        document.getElementById('MBWAYNumberPrefillchecked').value = credential_config_variable.MBWAYNumberPrefillchecked;
+        document.getElementById('MBWAYPREFILL').value = credential_config_variable.MBWAYPREFILL;
       }
 
       if(useDefault){
@@ -391,12 +422,12 @@
 
       //document.getElementById("LayoutVersionMITS").style.display = "block";
 
-      /*if (MITs == "1") {
-        document.getElementById('MITs').checked = true;
+      if (MITs == "1") {
+        document.getElementById('MITSchecked').checked = true;
       } else {
-        document.getElementById('MITs').checked = false;
+        document.getElementById('MITSchecked').checked = false;
         document.getElementById("LayoutVersionMITS").style.display = "none";
-      }*/
+      }
 
         //document.getElementById("LayoutVersionMITS").style.display = "block";
 
@@ -407,6 +438,14 @@
         document.getElementById("LayoutVersionpagamentosAutorizados").style.display = "none";
       }
 
+      if (MBWAYNumberPrefillchecked == "1") {
+        document.getElementById('MBWAYNumberPrefillchecked').checked = true;
+      } else {
+        document.getElementById('MBWAYNumberPrefillchecked').checked = false;
+        document.getElementById("LayoutMBWAYNumberPrefill").style.display = "none";
+        document.getElementById("LayoutMBWAYNumberPrefillChecked").style.display = "none";
+      }
+
       const select = document.getElementById('paymentMethods');
       Array.from(select.options).forEach(opt => {
         opt.selected = savedMethods.includes(opt.value);
@@ -415,7 +454,7 @@
       toggleEntityField();
       handlePaymentMethodChange();
       toggleAllMethodsPayRestored(AllMethodsPay);
-      //toggleMITS();
+  
     }
 
     // Caso clicar no botão de voltar para tras, ele valida alguns pontos
@@ -450,14 +489,20 @@
 
     window.addEventListener('DOMContentLoaded', restoreFromLocalStorage);
 
-    //Função caso ele selecionar as MITs irá aparecer a checkbox
-    /*function toggleMITS(element) {
-      const paymentMethodsContainer = document.getElementById("LayoutVersionMITS");
-      paymentMethodsContainer.style.display = element.checked ? "block" : "none";
-    }*/
-
     //Função caso ele selecionar as pagamentos autorizados irá aparecer a checkbox
     function togglepagamentosAutorizados(element) {
       const paymentMethodsContainer = document.getElementById("LayoutVersionpagamentosAutorizados");
+      paymentMethodsContainer.style.display = element.checked ? "block" : "none";
+    }
+
+    //Função caso ele selecionar o numero MB WAY Prefill irá aparecer a checkbox
+    function toggleMBWAYNumberPrefill(element) {
+      const paymentMethodsContainer = document.getElementById("LayoutMBWAYNumberPrefill");
+      paymentMethodsContainer.style.display = element.checked ? "block" : "none";
+    }
+
+    //Função caso ele selecionar as MITs irá aparecer a checkbox
+    function toggleMITS(element) {
+      const paymentMethodsContainer = document.getElementById("LayoutVersionMITS");
       paymentMethodsContainer.style.display = element.checked ? "block" : "none";
     }

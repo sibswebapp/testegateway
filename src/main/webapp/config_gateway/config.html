@@ -61,6 +61,10 @@
             <li class="nav-item" role="presentation">
               <button class="nav-link" id="pagamentosAutorizados-tab" data-bs-toggle="tab" data-bs-target="#pagamentosAutorizados" type="button" role="tab">Pagamentos Autorizados</button>
             </li>
+
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="MITS-tab" data-bs-toggle="tab" data-bs-target="#MITS" type="button" role="tab">MITs</button>
+            </li>
           </ul>
 
           <!-- Tab panes -->
@@ -105,27 +109,36 @@
                   </div>
                 </div>
 
+                <div class="col" id="LayoutMBWAYNumberPrefillChecked">
+                  <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="MBWAYNumberPrefillchecked" onchange="toggleMBWAYNumberPrefill(this);">
+                    <label class="form-check-label" for="MBWAYNumberPrefillchecked">
+                      Ativar Número de MB WAY pré preenchido
+                    </label>
+                  </div>
+                </div>
+
               </div>
 
 
               <!--Inputs restantes-->
               <div class="mb-4" id="inputTerminalId">
-                <label for="terminalId" class="form-label">Terminal ID:</label>
+                <label for="terminalId" class="form-label">Terminal ID <strong style="color: #ff5d5d;">*</strong>:</label>
                 <input type="number" id="terminalId" class="form-control" placeholder="Insira o terminal ID fornecido pela SIBS">
               </div>
 
               <div class="mb-4" id="inputClientId">
-                <label for="clientId" class="form-label">Client ID:</label>
+                <label for="clientId" class="form-label">Client ID <strong style="color: #ff5d5d;">*</strong>:</label>
                 <input type="text" id="clientId" class="form-control" placeholder="Insira o Client ID fornecido pela SIBS">
               </div>
 
               <div class="mb-4" id="inputBearerToken">
-                <label for="bearerToken" class="form-label">Bearer Token:</label>
+                <label for="bearerToken" class="form-label">Bearer Token <strong style="color: #ff5d5d;">*</strong>:</label>
                 <textarea id="bearerToken" class="form-control" rows="4" placeholder="Insira o Bearer Token via SIBS BackOffice"></textarea>
               </div>
 
               <div class="mb-4" id="paymentMethodsLabels">
-                <label class="form-label">Métodos de Pagamento:</label>
+                <label class="form-label">Métodos de Pagamento <strong style="color: #ff5d5d;">*</strong>:</label>
                 <div class="d-flex align-items-start gap-3 flex-wrap" id="paymentMethodsWrapper">
                   <div id="paymentMethodsContainer" style="flex: 1; min-width: 260px;">
                     <select id="paymentMethods" multiple class="form-select" onchange="handlePaymentMethodChange()">
@@ -137,7 +150,7 @@
                   </div>
 
                   <div id="LayoutVersionContainer" style="width: 220px;">
-                    <label for="LayoutVersion" class="form-label">Versão do Layout:</label>
+                    <label for="LayoutVersion" class="form-label">Versão do Layout <strong style="color: #ff5d5d;">*</strong>:</label>
                     <select id="LayoutVersion" class="form-select">
                       <option value="1" selected>spg_form_tabs</option>
                       <option value="2">spg_form</option>
@@ -145,14 +158,14 @@
                   </div>
 
                   <div id="gatewayVersionContainer" style="width: 220px;">
-                    <label for="gatewayVersion" class="form-label">Versão da Gateway:</label>
+                    <label for="gatewayVersion" class="form-label">Versão da Gateway <strong style="color: #ff5d5d;">*</strong>:</label>
                     <select id="gatewayVersion" class="form-select">
                       <option value="2" selected>v2</option>
                     </select>
                   </div>
 
                   <div id="typeOfPaymentContainer" style="width: 220px;">
-                    <label for="typeOfPayment" class="form-label">Tipo de pagamento:</label>
+                    <label for="typeOfPayment" class="form-label">Tipo de pagamento <strong style="color: #ff5d5d;">*</strong>:</label>
                     <select id="typeOfPayment" class="form-select">
                       <option value="1" selected>PURS</option>
                       <option value="2">AUTH</option>
@@ -162,8 +175,21 @@
                 </div>
               </div>
 
+              <div class="mb-4" >
+              
+              </div>
+
+              <div class="row align-items-center mb-4" id="inputMBWAYPREFILL">
+
+                <div class="col-md-12" id="LayoutMBWAYNumberPrefill">
+                  <label for="MBWAYPREFILL" class="form-label">Número de telefone <strong style="color: #ff5d5d;">*</strong>:</label>
+                  <input type="number" id="MBWAYPREFILL" class="form-control" placeholder="Insira o seu número de telefone">
+                </div>
+
+              </div>
+
               <div class="mb-4" id="inputReferenceExpiry">
-                <label for="referenceExpiry" class="form-label">Data de Expiração das Referências Bancárias:</label>
+                <label for="referenceExpiry" class="form-label">Data de Expiração das Referências Bancárias <strong style="color: #ff5d5d;">*</strong>:</label>
                 <div class="d-flex align-items-center gap-2">
                   <input type="number" id="referenceExpiry" class="form-control" placeholder="Ex: 24" style="flex: 1;" min="1" max="31" value="1" oninput="if(this.valueAsNumber > 31) this.value = 31; if(this.valueAsNumber < 1) this.value = 1;">
                   <select id="referenceExpiryUnit" class="form-select" style="width: 140px;">
@@ -175,7 +201,7 @@
               </div>
 
               <div class="mb-4" id="inputEntity">
-                <label for="entity" class="form-label">Entidade (Multibanco):</label>
+                <label for="entity" class="form-label">Entidade (Multibanco) <strong style="color: #ff5d5d;">*</strong>:</label>
                 <input type="text" id="entity" class="form-control" placeholder="Insira a entidade de pagamento">
               </div>
 
@@ -196,7 +222,7 @@
                 </div>
 
                 <div class="col-md-4" id="LayoutVersionpagamentosAutorizados">
-                  <label for="VersionpagamentosAutorizados" class="form-label fw-semibold">Tipo de pagamentos Autorizados:</label>
+                  <label for="VersionpagamentosAutorizados" class="form-label fw-semibold">Tipo de pagamentos Autorizados <strong style="color: #ff5d5d;">*</strong>:</label>
                   <select id="VersionpagamentosAutorizados" class="form-select">
                     <option value="1" selected>One Click</option>
                     <option value="2">Subscrição</option>
@@ -208,11 +234,45 @@
 
             </div>
             
+             <!-- MITS -->
+            <div class="tab-pane fade" id="MITS" role="tabpanel" aria-labelledby="MITS-tab">
+
+              <div class="row align-items-center mb-4">
+                  
+                <div class="col-md-3 mb-3 mb-md-0">
+                  <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="MITSchecked" onchange="toggleMITS(this);">
+                    <label class="form-check-label" for="MITSchecked">
+                      Ativar MITs
+                    </label>
+                  </div>
+                </div>
+
+                <div class="col-md-4" id="LayoutVersionMITS">
+                  <label for="VersionMITS" class="form-label fw-semibold">Tipo de MITs <strong style="color: #ff5d5d;">*</strong>:</label>
+                  <select id="VersionMITS" class="form-select">
+                    <option value="1" selected>UCOF</option>
+                    <option value="2">Recorrentes</option>
+                  </select>
+                </div>
+              </div>
+          
+              <br>
+
+            </div>
+
             <!--Botão de salvar os dados-->
             <button class="btn btn-primary w-100" onclick="saveConfig()">Guardar Configuração</button>
 
         </div>
       </div>
+      
+      <div class="mt-3">
+        <small class="text-muted">
+          ( <strong style="color: #ff5d5d;">*</strong> ) Campos obrigatórios.
+        </small>
+      </div>
+
   </main>
   
 

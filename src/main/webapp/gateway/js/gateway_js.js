@@ -17,7 +17,9 @@
       VersionMITS: "0",
       typeOfPayment: "1",
       VersionpagamentosAutorizados: "0",
-      pagamentosAutorizados: "0"
+      pagamentosAutorizados: "0",
+      MBWAYNumberPrefillchecked: "0",
+      MBWAYPREFILL: ""
     };
 
     localStorage.setItem('credential_default', JSON.stringify(credential_default));
@@ -34,13 +36,30 @@
       return urlParams.get(param);
     }
 
+    function updateAmountField() {
+
+      const amountField = document.getElementById("amount");
+      const paymentMethod = document.getElementById("payment-method").value;
+
+      if (
+          credential_config_variable.MITs == 1 &&
+          credential_config_variable.VersionMITS == 1 &&
+          paymentMethod != "MBWAY" &&
+          paymentMethod != "REFERENCE"
+      ) {
+          amountField.value = "0";
+          amountField.readOnly = true;
+      } else {
+          amountField.readOnly = false;
+          amountField.value = "1";
+      }
+    }
+
     let PagamentoMBWAY_documentacao = getQueryParam("PagamentoMBWAY");
     let PagamentoRefereciasMB_documentacao = getQueryParam("PagamentoRefereciasMB");
     let PagamentoCartao_documentacao = getQueryParam("PagamentoCartao");
     let PagamentoServerToServerMBWAY_documentacao = getQueryParam("PagamentoServerToServerMBWAY");
     let PagamentoServerToServer_documentacao = getQueryParam("PagamentoServerToServerReferencia");
-    let RefereciasMB_documentacao = getQueryParam("RefereciasMB");
-    let PA_trigger_documentacao = getQueryParam("PA_trigger");
 
     if (PagamentoMBWAY_documentacao == "1") {
       PA_trigger = 0;
@@ -112,6 +131,7 @@
 
       }
 
+
       if (PagamentoMBWAY_documentacao == "1" || PagamentoServerToServerMBWAY_documentacao == "1") {
         paymentMethodsParam = ["1"];
       }
@@ -150,11 +170,28 @@
       const select = document.getElementById("payment-method");
       select.innerHTML = "";
 
-      const methodMap = {
+      let methodMap
+
+      if(credential_config_variable.MITs == "1" && credential_config_variable.VersionMITS == "1"  ){
+        methodMap = {
+          "1": { label: "MB WAY", value: "MBWAY" },
+          "2": { label: "Multibanco", value: "REFERENCE" },
+          "3": { label: "Cartão (MITS UCOF)", value: "CARD" }
+        };
+      }else if(credential_config_variable.MITs == "1" && credential_config_variable.VersionMITS == "2"){
+        methodMap = {
+          "1": { label: "MB WAY", value: "MBWAY" },
+          "2": { label: "Multibanco", value: "REFERENCE" },
+          "3": { label: "Cartão (MITS Recorrentes)", value: "CARD" }
+        }
+      }else{
+        methodMap = {
           "1": { label: "MB WAY", value: "MBWAY" },
           "2": { label: "Multibanco", value: "REFERENCE" },
           "3": { label: "Cartão", value: "CARD" }
-      };
+        }
+      }
+      
 
       if (pagamentosAutorizados == 1) {
         methodMap["4"] = { label: "Criação Mandato", value: "PA" };
@@ -264,9 +301,6 @@
           paymentform.style.display = 'block';
       }
 
-      //FALTA ESTES MÉTODOS DE PAGAMENTO
-      const PA_trigger_documentacao = getQueryParam("PA_trigger");
-
       let token;
       let clientId;
       let terminalId;
@@ -278,45 +312,73 @@
       let LayoutVersion;
       let apiUrl;
       let MITs;
+      let VersionMITS;
       let pagamentosAutorizados;
       let VersionpagamentosAutorizados;
-
+      let MBWAYNumberPrefillchecked;
+      let MBWAYPREFILL;
 
       if(default_Configs == "0" && credential_config_variable.useDefaultConfig == "true"){
         token = credential_default_variable.bearerToken;
         clientId = credential_default_variable.clientId;
         terminalId = parseInt(credential_default_variable.terminalId);
         entity = String(credential_default_variable.entity);
+
       }else{
 
         token = credential_config_variable?.bearerToken ?? credential_default_variable?.bearerToken;
         clientId = credential_config_variable?.clientId ?? credential_default_variable?.clientId;
         terminalId =  parseInt(credential_config_variable?.terminalId ?? credential_default_variable?.terminalId);
         entity =  String(credential_config_variable?.entity ?? credential_default_variable?.entity);
+
       }
 
       if(credential_config_variable?.useDefaultConfig == "true"){
-        referenceExpiry = credential_config_variable.referenceExpiry;
-        referenceExpiryUnit = credential_config_variable.referenceExpiryUnit;
-        gatewayVersion = credential_config_variable.gatewayVersion;
-        typeOfPayment = credential_config_variable.typeOfPayment;
-        LayoutVersion = credential_config_variable.LayoutVersion;
-        MITs = credential_config_variable.MITs;
-        pagamentosAutorizados = credential_config_variable.pagamentosAutorizados;
-        VersionpagamentosAutorizados = credential_config_variable.VersionpagamentosAutorizados;
-
-      }else{
         referenceExpiry = credential_default_variable.referenceExpiry;
         referenceExpiryUnit = credential_default_variable.referenceExpiryUnit;
         gatewayVersion = credential_default_variable.gatewayVersion;
         typeOfPayment = credential_default_variable.typeOfPayment;
         LayoutVersion = credential_default_variable.LayoutVersion
-        MITs = credential_default_variable.MITs;
         pagamentosAutorizados = credential_default_variable.pagamentosAutorizados;
         VersionpagamentosAutorizados = credential_default_variable.VersionpagamentosAutorizados;
+        MBWAYNumberPrefillchecked = credential_default_variable.MBWAYNumberPrefillchecked;
+        MBWAYPREFILL = credential_default_variable.MBWAYPREFILL;
+
+      }else{
+       
+        referenceExpiry = credential_config_variable.referenceExpiry;
+        referenceExpiryUnit = credential_config_variable.referenceExpiryUnit;
+        gatewayVersion = credential_config_variable.gatewayVersion;
+        typeOfPayment = credential_config_variable.typeOfPayment;
+        LayoutVersion = credential_config_variable.LayoutVersion;
+        pagamentosAutorizados = credential_config_variable.pagamentosAutorizados;
+        VersionpagamentosAutorizados = credential_config_variable.VersionpagamentosAutorizados;
+        MBWAYNumberPrefillchecked = credential_config_variable.MBWAYNumberPrefillchecked;
+        MBWAYPREFILL = credential_config_variable.MBWAYPREFILL;
+
       }
 
-      const amountValue = parseFloat(document.getElementById("amount").value);
+      if(credential_config_variable.MBWAYNumberPrefillchecked == "1" ){
+        MBWAYNumberPrefillchecked = credential_config_variable.MBWAYNumberPrefillchecked ?? credential_default_variable?.MBWAYNumberPrefillchecked;
+        MBWAYPREFILL = credential_config_variable?.MBWAYPREFILL ?? credential_default_variable?.MBWAYPREFILL;
+      }
+
+      MITs = credential_default_variable.MITs;
+      VersionMITS = credential_default_variable.VersionMITS;
+
+      const amountLayout = document.getElementById("amountLayout");
+
+    
+      if (
+          credential_config_variable.MITs !== null &&
+          credential_config_variable.MITs !== "" &&
+          credential_config_variable.MITs !== 0
+      ) {
+          MITs = credential_config_variable.MITs;
+          VersionMITS = credential_config_variable.VersionMITS;
+      }
+
+      let amountValue = parseFloat(document.getElementById("amount").value);
       let selectedMethod
 
       selectedMethod = document.getElementById("payment-method").value;
@@ -364,8 +426,15 @@
       //caso o AllMethodsPay tiver a 1 então o array do payment Method fica vazio
       const paymentMethodArray = (AllMethodsPay == "1") ? [] : [selectedMethod];
 
+      if( MITs== "1" && VersionMITS == "1" && paymentMethodArray[0] == "CARD"){
+        amountLayout.classList.add("d-none");
+      }else{
+        amountLayout.classList.remove("d-none");
+      }
+
+
       const version = gatewayVersion === "1" ? "v1" : "v2";
-      const versionTypePayment = typeOfPayment === "1" ? "PURS" : "AUTH";
+      let versionTypePayment = typeOfPayment === "1" ? "PURS" : "AUTH";
 
       if(selectedMethod != "PA"){
         apiUrl = `https://spg.qly.site1.sibs.pt/api/${version}/payments`;
@@ -426,6 +495,10 @@
       const finalDatetimeStr = finalDatetime.toISOString();
       let requestData
 
+      if(MITs == "1" && VersionMITS == "1"){
+        amountValue = 0;
+        versionTypePayment = "AUTH";
+      }
 
       if (selectedMethod == "PA") {
 
@@ -533,9 +606,25 @@
         };
       }
 
+      if(MBWAYNumberPrefillchecked == "1"){
+        requestData.customer = {
+          extendedInfo: [
+            {
+              key: "PREFILL_MBWAY_ID",
+              value: MBWAYPREFILL
+            }
+          ]
+        };
+      }
+      
+
+
       if(MITs == "1" && selectedMethod == "CARD"){
+
+        VersionMITS = VersionMITS === "1" ? "UCOF" : "RCRR";
+
         requestData.merchantInitiatedTransaction = {
-          type: "PURS",
+          type: VersionMITS,
           amountQualifier: "ESTIMATED"
         }
       }
@@ -719,6 +808,13 @@
         redirectUrl = `${baseUrl}AllmethodsPayment/AllmethodsPayment.html`
       }
 
+      if (paymentMethodArray.length === 1 && paymentMethodArray[0] === "CARD" && credential_config_variable.MITs == "1" && credential_config_variable.VersionMITS == "1") {
+        redirectUrl = `${baseUrl}MITs/MITsUCOF.html`
+      }
+
+      if (paymentMethodArray.length === 1 && paymentMethodArray[0] === "CARD" && credential_config_variable.MITs == "1" && credential_config_variable.VersionMITS == "2") {
+        redirectUrl = `${baseUrl}MITs/MITsRCRR.html`
+      }
 
       const amount = parseFloat(document.getElementById("amount").value);
 
@@ -781,6 +877,12 @@
           phoneInput.className = "form-control text-center";
           phoneInput.placeholder = "Formato 351#915532562";
           phoneInput.style.maxWidth = "300px";
+
+          if (credential_config_variable?.MBWAYNumberPrefillchecked == "1") {
+            phoneInput.value = credential_config_variable?.MBWAYPREFILL
+                ? `351#${credential_config_variable.MBWAYPREFILL}`
+                : "";          
+          }
 
           phoneInput.addEventListener("input", function () {
             this.value = this.value.replace(/[^\d#]/g, "");
