@@ -56,7 +56,7 @@
                     <div id="step-header-1" class="step-item position-relative pe-3 step-active" onclick="goToStep(1)" style="z-index: 1; flex-shrink: 0;">
                         <div class="d-flex align-items-center shadow-sm px-3 py-2 rounded-pill border bg-white">
                             <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-2" style="width: 24px; height: 24px; font-size: 0.7rem;">1</div>
-                            <span class="small">Ativação</span>
+                            <span class="small">Cobrança (MITs)</span>
                         </div>
                     </div>
 
@@ -64,7 +64,7 @@
                     <div id="step-header-2" class="step-item position-relative px-3 step-inactive" onclick="goToStep(2)" style="z-index: 1; flex-shrink: 0;">
                         <div class="d-flex align-items-center px-3 py-2 rounded-pill border bg-white">
                             <div class="bg-secondary text-white rounded-circle d-flex align-items-center justify-content-center me-2" style="width: 24px; height: 24px; font-size: 0.7rem;">2</div>
-                            <span class="small">Cobrança</span>
+                            <span class="small">Captura da Cobrança</span>
                         </div>
                     </div>
 
@@ -81,8 +81,8 @@
                     </div>
                     <div class="small text-dark opacity-80 flex-grow-1 align-self-center" style="line-height: 1.5;">
                         <span class="fw-bold d-block mb-1" style="color: #15803d; font-size: 0.85rem; letter-spacing: 0.3px; text-uppercase: uppercase;">Validações e Regras Extra</span>
-                        Os Pagamentos Autorizados (Mandatos) possuem fluxos de verificação específicos e regras de negócio adicionais que devem ser validadas. Consulte os requisitos oficiais na 
-                        <a href="https://sibsonboarding.atlassian.net/servicedesk/customer/article/689864706?source=shareable-url" target="_blank" class="fw-bold text-decoration-none pb-0" style="color: #16a34a; border-bottom: 1px dashed #16a34a !important;">
+                        As MITs possuem fluxos de verificação específicos e regras de negócio adicionais que devem ser validadas. Consulte os requisitos oficiais na 
+                        <a href="https://www.docs.pay.sibs.com/portugal/sibs-gateway/sibs-backoffice/payment-gateway-management-2/mit/" target="_blank" class="fw-bold text-decoration-none pb-0" style="color: #16a34a; border-bottom: 1px dashed #16a34a !important;">
                             Documentação de Suporte SIBS <i class="fa-solid fa-arrow-up-right-from-square ms-1" style="font-size: 0.65rem;"></i>
                         </a>.
                     </div>
@@ -92,63 +92,118 @@
 
         <div id="step-content-1" class="step-content active">
             <div class="card border-0 shadow-lg mb-5" style="border-radius: 32px; overflow: hidden; background: #ffffff; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.08) !important;">
-                <div class="row g-0">
-                    <div class="col-lg-7 p-4 p-md-5">
-                        <div class="mb-4">
-                            <h4 class="fw-bold mb-1">Configurar Mandato</h4>
-                            <p class="text-muted small">Preencha os dados abaixo para iniciar a autorização.</p>
-                        </div>
-
-                        <div class="space-y-4">
-                            <div class="mb-4">
-                                <label class="form-label small fw-bold text-muted text-uppercase mb-2" style="letter-spacing: 0.5px;">Contacto MB WAY</label>
-                                <div class="position-relative">
-                                    <i class="bi bi-phone position-absolute top-50 start-0 translate-middle-y ms-3 text-muted"></i>
-                                    <input value="351#" type="text" id="CriarMandatoPhone" class="form-control form-control-lg border-0 bg-light ps-5 py-3" placeholder="351#9XXXXXXXX" style="border-radius: 16px; font-size: 1rem;">
-                                </div>
-                            </div>
-
-                            <div class="mb-4">
-                                <label class="form-label small fw-bold text-muted text-uppercase mb-2" style="letter-spacing: 0.5px;">Titular da Conta</label>
-                                <div class="position-relative">
-                                    <i class="bi bi-person position-absolute top-50 start-0 translate-middle-y ms-3 text-muted"></i>
-                                    <input type="text" id="CriarMandatoCustomerName" class="form-control form-control-lg border-0 bg-light ps-5 py-3" placeholder="Ex: Maria Pereira" style="border-radius: 16px; font-size: 1rem;">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="p-3 mb-4 d-flex align-items-start" style="background: #f8faff; border-radius: 18px; border: 1px solid #eef2ff;">
-                            <div class="bg-white shadow-sm rounded-circle p-2 me-3">
-                                <i class="bi bi-bell-fill text-primary"></i>
-                            </div>
-                            <div class="small text-dark opacity-75 leading-sm">
-                                Enviaremos um pedido de confirmação. Verifique as notificações na sua <strong>App MB WAY</strong> após clicar abaixo.
-                            </div>
-                        </div>
-
-                        <button class="btn btn-primary btn-lg w-100 py-3 shadow-sm border-0 transition-all" onclick="CriarMandato()" style="border-radius: 18px; font-weight: 700; background: linear-gradient(135deg, #4f46e5 0%, #3730a3 100%); transition: all 0.3s ease;">
-                            Ativar Pagamentos Autorizados
-                        </button>
+                <div class="container-fluid p-4" style="max-width: 1250px;">
+    
+                    <div class="mb-4 ps-2">
+                        <h4 class="fw-bold text-dark mb-1">
+                            <i class="bi bi-wallet2 text-primary me-2"></i> Submissão de Mandato MB WAY
+                        </h4>
+                        <p class="text-muted small mb-0">Gestão e ativação de fluxos de débito autorizado.</p>
                     </div>
 
-                    <div class="col-lg-5 p-4 p-md-5 d-flex flex-column" style="background: #0f172a; position: relative; overflow: hidden;">
-                        <div class="position-absolute top-0 end-0 bg-primary opacity-10 rounded-circle" style="width: 200px; height: 200px; margin: -50px;"></div>
+                    <div class="row g-4">
+                        
+                        <div class="col-xl-6 col-lg-6">
+                            <div class="card border-0 shadow-sm h-100" style="border-radius: 16px;">
+                                <div class="card-body p-4 p-md-5 d-flex flex-column justify-content-between">
+                                    <div>
+                                        <span class="text-primary small fw-bold text-uppercase tracking-wider d-block mb-4" style="font-size: 0.75rem;">01. Configuração</span>
+                                        
+                                        <div class="mb-4">
+                                            <label class="form-label text-secondary small fw-semibold">TransactionID (CIT)</label>
+                                            <div class="input-group border-bottom pb-1 custom-input-group">
+                                                <input 
+                                                    type="tel" 
+                                                    id="CriarMandatoPhone" 
+                                                    class="form-control bg-transparent border-0 shadow-none ps-2" 
+                                                    placeholder="9XXXXXXXX" 
+                                                    maxLength="9"
+                                                    style="font-size: 1rem;"
+                                                >
+                                            </div>
+                                        </div>
 
-                        <div class="position-relative z-1 text-white">
-                            <h6 class="small fw-bold text-uppercase opacity-50 mb-3" style="letter-spacing: 1px;">Estado em tempo real</h6>
-                            <div id="CriarMandatoPagamento" class="h2 fw-bold mb-1">Aguardando</div>
-                            <div id="statusCodeCriarMandato" class="badge bg-success bg-opacity-25 text-success rounded-pill px-3 py-2 mt-2" style="font-size: 0.7rem;">PRONTO PARA ENVIO</div>
+                                        <div class="mb-4">
+                                            <label class="form-label text-secondary small fw-semibold">Valor para cobrar</label>
+                                            <div class="border-bottom pb-1 custom-input-group">
+                                                <input 
+                                                    type="text" 
+                                                    id="CriarMandatoCustomerName" 
+                                                    class="form-control bg-transparent border-0 shadow-none px-2" 
+                                                    placeholder="Ex: Maria Silva"
+                                                    style="font-size: 1rem;"
+                                                >
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="pt-3">
+                                        <button 
+                                            class="btn btn-primary btn-lg w-100 py-3 fw-semibold d-flex align-items-center justify-content-center gap-2 shadow-sm" 
+                                            onclick="CriarMandato()" 
+                                            style="border-radius: 12px; font-size: 0.95rem;"
+                                        >
+                                            <span>Fazer Cobrança (MIT)</span>
+                                            <i class="bi bi-arrow-right small"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
-                        <div class="position-relative z-1 mt-5">
-                            <div class="d-flex align-items-center justify-content-between mb-3 text-white-50">
-                                <span class="small fw-bold text-uppercase">API Response</span>
-                                <i class="bi bi-code-square small"></i>
-                            </div>
-                            <div class="p-3" style="background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; backdrop-filter: blur(10px);">
-                                <pre id="bodyCompletoCriarMandato" class="m-0" style="color: #818cf8; font-family: 'Fira Code', monospace; font-size: 0.75rem; max-height: 230px; overflow-y: auto;">{}</pre>
+                        <div class="col-xl-6 col-lg-6">
+                            <div class="card border-0 shadow-sm h-100" style="border-radius: 16px; background: #fdfdfd;">
+                                <div class="card-body p-4 p-md-5 d-flex flex-column justify-content-between text-center">
+                                    <div>
+                                        <div class="d-flex align-items-center justify-content-between mb-4">
+                                            <span class="text-secondary small fw-bold text-uppercase" style="font-size: 0.75rem; letter-spacing: 0.5px;">02. Estado</span>
+                                            <i class="bi bi-broadcast text-primary app-pulse fs-5"></i>
+                                        </div>
+
+                                        <div class="py-4 d-flex flex-column align-items-center justify-content-center">
+                                            <div class="d-flex align-items-center gap-2 mb-2 p-2 px-3 bg-primary-subtle rounded-pill waiting-pulse">
+                                                <span class="spinner-grow spinner-grow-sm text-primary" role="status"></span>
+                                                <span id="CriarMandatoPagamento" class="fw-semibold text-primary small text-uppercase tracking-wider">
+                                                    Aguardando Ação
+                                                </span>
+                                            </div>
+                                            <p class="text-muted small mb-0">Aguardando envio do formulário...</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="bg-light p-2 rounded-3 border">
+                                        <span id="statusCodeCriarMandato" class="text-secondary small fw-medium" style="font-size: 0.8rem; letter-spacing: 0.5px;">
+                                            PRONTO PARA ENVIO
+                                        </span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
+
+                        <div class="col-xl-12 col-lg-12">
+                            <div class="card border-0 shadow-sm h-100" style="border-radius: 16px; background: #fafafa;">
+                                <div class="card-body p-4 d-flex flex-column">
+                                    <div class="d-flex align-items-center justify-content-between mb-3">
+                                        <span class="text-secondary small fw-bold text-uppercase" style="font-size: 0.75rem;">03. Resposta da API</span>
+                                        <span class="badge bg-white text-muted border fw-normal" style="font-size: 0.7rem; border-radius: 6px;">JSON</span>
+                                    </div>
+                                    
+                                    <div class="flex-grow-1" style="min-height: 220px;">
+                                        <pre id="bodyCompletoCriarMandato" class="w-100 h-100 m-0" style="
+                                            background: #0f172a; 
+                                            color: #38bdf8; 
+                                            border-radius: 12px; 
+                                            padding: 18px; 
+                                            font-family: SFMono-Regular, Menlo, Monaco, Consolas, monospace; 
+                                            font-size: 0.8rem;
+                                            max-height: 250px;
+                                            overflow: auto;
+                                        ">{}</pre>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -205,34 +260,23 @@
         </div>
 
         <div class="row g-4">
-            <div class="col-md-4">
-                <div class="card border-0 shadow-sm p-4 h-100 transition-all bg-white hover-card" style="border-radius: 24px; border: 1px solid #f1f5f9 !important;">
-                    <div class="rounded-4 d-flex align-items-center justify-content-center mb-3" style="width: 52px; height: 52px; background: #fff7ed; color: #f97316;">
-                        <i class="bi bi-text-left  fs-4"></i>
-                    </div>
-                    <h6 class="fw-bold mb-2">Detalhes Mandato</h6>
-                    <p class="small text-muted mb-4">Ver os detalhes de um mandato de forma simples.</p>
-                    <button class="btn btn-light btn-sm w-100 py-2 fw-bold rounded-pill" data-bs-toggle="modal" data-bs-target="#modalDetalhesMandatos">Ver detalhes</button>
-                </div>
-            </div>
-
-            <div class="col-md-4">
+            <div class="col-md-6">
                 <div class="card border-0 shadow-sm p-4 h-100 transition-all bg-white hover-card" style="border-radius: 24px; border: 1px solid #f1f5f9 !important;">
                     <div class="rounded-4 d-flex align-items-center justify-content-center mb-3" style="width: 52px; height: 52px; background: #f0fdf4; color: #22c55e;">
                         <i class="bi bi-activity fs-4"></i>
                     </div>
-                    <h6 class="fw-bold mb-2">Mandatos Ativos</h6>
+                    <h6 class="fw-bold mb-2">Reembolso da Cobrança</h6>
                     <p class="small text-muted mb-4">Visualize todas as autorizações recorrentes pendentes ou ativas.</p>
                     <button class="btn btn-light btn-sm w-100 py-2 fw-bold rounded-pill" data-bs-toggle="modal" data-bs-target="#modalMandatosAtivos">Listar Todos</button>
                 </div>
             </div>
 
-            <div class="col-md-4">
+            <div class="col-md-6">
                 <div class="card border-0 shadow-sm p-4 h-100 transition-all bg-white hover-card" style="border-radius: 24px; border: 1px solid #f1f5f9 !important;">
                     <div class="rounded-4 d-flex align-items-center justify-content-center mb-3" style="width: 52px; height: 52px; background: #fef2f2; color: #ef4444;">
                         <i class="bi bi-trash3 fs-4"></i>
                     </div>
-                    <h6 class="fw-bold mb-2">Cancelar Mandato</h6>
+                    <h6 class="fw-bold mb-2">Cancelar CIT</h6>
                     <p class="small text-muted mb-4">Cancele autorizações MB WAY de clientes de forma imediata.</p>
                     <button class="btn btn-outline-danger btn-sm w-100 py-2 fw-bold rounded-pill" data-bs-toggle="modal" data-bs-target="#modalCancelarMandatos">Desativar Agora</button>
                 </div>

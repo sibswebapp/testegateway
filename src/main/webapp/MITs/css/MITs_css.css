@@ -91,3 +91,21 @@ html, body {
     .step-inactive {
         opacity: 0.5;
     }
+
+    .custom-input-group {
+      transition: border-color 0.2s ease-in-out;
+    }
+
+    .custom-input-group:focus-within {
+      border-color: #0d6efd !important; /* Cor primária do Bootstrap ao focar */
+    }
+    
+    @keyframes appPulse {
+      0% { opacity: 0.4; }
+      50% { opacity: 1; }
+      100% { opacity: 0.4; }
+    }
+
+    .app-pulse {
+      animation: appPulse 2s infinite ease-in-out;
+    }

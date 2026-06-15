@@ -443,8 +443,14 @@
       } else {
         document.getElementById('MBWAYNumberPrefillchecked').checked = false;
         document.getElementById("LayoutMBWAYNumberPrefill").style.display = "none";
+      }
+
+
+      if (!savedMethods.includes("1")) {
         document.getElementById("LayoutMBWAYNumberPrefillChecked").style.display = "none";
       }
+
+    
 
       const select = document.getElementById('paymentMethods');
       Array.from(select.options).forEach(opt => {

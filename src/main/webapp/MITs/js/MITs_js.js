@@ -1,7 +1,6 @@
 window.addEventListener("DOMContentLoaded", () => {
   const params = new URLSearchParams(window.location.search);
 
-
   const modalDetalhes = document.getElementById('modalDetalhesMandatos');
 
   modalDetalhes.addEventListener('hidden.bs.modal', function () {
