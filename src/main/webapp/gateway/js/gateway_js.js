@@ -97,6 +97,86 @@
         }
     });
 
+    // Abrir/Fechar a barra lateral
+    function toggleSidebar() {
+        document.getElementById('colorSidebar').classList.toggle('active');
+    }
+
+    // Função chamada automaticamente sempre que o utilizador mexe numa roda de cores
+    function updateSibsStyles() {
+        // 1. Atualiza o texto hexadecimal escrito ao lado de cada input color
+        const mapping = {
+            'checkoutPrimaryColor': 'c-primary',
+            'bodyBgColor': 'c-border',
+            'checkoutSurfaceColor': 'c-surface',
+            'bodyTextColor': 'c-body-text'
+        };
+
+        // Atualiza os hexadecimais na interface da sidebar (apenas visual)
+        Object.keys(mapping).forEach(id => {
+            const input = document.getElementById(id);
+            if (input) {
+                // Se tiveres um elemento de texto ao lado para mostrar o HEX
+                const hexSpan = input.nextElementSibling;
+                if (hexSpan && hexSpan.classList.contains('color-hex')) {
+                    hexSpan.innerText = input.value.toUpperCase();
+                }
+            }
+        });
+
+        // 2. O GATILHO DINÂMICO: Se já houver um checkout gerado no ecrã, redesenha-o com a nova cor!
+        if (typeof lastActiveTransaction !== "undefined" && lastActiveTransaction !== null) {
+            generatePaymentForm(
+                lastActiveTransaction.transactionID,
+                lastActiveTransaction.formContext,
+                lastActiveTransaction.transactionSignature,
+                lastActiveTransaction.data,
+                lastActiveTransaction.paymentMethodArray
+            );
+        }
+    }
+
+    // Reseta o painel para os valores padrão
+    function resetSibsStyles() {
+        document.getElementById('checkoutPrimaryColor').value = '#2563eb';
+        document.getElementById('checkoutSurfaceColor').value = '#FFFFFF';
+        document.getElementById('bodyBgColor').value = '#FFFFFF';
+        document.getElementById('bodyTextColor').value = '#000000';
+
+       const Reset = 1;
+
+        updateSibsStyles();
+        guardarConfiguracao(Reset);
+    }
+
+    // Inicializa os textos hex no primeiro carregamento
+    document.addEventListener("DOMContentLoaded", () => {
+
+      const configuracao = JSON.parse(
+        localStorage.getItem("checkoutThemeConfig") || "{}"
+      );
+
+      if (configuracao.primaryColor)
+          document.getElementById("checkoutPrimaryColor").value = configuracao.primaryColor;
+
+      if (configuracao.surfaceColor)
+          document.getElementById("checkoutSurfaceColor").value = configuracao.surfaceColor;
+
+      if (configuracao.textColor)
+          document.getElementById("checkoutTextColor").value = configuracao.textColor;
+
+      if (configuracao.bodyBgColor)
+          document.getElementById("bodyBgColor").value = configuracao.bodyBgColor;
+
+      if (configuracao.bodyTextColor)
+          document.getElementById("bodyTextColor").value = configuracao.bodyTextColor;
+
+      if (configuracao.familyTypeText)
+          document.getElementById("familyTypeText").value = configuracao.familyTypeText;
+
+      updateSibsStyles();
+
+    });
 
     //Função para mascarar string
     function maskValue(value) {
@@ -287,6 +367,8 @@
 
       return true;
     }
+
+    let lastActiveTransaction = null;
 
     //função que faz o pagamento (checkout)
     async function makePayment() {
@@ -495,9 +577,13 @@
       const finalDatetimeStr = finalDatetime.toISOString();
       let requestData
 
-      if(MITs == "1" && VersionMITS == "1"){
+      if(MITs == "1" && VersionMITS == "1" && paymentMethodArray[0] == "CARD"){
         amountValue = 0;
         versionTypePayment = "AUTH";
+      }
+
+      if(MITs == "1" && VersionMITS == "1" && (paymentMethodArray[0] == "REFERENCE" || paymentMethodArray[0] == "MBWAY") && amountValue == 0){
+        amountValue = 1;
       }
 
       if (selectedMethod == "PA") {
@@ -653,6 +739,15 @@
         window.history.replaceState({}, document.title, window.location.pathname);
 
         if (data.transactionID && data.formContext) {
+
+          lastActiveTransaction = {
+            transactionID: data.transactionID,
+            formContext: data.formContext,
+            transactionSignature: data.transactionSignature,
+            data: data,
+            paymentMethodArray: paymentMethodArray
+          };
+
           generatePaymentForm(
             data.transactionID,
             data.formContext,
@@ -758,6 +853,14 @@
       const formContainer = document.getElementById("payment-form");
       formContainer.innerHTML = "";
 
+      const primaryColor = document.getElementById("checkoutPrimaryColor")?.value || "";
+      const surfaceColor = document.getElementById("checkoutSurfaceColor")?.value || "";
+      const textColor = document.getElementById("checkoutTextColor")?.value || "";
+      const bodyBgColor = document.getElementById("bodyBgColor")?.value || "";
+      const bodyTextColor = document.getElementById("bodyTextColor")?.value || "";
+      const familyTypeText = document.getElementById("familyTypeText")?.value || "";
+
+
       let token_payment;
       let clientId_payment;
       let terminalId_payment;
@@ -834,20 +937,25 @@
         if(LayoutVersion == "1") LayoutVersion = "spg_form_tabs"
         if(LayoutVersion == "2") LayoutVersion = "spg_form"
 
-          form.setAttribute("spg-style", JSON.stringify({
+        form.setAttribute("spg-style", JSON.stringify({
             layout: LayoutVersion,
             theme: "default",
             color: {
-                  "primary": "",
+                  "primary": primaryColor,
+                  "secondary": "",
                   "border": "",
-                  "surface": "",
+                  "surface": surfaceColor,
+                   "header": {
+                    "text": "",
+                    "background": ""
+                  },
                   "body": {
-                      "text": "",
+                      "text": bodyTextColor,
+                      "background": bodyBgColor
                   }
             },
-            font: ""
-          }));
-
+            font: familyTypeText
+        }));
 
         formContainer.appendChild(form);
 
@@ -1390,4 +1498,22 @@
     makePayment();
   }
 
-  
+  function guardarConfiguracao(Reset) {
+    const configuracao = {
+        primaryColor: document.getElementById("checkoutPrimaryColor")?.value || "",
+        surfaceColor: document.getElementById("checkoutSurfaceColor")?.value || "",
+        textColor: document.getElementById("checkoutTextColor")?.value || "",
+        bodyBgColor: document.getElementById("bodyBgColor")?.value || "",
+        bodyTextColor: document.getElementById("bodyTextColor")?.value || "",
+        familyTypeText: document.getElementById("familyTypeText")?.value || ""
+    };
+
+    localStorage.setItem(
+        "checkoutThemeConfig",
+        JSON.stringify(configuracao)
+    );
+
+    if(Reset != 1){
+      showSuccessModal("Configuração guardada com sucesso!");
+    }
+}

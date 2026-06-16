@@ -1,63 +1,52 @@
 window.addEventListener("DOMContentLoaded", () => {
   const params = new URLSearchParams(window.location.search);
 
-  const modalDetalhes = document.getElementById('modalDetalhesMandatos');
+  const transactionId = params.get("id");
 
-  modalDetalhes.addEventListener('hidden.bs.modal', function () {
+  // Preencher o campo TransactionIDCIT
+  if (transactionId) {
+      document.getElementById("TransactionIDCIT").value = transactionId;
+  }
+
+
+  const modalMITEstado = document.getElementById('modalMITEstado');
+
+  modalMITEstado.addEventListener('hidden.bs.modal', function () {
 
     //Limpar os Inputs
-    document.getElementById('DetalheMandatoTransactionId').value = '';
-    document.getElementById('DetalheMandatoPhone').value = '351#';
+    document.getElementById('TransactionIdCITorMIT').value = '';
 
     //Resetar o conteúdo da listagem para o estado inicial (mensagem de vazio)
-    const listaResultados = document.getElementById('listaMandatosResultados');
+    const listaResultados = document.getElementById('StatusResultados');
           listaResultados.innerHTML = `
           <div class="p-5 text-center text-muted bg-light bg-opacity-50">
             <i class="fa-solid fa-inbox d-block mb-2 fs-3 opacity-25"></i>
-            <span class="small">Introduza os dados e clique em pesquisar</span>
+            <span class="small">Nenhum estado da MIT/CIT carregada na vista atual</span>
           </div>
           `;
   });
 
+  const modalRefundTransaction = document.getElementById('modalRefundTransaction');
 
-  const modalCancelar = document.getElementById('modalCancelarMandatos');
+  modalRefundTransaction.addEventListener('hidden.bs.modal', function () {
+    document.getElementById('TransactionIDRefund').value = '';
+    document.getElementById('ValorRefund').value = '';
 
-  modalCancelar.addEventListener('hidden.bs.modal', function () {
-    document.getElementById('CancelarMandatoTransactionId').value = '';
-    document.getElementById('CancelarMandatoPhone').value = '351#';
-
-    const feedbackArea = document.getElementById('feedbackCancelarMandato');
+    const feedbackArea = document.getElementById('feedbackRefundMIT');
       if (feedbackArea) {
         feedbackArea.innerHTML = '';
       }
   });
 
-  modalCancelar.addEventListener('shown.bs.modal', function () {
-    document.getElementById('CancelarMandatoTransactionId').focus();
-  });
-
-
-  const modalLista = document.getElementById('modalMandatosAtivos');
-
-  modalLista.addEventListener('hidden.bs.modal', function () {
-    const listaResultados = document.getElementById('listaTodosMandatosResultados');
-
-    if (listaResultados) {
-      listaResultados.innerHTML = `
-        <div class="p-5 text-center text-muted bg-light bg-opacity-50">
-          <i class="fa-solid fa-clipboard-list d-block mb-2 fs-3 opacity-25"></i>
-          <span class="small fw-medium">Nenhum mandato carregado na vista atual</span>
-        </div>
-      `;
-    }
-
+  modalRefundTransaction.addEventListener('shown.bs.modal', function () {
+    document.getElementById('TransactionIDRefund').focus();
   });
 
 });
 
 const credential_default = JSON.parse(localStorage.getItem('credential_default')) || {};
 const credential_config = JSON.parse(localStorage.getItem('credential_config')) || {};
-const default_Configs = localStorage.getItem('default'); // Normalmente é string "0" ou "1"~
+const default_Configs = localStorage.getItem('default');
 
 // PopUP de sucesso chamada
 const successModal = document.getElementById("successModal"),
@@ -85,122 +74,6 @@ function showErrorModal(message) {
 
 errorOverlay.addEventListener("click", () => errorModal.classList.remove("active"));
 errorCloseBtn.addEventListener("click", () => errorModal.classList.remove("active"));
-
-
-//Listar Mandato
-async function ListarMandato() {
-    let clientId, bearerToken;
-    const container = document.getElementById("listaTodosMandatosResultados");
-
-    // 1. Setup de Credenciais (Reutilizando a tua lógica)
-    const finalData = (default_Configs === "0" && credential_config.useDefaultConfig === "true") 
-        ? { clientId: credential_default.clientId, token: credential_default.bearerToken }
-        : { clientId: credential_config.clientId, token: credential_config.bearerToken };
-
-    clientId = finalData.clientId;
-    bearerToken = finalData.token;
-
-    // 2. Feedback de Loading
-    container.innerHTML = `
-        <div class="p-5 text-center text-success">
-            <div class="spinner-border spinner-border-sm me-2 text-success" role="status"></div>
-            <span class="small fw-bold">A comunicar com o servidor SIBS...</span>
-        </div>`;
-
-    const prefix = window.location.hostname === '127.0.0.1' ? '' : '/SimuladorSIBS';
-
-    try {
-        const params = new URLSearchParams({ bearerToken, clientId });
-        const response = await fetch(`${prefix}/api/ListarMandato?${params.toString()}`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" }
-        });
-
-        const data = await response.json();
-
-        // 3. Verificação de dados (Adaptar conforme a estrutura real do teu JSON)
-        // Supondo que a SIBS retorna uma lista em data.mandates
-        const mandatos = data.mandates || []; 
-
-        if (mandatos.length === 0) {
-            container.innerHTML = `
-                <div class="p-5 text-center text-muted bg-light bg-opacity-50">
-                    <i class="fa-solid fa-folder-open d-block mb-2 fs-3 opacity-25"></i>
-                    <span class="small fw-medium">Não foram encontrados mandatos ativos.</span>
-                </div>`;
-            return;
-        }
-
-        // 4. Construção da Tabela Global com mais espaço e data formatada
-        let htmlTable = `
-            <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0" style="font-size: 0.9rem; min-width: 900px;">
-                    <thead class="bg-light sticky-top" style="z-index: 1;">
-                        <tr style="border-bottom: 2px solid #edf2f7;">
-                            <th class="border-0 px-4 py-4 text-muted small fw-bold text-uppercase">Mandato ID</th>
-                            <th class="border-0 px-3 py-4 text-muted small fw-bold text-uppercase">Transaction ID</th>
-                            <th class="border-0 px-3 py-4 text-muted small fw-bold text-uppercase">Nome Cliente</th>
-                            <th class="border-0 px-3 py-4 text-muted small fw-bold text-uppercase">Telefone</th>
-                            <th class="border-0 px-3 py-4 text-muted small fw-bold text-uppercase">Estado</th>
-                            <th class="border-0 py-4 text-end px-4 text-muted small fw-bold text-uppercase">Data Expiração</th>
-                        </tr>
-                    </thead>
-                    <tbody class="border-top-0">`;
-
-        mandatos.forEach(m => {
-            // Lógica para cor do badge
-            const status = m.mandateStatus || '---';
-            let statusClass = "bg-secondary text-secondary";
-            
-            if (status === "ACTV" || status === "Success" || status === "Active") {
-                statusClass = "bg-success text-success";
-            } else if (status === "PEND" || status === "Pending") {
-                statusClass = "bg-warning text-warning";
-            }
-
-            // Formatação da Data: Retira apenas a parte YYYY-MM-DD
-            const dataFull = m.mandateExpirationDate || '';
-            const dataFormatada = dataFull.length > 10 ? dataFull.substring(0, 10) : (dataFull || '---');
-
-            htmlTable += `
-                <tr style="transition: background 0.2s;">
-                    <td class="px-4 py-4 fw-bold text-primary">
-                        ${m.mandateId || '---'}
-                    </td>
-                    <td class="px-3 py-4 text-muted" style="font-size: 0.85rem;">
-                        ${m.transactionId || '---'}
-                    </td>
-                    <td class="px-3 py-4 fw-semibold text-dark">
-                        ${m.customerName || '---'}
-                    </td>
-                    <td class="px-3 py-4 text-muted">
-                        ${m.aliasMBWAY || '---'}
-                    </td>
-                    <td class="px-3 py-4">
-                        <span class="badge rounded-pill px-3 py-2 bg-opacity-10 ${statusClass}" style="font-size: 0.75rem; letter-spacing: 0.3px;">
-                            ${status}
-                        </span>
-                    </td>
-                    <td class="text-end px-4 py-4 text-muted fw-medium">
-                        ${dataFormatada}
-                    </td>
-                </tr>`;
-        });
-
-        htmlTable += `</tbody></table></div>`;
-
-        container.innerHTML = htmlTable;
-
-    } catch (err) {
-        console.error(err);
-        container.innerHTML = `
-            <div class="p-4 text-center text-danger">
-                <i class="fa-solid fa-triangle-exclamation fs-3 d-block mb-2"></i>
-                <span class="small fw-bold">Erro ao listar mandatos</span>
-            </div>`;
-    }
-}
-
 
 // Cancelar Mandato
 async function CancelarMandato() {
@@ -285,104 +158,11 @@ async function CancelarMandato() {
     }
 }
 
+//Fazer MIT
+async function fazerMIT() {
 
-//Detalhe Mandato
-async function DetalheMandato() {
-  let clientId, bearerToken, terminalId;
-  const listaContainer = document.getElementById("listaMandatosResultados");
-
-  // Configuração de Credenciais (Mantido da tua lógica original)
-  const finalData = (default_Configs === "0" && credential_config.useDefaultConfig === "true") 
-    ? { clientId: credential_default.clientId, token: credential_default.bearerToken }
-    : { clientId: credential_config.clientId, token: credential_config.bearerToken };
-
-  clientId = finalData.clientId;
-  bearerToken = finalData.token;
-
-  const transactionId = document.getElementById("DetalheMandatoTransactionId")?.value?.trim();
-  const phone = document.getElementById("DetalheMandatoPhone")?.value?.trim();
-
-  // Validações
-  if (!transactionId || !phone) {
-    showErrorModal("Por favor, preencha o TransactionID e o Telefone.");
-    return;
-  }
-
-  // 1. Iniciar estado de carregamento na listagem
-  listaContainer.innerHTML = `
-    <div class="p-5 text-center text-primary">
-        <div class="spinner-border spinner-border-sm me-2" role="status"></div>
-        <span class="small fw-bold">A consultar SIBS...</span>
-    </div>`;
-
-  const prefix = window.location.hostname === '127.0.0.1' ? '' : '/SimuladorSIBS';
-
-  try {
-    const params = new URLSearchParams({ DetalheMandatoTransactionId: transactionId, bearerToken, clientId, DetalheMandatoPhone: phone });
-    const response = await fetch(`${prefix}/api/DetalheMandato?${params.toString()}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" }
-    });
-
-    const data = await response.json();
-
-    // Atualizar elementos de debug (se ainda existirem na página)
-    if(document.getElementById("bodyCompletoDetalheMandato")) {
-        document.getElementById("bodyCompletoDetalheMandato").innerText = JSON.stringify(data, null, 2);
-    }
-
-    const statusMsg = data?.returnStatus?.statusMsg || "Error";
-    const amount = data?.mandate?.amountAvailable?.value || "0.00";
-    const currency = data?.mandate?.amountAvailable?.currency || "EUR";
-
-    // 2. Construir a Tabela de Resultados
-    let statusClass = statusMsg === "Success" ? "bg-success text-success" : "bg-danger text-danger";
-    
-    listaContainer.innerHTML = `
-      <div class="table-responsive">
-          <table class="table table-hover align-middle mb-0" style="font-size: 0.85rem;">
-              <thead class="bg-light">
-                  <tr>
-                      <th class="border-0 px-4 py-3 text-muted small">DETALHES</th>
-                      <th class="border-0 py-3 text-muted small">ESTADO</th>
-                      <th class="border-0 py-3 text-end px-4 text-muted small">DISPONÍVEL</th>
-                  </tr>
-              </thead>
-              <tbody>
-                  <tr>
-                      <td class="px-4 py-3">
-                          <div class="fw-bold text-dark">#${transactionId}</div>
-                          <div class="text-muted small">${phone}</div>
-                      </td>
-                      <td>
-                          <span class="badge rounded-pill px-3 py-2 bg-opacity-10 ${statusClass}">
-                              ${statusMsg.toUpperCase()}
-                          </span>
-                      </td>
-                      <td class="text-end px-4 fw-bold text-dark">
-                          ${parseFloat(amount).toFixed(2)} ${currency}
-                      </td>
-                  </tr>
-              </tbody>
-          </table>
-      </div>`;
-
-  } catch (err) {
-    console.error(err);
-    listaContainer.innerHTML = `
-      <div class="p-4 text-center text-danger">
-          <i class="bi bi-exclamation-triangle fs-3 d-block mb-2"></i>
-          <span class="small fw-bold">Erro ao comunicar com o servidor</span>
-      </div>`;
-  }
-}
-
-
-//Criar Mandato
-async function CriarMandato() {
-
-  const CriarMandatoCustomerName = document.getElementById("CriarMandatoCustomerName")?.value?.trim();
-  const CriarMandatoPhone = document.getElementById("CriarMandatoPhone")?.value?.trim();
+  const MITTransactionId = document.getElementById("TransactionIDCIT")?.value?.trim();
+  const montante = document.getElementById("ValorCIT")?.value?.trim();
 
   let clientId;
   let bearerToken;
@@ -406,82 +186,160 @@ async function CriarMandato() {
   clientId = finalData.clientId;
   bearerToken = finalData.token;
   terminalId = finalData.terminalId;
-  typeofPA = credential_config.VersionpagamentosAutorizados;
+  mitType = credential_config.VersionMITS;
 
-  if(typeofPA === "1"){
-    typeofPA = "ONECLICK";
+  if(mitType == "1"){
+    mitType = "UCOF";
   }else{
-    typeofPA = "SUBSCRIPTION";
+    mitType = "RCRR";
   }
 
-  if (!CriarMandatoPhone) {
-    showErrorModal("O campo 'Telefone' tem que estar preenchido");
+  if (!MITTransactionId) {
+    showErrorModal("TransactionID tem que estar preenchido");
     return;
   }
 
-  if (!CriarMandatoCustomerName) {
-    showErrorModal("O campo 'Titular da conta' tem que estar preenchido");
+  if (!montante) {
+    showErrorModal("Montante tem que estar preenchido");
     return;
   }
 
-  document.getElementById("CriarMandatoPagamento").innerText = "...";
-  document.getElementById("statusCodeCriarMandato").innerText = "CODE: -";
-  document.getElementById("bodyCompletoCriarMandato").innerText = "{}";
+  document.getElementById("MITPagamento").innerText = "...";
+  document.getElementById("statusCodeMIT").innerText = "CODE: -";
+  document.getElementById("bodyCompletoMIT").innerText = "{}";
 
   const prefix = window.location.hostname === '127.0.0.1' ? '' : '/SimuladorSIBS';
 
   try {
-    const params = new URLSearchParams({bearerToken, clientId, typeofPA});
-    const response = await fetch(`${prefix}/api/CriarMandato_cli?${params.toString()}`, {
+    const params = new URLSearchParams({ mitType, MITTransactionId});
+    const response = await fetch(`${prefix}/api/mit?${params.toString()}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ terminalId, CriarMandatoCustomerName, CriarMandatoPhone })
+      body: JSON.stringify({ montante, clientId, terminalId, bearerToken })
     });
 
     const data = await response.json();
-    document.getElementById("bodyCompletoCriarMandato").innerText = JSON.stringify(data, null, 2);
-    document.getElementById("statusCodeCriarMandato").innerText = `CODE: ${data.returnStatus.statusCode}`;
+    document.getElementById("bodyCompletoMIT").innerText = JSON.stringify(data, null, 2);
+    document.getElementById("statusCodeMIT").innerText = `CODE: ${data.returnStatus.statusCode}`;
 
-    const status = data?.returnStatus.statusMsg || "-";
-    document.getElementById("CriarMandatoPagamento").innerText = status;
+    const status = data?.status || data?.paymentStatus || data?.transactionStatus || data?.returnStatus.statusDescription || "-";
+    document.getElementById("MITPagamento").innerText = status;
 
     if (status === "Success") {
-      document.getElementById("CriarMandatoPagamento").className = "h4 fw-bold text-success mt-1";
-      showSuccessModal("Mandato criado com sucesso");
+      document.getElementById("MITPagamento").className = "h4 fw-bold text-success mt-1";
+      showSuccessModal("MIT feita com sucesso");
 
-      setTimeout(() => {
-          goToStep(2);
-      }, 800);
+      if(mitType == "1"){
+        setTimeout(() => {
+            goToStep(2);
+        }, 800);
+      }
 
     } else {
-      document.getElementById("CriarMandatoPagamento").className = "h4 fw-bold text-danger mt-1";
+      document.getElementById("MITPagamento").className = "h4 fw-bold text-danger mt-1";
     }
 
-
-    const MandateId = document.getElementById("checkoutMandateMandateId");
-    if (MandateId && data?.mandate.mandateId) {
-      MandateId.value = data.mandate.mandateId;
-    }
-
-    const checkoutMandatoCustomerName = document.getElementById("checkoutMandatoCustomerName");
-    if (checkoutMandatoCustomerName && CriarMandatoCustomerName) {
-      checkoutMandatoCustomerName.value = CriarMandatoCustomerName;
+    const MITId = document.getElementById("TransactionIDMIT");
+    if (MITId && data?.transactionID) {
+      MITId.value = data.transactionID;
     }
 
   } catch (err) {
     console.error(err);
-    document.getElementById("CriarMandatoPagamento").innerText = "ERRO";
-    document.getElementById("CriarMandatoPagamento").className = "h4 fw-bold text-danger mt-1";
+    document.getElementById("MITPagamento").innerText = "ERRO";
+    document.getElementById("MITPagamento").className = "h4 fw-bold text-danger mt-1";
   }
 }
 
 
-//Checkout e compra do Mandato
-async function CobrancaMandato() {
+//Fazer Captura
+async function fazerCaptura() {
+  const captureTransactionId = document.getElementById("TransactionIDMIT")?.value?.trim();
+  const montante = document.getElementById("ValorMIT")?.value?.trim();
 
   let clientId;
   let bearerToken;
   let terminalId;
+  let typeofPA;
+
+  if (default_Configs === "0" && credential_config.useDefaultConfig === "true") {
+    finalData = {
+      clientId: credential_default.clientId,
+      token: credential_default.bearerToken,
+      terminalId: credential_default.terminalId,
+    };
+  } else {
+    finalData = {
+      clientId: credential_config.clientId,
+      token: credential_config.bearerToken,
+      terminalId: credential_config.terminalId,
+    };
+  }
+
+  clientId = finalData.clientId;
+  bearerToken = finalData.token;
+  terminalId = finalData.terminalId;
+  mitType = credential_config.VersionMITS;
+
+  if(mitType == "1"){
+    mitType = "UCOF";
+  }else{
+    mitType = "RCRR";
+  }
+
+  if (!captureTransactionId) {
+    showErrorModal("TransactionID tem que estar preenchido");
+    return;
+  }
+
+  if (!montante) {
+    showErrorModal("Montante tem que estar preenchido");
+    return;
+  }
+
+  document.getElementById("capturePagamento").innerText = "...";
+  document.getElementById("statusCodecapture").innerText = "CODE: -";
+  document.getElementById("bodyCompletocapture").innerText = "{}";
+
+  const prefix = window.location.hostname === '127.0.0.1' ? '' : '/SimuladorSIBS';
+
+
+  try {
+    const params = new URLSearchParams({captureTransactionId});
+    const response = await fetch(`${prefix}/api/capture?${params.toString()}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ montante, clientId, terminalId, bearerToken })
+    });
+
+    const data = await response.json();
+    document.getElementById("bodyCompletocapture").innerText = JSON.stringify(data, null, 2);
+    document.getElementById("statusCodecapture").innerText = `CODE: ${data.returnStatus.statusCode}`;
+
+    const status = data?.status || data?.paymentStatus || data?.transactionStatus || data?.returnStatus.statusDescription || "-";
+    document.getElementById("capturePagamento").innerText = status;
+
+    if (status === "Success") {
+      document.getElementById("capturePagamento").className = "h4 fw-bold text-success mt-1";
+    } else {
+      document.getElementById("capturePagamento").className = "h4 fw-bold text-danger mt-1";
+    }
+
+  } catch (err) {
+    console.error(err);
+    document.getElementById("capturePagamento").innerText = "ERRO";
+    document.getElementById("capturePagamento").className = "h4 fw-bold text-danger mt-1";
+  }
+}
+
+
+/// GET STATUS
+async function getStatusMIT() {
+
+  let clientId;
+  let bearerToken;
+  let terminalId;
+  const listaContainer = document.getElementById("StatusResultados");
 
   if (default_Configs === "0" && credential_config.useDefaultConfig === "true") {
     finalData = {
@@ -501,109 +359,300 @@ async function CobrancaMandato() {
   bearerToken = finalData.token;
   terminalId = finalData.terminalId;
 
-  const montante = document.getElementById("checkoutMandatoAmount")?.value?.trim();
-  const checkoutMandateId = document.getElementById("checkoutMandateMandateId")?.value?.trim();
-  const checkoutCustomerName = document.getElementById("checkoutMandatoCustomerName")?.value?.trim();
-  const checkoutMerchantID = "123"
+  // 1ª Declaração (Input local)
+  const transactionId = document.getElementById("TransactionIdCITorMIT")?.value?.trim();
 
-
-  if (!checkoutMandateId) {
-    showErrorModal("O campo 'Mandate ID' tem que estar preenchido");
+  if (!transactionId) {
+    showErrorModal("TransactionID tem que estar preenchido");
     return;
   }
 
-  if (!checkoutCustomerName) {
-    showErrorModal("O campo 'Titular da conta' tem que estar preenchido");
-    return;
-  }
-
-  if (!montante) {
-    showErrorModal("O campo 'Montante' tem que estar preenchido");
-    return;
-  }
-
-  document.getElementById("CheckoutMandatoPagamento").innerText = "...";
-  document.getElementById("statusCodeCheckoutMandato").innerText = "CODE: -";
-  document.getElementById("bodyCompletoCheckoutMandato").innerText = "{}";
+  listaContainer.innerHTML = `
+    <div class="p-5 text-center text-primary">
+        <div class="spinner-border spinner-border-sm me-2" role="status"></div>
+        <span class="small fw-bold">A consultar SIBS...</span>
+    </div>`;
 
   const prefix = window.location.hostname === '127.0.0.1' ? '' : '/SimuladorSIBS';
 
-
   try {
-
     const params = new URLSearchParams({
-      clientId, bearerToken
+      terminalId,
+      clientId,
+      token: bearerToken,
+      transactionId
     });
 
-
-    const response = await fetch(`${prefix}/api/CheckoutMandato?${params.toString()}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ terminalId , montante , checkoutMandateId, checkoutMerchantID, checkoutCustomerName  })
+    const response = await fetch(`${prefix}/api/status?${params.toString()}`, {
+      method: "GET"
     });
 
     const data = await response.json();
 
-    // ===================== LOCALSTORAGE =====================
-    localStorage.removeItem("CheckoutMandatoConfigurado");
+    if (document.getElementById("bodyCompletoStatus")) {
+        document.getElementById("bodyCompletoStatus").innerText = JSON.stringify(data, null, 2);
+    }
+    if (document.getElementById("statusCode")) {
+        document.getElementById("statusCode").innerText = `CODE: ${response.status}`;
+    }
 
-    const CheckoutMandatoArray = [
-      {
-        checkoutmandateId: data?.transactionID,
-        MandateTransactionSignature: data?.transactionSignature
-      }
-    ];
+    let status = data.paymentReference?.status || data?.paymentStatus || data?.transactionStatus || "-";
+    if (status == "CANC") {
+      status = "Cancelado";
+    }
 
-    localStorage.setItem("CheckoutMandatoConfigurado", JSON.stringify(CheckoutMandatoArray));
+    if (document.getElementById("bodyCompletoDetalheMandato")) {
+        document.getElementById("bodyCompletoDetalheMandato").innerText = JSON.stringify(data, null, 2);
+    }
 
-    const raw = localStorage.getItem("CheckoutMandatoConfigurado");
-    const arrayMandato = raw ? JSON.parse(raw) : [];
-    const mandateTransactionSignature = Array.isArray(arrayMandato) ? arrayMandato?.[0]?.MandateTransactionSignature || "" : "";
+    // CORREÇÃO: Mudado o nome para apiTransactionId para não colidir com a de cima
+    const apiTransactionId = data.transactionID || transactionId || "-";
+    const maskedPAN = data.token?.maskedPAN || "Cartão Não Vinculado";
+    const expireDateRaw = data.token?.expireDate || "";
+    const amountValue = data.amount?.value || "0.00";
 
-    try {
-
-        const params = new URLSearchParams({
-          bearerToken, mandateTransactionSignature
-        });
-
-        const transactionID = arrayMandato?.[0]?.checkoutmandateId || "";
-
-        const response = await fetch(`${prefix}/api/CompraMandato?${params.toString()}`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            clientId,
-            transactionID
-          })
-        });
-
-        const data = await response.json();
-
-        document.getElementById("bodyCompletoCheckoutMandato").innerText = JSON.stringify(data, null, 2);
-        document.getElementById("statusCodeCheckoutMandato").innerText = `CODE: ${data.returnStatus.statusCode}`;
-
-        const status = data?.returnStatus?.statusMsg || "-";
-        document.getElementById("CheckoutMandatoPagamento").innerText = status;
-        if (["Success"].includes(status)) {
-          document.getElementById("CheckoutMandatoPagamento").className = "h4 fw-bold text-success mt-1";
-          showSuccessModal("Compra com Mandato criado com sucesso");
-        } else {
-          document.getElementById("CheckoutMandatoPagamento").className = "h4 fw-bold text-danger mt-1";
+    let formattedExpiry = "-";
+    if (expireDateRaw) {
+        const expDate = new Date(expireDateRaw);
+        if (!isNaN(expDate.getTime())) {
+            const month = String(expDate.getMonth() + 1).padStart(2, '0');
+            const year = String(expDate.getFullYear()).slice(-2);
+            formattedExpiry = `${month}/${year}`;
         }
+    }
 
-
-      } catch (err) {
-        console.error(err);
-        document.getElementById("CheckoutMandatoPagamento").innerText = "ERRO";
-        document.getElementById("CheckoutMandatoPagamento").className = "h4 fw-bold text-danger mt-1";
-      }
+    // CORREÇÃO: Ajustado para usar a variável 'status' que definiste acima
+    let statusClass = (status === "Success" || status === "Success") ? "bg-success text-success" : "bg-danger text-danger";
+    
+    listaContainer.innerHTML = `
+      <div class="table-responsive">
+          <table class="table table-hover align-middle mb-0" style="font-size: 0.85rem;">
+              <thead class="bg-light">
+                  <tr>
+                      <th class="border-0 px-4 py-3 text-muted small">DETALHES DO TOKEN / CARTÃO</th>
+                      <th class="border-0 py-3 text-muted small">ESTADO</th>
+                      <th class="border-0 py-3 text-end px-4 text-muted small">MONTANTE</th>
+                  </tr>
+              </thead>
+              <tbody>
+                  <tr>
+                      <td class="px-4 py-3">
+                          <div class="fw-bold text-dark mb-1"><i class="fa-solid fa-hashtag me-1 text-muted"></i>${apiTransactionId}</div>
+                          <div class="text-secondary small d-flex align-items-center gap-2">
+                              <span><i class="fa-solid fa-credit-card me-1"></i> ${maskedPAN}</span>
+                              <span class="text-muted">|</span>
+                              <span><i class="fa-solid fa-calendar-days me-1"></i> Validade: ${formattedExpiry}</span>
+                          </div>
+                      </td>
+                      <td>
+                          <span class="badge rounded-pill px-3 py-2 bg-opacity-10 ${statusClass}">
+                              ${status.toUpperCase()}
+                          </span>
+                      </td>
+                      <td class="text-end px-4 fw-bold text-dark" style="font-size: 0.9rem;">
+                          ${parseFloat(amountValue).toFixed(2)} EUR
+                      </td>
+                  </tr>
+              </tbody>
+          </table>
+      </div>`;
 
   } catch (err) {
     console.error(err);
-    document.getElementById("CheckoutMandatoPagamento").innerText = "ERRO";
-    document.getElementById("CheckoutMandatoPagamento").className = "h4 fw-bold text-danger mt-1";
+    const statusElem = document.getElementById("statusPagamento");
+    if (statusElem) {
+        statusElem.innerText = "ERRO";
+        statusElem.className = "h4 fw-bold text-danger mt-1";
+    }
   }
 }
+
+//REFUND
+async function RefundPagamento() {
+
+  let clientId;
+  let bearerToken;
+  let terminalId;
+
+  const transactionId = document.getElementById("TransactionIDRefund")?.value?.trim();
+  const montante = document.getElementById("ValorRefund")?.value?.trim();
+  const feedbackArea = document.getElementById("feedbackRefundMIT");
+
+
+  if (default_Configs === "0" && credential_config.useDefaultConfig === "true") {
+    finalData = {
+      clientId: credential_default.clientId,
+      token: credential_default.bearerToken,
+      terminalId: credential_default.terminalId,
+    };
+  } else {
+    finalData = {
+      clientId: credential_config.clientId,
+      token: credential_config.bearerToken,
+      terminalId: credential_config.terminalId,
+    };
+  }
+
+  clientId = finalData.clientId;
+  bearerToken = finalData.token;
+  terminalId = finalData.terminalId;
+
+  if (!transactionId) {
+    showErrorModal("TransactionID tem que estar preenchido");
+    return;
+  }
+
+  if (!montante) {
+    showErrorModal("Montante tem que estar preenchido");
+    return;
+  }
+
+  feedbackArea.innerHTML = `
+    <div class="d-flex align-items-center justify-content-center p-3 text-muted">
+      <div class="spinner-border spinner-border-sm me-2" role="status"></div>
+      <span class="small fw-bold">A comunicar com api...</span>
+    </div>`;
+
+  const prefix = window.location.hostname === '127.0.0.1' ? '' : '/SimuladorSIBS';
+
+  try {
+
+    const params = new URLSearchParams({
+      transactionId
+    });
+
+    const response = await fetch(`${prefix}/api/Refund?${params.toString()}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ montante , clientId , terminalId, bearerToken  })
+    });
+
+    const data = await response.json();
+    const statusMsg = data?.returnStatus?.statusMsg;
+
+    if (statusMsg === "Success") {
+      feedbackArea.innerHTML = `
+          <div class="p-4 border-0 shadow-sm d-flex align-items-center" style="background: #f0fdf4; border-radius: 20px;">
+            <div class="bg-success text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 45px; height: 45px; flex-shrink: 0;">
+              <i class="fa-solid fa-check fs-5"></i>
+            </div>
+            <div>
+              <h6 class="fw-bold text-success mb-1">Reembolso efetuado!</h6>
+              <p class="small text-success mb-0 opacity-75">Reembolso emitido com sucesso.</p>
+            </div>
+          </div>`;
+        } else {
+            feedbackArea.innerHTML = `
+              <div class="p-4 border-0 shadow-sm d-flex align-items-center" style="background: #fef2f2; border-radius: 20px;">
+                <div class="bg-danger text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 45px; height: 45px; flex-shrink: 0;">
+                  <i class="fa-solid fa-xmark fs-5"></i>
+                </div>
+                <div>
+                  <h6 class="fw-bold text-danger mb-1">Falha no Reembolso</h6>
+                  <p class="small text-danger mb-0 opacity-75">${data?.returnStatus?.errorDescription || "Verifique os dados e tente novamente."}</p>
+                </div>
+              </div>`;
+        }
+    
+  } catch (err) {
+    console.error(err);
+    document.getElementById("refundPagamento").innerText = "ERRO";
+    document.getElementById("refundPagamento").className = "h4 fw-bold text-danger mt-1";
+  }
+}
+
+//Cancelamento
+/*async function CancelMIT() {
+
+  let clientId;
+  let bearerToken;
+  let terminalId;
+
+  const transactionId = document.getElementById("TransactionIDCancel")?.value?.trim();
+  const montante = "0";
+  const feedbackArea = document.getElementById("feedbackCancelarMIT");
+
+
+  if (default_Configs === "0" && credential_config.useDefaultConfig === "true") {
+    finalData = {
+      clientId: credential_default.clientId,
+      token: credential_default.bearerToken,
+      terminalId: credential_default.terminalId,
+    };
+  } else {
+    finalData = {
+      clientId: credential_config.clientId,
+      token: credential_config.bearerToken,
+      terminalId: credential_config.terminalId,
+    };
+  }
+
+  clientId = finalData.clientId;
+  bearerToken = finalData.token;
+  terminalId = finalData.terminalId;
+
+  if (!transactionId) {
+    showErrorModal("TransactionID tem que estar preenchido");
+    return;
+  }
+
+  feedbackArea.innerHTML = `
+    <div class="d-flex align-items-center justify-content-center p-3 text-muted">
+      <div class="spinner-border spinner-border-sm me-2" role="status"></div>
+      <span class="small fw-bold">A comunicar com api...</span>
+    </div>`;
+
+  const prefix = window.location.hostname === '127.0.0.1' ? '' : '/SimuladorSIBS';
+
+  try {
+
+    const params = new URLSearchParams({
+      transactionId
+    });
+
+
+    const response = await fetch(`${prefix}/api/Cancel?${params.toString()}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ montante , clientId , terminalId, bearerToken  })
+    });
+
+    const data = await response.json();
+    const statusMsg = data?.returnStatus?.statusMsg;
+
+    if (statusMsg === "Success") {
+      feedbackArea.innerHTML = `
+          <div class="p-4 border-0 shadow-sm d-flex align-items-center" style="background: #f0fdf4; border-radius: 20px;">
+            <div class="bg-success text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 45px; height: 45px; flex-shrink: 0;">
+              <i class="fa-solid fa-check fs-5"></i>
+            </div>
+            <div>
+              <h6 class="fw-bold text-success mb-1">Cancelamento efetuado!</h6>
+              <p class="small text-success mb-0 opacity-75">Cancelamento emitido com sucesso.</p>
+            </div>
+          </div>`;
+        } else {
+            feedbackArea.innerHTML = `
+              <div class="p-4 border-0 shadow-sm d-flex align-items-center" style="background: #fef2f2; border-radius: 20px;">
+                <div class="bg-danger text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 45px; height: 45px; flex-shrink: 0;">
+                  <i class="fa-solid fa-xmark fs-5"></i>
+                </div>
+                <div>
+                  <h6 class="fw-bold text-danger mb-1">Falha no Cancelamento</h6>
+                  <p class="small text-danger mb-0 opacity-75">${data?.returnStatus?.errorDescription || "Verifique os dados e tente novamente."}</p>
+                </div>
+              </div>`;
+        }
+
+  } catch (err) {
+    console.error(err);
+    document.getElementById("Cancelagamento").innerText = "ERRO";
+    document.getElementById("CancelPagamento").className = "h4 fw-bold text-danger mt-1";
+  }
+}*/
+
+
+
 
 function goToStep(stepNumber) {
     document.querySelectorAll('.step-content').forEach(content => {

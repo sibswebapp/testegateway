@@ -407,3 +407,103 @@ html, body {
 .text_info_debug{
   color:white
 }
+
+/* Sidebar Principal à Esquerda */
+.color-sidebar {
+    position: fixed;
+    top: 0;
+    left: -320px;
+    width: 320px;
+    height: 100vh;
+    background: #ffffff;
+    box-shadow: 5px 0 30px rgba(0, 0, 0, 0.12);
+    z-index: 1060;
+    transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.color-sidebar.active {
+    left: 0;
+}
+
+.sidebar-content {
+    height: 100%;
+    overflow-y: auto;
+}
+
+/* Botão Flutuante */
+.sidebar-toggle {
+    position: absolute;
+    top: 30%;
+    right: -45px;
+    transform: translateY(-50%);
+    width: 45px;
+    height: 48px;
+    background: #2563eb;
+    color: #ffffff;
+    border: none;
+    border-radius: 0 12px 12px 0;
+    box-shadow: 4px 0 10px rgba(37, 99, 235, 0.2);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+}
+
+/* Secções internas */
+.sidebar-section {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 14px;
+}
+
+.section-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: #475569;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 12px;
+    border-bottom: 1px solid #e2e8f0;
+    padding-bottom: 6px;
+}
+
+/* Inputs e Linhas de Cores */
+.color-picker-row {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+}
+
+.color-picker-row:last-child {
+    margin-bottom: 0;
+}
+
+.small-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: #64748b;
+    margin-bottom: 4px;
+}
+
+.custom-picker-sm {
+    width: 40px;
+    height: 28px;
+    padding: 1px;
+    border-radius: 6px;
+    cursor: pointer;
+    border: 1px solid #cbd5e1;
+}
+
+.color-hex {
+    font-family: monospace;
+    font-size: 11px;
+    color: #64748b;
+}
+
+.modern-input-sm {
+    font-size: 12px !important;
+    padding: 4px 8px !important;
+    border-radius: 6px !important;
+}
