@@ -430,16 +430,15 @@
         MBWAYPREFILL = credential_default_variable.MBWAYPREFILL;
 
       }else{
-       
-        referenceExpiry = credential_config_variable.referenceExpiry;
-        referenceExpiryUnit = credential_config_variable.referenceExpiryUnit;
-        gatewayVersion = credential_config_variable.gatewayVersion;
-        typeOfPayment = credential_config_variable.typeOfPayment;
-        LayoutVersion = credential_config_variable.LayoutVersion;
-        pagamentosAutorizados = credential_config_variable.pagamentosAutorizados;
-        VersionpagamentosAutorizados = credential_config_variable.VersionpagamentosAutorizados;
-        MBWAYNumberPrefillchecked = credential_config_variable.MBWAYNumberPrefillchecked;
-        MBWAYPREFILL = credential_config_variable.MBWAYPREFILL;
+        referenceExpiry = credential_config_variable?.referenceExpiry ?? credential_default_variable?.referenceExpiry;
+        referenceExpiryUnit = credential_config_variable?.referenceExpiryUnit ?? credential_default_variable?.referenceExpiryUnit;
+        gatewayVersion = credential_config_variable?.gatewayVersion ?? credential_default_variable?.gatewayVersion;
+        typeOfPayment = credential_config_variable?.typeOfPayment ?? credential_default_variable?.typeOfPayment;
+        LayoutVersion = credential_config_variable?.LayoutVersion ?? credential_default_variable?.LayoutVersion;
+        pagamentosAutorizados = credential_config_variable?.pagamentosAutorizados ?? credential_default_variable?.pagamentosAutorizados;
+        VersionpagamentosAutorizados = credential_config_variable.VersionpagamentosAutorizados ?? credential_default_variable?.VersionpagamentosAutorizados;
+        MBWAYNumberPrefillchecked = credential_config_variable.MBWAYNumberPrefillchecked ?? credential_default_variable?.MBWAYNumberPrefillchecked;
+        MBWAYPREFILL = credential_config_variable.MBWAYPREFILL ?? credential_default_variable?.MBWAYPREFILL;
 
       }
 
