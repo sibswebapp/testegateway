@@ -444,9 +444,14 @@
 
       }
 
-      if(credential_config_variable.MBWAYNumberPrefillchecked == "1" ){
-        MBWAYNumberPrefillchecked = credential_config_variable.MBWAYNumberPrefillchecked ?? credential_default_variable?.MBWAYNumberPrefillchecked;
-        MBWAYPREFILL = credential_config_variable?.MBWAYPREFILL ?? credential_default_variable?.MBWAYPREFILL;
+      const MBWAYNumberPrefillchecked =
+      credential_config_variable?.MBWAYNumberPrefillchecked ??
+      credential_default_variable?.MBWAYNumberPrefillchecked;
+
+      if (MBWAYNumberPrefillchecked == "1") {
+        MBWAYPREFILL =
+          credential_config_variable?.MBWAYPREFILL ??
+          credential_default_variable?.MBWAYPREFILL;
       }
 
       MITs = credential_default_variable.MITs;
