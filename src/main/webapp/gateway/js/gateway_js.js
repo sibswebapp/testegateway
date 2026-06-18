@@ -430,28 +430,22 @@
         MBWAYPREFILL = credential_default_variable.MBWAYPREFILL;
 
       }else{
-        const config = credential_config_variable ?? credential_default_variable;
 
-        referenceExpiry = config?.referenceExpiry;
-        referenceExpiryUnit = config?.referenceExpiryUnit;
-        gatewayVersion = config?.gatewayVersion;
-        typeOfPayment = config?.typeOfPayment;
-        LayoutVersion = config?.LayoutVersion;
-        pagamentosAutorizados = config?.pagamentosAutorizados;
-        VersionpagamentosAutorizados = config?.VersionpagamentosAutorizados;
-        MBWAYNumberPrefillchecked = config?.MBWAYNumberPrefillchecked;
-        MBWAYPREFILL = config?.MBWAYPREFILL;
+        referenceExpiry = credential_config_variable.referenceExpiry;
+        referenceExpiryUnit = credential_config_variable.referenceExpiryUnit;
+        gatewayVersion = credential_config_variable.gatewayVersion;
+        typeOfPayment = credential_config_variable.typeOfPayment;
+        LayoutVersion = credential_config_variable.LayoutVersion;
+        pagamentosAutorizados = credential_config_variable.pagamentosAutorizados;
+        VersionpagamentosAutorizados = credential_config_variable.VersionpagamentosAutorizados;
+        MBWAYNumberPrefillchecked = credential_config_variable.MBWAYNumberPrefillchecked;
+        MBWAYPREFILL = credential_config_variable.MBWAYPREFILL;
 
       }
 
-      const MBWAYNumberPrefillchecked =
-      credential_config_variable?.MBWAYNumberPrefillchecked ??
-      credential_default_variable?.MBWAYNumberPrefillchecked;
-
-      if (MBWAYNumberPrefillchecked == "1") {
-        MBWAYPREFILL =
-          credential_config_variable?.MBWAYPREFILL ??
-          credential_default_variable?.MBWAYPREFILL;
+      if(credential_config_variable.MBWAYNumberPrefillchecked == "1" ){
+        MBWAYNumberPrefillchecked = credential_config_variable.MBWAYNumberPrefillchecked ?? credential_default_variable?.MBWAYNumberPrefillchecked;
+        MBWAYPREFILL = credential_config_variable?.MBWAYPREFILL ?? credential_default_variable?.MBWAYPREFILL;
       }
 
       MITs = credential_default_variable.MITs;
