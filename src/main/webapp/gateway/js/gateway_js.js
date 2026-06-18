@@ -255,13 +255,13 @@
       const mits = credential_config_variable?.MITs;
       const versionMITS = credential_config_variable?.VersionMITS;
 
-      if (mits === "1" && versionMITS === "1") {
+      if (mits == "1" && versionMITS == "1") {
           methodMap = {
               "1": { label: "MB WAY", value: "MBWAY" },
               "2": { label: "Multibanco", value: "REFERENCE" },
               "3": { label: "Cartão (MITS UCOF)", value: "CARD" }
           };
-      } else if (mits === "1" && versionMITS === "2") {
+      } else if (mits == "1" && versionMITS == "2") {
           methodMap = {
               "1": { label: "MB WAY", value: "MBWAY" },
               "2": { label: "Multibanco", value: "REFERENCE" },
