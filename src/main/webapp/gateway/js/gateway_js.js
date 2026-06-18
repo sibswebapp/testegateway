@@ -41,9 +41,12 @@
       const amountField = document.getElementById("amount");
       const paymentMethod = document.getElementById("payment-method").value;
 
+      const versionMITS = credential_config_variable?.VersionMITS ?? credential_default_variable?.VersionMITS;
+      const MITS_input = credential_config_variable?.MITs ?? credential_default_variable?.MITs;
+
       if (
-          credential_config_variable.MITs == 1 &&
-          credential_config_variable.VersionMITS == 1 &&
+          MITS_input == 1 &&
+          versionMITS == 1 &&
           paymentMethod != "MBWAY" &&
           paymentMethod != "REFERENCE"
       ) {
@@ -431,19 +434,22 @@
 
       }else{
 
-        referenceExpiry = credential_config_variable.referenceExpiry;
-        referenceExpiryUnit = credential_config_variable.referenceExpiryUnit;
-        gatewayVersion = credential_config_variable.gatewayVersion;
-        typeOfPayment = credential_config_variable.typeOfPayment;
-        LayoutVersion = credential_config_variable.LayoutVersion;
-        pagamentosAutorizados = credential_config_variable.pagamentosAutorizados;
-        VersionpagamentosAutorizados = credential_config_variable.VersionpagamentosAutorizados;
-        MBWAYNumberPrefillchecked = credential_config_variable.MBWAYNumberPrefillchecked;
-        MBWAYPREFILL = credential_config_variable.MBWAYPREFILL;
+        referenceExpiry = credential_config_variable?.referenceExpiry ?? credential_default_variable?.referenceExpiry;
+        referenceExpiryUnit = credential_config_variable?.referenceExpiryUnit ?? credential_default_variable?.referenceExpiryUnit;
+        gatewayVersion = credential_config_variable?.gatewayVersion ?? credential_default_variable?.gatewayVersion;
+        typeOfPayment = credential_config_variable?.typeOfPayment ?? credential_default_variable?.typeOfPayment;;
+        LayoutVersion = credential_config_variable?.LayoutVersion ?? credential_default_variable?.LayoutVersion;
+        pagamentosAutorizados = credential_config_variable?.pagamentosAutorizados ?? credential_default_variable?.pagamentosAutorizados;
+        VersionpagamentosAutorizados = credential_config_variable?.VersionpagamentosAutorizados ?? credential_default_variable?.VersionpagamentosAutorizados;
+        MBWAYNumberPrefillchecked = credential_config_variable?.MBWAYNumberPrefillchecked ?? credential_default_variable?.MBWAYNumberPrefillchecked;
+        MBWAYPREFILL = credential_config_variable?.MBWAYPREFILL ?? credential_default_variable?.MBWAYPREFILL;
 
       }
 
-      if(credential_config_variable.MBWAYNumberPrefillchecked == "1" ){
+
+      const MBWAYNumberPrefillchecked_input = credential_config_variable?.MBWAYNumberPrefillchecked ?? credential_default_variable?.MBWAYNumberPrefillchecked;
+
+      if(MBWAYNumberPrefillchecked_input == "1" ){
         MBWAYNumberPrefillchecked = credential_config_variable.MBWAYNumberPrefillchecked ?? credential_default_variable?.MBWAYNumberPrefillchecked;
         MBWAYPREFILL = credential_config_variable?.MBWAYPREFILL ?? credential_default_variable?.MBWAYPREFILL;
       }
@@ -453,8 +459,8 @@
 
       const amountLayout = document.getElementById("amountLayout");
 
-    
       if (
+          credential_config_variable &&
           credential_config_variable.MITs !== null &&
           credential_config_variable.MITs !== "" &&
           credential_config_variable.MITs !== 0
@@ -902,6 +908,11 @@
 
       let redirectUrl = `${baseUrl}reference_payment/REFERENCE_return.html`
 
+
+      const versionMITS = credential_config_variable?.VersionMITS ?? credential_default_variable?.VersionMITS;
+      const MITS_input = credential_config_variable?.MITs ?? credential_default_variable?.MITs;
+
+
       if (paymentMethodArray.length === 1 && paymentMethodArray[0] === "MBWAY") {
         redirectUrl = `${baseUrl}MBWAY_payment/MBWAY_return.html`
       }
@@ -914,11 +925,11 @@
         redirectUrl = `${baseUrl}AllmethodsPayment/AllmethodsPayment.html`
       }
 
-      if (paymentMethodArray.length === 1 && paymentMethodArray[0] === "CARD" && credential_config_variable.MITs == "1" && credential_config_variable.VersionMITS == "1") {
+      if (paymentMethodArray.length === 1 && paymentMethodArray[0] === "CARD" && MITS_input == "1" && versionMITS == "1") {
         redirectUrl = `${baseUrl}MITs/MITsUCOF.html`
       }
 
-      if (paymentMethodArray.length === 1 && paymentMethodArray[0] === "CARD" && credential_config_variable.MITs == "1" && credential_config_variable.VersionMITS == "2") {
+      if (paymentMethodArray.length === 1 && paymentMethodArray[0] === "CARD" && MITS_input == "1" && versionMITS == "2") {
         redirectUrl = `${baseUrl}MITs/MITsRCRR.html`
       }
 

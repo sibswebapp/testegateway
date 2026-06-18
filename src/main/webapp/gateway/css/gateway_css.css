@@ -433,11 +433,11 @@ html, body {
 /* Botão Flutuante */
 .sidebar-toggle {
     position: absolute;
-    top: 30%;
-    right: -45px;
+    top: 28%;
+    right: -55px;
     transform: translateY(-50%);
-    width: 45px;
-    height: 48px;
+    width: 55px;
+    height: 100px;
     background: #2563eb;
     color: #ffffff;
     border: none;
@@ -447,7 +447,33 @@ html, body {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.2rem;
+    font-size: 1.9rem;
+}
+
+
+/* ==========================================================================
+   OTIMIZAÇÃO PARA TELEMÓVEL (MOBILE - Ecrãs < 768px)
+   ========================================================================== */
+@media (max-width: 768px) {
+    .sidebar-toggle {
+        width: 52px !important; 
+        height: 52px !important;
+        border-radius: 50% !important; /* Redondo no telemóvel */
+        box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4) !important;
+        
+        /* Move para o canto inferior direito para o polegar */
+        position: fixed !important;
+        top: auto !important; 
+        left: auto !important; 
+        bottom: 24px !important;
+        right: 24px !important;
+        
+        font-size: 1.25rem !important;
+    }
+    
+    .sidebar-toggle:active {
+        transform: scale(0.92) !important;
+    }
 }
 
 /* Secções internas */
