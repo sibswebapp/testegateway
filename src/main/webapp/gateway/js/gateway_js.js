@@ -425,7 +425,6 @@
         referenceExpiry = credential_default_variable.referenceExpiry;
         referenceExpiryUnit = credential_default_variable.referenceExpiryUnit;
         gatewayVersion = credential_default_variable.gatewayVersion;
-        typeOfPayment = credential_default_variable.typeOfPayment;
         LayoutVersion = credential_default_variable.LayoutVersion
         pagamentosAutorizados = credential_default_variable.pagamentosAutorizados;
         VersionpagamentosAutorizados = credential_default_variable.VersionpagamentosAutorizados;
@@ -448,6 +447,9 @@
 
 
       const MBWAYNumberPrefillchecked_input = credential_config_variable?.MBWAYNumberPrefillchecked ?? credential_default_variable?.MBWAYNumberPrefillchecked;
+
+      typeOfPayment = credential_config_variable?.typeOfPayment ?? credential_default_variable?.typeOfPayment;
+
 
       if(MBWAYNumberPrefillchecked_input == "1" ){
         MBWAYNumberPrefillchecked = credential_config_variable.MBWAYNumberPrefillchecked ?? credential_default_variable?.MBWAYNumberPrefillchecked;
@@ -591,7 +593,15 @@
         versionTypePayment = "AUTH";
       }
 
-      if(MITs == "1" && VersionMITS == "1" && (paymentMethodArray[0] == "REFERENCE" || paymentMethodArray[0] == "MBWAY") && amountValue == 0){
+      if(MITs == "1" && VersionMITS == "1" && (paymentMethodArray[0] == "REFERENCE" || paymentMethodArray[0] == "MBWAY") && amountValue == 0 && versionTypePayment != "AUTH"){
+        amountValue = 1;
+      }
+      
+      if(VersionMITS == "2" && (paymentMethodArray[0] == "REFERENCE" || paymentMethodArray[0] == "MBWAY" || paymentMethodArray[0] == "CARD") && amountValue == 0 && versionTypePayment != "AUTH"){
+        amountValue = 1;
+      }
+
+       if(VersionMITS == "2" && versionTypePayment == "AUTH" && paymentMethodArray[0] != "MBWAY"){
         amountValue = 1;
       }
 
