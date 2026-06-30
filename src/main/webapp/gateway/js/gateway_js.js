@@ -501,7 +501,10 @@
       if (PagamentoServerToServer_documentacao == "1") {
         selectedMethod = "REFERENCE";
         credential_default_variable.ServerToServer = "1";
-        credential_config_variable.ServerToServer = "1";
+
+        if (credential_config_variable) {
+          credential_config_variable.ServerToServer = "1";
+        }
         AllMethodsPay = 0;
       }
     
@@ -1238,15 +1241,23 @@
       }
 
       if (PagamentoServerToServerMBWAY_documentacao == "1" || PagamentoServerToServer_documentacao == "1" || PagamentoMBWAY_documentacao == "1" || PagamentoCartao_documentacao == "1" || PagamentoRefereciasMB_documentacao == "1") {
+          
+        if (credential_default_variable) {
           credential_default_variable.ServerToServer = "0";
-          credential_config_variable.ServerToServer = "0";
-          PagamentoServerToServerMBWAY_documentacao = "0";
-          PagamentoServerToServer_documentacao = "0";
-          PagamentoMBWAY_documentacao = "0"; 
-          PagamentoCartao_documentacao = "0"; 
-          PagamentoRefereciasMB_documentacao = "0";
+        }
+
+        if (credential_config_variable) {
+            credential_config_variable.ServerToServer = "0";
+        }
+
+        PagamentoServerToServerMBWAY_documentacao = "0";
+        PagamentoServerToServer_documentacao = "0";
+        PagamentoMBWAY_documentacao = "0";
+        PagamentoCartao_documentacao = "0";
+        PagamentoRefereciasMB_documentacao = "0";
       }
 
+      
       //para o corpo do debug (debug - body do checkout)
       const debugHeaders = {
         "Authorization": `Bearer ${maskValue(token)}`,
