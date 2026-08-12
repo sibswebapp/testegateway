@@ -446,6 +446,9 @@
       }
 
 
+      referenceExpiry = credential_config_variable?.referenceExpiry ?? credential_default_variable?.referenceExpiry;
+      referenceExpiryUnit = credential_config_variable?.referenceExpiryUnit ?? credential_default_variable?.referenceExpiryUnit;
+
       const MBWAYNumberPrefillchecked_input = credential_config_variable?.MBWAYNumberPrefillchecked ?? credential_default_variable?.MBWAYNumberPrefillchecked;
 
       typeOfPayment = credential_config_variable?.typeOfPayment ?? credential_default_variable?.typeOfPayment;
@@ -818,7 +821,7 @@
             if (selectedMethod === "REFERENCE") {
               debugBody.transaction.paymentReference = {
                 initialDatetime: initialDatetime,
-                finalDatetime: finalDatetime.toISOString(),
+                finalDatetime: finalDatetimeStr.toISOString(),
                 maxAmount: { value: amount, currency: "EUR" },
                 minAmount: { value: amount, currency: "EUR" },
                 entity: entity
@@ -1183,9 +1186,51 @@
       }
 
       //para o corpo do debug (debug - body do checkout)
-      const initialDatetime = new Date().toISOString();
-      const finalDatetime = new Date();
-      finalDatetime.setMonth(finalDatetime.getMonth() + 2);
+      const initialDatetime = new Date();
+
+      const finalDatetime = new Date(initialDatetime);
+
+
+      const referenceExpiry = credential_config_variable?.referenceExpiry ?? credential_default_variable?.referenceExpiry;
+      const referenceExpiryUnit = credential_config_variable?.referenceExpiryUnit ?? credential_default_variable?.referenceExpiryUnit;
+
+      // força número
+      const expiryValue = parseInt(referenceExpiry, 10);
+      const unit = String(referenceExpiryUnit || "").toLowerCase();
+
+      if (!isNaN(expiryValue) && expiryValue > 0) {
+        switch (unit) {
+          case "hours":
+            finalDatetime.setHours(initialDatetime.getHours() + expiryValue);
+            break;
+
+          case "days":
+            finalDatetime.setDate(initialDatetime.getDate() + expiryValue);
+            break;
+
+          case "months":
+            // usa setFullYear para evitar overflow e bug de string
+            finalDatetime.setFullYear(
+              initialDatetime.getFullYear(),
+              initialDatetime.getMonth() + expiryValue,
+              initialDatetime.getDate()
+            );
+            break;
+
+          default:
+            console.warn("Unidade de expiração desconhecida:", referenceExpiryUnit);
+            break;
+        }
+      } else {
+          finalDatetime.setFullYear(
+          initialDatetime.getFullYear(),
+          initialDatetime.getMonth() + 2,
+          initialDatetime.getDate()
+        );
+      }
+
+      const finalDatetimeStr = finalDatetime.toISOString();
+
       const versionTypePayment = typeOfPayment === "1" ? "PURS" : "AUTH";
 
       const debugBody = {
@@ -1210,7 +1255,7 @@
       if (paymentMethodArray.length === 1 && paymentMethodArray[0] === "REFERENCE") {
         debugBody.transaction.paymentReference = {
           initialDatetime: initialDatetime,
-          finalDatetime: finalDatetime.toISOString(),
+          finalDatetime: finalDatetimeStr,
           maxAmount: { value: amount, currency: "EUR" },
           minAmount: { value: amount, currency: "EUR" },
           entity: entity
