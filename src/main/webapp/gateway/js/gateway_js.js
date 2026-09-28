@@ -970,7 +970,7 @@
         form.setAttribute("spg-style", JSON.stringify({
             layout: LayoutVersion,
             theme: "default",
-            color: {
+            color: { 
                   "primary": primaryColor,
                   "secondary": "",
                   "border": "",
