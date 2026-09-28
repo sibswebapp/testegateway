@@ -445,7 +445,6 @@
 
       }
 
-
       referenceExpiry = credential_config_variable?.referenceExpiry ?? credential_default_variable?.referenceExpiry;
       referenceExpiryUnit = credential_config_variable?.referenceExpiryUnit ?? credential_default_variable?.referenceExpiryUnit;
 
