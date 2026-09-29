@@ -19,7 +19,8 @@
       VersionpagamentosAutorizados: "0",
       pagamentosAutorizados: "0",
       MBWAYNumberPrefillchecked: "0",
-      MBWAYPREFILL: ""
+      MBWAYPREFILL: "",
+      MerchantTransactionID: ""
     };
 
     localStorage.setItem('credential_default', JSON.stringify(credential_default));
@@ -127,6 +128,9 @@
             }
         });
 
+        const hideAmountEl = document.getElementById('hideAmountToggle');
+        const isAmountHidden = hideAmountEl ? hideAmountEl.checked : false;
+
         // 2. O GATILHO DINÂMICO: Se já houver um checkout gerado no ecrã, redesenha-o com a nova cor!
         if (typeof lastActiveTransaction !== "undefined" && lastActiveTransaction !== null) {
             generatePaymentForm(
@@ -134,7 +138,8 @@
                 lastActiveTransaction.formContext,
                 lastActiveTransaction.transactionSignature,
                 lastActiveTransaction.data,
-                lastActiveTransaction.paymentMethodArray
+                lastActiveTransaction.paymentMethodArray,
+                isAmountHidden
             );
         }
     }
@@ -145,8 +150,12 @@
         document.getElementById('checkoutSurfaceColor').value = '#FFFFFF';
         document.getElementById('bodyBgColor').value = '#FFFFFF';
         document.getElementById('bodyTextColor').value = '#000000';
-
-       const Reset = 1;
+        
+        const hideAmountEl = document.getElementById('hideAmountToggle');
+        if (hideAmountEl) {
+          hideAmountEl.checked = false;
+        }
+        const Reset = 1;
 
         updateSibsStyles();
         guardarConfiguracao(Reset);
@@ -176,6 +185,10 @@
 
       if (configuracao.familyTypeText)
           document.getElementById("familyTypeText").value = configuracao.familyTypeText;
+
+      if (configuracao.hideAmountToggle !== undefined) {
+        document.getElementById("hideAmountToggle").checked = Boolean(configuracao.hideAmountToggle);
+      }
 
       updateSibsStyles();
 
@@ -405,6 +418,7 @@
       let VersionpagamentosAutorizados;
       let MBWAYNumberPrefillchecked;
       let MBWAYPREFILL;
+      let MerchantTransactionID
 
       if(default_Configs == "0" && credential_config_variable.useDefaultConfig == "true"){
         token = credential_default_variable.bearerToken;
@@ -430,6 +444,7 @@
         VersionpagamentosAutorizados = credential_default_variable.VersionpagamentosAutorizados;
         MBWAYNumberPrefillchecked = credential_default_variable.MBWAYNumberPrefillchecked;
         MBWAYPREFILL = credential_default_variable.MBWAYPREFILL;
+        MerchantTransactionID = credential_default_variable.MerchantTransactionID;
 
       }else{
 
@@ -442,11 +457,15 @@
         VersionpagamentosAutorizados = credential_config_variable?.VersionpagamentosAutorizados ?? credential_default_variable?.VersionpagamentosAutorizados;
         MBWAYNumberPrefillchecked = credential_config_variable?.MBWAYNumberPrefillchecked ?? credential_default_variable?.MBWAYNumberPrefillchecked;
         MBWAYPREFILL = credential_config_variable?.MBWAYPREFILL ?? credential_default_variable?.MBWAYPREFILL;
+        MerchantTransactionID = credential_config_variable?.MerchantTransactionID ?? credential_default_variable?.MBWAYPREFILL;
 
       }
 
       referenceExpiry = credential_config_variable?.referenceExpiry ?? credential_default_variable?.referenceExpiry;
       referenceExpiryUnit = credential_config_variable?.referenceExpiryUnit ?? credential_default_variable?.referenceExpiryUnit;
+      MerchantTransactionID = credential_config_variable?.MerchantTransactionID ?? credential_default_variable?.MBWAYPREFILL;
+
+
 
       const MBWAYNumberPrefillchecked_input = credential_config_variable?.MBWAYNumberPrefillchecked ?? credential_default_variable?.MBWAYNumberPrefillchecked;
 
@@ -610,6 +629,7 @@
         amountValue = 1;
       }
 
+
       if (selectedMethod == "PA") {
 
         if (VersionpagamentosAutorizados === "1") {
@@ -625,7 +645,7 @@
           merchant:{
             terminalId: terminalId,
             channel: "web",
-            merchantTransactionId: "mandatosExemplo",
+            merchantTransactionId: MerchantTransactionID || "mandatosExemplo",
             transactionDescription: "mandatosExemplo"
           },
           mandate: {
@@ -640,7 +660,7 @@
           merchant: {
             terminalId: terminalId,
             channel: "web",
-            merchantTransactionId: "OrderID"
+            merchantTransactionId: MerchantTransactionID || "OrderID"
           },
           transaction: {
             transactionTimestamp: new Date().toISOString(),
@@ -668,7 +688,7 @@
           merchant: {
             terminalId: terminalId,
             channel: "web",
-            merchantTransactionId: "OrderID"
+            merchantTransactionId: MerchantTransactionID || "OrderID"
           },
           transaction: {
             transactionTimestamp: new Date().toISOString(),
@@ -777,7 +797,8 @@
             data.formContext,
             data.transactionSignature,
             data,
-            paymentMethodArray
+            paymentMethodArray,
+            MerchantTransactionID
           );
         } else {
           throw new Error("Resposta da API incompleta.");
@@ -797,12 +818,13 @@
               "Accept": "application/json"
             };
 
+            const MerchantTransactionID = credential_config_variable?.MerchantTransactionID ?? credential_default_variable?.MerchantTransactionID;
 
             const debugBody = {
               merchant: {
                 terminalId: terminalId,
                 channel: "web",
-                merchantTransactionId: "OrderID"
+                merchantTransactionId: MerchantTransactionID || "OrderID"
               },
               transaction: {
                 transactionTimestamp: new Date().toISOString(),
@@ -872,7 +894,7 @@
     }
 
     //função que gera o form (logo a seguir ao checkout)
-    function generatePaymentForm(transactionID, formContext, transactionSignature, data, paymentMethodArray) {
+    function generatePaymentForm(transactionID, formContext, transactionSignature, data, paymentMethodArray,isAmountHidden, MerchantTransactionID) {
 
       const formContainer = document.getElementById("payment-form");
       formContainer.innerHTML = "";
@@ -883,7 +905,8 @@
       const bodyBgColor = document.getElementById("bodyBgColor")?.value || "";
       const bodyTextColor = document.getElementById("bodyTextColor")?.value || "";
       const familyTypeText = document.getElementById("familyTypeText")?.value || "";
-
+      const hideAmountToggleInput = document.getElementById('hideAmountToggle');
+      const hideAmountToggle = hideAmountToggleInput ? hideAmountToggleInput.checked : false;
 
       let token_payment;
       let clientId_payment;
@@ -956,15 +979,22 @@
 
         form.setAttribute("spg-context", formContext);
 
+        
+        const hideAmount = hideAmountToggle == "1" || hideAmountToggle === true || hideAmountToggle == "true" || hideAmountToggle == "on ";
+
         form.setAttribute("spg-config", JSON.stringify({
-          paymentMethodList: [],
-          amount: { value: amount, currency: "EUR" },
-          language: "pt",
-          redirectUrl: redirectUrl
+            paymentMethodList: [],
+            amount: { value: amount, currency: "EUR" },
+            language: "pt",
+            redirectUrl: redirectUrl,
+            hideAmount: hideAmount
+            //hideCardholderName: true,
         }));
 
-        if(LayoutVersion == "1") LayoutVersion = "spg_form_tabs"
-        if(LayoutVersion == "2") LayoutVersion = "spg_form"
+      
+
+        if(LayoutVersion == "1") LayoutVersion = "spg_form"
+        if(LayoutVersion == "2") LayoutVersion = "spg_form_tabs"
 
         form.setAttribute("spg-style", JSON.stringify({
             layout: LayoutVersion,
@@ -1193,6 +1223,8 @@
       const referenceExpiry = credential_config_variable?.referenceExpiry ?? credential_default_variable?.referenceExpiry;
       const referenceExpiryUnit = credential_config_variable?.referenceExpiryUnit ?? credential_default_variable?.referenceExpiryUnit;
 
+      MerchantTransactionID = credential_config_variable?.MerchantTransactionID ?? credential_default_variable?.MerchantTransactionID;
+
       // força número
       const expiryValue = parseInt(referenceExpiry, 10);
       const unit = String(referenceExpiryUnit || "").toLowerCase();
@@ -1232,11 +1264,12 @@
 
       const versionTypePayment = typeOfPayment === "1" ? "PURS" : "AUTH";
 
+
       const debugBody = {
         merchant: {
           terminalId: terminalId,
           channel: "web",
-          merchantTransactionId: "OrderID"
+          merchantTransactionId: MerchantTransactionID || "OrderID"
         },
         transaction: {
           transactionTimestamp: new Date().toISOString(),
@@ -1578,13 +1611,18 @@
   }
 
   function guardarConfiguracao(Reset) {
+
+    const hideAmountToggleInput = document.getElementById('hideAmountToggle');
+    const hideAmountToggleResult = hideAmountToggleInput ? hideAmountToggleInput.checked : false;
+
     const configuracao = {
         primaryColor: document.getElementById("checkoutPrimaryColor")?.value || "",
         surfaceColor: document.getElementById("checkoutSurfaceColor")?.value || "",
         textColor: document.getElementById("checkoutTextColor")?.value || "",
         bodyBgColor: document.getElementById("bodyBgColor")?.value || "",
         bodyTextColor: document.getElementById("bodyTextColor")?.value || "",
-        familyTypeText: document.getElementById("familyTypeText")?.value || ""
+        familyTypeText: document.getElementById("familyTypeText")?.value || "",
+        hideAmountToggle: hideAmountToggleResult
     };
 
     localStorage.setItem(

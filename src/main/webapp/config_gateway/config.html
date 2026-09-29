@@ -65,6 +65,10 @@
             <li class="nav-item" role="presentation">
               <button class="nav-link" id="MITS-tab" data-bs-toggle="tab" data-bs-target="#MITS" type="button" role="tab">MITs</button>
             </li>
+             <!-- xpay
+             <li class="nav-item" role="presentation">
+              <button class="nav-link" id="Xpay-tab" data-bs-toggle="tab" data-bs-target="#Xpay" type="button" role="tab">Xpay</button>
+            </li> -->
           </ul>
 
           <!-- Tab panes -->
@@ -152,8 +156,8 @@
                   <div id="LayoutVersionContainer" style="width: 220px;">
                     <label for="LayoutVersion" class="form-label">Versão do Layout <strong style="color: #ff5d5d;">*</strong>:</label>
                     <select id="LayoutVersion" class="form-select">
-                      <option value="1" selected>spg_form_tabs</option>
-                      <option value="2">spg_form</option>
+                      <option value="1" selected>spg_form</option>
+                      <option value="2">spg_form_tabs</option>
                     </select>
                   </div>
 
@@ -200,6 +204,11 @@
                 </div>
               </div>
 
+              <div class="mb-4" id="inputMerchantTransactionID">
+                <label for="entity" class="form-label">Merchant Transaction ID (35 caracteres maximo):</label>
+                <input type="text" maxlength="35" id="MerchantTransactionID" class="form-control" placeholder="Insira um Merchant Transaction ID">
+              </div>
+              
               <div class="mb-4" id="inputEntity">
                 <label for="entity" class="form-label">Entidade (Multibanco) <strong style="color: #ff5d5d;">*</strong>:</label>
                 <input type="text" id="entity" class="form-control" placeholder="Insira a entidade de pagamento">
@@ -260,6 +269,33 @@
               <br>
 
             </div>
+
+            <!-- Xpay 
+            <div class="tab-pane fade" id="Xpay" role="tabpanel" aria-labelledby="Xpay-tab">
+
+              <div class="row align-items-center mb-4">
+                  
+                <div class="col-md-3 mb-3 mb-md-0">
+                  <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="Xpaychecked" onchange="toggleXpay(this);">
+                    <label class="form-check-label" for="Xpaychecked">
+                      Ativar pagamentos xpay (Google Pay e Apple Pay)
+                    </label>
+                  </div>
+                </div>
+
+                <div class="col-md-4" id="LayoutVersionMITS">
+                  <label for="VersionMITS" class="form-label fw-semibold">Tipo de MITs <strong style="color: #ff5d5d;">*</strong>:</label>
+                  <select id="VersionMITS" class="form-select">
+                    <option value="1" selected>UCOF</option>
+                    <option value="2">Recorrentes</option>
+                  </select>
+                </div>
+              </div>
+          
+              <br>
+
+            </div>-->
 
             <!--Botão de salvar os dados-->
             <button class="btn btn-primary w-100" onclick="saveConfig()">Guardar Configuração</button>

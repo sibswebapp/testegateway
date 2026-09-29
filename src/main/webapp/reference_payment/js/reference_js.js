@@ -105,66 +105,121 @@ document.addEventListener("DOMContentLoaded", async function () {
                     ? statusCfg["CANC"] 
                     : (statusCfg[data.paymentStatus] || { label: data.paymentStatus, icon: "fa-question", color: "#374151", bg: "#f3f4f6" });
 
-                referenceDiv.innerHTML = `
-                    <div class="card border-0 shadow-lg mx-auto mt-4" style="max-width: 750px; border-radius: 1.25rem; overflow: hidden;">
-                        
-                        <div class="row g-0">
-                            <div class="col-md-3 d-flex flex-column align-items-center justify-content-center p-4" style="background-color: ${current.bg}; border-right: 2px dashed #e5e7eb;">
-                                <div class="mb-2" style="color: ${current.color}; font-size: 3rem;">
-                                    <i class="fa-solid ${current.icon}"></i>
+                    
+                // Verifica se a transação falhou ou se o estado é recusado/desconhecido
+                const isError = data.paymentStatus === "Declined" || 
+                                data.paymentReference?.status === "UNKN" || 
+                                data.transactionStatusCode === "E9999";
+
+                if (isError) {
+                    // HTML de Erro
+                    referenceDiv.innerHTML = `
+                        <div class="card border-0 shadow-lg mx-auto mt-4" style="max-width: 750px; border-radius: 1.25rem; overflow: hidden;">
+                            <div class="row g-0">
+                                <div class="col-md-3 d-flex flex-column align-items-center justify-content-center p-4 bg-danger bg-gradient text-white">
+                                    <div class="mb-2" style="font-size: 3rem;">
+                                        <i class="fa-solid fa-triangle-exclamation"></i>
+                                    </div>
+                                    <h6 class="fw-bold mb-0 text-center text-uppercase" style="letter-spacing: 1px;">
+                                        Erro no Pagamento
+                                    </h6>
                                 </div>
-                                <h6 class="fw-bold mb-0 text-center" style="color: ${current.color}; letter-spacing: 1px; text-transform: uppercase;">
-                                    ${current.label}
-                                </h6>
-                            </div>
 
-                            <div class="col-md-9">
-                                <div class="card-body p-4 bg-white">
-                                    <div class="row mb-4">
-                                        <div class="col-6 text-start">
-                                            <p class="text-muted small fw-bold mb-1">ENTIDADE</p>
-                                            <span class="h4 fw-bold text-dark">${data.paymentReference.paymentEntity}</span>
+                                <div class="col-md-9">
+                                    <div class="card-body p-4 bg-white">
+                                        <div class="alert alert-danger d-flex align-items-center mb-3" role="alert">
+                                            <i class="fa-solid fa-circle-xmark fs-4 me-3"></i>
+                                            <div>
+                                                <strong>Operação Recusada:</strong><br>
+                                                ${data.transactionStatusDescription || 'Erro ao processar o pagamento.'}
+                                            </div>
                                         </div>
-                                        <div class="col-6 text-end">
-                                            <p class="text-muted small fw-bold mb-1">MONTANTE</p>
-                                            <span class="h4 fw-bold text-primary">${data.amount.value} €</span>
-                                        </div>
-                                    </div>
 
-                                    <div class="p-4 mb-3 rounded-3 text-center" style="background: #f8fafc; border: 1px solid #f1f5f9; position: relative;">
-                                        <p class="text-muted small fw-bold mb-2">REFERÊNCIA BANCÁRIA</p>
-                                        <span class="display-6 fw-bold font-monospace" style="letter-spacing: 8px; color: #1e293b;">
-                                            ${data.paymentReference.reference.replace(/(.{3})/g, '$1 ')}
-                                        </span>
-                                    </div>
-
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <span class="text-muted small">
-                                            <i class="fa-regular fa-calendar-check me-1"></i> 
-                                            Limite de pagamento: <strong>${new Date(data.paymentReference.expireDate).toLocaleDateString('pt-BR', {day:'2-digit', month:'2-digit', year:'numeric'})}</strong>
-                                        </span>
-                                        
-                                        <div class="d-flex gap-2">
-                                            ${data.paymentStatus === "Success" ? `
-                                                <button type="button" id="refund-btn" class="btn btn-warning btn-sm fw-bold px-3 rounded-pill">
-                                                    <i class="fa-solid fa-arrow-rotate-left me-1"></i> Reembolsar
-                                                </button>
-                                            ` : ""}
-                                            
-                                            ${data.paymentStatus === "Pending" ? `
-                                                <button type="button" id="cancel-ref-btn" class="btn btn-danger btn-sm fw-bold px-3 rounded-pill">
-                                                    <i class="fa-solid fa-xmark me-1"></i> Cancelar Referência Bancária
-                                                </button>
-                                            ` : ""}
-                                            
+                                        <div class="p-3 bg-light rounded-3">
+                                            <div class="row text-muted small">
+                                                <div class="col-6 mb-2">
+                                                    <strong>Código do Erro:</strong> <span class="badge bg-secondary">${data.transactionStatusCode || 'N/A'}</span>
+                                                </div>
+                                                <div class="col-6 mb-2 text-end">
+                                                    <strong>Montante:</strong> ${data.amount?.value || '0.00'} €
+                                                </div>
+                                                <div class="col-12">
+                                                    <strong>ID da Transação:</strong> <code class="text-dark">${data.transactionID || 'N/A'}</code>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                `;
+                    `;
+                } else {
+                    // HTML Sucesso / Pendente (o teu código original com Optional Chaining seguro)
+                    const entity = data.paymentReference?.paymentEntity || "N/A";
+                    const refRaw = data.paymentReference?.reference || "";
+                    const refFormatted = refRaw ? refRaw.replace(/(.{3})/g, '$1 ') : "N/A";
+                    const expireDateStr = data.paymentReference?.expireDate 
+                        ? new Date(data.paymentReference.expireDate).toLocaleDateString('pt-BR', {day:'2-digit', month:'2-digit', year:'numeric'})
+                        : "N/A";
 
+                    referenceDiv.innerHTML = `
+                        <div class="card border-0 shadow-lg mx-auto mt-4" style="max-width: 750px; border-radius: 1.25rem; overflow: hidden;">
+                            <div class="row g-0">
+                                <div class="col-md-3 d-flex flex-column align-items-center justify-content-center p-4" style="background-color: ${current.bg}; border-right: 2px dashed #e5e7eb;">
+                                    <div class="mb-2" style="color: ${current.color}; font-size: 3rem;">
+                                        <i class="fa-solid ${current.icon}"></i>
+                                    </div>
+                                    <h6 class="fw-bold mb-0 text-center" style="color: ${current.color}; letter-spacing: 1px; text-transform: uppercase;">
+                                        ${current.label}
+                                    </h6>
+                                </div>
+
+                                <div class="col-md-9">
+                                    <div class="card-body p-4 bg-white">
+                                        <div class="row mb-4">
+                                            <div class="col-6 text-start">
+                                                <p class="text-muted small fw-bold mb-1">ENTIDADE</p>
+                                                <span class="h4 fw-bold text-dark">${entity}</span>
+                                            </div>
+                                            <div class="col-6 text-end">
+                                                <p class="text-muted small fw-bold mb-1">MONTANTE</p>
+                                                <span class="h4 fw-bold text-primary">${data.amount?.value} €</span>
+                                            </div>
+                                        </div>
+
+                                        <div class="p-4 mb-3 rounded-3 text-center" style="background: #f8fafc; border: 1px solid #f1f5f9; position: relative;">
+                                            <p class="text-muted small fw-bold mb-2">REFERÊNCIA BANCÁRIA</p>
+                                            <span class="display-6 fw-bold font-monospace" style="letter-spacing: 8px; color: #1e293b;">
+                                                ${refFormatted}
+                                            </span>
+                                        </div>
+
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span class="text-muted small">
+                                                <i class="fa-regular fa-calendar-check me-1"></i> 
+                                                Limite de pagamento: <strong>${expireDateStr}</strong>
+                                            </span>
+
+                                            <div class="d-flex gap-2">
+                                                ${data.paymentStatus === "Success" ? `
+                                                    <button type="button" id="refund-btn" class="btn btn-warning btn-sm fw-bold px-3 rounded-pill">
+                                                        <i class="fa-solid fa-arrow-rotate-left me-1"></i> Reembolsar
+                                                    </button>
+                                                ` : ""}
+
+                                                ${data.paymentStatus === "Pending" ? `
+                                                    <button type="button" id="cancel-ref-btn" class="btn btn-danger btn-sm fw-bold px-3 rounded-pill">
+                                                        <i class="fa-solid fa-xmark me-1"></i> Cancelar Referência Bancária
+                                                    </button>
+                                                ` : ""}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
                 // Adicionar event listener para o botão de reembolso
                 if (data.paymentStatus === "Success") {
                     document.getElementById("refund-btn").addEventListener("click", function() {

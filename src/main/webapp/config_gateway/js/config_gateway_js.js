@@ -260,6 +260,7 @@
       let pagamentosAutorizados = document.getElementById('pagamentosAutorizadoschecked').checked ? 1 : 0;
       let MBWAYPREFILL = document.getElementById('MBWAYPREFILL').value;
       let MBWAYNumberPrefillchecked = document.getElementById('MBWAYNumberPrefillchecked').checked ? 1 : 0;
+      let MerchantTransactionID = document.getElementById("MerchantTransactionID").value.trim();
 
 
       const methods = Array.from(document.getElementById('paymentMethods').selectedOptions).map(opt => opt.value);
@@ -327,7 +328,8 @@
         pagamentosAutorizados: pagamentosAutorizados,
         VersionpagamentosAutorizados: VersionpagamentosAutorizados,
         MBWAYNumberPrefillchecked: MBWAYNumberPrefillchecked,
-        MBWAYPREFILL: MBWAYPREFILL
+        MBWAYPREFILL: MBWAYPREFILL,
+        MerchantTransactionID:MerchantTransactionID
       };
 
       localStorage.setItem('credential_config', JSON.stringify(credential_obj));
@@ -357,6 +359,7 @@
       let VersionpagamentosAutorizados
       let MBWAYNumberPrefillchecked
       let MBWAYPREFILL
+      let MerchantTransactionID
 
       if(useDefault == "1"){
         checkbox_option = credentialDefaultObj.useDefaultConfig;
@@ -374,6 +377,7 @@
         VersionpagamentosAutorizados = credentialDefaultObj.VersionpagamentosAutorizados;
         MBWAYNumberPrefillchecked = credentialDefaultObj.MBWAYNumberPrefillchecked;
         MBWAYPREFILL = credentialDefaultObj.MBWAYPREFILL;
+        MerchantTransactionID = credentialDefaultObj.MerchantTransactionID;
 
       }else{
         checkbox_option = credential_config_variable.useDefaultConfig;
@@ -391,6 +395,8 @@
         VersionpagamentosAutorizados = credential_config_variable.VersionpagamentosAutorizados;
         MBWAYNumberPrefillchecked = credential_config_variable.MBWAYNumberPrefillchecked;
         MBWAYPREFILL = credential_config_variable.MBWAYPREFILL;
+        MerchantTransactionID = credential_config_variable.MerchantTransactionID;
+
       }
 
       checkbox.checked = checkbox_option === "true" || checkbox_option === true || checkbox_option === 1 || checkbox_option === "1" ;
@@ -413,6 +419,7 @@
         document.getElementById('VersionpagamentosAutorizados').value = credential_config_variable.VersionpagamentosAutorizados;
         document.getElementById('MBWAYNumberPrefillchecked').value = credential_config_variable.MBWAYNumberPrefillchecked;
         document.getElementById('MBWAYPREFILL').value = credential_config_variable.MBWAYPREFILL;
+        document.getElementById('MerchantTransactionID').value = credential_config_variable.MerchantTransactionID;
       }
 
       if(useDefault){
