@@ -13,9 +13,11 @@ const prefix = HOST === '127.0.0.1' ? '' : '/SimuladorSIBS';
 
 
 
-const API_URL =
-    `http://${HOST}:${PORT}${prefix}/api/validar-clientid_script`;
+//const API_URL =
+   // `http://${HOST}:${PORT}${prefix}/api/validar-clientid_script`;
 
+const API_URL =
+   `http://sibsdigitalcommerce.com/SimuladorSIBS/api/validar-clientid_script`;
 
 // 10 pedidos por execução
 const REQUESTS_PER_RUN = 10;
