@@ -9,12 +9,12 @@ const path = require("path");
 const HOST = process.env.HOST || "127.0.0.1";
 const PORT = process.env.PORT || 8002;
 
-const prefix = HOST === "127.0.0.1"
-    ? ""
-    : "/SimuladorSIBS";
+const prefix = HOST === '127.0.0.1' ? '' : '/SimuladorSIBS';
+
+
 
 const API_URL =
-    `http://127.0.0.1:${PORT}${prefix}/api/validar-clientid_script`;
+    `http://${HOST}:${PORT}${prefix}/api/validar-clientid_script`;
 
 
 // 10 pedidos por execução

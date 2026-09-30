@@ -2435,5 +2435,430 @@
                 }
             }
         ]
+    },
+    {
+        "timestamp": "2026-09-30T21:18:12.807Z",
+        "total": 10,
+        "success": 0,
+        "errors": 10,
+        "percentage": 0,
+        "results": [
+            {
+                "status": "error",
+                "httpStatus": null,
+                "duration": 16,
+                "error": "Failed to parse URL from /api/validar-clientid_script"
+            },
+            {
+                "status": "error",
+                "httpStatus": null,
+                "duration": 0,
+                "error": "Failed to parse URL from /api/validar-clientid_script"
+            },
+            {
+                "status": "error",
+                "httpStatus": null,
+                "duration": 0,
+                "error": "Failed to parse URL from /api/validar-clientid_script"
+            },
+            {
+                "status": "error",
+                "httpStatus": null,
+                "duration": 0,
+                "error": "Failed to parse URL from /api/validar-clientid_script"
+            },
+            {
+                "status": "error",
+                "httpStatus": null,
+                "duration": 0,
+                "error": "Failed to parse URL from /api/validar-clientid_script"
+            },
+            {
+                "status": "error",
+                "httpStatus": null,
+                "duration": 0,
+                "error": "Failed to parse URL from /api/validar-clientid_script"
+            },
+            {
+                "status": "error",
+                "httpStatus": null,
+                "duration": 0,
+                "error": "Failed to parse URL from /api/validar-clientid_script"
+            },
+            {
+                "status": "error",
+                "httpStatus": null,
+                "duration": 0,
+                "error": "Failed to parse URL from /api/validar-clientid_script"
+            },
+            {
+                "status": "error",
+                "httpStatus": null,
+                "duration": 0,
+                "error": "Failed to parse URL from /api/validar-clientid_script"
+            },
+            {
+                "status": "error",
+                "httpStatus": null,
+                "duration": 0,
+                "error": "Failed to parse URL from /api/validar-clientid_script"
+            }
+        ]
+    },
+    {
+        "timestamp": "2026-09-30T21:18:35.568Z",
+        "total": 10,
+        "success": 0,
+        "errors": 10,
+        "percentage": 0,
+        "results": [
+            {
+                "status": "error",
+                "httpStatus": null,
+                "duration": 15,
+                "error": "Failed to parse URL from 8002/api/validar-clientid_script"
+            },
+            {
+                "status": "error",
+                "httpStatus": null,
+                "duration": 0,
+                "error": "Failed to parse URL from 8002/api/validar-clientid_script"
+            },
+            {
+                "status": "error",
+                "httpStatus": null,
+                "duration": 0,
+                "error": "Failed to parse URL from 8002/api/validar-clientid_script"
+            },
+            {
+                "status": "error",
+                "httpStatus": null,
+                "duration": 1,
+                "error": "Failed to parse URL from 8002/api/validar-clientid_script"
+            },
+            {
+                "status": "error",
+                "httpStatus": null,
+                "duration": 0,
+                "error": "Failed to parse URL from 8002/api/validar-clientid_script"
+            },
+            {
+                "status": "error",
+                "httpStatus": null,
+                "duration": 0,
+                "error": "Failed to parse URL from 8002/api/validar-clientid_script"
+            },
+            {
+                "status": "error",
+                "httpStatus": null,
+                "duration": 0,
+                "error": "Failed to parse URL from 8002/api/validar-clientid_script"
+            },
+            {
+                "status": "error",
+                "httpStatus": null,
+                "duration": 0,
+                "error": "Failed to parse URL from 8002/api/validar-clientid_script"
+            },
+            {
+                "status": "error",
+                "httpStatus": null,
+                "duration": 1,
+                "error": "Failed to parse URL from 8002/api/validar-clientid_script"
+            },
+            {
+                "status": "error",
+                "httpStatus": null,
+                "duration": 1,
+                "error": "Failed to parse URL from 8002/api/validar-clientid_script"
+            }
+        ]
+    },
+    {
+        "timestamp": "2026-09-30T21:19:13.605Z",
+        "total": 10,
+        "success": 0,
+        "errors": 10,
+        "percentage": 0,
+        "results": [
+            {
+                "status": "error",
+                "httpStatus": null,
+                "duration": 15,
+                "error": "Failed to parse URL from 127.0.0.1:8002/api/validar-clientid_script"
+            },
+            {
+                "status": "error",
+                "httpStatus": null,
+                "duration": 0,
+                "error": "Failed to parse URL from 127.0.0.1:8002/api/validar-clientid_script"
+            },
+            {
+                "status": "error",
+                "httpStatus": null,
+                "duration": 0,
+                "error": "Failed to parse URL from 127.0.0.1:8002/api/validar-clientid_script"
+            },
+            {
+                "status": "error",
+                "httpStatus": null,
+                "duration": 0,
+                "error": "Failed to parse URL from 127.0.0.1:8002/api/validar-clientid_script"
+            },
+            {
+                "status": "error",
+                "httpStatus": null,
+                "duration": 0,
+                "error": "Failed to parse URL from 127.0.0.1:8002/api/validar-clientid_script"
+            },
+            {
+                "status": "error",
+                "httpStatus": null,
+                "duration": 1,
+                "error": "Failed to parse URL from 127.0.0.1:8002/api/validar-clientid_script"
+            },
+            {
+                "status": "error",
+                "httpStatus": null,
+                "duration": 0,
+                "error": "Failed to parse URL from 127.0.0.1:8002/api/validar-clientid_script"
+            },
+            {
+                "status": "error",
+                "httpStatus": null,
+                "duration": 0,
+                "error": "Failed to parse URL from 127.0.0.1:8002/api/validar-clientid_script"
+            },
+            {
+                "status": "error",
+                "httpStatus": null,
+                "duration": 0,
+                "error": "Failed to parse URL from 127.0.0.1:8002/api/validar-clientid_script"
+            },
+            {
+                "status": "error",
+                "httpStatus": null,
+                "duration": 1,
+                "error": "Failed to parse URL from 127.0.0.1:8002/api/validar-clientid_script"
+            }
+        ]
+    },
+    {
+        "timestamp": "2026-09-30T21:19:31.261Z",
+        "total": 10,
+        "success": 10,
+        "errors": 0,
+        "percentage": 100,
+        "results": [
+            {
+                "status": "success",
+                "httpStatus": 200,
+                "duration": 623,
+                "returnStatus": {
+                    "statusCode": "000",
+                    "statusMsg": "Success",
+                    "statusDescription": "Success"
+                }
+            },
+            {
+                "status": "success",
+                "httpStatus": 200,
+                "duration": 368,
+                "returnStatus": {
+                    "statusCode": "000",
+                    "statusMsg": "Success",
+                    "statusDescription": "Success"
+                }
+            },
+            {
+                "status": "success",
+                "httpStatus": 200,
+                "duration": 353,
+                "returnStatus": {
+                    "statusCode": "000",
+                    "statusMsg": "Success",
+                    "statusDescription": "Success"
+                }
+            },
+            {
+                "status": "success",
+                "httpStatus": 200,
+                "duration": 375,
+                "returnStatus": {
+                    "statusCode": "000",
+                    "statusMsg": "Success",
+                    "statusDescription": "Success"
+                }
+            },
+            {
+                "status": "success",
+                "httpStatus": 200,
+                "duration": 447,
+                "returnStatus": {
+                    "statusCode": "000",
+                    "statusMsg": "Success",
+                    "statusDescription": "Success"
+                }
+            },
+            {
+                "status": "success",
+                "httpStatus": 200,
+                "duration": 355,
+                "returnStatus": {
+                    "statusCode": "000",
+                    "statusMsg": "Success",
+                    "statusDescription": "Success"
+                }
+            },
+            {
+                "status": "success",
+                "httpStatus": 200,
+                "duration": 436,
+                "returnStatus": {
+                    "statusCode": "000",
+                    "statusMsg": "Success",
+                    "statusDescription": "Success"
+                }
+            },
+            {
+                "status": "success",
+                "httpStatus": 200,
+                "duration": 342,
+                "returnStatus": {
+                    "statusCode": "000",
+                    "statusMsg": "Success",
+                    "statusDescription": "Success"
+                }
+            },
+            {
+                "status": "success",
+                "httpStatus": 200,
+                "duration": 334,
+                "returnStatus": {
+                    "statusCode": "000",
+                    "statusMsg": "Success",
+                    "statusDescription": "Success"
+                }
+            },
+            {
+                "status": "success",
+                "httpStatus": 200,
+                "duration": 494,
+                "returnStatus": {
+                    "statusCode": "000",
+                    "statusMsg": "Success",
+                    "statusDescription": "Success"
+                }
+            }
+        ]
+    },
+    {
+        "timestamp": "2026-09-30T21:19:58.798Z",
+        "total": 10,
+        "success": 10,
+        "errors": 0,
+        "percentage": 100,
+        "results": [
+            {
+                "status": "success",
+                "httpStatus": 200,
+                "duration": 471,
+                "returnStatus": {
+                    "statusCode": "000",
+                    "statusMsg": "Success",
+                    "statusDescription": "Success"
+                }
+            },
+            {
+                "status": "success",
+                "httpStatus": 200,
+                "duration": 314,
+                "returnStatus": {
+                    "statusCode": "000",
+                    "statusMsg": "Success",
+                    "statusDescription": "Success"
+                }
+            },
+            {
+                "status": "success",
+                "httpStatus": 200,
+                "duration": 294,
+                "returnStatus": {
+                    "statusCode": "000",
+                    "statusMsg": "Success",
+                    "statusDescription": "Success"
+                }
+            },
+            {
+                "status": "success",
+                "httpStatus": 200,
+                "duration": 299,
+                "returnStatus": {
+                    "statusCode": "000",
+                    "statusMsg": "Success",
+                    "statusDescription": "Success"
+                }
+            },
+            {
+                "status": "success",
+                "httpStatus": 200,
+                "duration": 298,
+                "returnStatus": {
+                    "statusCode": "000",
+                    "statusMsg": "Success",
+                    "statusDescription": "Success"
+                }
+            },
+            {
+                "status": "success",
+                "httpStatus": 200,
+                "duration": 308,
+                "returnStatus": {
+                    "statusCode": "000",
+                    "statusMsg": "Success",
+                    "statusDescription": "Success"
+                }
+            },
+            {
+                "status": "success",
+                "httpStatus": 200,
+                "duration": 277,
+                "returnStatus": {
+                    "statusCode": "000",
+                    "statusMsg": "Success",
+                    "statusDescription": "Success"
+                }
+            },
+            {
+                "status": "success",
+                "httpStatus": 200,
+                "duration": 342,
+                "returnStatus": {
+                    "statusCode": "000",
+                    "statusMsg": "Success",
+                    "statusDescription": "Success"
+                }
+            },
+            {
+                "status": "success",
+                "httpStatus": 200,
+                "duration": 294,
+                "returnStatus": {
+                    "statusCode": "000",
+                    "statusMsg": "Success",
+                    "statusDescription": "Success"
+                }
+            },
+            {
+                "status": "success",
+                "httpStatus": 200,
+                "duration": 300,
+                "returnStatus": {
+                    "statusCode": "000",
+                    "statusMsg": "Success",
+                    "statusDescription": "Success"
+                }
+            }
+        ]
     }
 ]
