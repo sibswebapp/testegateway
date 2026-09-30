@@ -1,0 +1,1291 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>API Environment Monitor</title>
+
+
+    <!-- Bootstrap 5 -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+
+    <!-- Bootstrap Icons -->
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    >
+
+
+    <style>
+
+        body {
+
+            background: #f5f7fb;
+
+            color: #212529;
+
+            font-family:
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                Roboto,
+                Arial,
+                sans-serif;
+
+        }
+
+
+        /* =====================================================
+           HEADER
+        ===================================================== */
+
+        .topbar {
+
+            background: #ffffff;
+
+            border-bottom:
+                1px solid #e9ecef;
+
+            padding: 18px 0;
+
+        }
+
+
+        .logo {
+
+            font-weight: 700;
+
+            font-size: 21px;
+
+            color: #212529;
+
+        }
+
+
+        .logo i {
+
+            margin-right: 8px;
+
+        }
+
+
+        .last-update {
+
+            font-size: 13px;
+
+            color: #6c757d;
+
+        }
+
+
+        /* =====================================================
+           STATUS CARD
+        ===================================================== */
+
+        .status-card {
+
+            border: none;
+
+            border-radius: 18px;
+
+            background: #ffffff;
+
+            box-shadow:
+                0 5px 25px rgba(0,0,0,0.05);
+
+            overflow: hidden;
+
+        }
+
+
+        .status-header {
+
+            padding: 30px;
+
+            border-bottom:
+                1px solid #f0f0f0;
+
+        }
+
+
+        .status-label {
+
+            font-size: 13px;
+
+            text-transform: uppercase;
+
+            letter-spacing: 1px;
+
+            color: #6c757d;
+
+            font-weight: 600;
+
+        }
+
+
+        .status {
+
+            font-size: 36px;
+
+            font-weight: 700;
+
+            margin-top: 5px;
+
+        }
+
+
+        .status.stable {
+
+            color: #198754;
+
+        }
+
+
+        .status.unstable {
+
+            color: #dc3545;
+
+        }
+
+
+        .status.degraded {
+
+            color: #fd7e14;
+
+        }
+
+
+        .status-icon {
+
+            width: 65px;
+
+            height: 65px;
+
+            border-radius: 50%;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 30px;
+
+        }
+
+
+        .status-icon.stable {
+
+            background: #d1e7dd;
+
+            color: #198754;
+
+        }
+
+
+        .status-icon.unstable {
+
+            background: #f8d7da;
+
+            color: #dc3545;
+
+        }
+
+
+        .status-icon.degraded {
+
+            background: #ffe5d0;
+
+            color: #fd7e14;
+
+        }
+
+
+        /* =====================================================
+           AVAILABILITY
+        ===================================================== */
+
+        .availability {
+
+            padding: 30px;
+
+        }
+
+
+        .availability-number {
+
+            font-size: 52px;
+
+            font-weight: 700;
+
+            line-height: 1;
+
+        }
+
+
+        .availability-label {
+
+            color: #6c757d;
+
+            margin-top: 8px;
+
+        }
+
+
+        .progress {
+
+            height: 10px;
+
+            border-radius: 20px;
+
+            background: #e9ecef;
+
+            margin-top: 25px;
+
+        }
+
+
+        .progress-bar {
+
+            border-radius: 20px;
+
+        }
+
+
+        /* =====================================================
+           STAT CARDS
+        ===================================================== */
+
+        .stat-card {
+
+            background: #ffffff;
+
+            border: none;
+
+            border-radius: 16px;
+
+            padding: 24px;
+
+            height: 100%;
+
+            box-shadow:
+                0 5px 20px rgba(0,0,0,0.04);
+
+        }
+
+
+        .stat-icon {
+
+            width: 45px;
+
+            height: 45px;
+
+            border-radius: 12px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 21px;
+
+            margin-bottom: 15px;
+
+        }
+
+
+        .stat-title {
+
+            font-size: 13px;
+
+            color: #6c757d;
+
+            margin-bottom: 5px;
+
+        }
+
+
+        .stat-value {
+
+            font-size: 30px;
+
+            font-weight: 700;
+
+        }
+
+
+        .icon-total {
+
+            background: #e7f1ff;
+
+            color: #0d6efd;
+
+        }
+
+
+        .icon-success {
+
+            background: #d1e7dd;
+
+            color: #198754;
+
+        }
+
+
+        .icon-error {
+
+            background: #f8d7da;
+
+            color: #dc3545;
+
+        }
+
+
+        .icon-time {
+
+            background: #fff3cd;
+
+            color: #997404;
+
+        }
+
+
+        /* =====================================================
+           HISTORY
+        ===================================================== */
+
+        .history-card {
+
+            background: #ffffff;
+
+            border: none;
+
+            border-radius: 18px;
+
+            box-shadow:
+                0 5px 25px rgba(0,0,0,0.05);
+
+        }
+
+
+        .history-header {
+
+            padding: 25px;
+
+            border-bottom:
+                1px solid #eee;
+
+        }
+
+
+        .history-title {
+
+            font-size: 19px;
+
+            font-weight: 700;
+
+        }
+
+
+        .table {
+
+            margin-bottom: 0;
+
+        }
+
+
+        .table th {
+
+            font-size: 12px;
+
+            text-transform: uppercase;
+
+            letter-spacing: .5px;
+
+            color: #6c757d;
+
+            background: #fafafa;
+
+            padding: 15px;
+
+        }
+
+
+        .table td {
+
+            padding: 16px 15px;
+
+            vertical-align: middle;
+
+        }
+
+
+        .badge-success {
+
+            background: #d1e7dd;
+
+            color: #146c43;
+
+        }
+
+
+        .badge-error {
+
+            background: #f8d7da;
+
+            color: #b02a37;
+
+        }
+
+
+        .run-result {
+
+            font-weight: 600;
+
+        }
+
+
+        /* =====================================================
+           FOOTER
+        ===================================================== */
+
+        footer {
+
+            color: #8a8f98;
+
+            font-size: 13px;
+
+            padding: 30px 0;
+
+        }
+
+
+        /* =====================================================
+           MOBILE
+        ===================================================== */
+
+        @media (max-width: 768px) {
+
+            .status {
+
+                font-size: 28px;
+
+            }
+
+
+            .availability-number {
+
+                font-size: 42px;
+
+            }
+
+
+            .table {
+
+                min-width: 700px;
+
+            }
+
+
+            .table-container {
+
+                overflow-x: auto;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================================================
+     HEADER
+========================================================= -->
+
+<nav class="topbar">
+
+    <div class="container">
+
+        <div class="d-flex
+                    justify-content-between
+                    align-items-center">
+
+            <div class="logo">
+
+                <i class="bi bi-activity"></i>
+
+                API Environment Monitor
+
+            </div>
+
+
+            <div class="last-update">
+
+                Última atualização:
+
+                <span id="lastUpdate">
+                    -
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</nav>
+
+
+
+<!-- =========================================================
+     MAIN
+========================================================= -->
+
+<main class="container py-4">
+
+
+    <!-- =====================================================
+         STATUS
+    ====================================================== -->
+
+    <div class="card status-card mb-4">
+
+        <div class="status-header">
+
+            <div class="row align-items-center">
+
+                <div class="col-md-8">
+
+                    <div class="status-label">
+
+                        Estado do ambiente
+
+                    </div>
+
+
+                    <div
+                        id="status"
+                        class="status stable"
+                    >
+
+                        A carregar...
+
+                    </div>
+
+
+                    <div class="text-muted">
+
+                        Monitorização automática da API
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-md-4
+                            d-flex
+                            justify-content-md-end
+                            mt-3
+                            mt-md-0">
+
+                    <div
+                        id="statusIcon"
+                        class="status-icon stable"
+                    >
+
+                        <i class="bi bi-check-lg"></i>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="availability">
+
+            <div class="d-flex
+                        justify-content-between
+                        align-items-end">
+
+                <div>
+
+                    <div
+                        id="percentage"
+                        class="availability-number"
+                    >
+                        0%
+                    </div>
+
+                    <div class="availability-label">
+
+                        Disponibilidade acumulada
+
+                    </div>
+
+                </div>
+
+
+                <div class="text-muted">
+
+                    Desde o início da monitorização
+
+                </div>
+
+            </div>
+
+
+            <div class="progress">
+
+                <div
+                    id="progressBar"
+                    class="progress-bar"
+                    role="progressbar"
+                    style="width: 0%"
+                ></div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         STATISTICS
+    ====================================================== -->
+
+    <div class="row g-4 mb-4">
+
+
+        <!-- TOTAL -->
+
+        <div class="col-md-6 col-xl-3">
+
+            <div class="stat-card">
+
+                <div class="stat-icon icon-total">
+
+                    <i class="bi bi-arrow-repeat"></i>
+
+                </div>
+
+
+                <div class="stat-title">
+
+                    Pedidos totais
+
+                </div>
+
+
+                <div
+                    id="total"
+                    class="stat-value"
+                >
+                    0
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- SUCCESS -->
+
+        <div class="col-md-6 col-xl-3">
+
+            <div class="stat-card">
+
+                <div class="stat-icon icon-success">
+
+                    <i class="bi bi-check-circle"></i>
+
+                </div>
+
+
+                <div class="stat-title">
+
+                    Pedidos com sucesso
+
+                </div>
+
+
+                <div
+                    id="success"
+                    class="stat-value text-success"
+                >
+                    0
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ERRORS -->
+
+        <div class="col-md-6 col-xl-3">
+
+            <div class="stat-card">
+
+                <div class="stat-icon icon-error">
+
+                    <i class="bi bi-x-circle"></i>
+
+                </div>
+
+
+                <div class="stat-title">
+
+                    Pedidos com erro
+
+                </div>
+
+
+                <div
+                    id="errors"
+                    class="stat-value text-danger"
+                >
+                    0
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- LAST RUN -->
+
+        <div class="col-md-6 col-xl-3">
+
+            <div class="stat-card">
+
+                <div class="stat-icon icon-time">
+
+                    <i class="bi bi-clock"></i>
+
+                </div>
+
+
+                <div class="stat-title">
+
+                    Última execução
+
+                </div>
+
+
+                <div
+                    id="lastRun"
+                    class="stat-value"
+                    style="font-size: 18px;"
+                >
+                    -
+                </div>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- =====================================================
+         HISTORY
+    ====================================================== -->
+
+    <div class="card history-card">
+
+        <div class="history-header">
+
+            <div class="d-flex
+                        justify-content-between
+                        align-items-center">
+
+                <div>
+
+                    <div class="history-title">
+
+                        Histórico de monitorização
+
+                    </div>
+
+                    <div class="text-muted small">
+
+                        Cada execução realiza 10 pedidos
+
+                    </div>
+
+                </div>
+
+
+                <span
+                    id="runCount"
+                    class="badge text-bg-light"
+                >
+                    0 execuções
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="table-container">
+
+            <table class="table table-hover">
+
+                <thead>
+
+                    <tr>
+
+                        <th>Data</th>
+
+                        <th>Pedidos</th>
+
+                        <th>Sucesso</th>
+
+                        <th>Erros</th>
+
+                        <th>Disponibilidade</th>
+
+                        <th>Estado</th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody id="history">
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+</main>
+
+
+
+<!-- =========================================================
+     FOOTER
+========================================================= -->
+
+<footer>
+
+    <div class="container text-center">
+
+        API Environment Monitor
+
+        <span class="mx-2">•</span>
+
+        Atualização automática
+
+    </div>
+
+</footer>
+
+
+
+<script>
+
+
+// ============================================================
+// FORMATAR DATA
+// ============================================================
+
+function formatDate(timestamp) {
+
+    if (!timestamp) {
+        return "-";
+    }
+
+
+    return new Date(timestamp)
+        .toLocaleString("pt-PT");
+
+}
+
+
+
+// ============================================================
+// DETERMINAR ESTADO
+// ============================================================
+
+function getStatus(percentage) {
+
+    if (percentage >= 90) {
+
+        return "ESTÁVEL";
+
+    }
+
+    if (percentage >= 70) {
+
+        return "DEGRADADO";
+
+    }
+
+    return "INSTÁVEL";
+
+}
+
+
+
+// ============================================================
+// ATUALIZAR STATUS
+// ============================================================
+
+function updateStatus(status, percentage) {
+
+    const statusElement =
+        document.getElementById("status");
+
+
+    const iconElement =
+        document.getElementById("statusIcon");
+
+
+    statusElement.textContent =
+        status;
+
+
+    statusElement.className =
+        "status";
+
+
+    iconElement.className =
+        "status-icon";
+
+
+    if (status === "ESTÁVEL") {
+
+        statusElement.classList.add("stable");
+
+        iconElement.classList.add("stable");
+
+        iconElement.innerHTML =
+            '<i class="bi bi-check-lg"></i>';
+
+    }
+
+    else if (status === "DEGRADADO") {
+
+        statusElement.classList.add("degraded");
+
+        iconElement.classList.add("degraded");
+
+        iconElement.innerHTML =
+            '<i class="bi bi-exclamation-lg"></i>';
+
+    }
+
+    else {
+
+        statusElement.classList.add("unstable");
+
+        iconElement.classList.add("unstable");
+
+        iconElement.innerHTML =
+            '<i class="bi bi-x-lg"></i>';
+
+    }
+
+
+    // Progress bar
+
+    const progressBar =
+        document.getElementById("progressBar");
+
+
+    progressBar.style.width =
+        percentage + "%";
+
+
+    progressBar.className =
+        "progress-bar";
+
+
+    if (percentage >= 90) {
+
+        progressBar.classList.add(
+            "bg-success"
+        );
+
+    }
+
+    else if (percentage >= 70) {
+
+        progressBar.classList.add(
+            "bg-warning"
+        );
+
+    }
+
+    else {
+
+        progressBar.classList.add(
+            "bg-danger"
+        );
+
+    }
+
+}
+
+
+
+// ============================================================
+// CARREGAR DADOS
+// ============================================================
+
+async function loadMonitor() {
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/monitor/status",
+                {
+                    cache: "no-store"
+                }
+            );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "HTTP " + response.status
+            );
+
+        }
+
+
+        const data =
+            await response.json();
+
+
+        // ====================================================
+        // ESTATÍSTICAS
+        // ====================================================
+
+        document.getElementById("total")
+            .textContent =
+                data.total;
+
+
+        document.getElementById("success")
+            .textContent =
+                data.success;
+
+
+        document.getElementById("errors")
+            .textContent =
+                data.errors;
+
+
+        const percentage =
+            Number(data.percentage) || 0;
+
+
+        document.getElementById("percentage")
+            .textContent =
+                percentage.toFixed(2) + "%";
+
+
+        // ====================================================
+        // STATUS
+        // ====================================================
+
+        const status =
+            getStatus(percentage);
+
+
+        updateStatus(
+            status,
+            percentage
+        );
+
+
+        // ====================================================
+        // DATAS
+        // ====================================================
+
+        document.getElementById("lastUpdate")
+            .textContent =
+                new Date()
+                    .toLocaleTimeString(
+                        "pt-PT"
+                    );
+
+
+        document.getElementById("lastRun")
+            .textContent =
+                formatDate(
+                    data.lastRun
+                );
+
+
+        // ====================================================
+        // HISTÓRICO
+        // ====================================================
+
+        const historyElement =
+            document.getElementById("history");
+
+
+        historyElement.innerHTML = "";
+
+
+        const history =
+            [...data.history].reverse();
+
+
+        document.getElementById("runCount")
+            .textContent =
+                `${history.length} execuções`;
+
+
+        history.forEach(run => {
+
+
+            const percentage =
+                Number(run.percentage) || 0;
+
+
+            const status =
+                getStatus(percentage);
+
+
+            let badgeClass =
+                "badge-success";
+
+
+            if (status === "INSTÁVEL") {
+
+                badgeClass =
+                    "badge-error";
+
+            }
+
+
+            if (status === "DEGRADADO") {
+
+                badgeClass =
+                    "text-bg-warning";
+
+            }
+
+
+            const row =
+                document.createElement("tr");
+
+
+            row.innerHTML = `
+
+                <td>
+                    ${formatDate(run.timestamp)}
+                </td>
+
+                <td>
+                    <strong>
+                        ${run.total}
+                    </strong>
+                </td>
+
+                <td>
+                    <span class="text-success fw-semibold">
+                        ${run.success}
+                    </span>
+                </td>
+
+                <td>
+                    <span class="text-danger fw-semibold">
+                        ${run.errors}
+                    </span>
+                </td>
+
+                <td>
+
+                    <strong>
+                        ${percentage.toFixed(2)}%
+                    </strong>
+
+                </td>
+
+                <td>
+
+                    <span
+                        class="badge ${badgeClass}"
+                    >
+                        ${status}
+                    </span>
+
+                </td>
+
+            `;
+
+
+            historyElement.appendChild(row);
+
+        });
+
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Erro ao carregar monitor:",
+            error
+        );
+
+    }
+
+}
+
+
+
+// ============================================================
+// INICIALIZAÇÃO
+// ============================================================
+
+loadMonitor();
+
+
+// Atualizar o dashboard a cada minuto
+setInterval(
+    loadMonitor,
+    60 * 1000
+);
+
+</script>
+
+
+</body>
+
+</html>

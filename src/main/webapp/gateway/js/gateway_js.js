@@ -20,7 +20,8 @@
       pagamentosAutorizados: "0",
       MBWAYNumberPrefillchecked: "0",
       MBWAYPREFILL: "",
-      MerchantTransactionID: ""
+      MerchantTransactionID: "OrderID",
+      Xpay: "0",
     };
 
     localStorage.setItem('credential_default', JSON.stringify(credential_default));
@@ -216,7 +217,7 @@
         typeOfPayment = credential_config_variable.typeOfPayment
         LayoutVersion = credential_config_variable.LayoutVersion
         pagamentosAutorizados = credential_config_variable.pagamentosAutorizados
-
+        Xpay = credential_config_variable.Xpay
       }else{
         paymentMethodsParam = credential_default_variable.paymentMethods
         AllMethodsPay = credential_default_variable.AllMethodsPay
@@ -224,6 +225,7 @@
         typeOfPayment = credential_default_variable.typeOfPayment
         LayoutVersion = credential_default_variable.LayoutVersion
         pagamentosAutorizados = credential_default_variable.pagamentosAutorizados
+        Xpay = credential_default_variable.Xpay
 
       }
 
@@ -263,6 +265,16 @@
           }
       }
 
+      if (pagamentosAutorizados == 1  && Xpay == 1 ) {
+        if (!paymentMethodsParam.includes("5")) {
+          paymentMethodsParam.push("5");
+        }
+      }else if(pagamentosAutorizados == 0  && Xpay == 1 ) {
+        if (!paymentMethodsParam.includes("4")) {
+          paymentMethodsParam.push("4");
+        }
+      }
+
       const select = document.getElementById("payment-method");
       select.innerHTML = "";
 
@@ -295,6 +307,13 @@
       if (pagamentosAutorizados == 1) {
         methodMap["4"] = { label: "Criação Mandato", value: "PA" };
       }
+
+      if (Xpay == 1 && pagamentosAutorizados == 1) {
+        methodMap["5"] = { label: "Pagamentos XPAY (Apple e google pay)", value: "XPAY" };
+      }else if (Xpay == 1 && pagamentosAutorizados == 0){
+        methodMap["4"] = { label: "Pagamentos XPAY (Apple e google pay)", value: "XPAY" };
+      }
+
 
       if (paymentMethodsParam) {
 
@@ -445,7 +464,7 @@
         MBWAYNumberPrefillchecked = credential_default_variable.MBWAYNumberPrefillchecked;
         MBWAYPREFILL = credential_default_variable.MBWAYPREFILL;
         MerchantTransactionID = credential_default_variable.MerchantTransactionID;
-
+        Xpay = credential_default_variable.Xpay;
       }else{
 
         referenceExpiry = credential_config_variable?.referenceExpiry ?? credential_default_variable?.referenceExpiry;
@@ -457,13 +476,15 @@
         VersionpagamentosAutorizados = credential_config_variable?.VersionpagamentosAutorizados ?? credential_default_variable?.VersionpagamentosAutorizados;
         MBWAYNumberPrefillchecked = credential_config_variable?.MBWAYNumberPrefillchecked ?? credential_default_variable?.MBWAYNumberPrefillchecked;
         MBWAYPREFILL = credential_config_variable?.MBWAYPREFILL ?? credential_default_variable?.MBWAYPREFILL;
-        MerchantTransactionID = credential_config_variable?.MerchantTransactionID ?? credential_default_variable?.MBWAYPREFILL;
+        MerchantTransactionID = credential_config_variable?.MerchantTransactionID ?? credential_default_variable?.MerchantTransactionID;
+        Xpay = credential_config_variable?.Xpay ?? credential_default_variable?.Xpay;
 
       }
 
       referenceExpiry = credential_config_variable?.referenceExpiry ?? credential_default_variable?.referenceExpiry;
       referenceExpiryUnit = credential_config_variable?.referenceExpiryUnit ?? credential_default_variable?.referenceExpiryUnit;
-      MerchantTransactionID = credential_config_variable?.MerchantTransactionID ?? credential_default_variable?.MBWAYPREFILL;
+      MerchantTransactionID = credential_config_variable?.MerchantTransactionID ?? credential_default_variable?.MerchantTransactionID;
+      Xpay = credential_config_variable?.Xpay ?? credential_default_variable?.Xpay;
 
 
 
@@ -629,7 +650,7 @@
         amountValue = 1;
       }
 
-
+      
       if (selectedMethod == "PA") {
 
         if (VersionpagamentosAutorizados === "1") {
@@ -682,6 +703,34 @@
           }
         };
 
+      }else if(selectedMethod == "XPAY"){
+
+        terminalId = "72607"
+        clientId = "f71ed912-fe5e-41b7-90db-36dd9752a1a9"
+        token = "0276b80f950fb446c6addaccd121abfbbb.eyJlIjoiMjA3NTI5NTUzNTM2MSIsInJvbGVzIjoiTUFOQUdFUiIsInRva2VuQXBwRGF0YSI6IntcIm1jXCI6XCI1MDU2NjVcIixcInRjXCI6XCI3MjYwN1wifSIsImkiOiIxNzU5NzYyNzM1MzYxIiwiaXMiOiJodHRwczovL3FseS5zaXRlMS5zc28uc3lzLnNpYnMucHQvYXV0aC9yZWFsbXMvUUxZLk1FUkNILlBPUlQxIiwidHlwIjoiQmVhcmVyIiwiaWQiOiJVTTJRRnpaUUNHOTk1MGUxMDM5YzI3NGE2MTk0NzYzYTkwOGM5ODAxOTMifQ==.d4543ab9c27e4bf1c6e82a25b765600f2a67b5b07892e4cf9137a12acf862d864ad5a99f17c50e8603d68257b42be557edca21eb7b9d4f9a2dbfca5129d063b6"
+
+        requestData = {
+          merchant: {
+            terminalId: Number(terminalId), 
+            channel: "web",
+            merchantTransactionId:
+            `${Math.random().toString(36).substring(2, 8).toUpperCase()}${MerchantTransactionID || "OrderID"}`
+          },
+          transaction: {
+            transactionTimestamp: new Date().toISOString(),
+            description: "Transaction short description",
+            moto: false,
+            paymentType: String(versionTypePayment),
+            amount: {
+              value: Number(amountValue),
+              currency: "EUR"
+            },
+            paymentMethod: [
+              "XPAY"
+            ]
+          }
+        };
+      
       }else{
 
         requestData = {
@@ -959,6 +1008,10 @@
         redirectUrl = `${baseUrl}card_payment/card_return.html`
       }
 
+      if (paymentMethodArray.length === 1 && paymentMethodArray[0] === "XPAY") {
+        redirectUrl = `${baseUrl}xpay_payment/xpay_return.html`
+      }
+
       if (paymentMethodArray.length == 0) {
         redirectUrl = `${baseUrl}AllmethodsPayment/AllmethodsPayment.html`
       }
@@ -1196,6 +1249,8 @@
 
       verificarMensagemMBWAY(paymentMethodArray);
 
+      verificarMensagemXPAY(paymentMethodArray);
+      
       let token;
       let clientId;
       let terminalId;
@@ -1490,6 +1545,17 @@
         const mensagem = document.getElementById('MBWAY_mensagem');
         
         if (paymentMethodArray && paymentMethodArray[0] === "MBWAY") {
+            mensagem.style.display = 'block'; // Mostra
+        } else {
+            mensagem.style.display = 'none';  // Esconde
+        }
+    }
+
+
+    function verificarMensagemXPAY(paymentMethodArray) {
+        const mensagem = document.getElementById('XPAY_mensagem');
+        
+        if (paymentMethodArray && paymentMethodArray[0] === "XPAY") {
             mensagem.style.display = 'block'; // Mostra
         } else {
             mensagem.style.display = 'none';  // Esconde

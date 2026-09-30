@@ -261,6 +261,7 @@
       let MBWAYPREFILL = document.getElementById('MBWAYPREFILL').value;
       let MBWAYNumberPrefillchecked = document.getElementById('MBWAYNumberPrefillchecked').checked ? 1 : 0;
       let MerchantTransactionID = document.getElementById("MerchantTransactionID").value.trim();
+      let Xpay = document.getElementById('Xpaychecked').checked ? 1 : 0;
 
 
       const methods = Array.from(document.getElementById('paymentMethods').selectedOptions).map(opt => opt.value);
@@ -329,7 +330,8 @@
         VersionpagamentosAutorizados: VersionpagamentosAutorizados,
         MBWAYNumberPrefillchecked: MBWAYNumberPrefillchecked,
         MBWAYPREFILL: MBWAYPREFILL,
-        MerchantTransactionID:MerchantTransactionID
+        MerchantTransactionID:MerchantTransactionID,
+        Xpay: Xpay
       };
 
       localStorage.setItem('credential_config', JSON.stringify(credential_obj));
@@ -360,6 +362,7 @@
       let MBWAYNumberPrefillchecked
       let MBWAYPREFILL
       let MerchantTransactionID
+      let Xpay
 
       if(useDefault == "1"){
         checkbox_option = credentialDefaultObj.useDefaultConfig;
@@ -378,6 +381,7 @@
         MBWAYNumberPrefillchecked = credentialDefaultObj.MBWAYNumberPrefillchecked;
         MBWAYPREFILL = credentialDefaultObj.MBWAYPREFILL;
         MerchantTransactionID = credentialDefaultObj.MerchantTransactionID;
+        Xpay = credentialDefaultObj.Xpay;
 
       }else{
         checkbox_option = credential_config_variable.useDefaultConfig;
@@ -396,7 +400,7 @@
         MBWAYNumberPrefillchecked = credential_config_variable.MBWAYNumberPrefillchecked;
         MBWAYPREFILL = credential_config_variable.MBWAYPREFILL;
         MerchantTransactionID = credential_config_variable.MerchantTransactionID;
-
+        Xpay = credential_config_variable.Xpay;
       }
 
       checkbox.checked = checkbox_option === "true" || checkbox_option === true || checkbox_option === 1 || checkbox_option === "1" ;
@@ -420,6 +424,7 @@
         document.getElementById('MBWAYNumberPrefillchecked').value = credential_config_variable.MBWAYNumberPrefillchecked;
         document.getElementById('MBWAYPREFILL').value = credential_config_variable.MBWAYPREFILL;
         document.getElementById('MerchantTransactionID').value = credential_config_variable.MerchantTransactionID;
+        document.getElementById('Xpaychecked').value = credential_config_variable.Xpay;
       }
 
       if(useDefault){
@@ -435,7 +440,6 @@
         document.getElementById('MITSchecked').checked = false;
         document.getElementById("LayoutVersionMITS").style.display = "none";
       }
-
         //document.getElementById("LayoutVersionMITS").style.display = "block";
 
       if (pagamentosAutorizados == "1") {
@@ -452,12 +456,16 @@
         document.getElementById("LayoutMBWAYNumberPrefill").style.display = "none";
       }
 
-
       if (!savedMethods.includes("1")) {
         document.getElementById("LayoutMBWAYNumberPrefillChecked").style.display = "none";
       }
 
-    
+      
+      if (Xpay == "1") {
+        document.getElementById('Xpaychecked').checked = true;
+      } else {
+        document.getElementById('Xpaychecked').checked = false;
+      }
 
       const select = document.getElementById('paymentMethods');
       Array.from(select.options).forEach(opt => {

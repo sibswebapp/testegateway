@@ -1125,6 +1125,199 @@ app.post(`${prefix}/api/CriarMandato_cli`, async (req, res) => {
   }
 });
 
+/////////////////////////////////////////testes///////////////////////////////////////////////////
+
+
+
+// --------------------------------------------------
+// Chamadas API
+// --------------------------------------------------
+
+app.post(`${prefix}/api/validar-clientid_script`, async (req, res) => {
+  try {
+    const {clientId, token, terminalID } = req.body;
+
+    if (!clientId || !token || !terminalID) {
+      return res.status(400).json({
+        error: "Parâmetros obrigatórios em falta"
+      });
+    }
+
+    const payload = {
+      merchant: {
+        terminalId: Number(terminalID),
+        channel: "web",
+        merchantTransactionId: `Order ID`
+      },
+      transaction: {
+        transactionTimestamp: new Date().toISOString(),
+        description: "Validação ClientID",
+        moto: false,
+        paymentType: "PURS",
+        amount: {
+          value: 1,
+          currency: "EUR"
+        },
+        paymentMethod: []
+      }
+    };
+
+    const sibsResponse = await fetch(
+      "https://api.qly.sibspayments.com/sibs/spg/v2/payments",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+          "X-IBM-Client-Id": clientId
+        },
+        body: JSON.stringify(payload)
+      }
+    );
+
+    const data = await sibsResponse.json();
+
+    res.status(sibsResponse.status).json(data);
+
+  } catch (err) {
+    console.error("Erro proxy SIBS:", err);
+    res.status(500).json({
+      error: "Erro ao comunicar com a SIBS",
+      details: err.message
+    });
+  }
+});
+
+
+app.get(`${prefix}/api/monitor/status`, async (req, res) => {
+
+    try {
+
+        const file = path.join(
+            __dirname,
+            "data",
+            "api-monitor.json"
+        );
+
+
+        if (!fs.existsSync(file)) {
+
+            return res.json({
+                total: 0,
+                success: 0,
+                errors: 0,
+                percentage: 0,
+                status: "SEM DADOS",
+                history: []
+            });
+
+        }
+
+
+        const history = JSON.parse(
+            fs.readFileSync(file, "utf8")
+        );
+
+
+        const total = history.reduce(
+            (sum, run) => sum + run.total,
+            0
+        );
+
+
+        const success = history.reduce(
+            (sum, run) => sum + run.success,
+            0
+        );
+
+
+        const errors = history.reduce(
+            (sum, run) => sum + run.errors,
+            0
+        );
+
+
+        const percentage =
+            total > 0
+                ? (success / total) * 100
+                : 0;
+
+
+        // ================================================
+        // ESTADO
+        // ================================================
+
+        let status;
+
+
+        if (total === 0) {
+
+            status = "SEM DADOS";
+
+        } else if (percentage >= 90) {
+
+            status = "ESTÁVEL";
+
+        } else {
+
+            status = "INSTÁVEL";
+
+        }
+
+
+        res.json({
+
+            total,
+
+            success,
+
+            errors,
+
+            percentage,
+
+            status,
+
+            lastRun:
+                history.length > 0
+                    ? history[history.length - 1].timestamp
+                    : null,
+
+            history
+
+        });
+
+
+    } catch (error) {
+
+        console.error(
+            "Erro ao obter monitor:",
+            error
+        );
+
+
+        res.status(500).json({
+            error: "Erro ao obter dados do monitor"
+        });
+
+    }
+
+});
+
+
+
+/////////////////////////////////////////testes///////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+
 
 // 1. ROTAS PROTEGIDAS (Acesso restrito)
 const protectedRoutes = [
@@ -1164,7 +1357,8 @@ const publicRoutes = [
   '/Refund_gateway',
   '/stargate',
   '/download_demo',
-  '/Cashout_clients'
+  '/Cashout_clients',
+  '/xpay_payment',
   ];
 
 publicRoutes.forEach(route => {
