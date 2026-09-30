@@ -6,12 +6,12 @@ const path = require("path");
 // CONFIGURAÇÃO
 // ============================================================
 
-const HOST = process.env.HOST || "127.0.0.1";
+const HOST = process.env.HOST || "0.0.0.0";
 const PORT = process.env.PORT || 8002;
 
-const prefix = HOST === '127.0.0.1' ? '' : '/SimuladorSIBS';
-
-
+const prefix = HOST === "127.0.0.1"
+    ? ""
+    : "/SimuladorSIBS";
 
 const API_URL =
     `http://${HOST}:${PORT}${prefix}/api/validar-clientid_script`;
