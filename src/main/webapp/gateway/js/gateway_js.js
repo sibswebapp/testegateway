@@ -486,7 +486,8 @@
       MerchantTransactionID = credential_config_variable?.MerchantTransactionID ?? credential_default_variable?.MerchantTransactionID;
       Xpay = credential_config_variable?.Xpay ?? credential_default_variable?.Xpay;
 
-
+      const MerchantTransactionID_Xpay = `${Math.random().toString(36).substring(2, 8).toUpperCase()}${MerchantTransactionID || "OrderID"}`;
+       
 
       const MBWAYNumberPrefillchecked_input = credential_config_variable?.MBWAYNumberPrefillchecked ?? credential_default_variable?.MBWAYNumberPrefillchecked;
 
@@ -713,8 +714,7 @@
           merchant: {
             terminalId: Number(terminalId), 
             channel: "web",
-            merchantTransactionId:
-            `${Math.random().toString(36).substring(2, 8).toUpperCase()}${MerchantTransactionID || "OrderID"}`
+            merchantTransactionId:MerchantTransactionID_Xpay
           },
           transaction: {
             transactionTimestamp: new Date().toISOString(),
@@ -831,6 +831,10 @@
 
         window.history.replaceState({}, document.title, window.location.pathname);
 
+        if(Xpay == "1"){
+          MerchantTransactionID = MerchantTransactionID_Xpay;
+        }
+
         if (data.transactionID && data.formContext) {
 
           lastActiveTransaction = {
@@ -867,7 +871,13 @@
               "Accept": "application/json"
             };
 
-            const MerchantTransactionID = credential_config_variable?.MerchantTransactionID ?? credential_default_variable?.MerchantTransactionID;
+            let MerchantTransactionID
+
+            if(Xpay == "1"){
+              MerchantTransactionID = MerchantTransactionID_Xpay;
+            }else{
+              MerchantTransactionID = credential_config_variable?.MerchantTransactionID ?? credential_default_variable?.MerchantTransactionID;
+            }
 
             const debugBody = {
               merchant: {
@@ -1278,7 +1288,14 @@
       const referenceExpiry = credential_config_variable?.referenceExpiry ?? credential_default_variable?.referenceExpiry;
       const referenceExpiryUnit = credential_config_variable?.referenceExpiryUnit ?? credential_default_variable?.referenceExpiryUnit;
 
-      MerchantTransactionID = credential_config_variable?.MerchantTransactionID ?? credential_default_variable?.MerchantTransactionID;
+      Xpay = credential_config_variable?.bearerToken ?? credential_default_variable?.bearerToken;
+
+      
+      if(Xpay == "0"){
+        MerchantTransactionID = credential_config_variable?.MerchantTransactionID ?? credential_default_variable?.MerchantTransactionID;
+      }else{
+        MerchantTransactionID = isAmountHidden;
+      }
 
       // força número
       const expiryValue = parseInt(referenceExpiry, 10);
