@@ -55,7 +55,7 @@ app.post(`${prefix}/api/validar-clientid`, async (req, res) => {
       merchant: {
         terminalId: Number(terminalID),
         channel: "web",
-        merchantTransactionId: `Order ID: ${nome}`
+        merchantTransactionId: `${Math.random().toString(36).substring(2, 8).toUpperCase()}-Order ID: ${nome}`
       },
       transaction: {
         transactionTimestamp: new Date().toISOString(),
@@ -159,7 +159,7 @@ app.post(`${prefix}/api/validar-clientid_qly`, async (req, res) => {
       merchant: {
         terminalId: Number(terminalID),
         channel: "web",
-        merchantTransactionId: `Order ID: ${nome}`
+        merchantTransactionId: `${Math.random().toString(36).substring(2, 8).toUpperCase()}-Order ID: ${nome}`
       },
       transaction: {
         transactionTimestamp: new Date().toISOString(),
@@ -259,12 +259,11 @@ app.post(`${prefix}/api/Refund`, async (req, res) => {
     if (!montante || !clientId || !bearerToken || !terminalId || !transactionId) {
       return res.status(400).json({ error: "Parâmetros obrigatórios em falta" });
     }
-
     const payload = {
       merchant: {
         terminalId: Number(terminalId),
         channel: "web",
-        merchantTransactionId: "Refund"
+        merchantTransactionId: `${Math.random().toString(36).substring(2, 8).toUpperCase()}-Refund`
       },
       transaction: {
         transactionTimestamp: new Date().toISOString(),
@@ -315,7 +314,7 @@ app.post(`${prefix}/api/Cancel`, async (req, res) => {
       merchant: {
         terminalId: Number(terminalId),
         channel: "web",
-        merchantTransactionId: "Cancelamento"
+        merchantTransactionId: `${Math.random().toString(36).substring(2, 8).toUpperCase()}-Cancelamento`
       },
       transaction: {
         transactionTimestamp: new Date().toISOString(),
@@ -369,7 +368,7 @@ app.post(`${prefix}/api/cit`, async (req, res) => {
         merchant: {
           terminalId: Number(terminalId),
           channel: "web",
-          merchantTransactionId: `CIT-RCRR-${Date.now()}`
+          merchantTransactionId: `${Math.random().toString(36).substring(2, 8).toUpperCase()}-CIT-RCRR`
         },
         transaction: {
           transactionTimestamp: new Date().toISOString(),
@@ -405,7 +404,7 @@ app.post(`${prefix}/api/cit`, async (req, res) => {
         merchant: {
           terminalId: Number(terminalId),
           channel: "web",
-          merchantTransactionId: `CIT-UCOF-${Date.now()}`
+          merchantTransactionId: `${Math.random().toString(36).substring(2, 8).toUpperCase()}-CIT-UCOF`
         },
         transaction: {
           transactionTimestamp: new Date().toISOString(),
@@ -481,7 +480,7 @@ app.post(`${prefix}/api/Mit`, async (req, res) => {
         merchant: {
           terminalId: Number(terminalId),
           channel: "web",
-          merchantTransactionId: `MIT-RCRR-${Date.now()}`
+          merchantTransactionId: `${Math.random().toString(36).substring(2, 8).toUpperCase()}-MIT-RCRR`
         },
         transaction: {
           transactionTimestamp: new Date().toISOString(),
@@ -502,7 +501,7 @@ app.post(`${prefix}/api/Mit`, async (req, res) => {
         merchant: {
           terminalId: Number(terminalId),
           channel: "web",
-          merchantTransactionId: `MIT-UCOF-${Date.now()}`
+          merchantTransactionId: `${Math.random().toString(36).substring(2, 8).toUpperCase()}-MIT-UCOF` 
         },
         transaction: {
           transactionTimestamp: new Date().toISOString(),
@@ -560,7 +559,7 @@ app.post(`${prefix}/api/capture`, async (req, res) => {
       merchant: {
         terminalId: Number(terminalId),
         channel: "web",
-        merchantTransactionId: `Captura MIT- ${captureTransactionId}`
+        merchantTransactionId: `${Math.random().toString(36).substring(2, 8).toUpperCase()}-Captura MIT` 
       },
       transaction: {
         transactionTimestamp: new Date().toISOString(),
@@ -663,7 +662,7 @@ app.post(`${prefix}/api/CancelarMandato`, async (req, res) => {
       merchant: {
         terminalId: Number(terminalId),
         channel: "web",
-        merchantTransactionId: `${CancelMandatoMerchantID}`
+        merchantTransactionId: `${Math.random().toString(36).substring(2, 8).toUpperCase()}-${CancelMandatoMerchantID}`
       }
     };
 
@@ -746,7 +745,7 @@ app.post(`${prefix}/api/CriarMandato`, async (req, res) => {
       merchant: {
         terminalId: Number(terminalId),
         channel: "web",
-        merchantTransactionId: `${CriarMandatoMerchantID}`,
+        merchantTransactionId: `${Math.random().toString(36).substring(2, 8).toUpperCase()}-${CriarMandatoMerchantID}`,
         transactionDescription: `Mandatos -> ${CriarMandatoMerchantID}`
       },
       mandate: {
@@ -795,7 +794,7 @@ app.post(`${prefix}/api/RefundMandato`, async (req, res) => {
       merchant: {
         terminalId: Number(terminalId),
         channel: "web",
-        merchantTransactionId: "Refund PA"
+        merchantTransactionId: `${Math.random().toString(36).substring(2, 8).toUpperCase()}-Refund PA`
       },
       transaction: {
         transactionTimestamp: new Date().toISOString(),
@@ -847,7 +846,7 @@ app.post(`${prefix}/api/CheckoutMandato`, async (req, res) => {
       merchant: {
         terminalId: Number(terminalId),
         channel: "web",
-        merchantTransactionId: checkoutMerchantID
+        merchantTransactionId: `${Math.random().toString(36).substring(2, 8).toUpperCase()}-${checkoutMerchantID}`
       },
       customer: {
         customerInfo: {
@@ -962,7 +961,7 @@ app.post(`${prefix}/api/Cashout`, async (req, res) => {
       initiationMethod: 1,
       merchant: {
         terminalId: String(terminalId),
-        merchantTransactionId: `TX-${new Date().getTime()}`,
+        merchantTransactionId: `${Math.random().toString(36).substring(2, 8).toUpperCase()}-TX-${new Date().getTime()}`,
         merchantBrandName: "Brand Name Test",
         operationDescription: "TEST"
       },
@@ -1026,7 +1025,7 @@ app.post(`${prefix}/api/Cashout_clients`, async (req, res) => {
       initiationMethod: 1,
       merchant: {
         terminalId: String(terminalId),
-        merchantTransactionId: `TX-${new Date().getTime()}`,
+        merchantTransactionId: `${Math.random().toString(36).substring(2, 8).toUpperCase()}-TX-${new Date().getTime()}`,
         merchantBrandName: "Brand Name Test",
         operationDescription: "TEST"
       },
@@ -1090,7 +1089,7 @@ app.post(`${prefix}/api/CriarMandato_cli`, async (req, res) => {
       merchant: {
         terminalId: Number(terminalId),
         channel: "web",
-        merchantTransactionId: `teste`,
+        merchantTransactionId: `${Math.random().toString(36).substring(2, 8).toUpperCase()}-teste`,
         transactionDescription: `Mandatos -> teste`
       },
       mandate: {
@@ -1147,7 +1146,7 @@ app.post(`${prefix}/api/validar-clientid_script`, async (req, res) => {
       merchant: {
         terminalId: Number(terminalID),
         channel: "web",
-        merchantTransactionId: `Order ID`
+        merchantTransactionId: `${Math.random().toString(36).substring(2, 8).toUpperCase()}-Order ID`
       },
       transaction: {
         transactionTimestamp: new Date().toISOString(),
