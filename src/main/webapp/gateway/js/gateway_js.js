@@ -1058,6 +1058,7 @@
 
         if(LayoutVersion == "1") LayoutVersion = "spg_form"
         if(LayoutVersion == "2") LayoutVersion = "spg_form_tabs"
+        if(LayoutVersion == "3") LayoutVersion = "spg_form_accordion_compact"
 
         form.setAttribute("spg-style", JSON.stringify({
             layout: LayoutVersion,
