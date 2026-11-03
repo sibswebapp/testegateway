@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <title>PayPal Fast Checkout Implementation</title>
+
+  <!-- Configuration Object antes de carregar o script do widget -->
+  <script>
+    var wpwlOptions = {
+      // 1. Define o modo Inline para o PayPal
+      inlineFlow: ["PAYPAL"],
+
+      // 2. Opções específicas do PayPal
+      paypal: {
+        merchantId: "Afg5YQ2OLQWJKc6_RIcQurQ67aGJPOl2bPGQJGYQgIicosgwopuQcBiT3VdgVhFjDsUgpzKo_ZEQeNfC", // Obrigatorio no Fast Checkout
+        intent: "authorize", // 'authorize' ou 'capture' (opcional, padrão: authorize)
+        currency: "EUR", // Opcional
+        
+        // Opções do SDK do PayPal (opcional)
+        sdkParams: {
+          components: "buttons,messages",
+          "enable-funding": "paylater"
+        },
+
+        // Callback para tratar alterações de morada de envio (opcional)
+        onShippingChange: function(data, actions) {
+          if (data.shipping_address.country_code !== 'PT') {
+            // Exemplo: recusar se o país não for Portugal
+            return actions.reject();
+          }
+          return actions.resolve();
+        }
+      },
+
+      // 3. Callback do Fast Checkout: Cria o Checkout ID dinamicamente
+      createCheckout: function(json) {
+        // Envia pedido ao teu backend para criar um checkout
+        return fetch('/api/create-checkout', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ brand: json.brand })
+        })
+        .then(function(response) {
+          return response.json();
+        })
+        .then(function(data) {
+          // Retorna o checkoutId recebido do backend
+          return data.checkoutId;
+        });
+      }
+    };
+  </script>
+
+  <!-- Carregar o script do Payment Widget SEM checkoutID no URL -->
+  <!-- Utiliza a URL de TESTE (test.onlinepayments.pt) ou PRODUÇÃO (onlinepayments.pt) conforme o teu ambiente -->
+  <script src="https://test.onlinepayments.pt/v1/paymentWidgets.js"></script>
+</head>
+<body>
+
+  <!-- Formulário onde o botão do PayPal será renderizado -->
+  <form action="https://seu-site.com/resultado-pagamento" class="paymentWidgets" data-brands="PAYPAL"></form>
+
+</body>
+</html>
