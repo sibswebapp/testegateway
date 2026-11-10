@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <script>(function(){var p=location.pathname;var b=p.indexOf("/SimuladorSIBS/")!==-1?"/SimuladorSIBS/":"/";var e=document.createElement("base");e.href=b;document.head.prepend(e);}());</script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Captura da Compra</title>
+
+    <link rel="icon" type="image/png" href="https://www.sibs.pt/favicon.ico">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.1/mdb.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet" href="/gateway/css/gateway_css.css">
+    <link rel="stylesheet" href="/navbar/css/navbar_css.css">
+    <link rel="stylesheet" href="/footer/css/footer_css.css">
+    <link rel="stylesheet" href="/Capture_gateway/css/Capture_gateway_css.css">
+    <link rel="stylesheet" href="/popups/css/popups_css.css">
+
+</head>
+
+<body>
+
+    <div id="navbar"></div>
+
+    <!-- Main - Captura Transação -->
+    <main class="container py-5">
+        <div class="dashboard-header shadow-sm card p-3" style="background: #49b2ff12;">
+            <div class="brand-container d-flex align-items-center justify-content-between w-100">
+                <div class="d-flex align-items-center">
+                    <div class="logo-square me-3">
+                        <i class="fa-solid fa-money-check-dollar"></i>
+                    </div>
+                    <div class="title-group">
+                        <span style="font-size: 22px; color: #202124; letter-spacing: -0.5px;">
+                            <b style="font-weight: 400;">Gateway</b>
+                            <b style="font-weight: 600;">SIBS</b>
+                            <span style="color: #dadce0; margin: 0 8px; font-weight: 300;">|</span>
+                            <span style="color: #5f6368; font-weight: 400;">Captura da Compra </span>
+                        </span>
+                    </div>
+                </div>
+
+                <button type="button" class="btn-info-minimal" data-bs-toggle="modal" data-bs-target="#infoModal" title="Informações">
+                    <i class="fa-solid fa-circle-info"></i>
+                </button>
+            </div>
+
+            <div class="card-body p-4 p-md-5">
+                
+                <!-- ENVOLVEMOS O FORMULÁRIO COM ESTA DIV -->
+                <div id="form-container">
+                
+                    <!-- Container Grid para alinhar os campos lado a lado -->
+                    <div class="row g-3 mb-4">
+                        <!-- Campo: ID da Transação -->
+                        <div class="col-md-8">
+                            <label for="transactionID" class="form-label fw-bold text-secondary small text-uppercase">
+                                ID da Transação
+                            </label>
+                            <div class="input-group input-group-lg shadow-sm">
+                                <span class="input-group-text bg-light border-end-0 text-muted">
+                                    <i class="fa-solid fa-hashtag"></i>
+                                </span>
+                                <input 
+                                    type="text" 
+                                    class="form-control border-start-0 bg-light fw-bold font-monospace" 
+                                    id="transactionID" 
+                                    placeholder="Ex: 1234567890"
+                                    style="font-size: 1.1rem;">
+                            </div>
+                        </div>
+
+                        <!-- Campo: Valor do Captura -->
+                        <div class="col-md-4">
+                            <label for="refundAmount" class="form-label fw-bold text-secondary small text-uppercase">
+                                Valor da Captura (€)
+                            </label>
+                            <div class="input-group input-group-lg shadow-sm">
+                                <span class="input-group-text bg-light border-end-0 text-primary fw-bold">€</span>
+                                <input 
+                                    type="number" 
+                                    class="form-control border-start-0 bg-light fw-bold" 
+                                    id="CaptureAmount" 
+                                    placeholder="0.00" 
+                                    min="0" 
+                                    step="0.01">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-grid mt-5">
+                        <button 
+                            type="button" 
+                            class="btn btn-primary btn-lg py-3 rounded-pill shadow d-flex align-items-center justify-content-center border-0" 
+                            style="background: #0d6efd; transition: all 0.3s;"
+                            onclick="CapturePayment()">
+                            <i class="fa-solid fa-rotate-left me-3 fs-5"></i>
+                            <strong class="text-uppercase" style="letter-spacing: 1px;">Capturar Valor</strong>
+                        </button>
+                    </div>
+                </div><!-- FIM DO FORM CONTAINER -->
+
+                <!-- Onde o JavaScript injeta o card de sucesso ou erro -->
+                <div id="payment-status"></div>
+
+            </div>
+        </div>
+    </main>
+
+    <div id="js_index"></div>
+
+    <!--para o corpo do debug (debug - body do checkout)-->
+    <div id="container_debug" class="container my-4 d-none">
+        <div class="my-5">
+            <div class="debug-card shadow-lg">
+                <div id="debug-header" class="debug-header_canc">
+                    <div class="terminal-dots">
+                        <div class="dot-red"></div>
+                        <div class="dot-yellow"></div>
+                        <div class="dot-green"></div>
+                    </div>
+                    <div class="debug-title">
+                        <i class="fa-solid fa-bug me-2"></i> Debug SIBS API Inspector
+                    </div>
+                    <div class="status_badge_debug text_info_debug" id="insp-badge">JSON Response</div>
+                </div>
+
+                <div class="debug-section p-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="text-muted small fw-bold">DEBUG CONSOLE</span>
+                    </div>
+
+                    <div id="insp-content">
+                        <div class="mb-4">
+                            <div class="section-label"> <i class="fa-solid fa-list-check"></i> HEADER</div>
+                            <div class="code-window position-relative">
+                                <pre id="debug-headers" class="bg-dark p-3 rounded" style="max-height:150px; overflow-y:auto; font-size:0.8rem; color:white">A carregar headers...</pre>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="section-label">PAYLOAD</div>
+                            <div class="code-window position-relative">
+                                <pre id="debug-body" class="bg-dark text_info_debug p-3 rounded" style="max-height:350px; overflow-y:auto; font-size:0.8rem;">A carregar body...</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="infoModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content shadow">
+                <div class="modal-header bg-light">
+                    <h5 class="modal-title">
+                        <i class="fa fa-info-circle text-primary me-2"></i> Processo de Captura da Autorização
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p>
+                        Nesta página pode efetuar uma <b>captura</b> de uma transação previamente realizada.
+                        Para isso, deve preencher o <b>Transaction ID</b> e o respetivo <b>valor</b>.
+                    </p>
+                    <p>
+                        Após submeter a captura, será enviada uma requisição para a API:
+                    </p>
+                    <div class="text-nowrap overflow-auto" style="max-width: 100%;">
+                        <p>
+                            <span class="badge bg-success align-middle">POST</span>
+                            <code class="align-middle" style="font-size: 0.70rem;">
+                                https://spg.qly.site1.sibs.pt/api/v2/payments/{transactionID}/capture
+                            </code>
+                        </p>
+                    </div>
+                    <br />
+                    <p>
+                        O resultado da operação será apresentado no painel de <b>Debug</b> abaixo.
+                        Se a captura for realizado com sucesso, será indicado com uma mensagem de confirmação.
+                    </p>
+                    <p>Para informações detalhadas, consulte a documentação oficial:</p>
+                    <a href="https://www.docs.pay.sibs.com/portugal/sibs-gateway/integrations/api/integration-guide/" class="btn btn-outline-primary btn-sm" target="_blank">
+                        <i class="fa fa-external-link me-1"></i> Documentação SIBS Gateway
+                    </a>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Fechar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!--PopUp sucesso-->
+    <section id="successModal">
+        <span class="overlay"></span>
+        <div class="modal-box">
+        <i class="fa-regular fa-circle-check icon-success"></i>
+        <h2>Captura efetuada com sucesso!</h2>
+        <p></p>
+
+        <div class="buttons">
+            <button class="close-btn">Ok, Fechar</button>
+        </div>
+        </div>
+    </section>
+
+
+    <!--PopUp Erro-->
+    <section id="errorModal">
+        <span class="overlay"></span>
+        <div class="modal-box">
+        <i class="fa-regular fa-circle-xmark icon-error"></i>
+        <h2>Erro na Configuração</h2>
+        <p id="errorMessage">Ocorreu um problema ao gravar as definições.</p>
+
+        <div class="buttons">
+            <button class="close-btn">Ok, Fechar</button>
+        </div>
+        </div>
+    </section>
+    
+
+    <div id="footer"></div>
+
+    <script>
+
+        // Carregar o ficheiro footer
+        fetch("footer/footer_layout.html")
+        .then(res => res.text())
+        .then(html => {
+            document.getElementById("footer").innerHTML = html;
+        })
+        .catch(err => console.error("Erro ao carregar footer:", err));
+
+        // Carregar o ficheiro navbar
+        fetch("navbar/navbar_gateway_pages.html")
+        .then(res => res.text())
+        .then(html => {
+            document.getElementById("navbar").innerHTML = html;
+        })
+        .catch(err => console.error("Erro ao carregar navbar:", err));
+
+    </script>
+
+<!--Carregar o js-->
+<script src="/Capture_gateway/js/Capture_gateway_js.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

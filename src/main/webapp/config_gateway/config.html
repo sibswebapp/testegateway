@@ -123,6 +123,16 @@
                   </div>
                 </div>
 
+                <div class="col" id="LayoutCapturePayment" style="display: none;">
+                  <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="CapturePaymenthecked">
+                      <label class="form-check-label" for="CapturePaymenthecked">
+                          Fazer compra com pré-autorização
+                      </label>
+                  </div>
+                </div>
+
+
               </div>
 
 
@@ -172,7 +182,7 @@
 
                   <div id="typeOfPaymentContainer" style="width: 220px;">
                     <label for="typeOfPayment" class="form-label">Tipo de pagamento <strong style="color: #ff5d5d;">*</strong>:</label>
-                    <select id="typeOfPayment" class="form-select">
+                    <select id="typeOfPayment" class="form-select"  onchange="toggleCapturePayment(this);">
                       <option value="1" selected>PURS</option>
                       <option value="2">AUTH</option>
                     </select>

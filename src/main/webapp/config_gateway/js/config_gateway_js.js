@@ -258,6 +258,7 @@
       let MITs = document.getElementById('MITSchecked').checked ? 1 : 0;
       let VersionpagamentosAutorizados = document.getElementById('VersionpagamentosAutorizados').value;
       let pagamentosAutorizados = document.getElementById('pagamentosAutorizadoschecked').checked ? 1 : 0;
+      let CapturePaymenthecked = document.getElementById('CapturePaymenthecked').checked ? 1 : 0;
       let MBWAYPREFILL = document.getElementById('MBWAYPREFILL').value;
       let MBWAYNumberPrefillchecked = document.getElementById('MBWAYNumberPrefillchecked').checked ? 1 : 0;
       let MerchantTransactionID = document.getElementById("MerchantTransactionID").value.trim();
@@ -331,7 +332,8 @@
         MBWAYNumberPrefillchecked: MBWAYNumberPrefillchecked,
         MBWAYPREFILL: MBWAYPREFILL,
         MerchantTransactionID:MerchantTransactionID,
-        Xpay: Xpay
+        Xpay: Xpay,
+        CapturePaymenthecked: CapturePaymenthecked
       };
 
       localStorage.setItem('credential_config', JSON.stringify(credential_obj));
@@ -363,6 +365,7 @@
       let MBWAYPREFILL
       let MerchantTransactionID
       let Xpay
+      let CapturePaymenthecked
 
       if(useDefault == "1"){
         checkbox_option = credentialDefaultObj.useDefaultConfig;
@@ -380,6 +383,7 @@
         VersionpagamentosAutorizados = credentialDefaultObj.VersionpagamentosAutorizados;
         MBWAYNumberPrefillchecked = credentialDefaultObj.MBWAYNumberPrefillchecked;
         MBWAYPREFILL = credentialDefaultObj.MBWAYPREFILL;
+        CapturePaymenthecked = credentialDefaultObj.CapturePaymenthecked;
         MerchantTransactionID = credentialDefaultObj.MerchantTransactionID;
         Xpay = credentialDefaultObj.Xpay;
 
@@ -399,6 +403,7 @@
         VersionpagamentosAutorizados = credential_config_variable.VersionpagamentosAutorizados;
         MBWAYNumberPrefillchecked = credential_config_variable.MBWAYNumberPrefillchecked;
         MBWAYPREFILL = credential_config_variable.MBWAYPREFILL;
+        CapturePaymenthecked = credential_config_variable.CapturePaymenthecked;
         MerchantTransactionID = credential_config_variable.MerchantTransactionID;
         Xpay = credential_config_variable.Xpay;
       }
@@ -420,6 +425,7 @@
         document.getElementById('MITSchecked').value = credential_config_variable.MITs;
         document.getElementById('VersionMITS').value = credential_config_variable.VersionMITS;
         document.getElementById('pagamentosAutorizadoschecked').value = credential_config_variable.pagamentosAutorizados;
+        document.getElementById('CapturePaymenthecked').value = credential_config_variable.CapturePaymenthecked;
         document.getElementById('VersionpagamentosAutorizados').value = credential_config_variable.VersionpagamentosAutorizados;
         document.getElementById('MBWAYNumberPrefillchecked').value = credential_config_variable.MBWAYNumberPrefillchecked;
         document.getElementById('MBWAYPREFILL').value = credential_config_variable.MBWAYPREFILL;
@@ -467,6 +473,14 @@
         document.getElementById('Xpaychecked').checked = false;
       }
 
+      
+      if (CapturePaymenthecked == "1") {
+        document.getElementById('CapturePaymenthecked').checked = true;
+      } else {
+        document.getElementById('CapturePaymenthecked').checked = false;
+        document.getElementById("LayoutCapturePayment").style.display = "none";
+      }
+
       const select = document.getElementById('paymentMethods');
       Array.from(select.options).forEach(opt => {
         opt.selected = savedMethods.includes(opt.value);
@@ -475,7 +489,8 @@
       toggleEntityField();
       handlePaymentMethodChange();
       toggleAllMethodsPayRestored(AllMethodsPay);
-  
+      toggleCapturePayment(typeOfPayment);
+
     }
 
     // Caso clicar no botão de voltar para tras, ele valida alguns pontos
@@ -526,4 +541,17 @@
     function toggleMITS(element) {
       const paymentMethodsContainer = document.getElementById("LayoutVersionMITS");
       paymentMethodsContainer.style.display = element.checked ? "block" : "none";
+    }
+
+    //Função caso ele selecionar o tipo de pagamento "AUTH"
+    function toggleCapturePayment(select) {
+      const layoutCapturePayment = document.getElementById('LayoutCapturePayment');
+
+      if (select.value || select === "2") {
+          layoutCapturePayment.style.display = "block";
+      } else {
+          layoutCapturePayment.style.display = "none";
+
+          document.getElementById('CapturePaymenthecked').checked = false;
+      }
     }

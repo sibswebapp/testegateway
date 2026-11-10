@@ -22,6 +22,7 @@
       MBWAYPREFILL: "",
       MerchantTransactionID: "OrderID",
       Xpay: "0",
+      CapturePaymenthecked: "0"
     };
 
     localStorage.setItem('credential_default', JSON.stringify(credential_default));
@@ -997,6 +998,7 @@
       const isServerToServer = credential_config_variable?.ServerToServer ?? credential_default_variable?.ServerToServer;
       const gatewayVersion = credential_config_variable?.gatewayVersion ?? credential_default_variable?.gatewayVersion;
       const typeOfPayment = credential_config_variable?.typeOfPayment ?? credential_default_variable?.typeOfPayment;
+      const CapturePaymenthecked = credential_config_variable?.CapturePaymenthecked ?? credential_default_variable?.CapturePaymenthecked;
 
       const isProd = window.location.hostname === 'sibsdigitalcommerce.com'; 
 
@@ -1010,7 +1012,6 @@
 
       const versionMITS = credential_config_variable?.VersionMITS ?? credential_default_variable?.VersionMITS;
       const MITS_input = credential_config_variable?.MITs ?? credential_default_variable?.MITs;
-
 
       if (paymentMethodArray.length === 1 && paymentMethodArray[0] === "MBWAY") {
         redirectUrl = `${baseUrl}MBWAY_payment/MBWAY_return.html`
@@ -1034,6 +1035,10 @@
 
       if (paymentMethodArray.length === 1 && paymentMethodArray[0] === "CARD" && MITS_input == "1" && versionMITS == "2") {
         redirectUrl = `${baseUrl}MITs/MITsRCRR.html`
+      }
+
+      if (paymentMethodArray.length === 1 && typeOfPayment === "2" && CapturePaymenthecked  === 1) {
+        redirectUrl = `${baseUrl}Capture_gateway/Capture_gateway.html`
       }
 
       const amount = parseFloat(document.getElementById("amount").value);
@@ -1655,7 +1660,7 @@
       btnDiv.classList.add("d-none");
 
       mandateDiv.classList.remove("d-none");
-      mandateDiv.style.display = "block";   // 👈 garante que aparece
+      mandateDiv.style.display = "block";  
 
       if(serverDiv){
         serverDiv.classList.add("d-none");
