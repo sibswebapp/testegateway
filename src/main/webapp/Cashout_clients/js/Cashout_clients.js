@@ -1,10 +1,3 @@
-function limparCredenciais() {
-  ["terminalId", "clientId", "bearerToken"].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.value = "";
-  });
-}
-
 // PopUP de sucesso chamada
 const successModal = document.getElementById("successModal"),
 overlay = successModal.querySelector(".overlay"),

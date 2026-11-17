@@ -8,12 +8,21 @@ require('dotenv').config({
 
 const USER = process.env.BASIC_AUTH_USER;
 const PASS = process.env.BASIC_AUTH_PASS;
+
+const USER_PAYMENT_BANCO = process.env.BASIC_AUTH_USER_PAYMENT_BANCO;
+const PASS_PAYMENT_BANCO = process.env.BASIC_AUTH_PASS_PAYMENT_BANCO;
+
+
 const PORT = process.env.PORT || 8002;
 const HOST = process.env.HOST || '127.0.0.1';
 const prefix = HOST === '127.0.0.1' ? '' : '/SimuladorSIBS';
 
 if (!USER || !PASS) {
   throw new Error('BASIC_AUTH_USER ou BASIC_AUTH_PASS não estão definidos!');
+}
+
+if (!USER_PAYMENT_BANCO || !PASS_PAYMENT_BANCO) {
+  throw new Error('Credenciais BASIC AUTH do Payment Banco não estão definidas!');
 }
 
 const app = express();
@@ -32,6 +41,27 @@ function basicAuth(req, res, next) {
   if (user === USER && pass === PASS) return next();
   
   res.setHeader('WWW-Authenticate', 'Basic realm="SecureArea"');
+  return res.status(401).send('Invalid credentials');
+}
+
+
+// Middleware para Basic Auth - Payment Banco
+function basicAuthPaymentBanco(req, res, next) {
+  const auth = req.headers.authorization;
+
+  if (!auth || !auth.startsWith('Basic ')) {
+    res.setHeader('WWW-Authenticate', 'Basic realm="PaymentBanco"');
+    return res.status(401).send('Authentication required');
+  }
+
+  const base64 = auth.split(' ')[1];
+  const [user, pass] = Buffer.from(base64, 'base64').toString().split(':');
+
+  if (user === USER_PAYMENT_BANCO && pass === PASS_PAYMENT_BANCO) {
+    return next();
+  }
+
+  res.setHeader('WWW-Authenticate', 'Basic realm="PaymentBanco"');
   return res.status(401).send('Invalid credentials');
 }
 
@@ -1329,11 +1359,24 @@ const protectedRoutes = [
   '/Cashout'
 ];
 
+// 2. ROTAS PROTEGIDAS (Acesso restrito)
+const protectedRoutesBanco = [
+    '/payment_banco'
+];
+
 protectedRoutes.forEach(route => {
   // O path.join aqui deve apontar para a pasta real no disco
   const folderName = route.replace('/', '');
   app.use(route, basicAuth, express.static(path.join(webappDir, folderName)));
 });
+
+
+protectedRoutesBanco.forEach(route => {
+  // O path.join aqui deve apontar para a pasta real no disco
+  const folderName = route.replace('/', '');
+  app.use(route, basicAuthPaymentBanco, express.static(path.join(webappDir, folderName)));
+});
+
 
 // 2. ROTAS PÚBLICAS (Sem Auth)
 const publicRoutes = [
