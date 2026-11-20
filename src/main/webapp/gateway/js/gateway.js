@@ -22,7 +22,8 @@
       MBWAYPREFILL: "",
       MerchantTransactionID: "OrderID",
       Xpay: "0",
-      CapturePaymenthecked: "0"
+      CapturePaymenthecked: "0",
+      TokenizarChecked: "0"
     };
 
     localStorage.setItem('credential_default', JSON.stringify(credential_default));
@@ -632,6 +633,8 @@
         );
       }
 
+      const TokenizarChecked = credential_config_variable?.TokenizarChecked ?? credential_default_variable?.TokenizarChecked;
+
       const finalDatetimeStr = finalDatetime.toISOString();
       let requestData
 
@@ -732,6 +735,35 @@
               "XPAY"
             ]
           }
+        };
+      
+      }else if(selectedMethod == "CARD" && TokenizarChecked == "1"){
+
+      
+        requestData = {
+          merchant: {
+            terminalId: terminalId,
+            channel: "web",
+            merchantTransactionId: MerchantTransactionID || "OrderID"
+          },
+          tokenisation: { 
+            tokenisationRequest: { 
+              tokeniseCard: true 
+            } 
+          },
+          transaction: {
+            transactionTimestamp: new Date().toISOString(),
+            description: "Transaction short description",
+            moto: false,
+            paymentType: versionTypePayment,
+            amount: {
+              value: amountValue,
+              currency: "EUR"
+            },
+            paymentMethod: [
+              "CARD"
+            ]          
+          },
         };
       
       }else{
@@ -901,6 +933,15 @@
               }
             };
 
+            if (selectedMethod == "CARD" && TokenizarChecked == "1") {
+              debugBody.tokenisation = {
+                  tokenisationRequest: {
+                      tokeniseCard: true
+                  }
+              };
+            }
+            
+
             if (selectedMethod === "REFERENCE") {
               debugBody.transaction.paymentReference = {
                 initialDatetime: initialDatetime,
@@ -999,6 +1040,7 @@
       const gatewayVersion = credential_config_variable?.gatewayVersion ?? credential_default_variable?.gatewayVersion;
       const typeOfPayment = credential_config_variable?.typeOfPayment ?? credential_default_variable?.typeOfPayment;
       const CapturePaymenthecked = credential_config_variable?.CapturePaymenthecked ?? credential_default_variable?.CapturePaymenthecked;
+      const TokenizarChecked = credential_config_variable?.TokenizarChecked ?? credential_default_variable?.TokenizarChecked;
 
       const isProd = window.location.hostname === 'sibsdigitalcommerce.com'; 
 
@@ -1039,6 +1081,10 @@
 
       if (paymentMethodArray.length === 1 && typeOfPayment === "2" && CapturePaymenthecked  === 1) {
         redirectUrl = `${baseUrl}Capture_gateway/Capture_gateway.html`
+      }
+
+      if (paymentMethodArray.length === 1 && paymentMethodArray[0] === "CARD" && TokenizarChecked == "1") {
+        redirectUrl = `${baseUrl}Tokanization_CARD/Tokanization_CARD.html`
       }
 
       const amount = parseFloat(document.getElementById("amount").value);
@@ -1363,6 +1409,14 @@
           paymentMethod: paymentMethodArray
         }
       };
+
+      if(paymentMethodArray[0] === "CARD" && TokenizarChecked == "1"){
+        debugBody.tokenisation = {
+          tokenisationRequest: {
+            tokeniseCard: true
+          }
+        };
+      }
 
       if (paymentMethodArray.length === 1 && paymentMethodArray[0] === "REFERENCE") {
         debugBody.transaction.paymentReference = {

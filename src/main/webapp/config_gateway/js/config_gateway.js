@@ -75,6 +75,12 @@
       const inputMBWAYPREFILL = document.getElementById("inputMBWAYPREFILL");
       const LayoutMBWAYNumberPrefillChecked = document.getElementById("LayoutMBWAYNumberPrefillChecked");
 
+      const LayoutTokenizar = document.getElementById("LayoutTokenizar");
+      const tokenizarCheckbox = document.getElementById("TokenizarChecked");
+
+      const mitsCheckbox = document.getElementById("MITSchecked");
+      const isCheckedMits = mitsCheckbox ? mitsCheckbox.checked : false;
+
 
       toggleContainer.style.display = hasCardSelected ? "block" : "none";
 
@@ -97,6 +103,17 @@
       } else {
         inputReferenceExpiry.classList.add("d-none");
       }
+
+      if(hasCardSelected && isCheckedMits == false) {
+      LayoutTokenizar.classList.remove("d-none");
+      } else {
+        LayoutTokenizar.classList.add("d-none");
+        
+        if (tokenizarCheckbox) {
+          tokenizarCheckbox.checked = false;
+        }
+      }
+
     }
 
     // Para selecionar a checkbox do server to server
@@ -263,6 +280,7 @@
       let MBWAYNumberPrefillchecked = document.getElementById('MBWAYNumberPrefillchecked').checked ? 1 : 0;
       let MerchantTransactionID = document.getElementById("MerchantTransactionID").value.trim();
       let Xpay = document.getElementById('Xpaychecked').checked ? 1 : 0;
+      let TokenizarChecked = document.getElementById('TokenizarChecked').checked ? 1 : 0;
 
 
       const methods = Array.from(document.getElementById('paymentMethods').selectedOptions).map(opt => opt.value);
@@ -333,7 +351,8 @@
         MBWAYPREFILL: MBWAYPREFILL,
         MerchantTransactionID:MerchantTransactionID,
         Xpay: Xpay,
-        CapturePaymenthecked: CapturePaymenthecked
+        CapturePaymenthecked: CapturePaymenthecked,
+        TokenizarChecked: TokenizarChecked
       };
 
       localStorage.setItem('credential_config', JSON.stringify(credential_obj));
@@ -366,6 +385,7 @@
       let MerchantTransactionID
       let Xpay
       let CapturePaymenthecked
+      let TokenizarChecked
 
       if(useDefault == "1"){
         checkbox_option = credentialDefaultObj.useDefaultConfig;
@@ -386,6 +406,7 @@
         CapturePaymenthecked = credentialDefaultObj.CapturePaymenthecked;
         MerchantTransactionID = credentialDefaultObj.MerchantTransactionID;
         Xpay = credentialDefaultObj.Xpay;
+        TokenizarChecked = credentialDefaultObj.TokenizarChecked;
 
       }else{
         checkbox_option = credential_config_variable.useDefaultConfig;
@@ -406,6 +427,7 @@
         CapturePaymenthecked = credential_config_variable.CapturePaymenthecked;
         MerchantTransactionID = credential_config_variable.MerchantTransactionID;
         Xpay = credential_config_variable.Xpay;
+        TokenizarChecked = credential_config_variable.TokenizarChecked;
       }
 
       checkbox.checked = checkbox_option === "true" || checkbox_option === true || checkbox_option === 1 || checkbox_option === "1" ;
@@ -431,6 +453,7 @@
         document.getElementById('MBWAYPREFILL').value = credential_config_variable.MBWAYPREFILL;
         document.getElementById('MerchantTransactionID').value = credential_config_variable.MerchantTransactionID;
         document.getElementById('Xpaychecked').value = credential_config_variable.Xpay;
+        document.getElementById('TokenizarChecked').value = credential_config_variable.TokenizarChecked;
       }
 
       if(useDefault){
@@ -480,6 +503,14 @@
         document.getElementById('CapturePaymenthecked').checked = false;
         document.getElementById("LayoutCapturePayment").style.display = "none";
       }
+
+      
+      if (TokenizarChecked == "1") {
+        document.getElementById('TokenizarChecked').checked = true;
+      } else {
+        document.getElementById('TokenizarChecked').checked = false;
+      }
+      
 
       const select = document.getElementById('paymentMethods');
       Array.from(select.options).forEach(opt => {
@@ -541,6 +572,25 @@
     function toggleMITS(element) {
       const paymentMethodsContainer = document.getElementById("LayoutVersionMITS");
       paymentMethodsContainer.style.display = element.checked ? "block" : "none";
+
+      const layoutTokenizar = document.getElementById("LayoutTokenizar");
+      const tokenizarCheckbox = document.getElementById("TokenizarChecked");
+
+      if (layoutTokenizar) {
+        if (element.checked) {
+          layoutTokenizar.classList.add("d-none");
+
+          if (tokenizarCheckbox) {
+            tokenizarCheckbox.checked = false;
+          }
+
+        } else {
+          if (typeof handlePaymentMethodChange === 'function') {
+            handlePaymentMethodChange();
+          }
+        }
+      }
+
     }
 
     // Função para apresentar o layout apenas quando o tipo de pagamento é AUTH
